@@ -65,5 +65,8 @@ Vagrant.configure(2) do |config|
     # Fix for slow SSH client connections.
     sudo echo "\tPreferredAuthentications publickey,password,gssapi-with-mic,hostbased,keyboard-interactive" >> /etc/ssh/ssh_config
 
+    # Install IPTables and IPSet stuff.
+    sudo aptitude install iptables iptables-persistent ipset
+
   SHELL
 end
