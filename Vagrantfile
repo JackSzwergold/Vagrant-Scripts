@@ -10,13 +10,21 @@ Vagrant.configure(2) do |config|
   config.vm.provision "shell", inline: <<-SHELL
 
     # Create the 'www-readwrite' group.
-    sudo groupadd www-readwrite
+    sudo groupadd -f www-readwrite
 
     # Set the Vagrant user’s main group to be the 'www-readwrite' group.
     sudo usermod -g www-readwrite vagrant
 
+    # Sync with the time/date server.
+    sudo ntpdate ntp.ubuntu.com
+    
+    # Set the time zone data.
+    sudo dpkg-reconfigure tzdata
+    debconf-set-selections <<< "tzdata tzdata/Areas select America"
+    debconf-set-selections <<< "tzdata tzdata/Zones/America select New_York"
+
     # Install 'sysstat'.
-    sudo aptitude install -y sysstat
+    sudo aptitude install -q -y sysstat
 
     # Enable 'sysstat'.
     sudo sed -i 's/ENABLED="false"/ENABLED="true"/g' /etc/default/sysstat
@@ -25,33 +33,33 @@ Vagrant.configure(2) do |config|
     sudo adduser vagrant www-readwrite
 
     # Install Avahi daemon stuff.
-    sudo aptitude install -y avahi-daemon avahi-utils
+    sudo aptitude install -q -y avahi-daemon avahi-utils
 
     # Install generic tools.
-    sudo aptitude install -y \
+    sudo aptitude install -q -y \
 	  dnsutils traceroute nmap bc htop finger curl whois rsync lsof \
 	  iftop figlet lynx mtr-tiny iperf nload zip unzip attr sshpass \
 	  dkms mc elinks ntp dos2unix p7zip-full nfs-common imagemagick \
 	  slurm sharutils uuid-runtime chkconfig quota pv trickle apachetop
 
     # Install and update the locate database.
-	sudo aptitude install -y locate
+	sudo aptitude install -q -y locate
 	sudo updatedb
 
     # Install the core compiler and built options.
-    sudo aptitude install -y build-essential
+    sudo aptitude install -q -y build-essential
 
     # Install Git via PPA.
-    sudo aptitude install -y python-software-properties
-    sudo add-apt-repository ppa:git-core/ppa
+    sudo aptitude install -q -y python-software-properties
+    sudo add-apt-repository -y ppa:git-core/ppa
     sudo aptitude update
     sudo aptitude upgrade
-    sudo aptitude install -y subversion git git-core git-svn
+    sudo aptitude install -q -y subversion git git-core git-svn
 
     # Install postfix and general mail stuff.
     debconf-set-selections <<< "postfix postfix/mailname string vagrant.local"
     debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'"
-    sudo aptitude install -y postfix mailutils
+    sudo aptitude install -q -y postfix mailutils
 
     # Set the server login banner with figlet.
     figlet Vagrant > /etc/motd
@@ -66,7 +74,9 @@ Vagrant.configure(2) do |config|
     sudo echo "\tPreferredAuthentications publickey,password,gssapi-with-mic,hostbased,keyboard-interactive" >> /etc/ssh/ssh_config
 
     # Install IPTables and IPSet stuff.
-    sudo aptitude install -y iptables iptables-persistent ipset
+    debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v4 boolean true"
+    debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v6 boolean true"
+    sudo aptitude install -q -y iptables iptables-persistent ipset
 
   SHELL
 end
