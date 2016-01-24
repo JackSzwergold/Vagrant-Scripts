@@ -22,9 +22,11 @@ Vagrant.configure(2) do |config|
     sudo ntpdate ntp.ubuntu.com
     
     # Set the time zone data.
-    sudo dpkg-reconfigure tzdata
+    # echo "America/New_York" > /etc/timezone 
+    # dpkg-reconfigure -f noninteractive tzdata
     debconf-set-selections <<< "tzdata tzdata/Areas select America"
     debconf-set-selections <<< "tzdata tzdata/Zones/America select New_York"
+    sudo dpkg-reconfigure tzdata
 
     # Install 'sysstat'.
     sudo aptitude install -q -y sysstat
