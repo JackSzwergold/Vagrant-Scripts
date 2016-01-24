@@ -10,7 +10,7 @@ Vagrant.configure(2) do |config|
     v.customize ["modifyvm", :id, "--memory", 512]
     v.customize ["modifyvm", :id, "--cpus", 1]
     # v.customize ["modifyvm", :id, "--name", "Vagrant"]
-    v.name = "Vagrant"
+    v.name = "Vagrant (Ubuntu 14.04; Base)"
   end
 
   # Shell script to provision the server.
@@ -32,11 +32,11 @@ Vagrant.configure(2) do |config|
     # debconf-set-selections <<< "tzdata tzdata/Areas select America"
     # debconf-set-selections <<< "tzdata tzdata/Zones/America select New_York"
     # sudo dpkg-reconfigure tzdata
-    echo "America/New_York" > /etc/timezone
+    echo 'America/New_York' > /etc/timezone
     dpkg-reconfigure -f noninteractive tzdata
 
     # Edit the 'sources.list' to enable partner package updates.
-    sudo sed -i "/^#.*deb.*partner$/s/^# //g" /etc/apt/sources.list
+    sudo sed -i '/^#.*deb.*partner$/s/^# //g' /etc/apt/sources.list
 
     # Install 'sysstat'.
     sudo aptitude install -y --assume-yes -q sysstat
@@ -95,6 +95,10 @@ Vagrant.configure(2) do |config|
     debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v4 boolean true"
     debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v6 boolean true"
     sudo aptitude install -y --assume-yes -q iptables iptables-persistent ipset
+
+    # Get rid of the symbolic link to `50-landscape-sysinfo` and similar for cloud installs.
+	sudo rm -f /etc/update-motd.d/50-landscape-sysinfo
+	sudo rm -f /etc/update-motd.d/51-cloudguest
 
   SHELL
 end
