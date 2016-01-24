@@ -66,7 +66,7 @@ Vagrant.configure(2) do |config|
     sudo echo "\tPreferredAuthentications publickey,password,gssapi-with-mic,hostbased,keyboard-interactive" >> /etc/ssh/ssh_config
 
     # Install IPTables and IPSet stuff.
-    sudo aptitude install iptables iptables-persistent ipset
+    sudo aptitude install -y iptables iptables-persistent ipset
 
   SHELL
 end
