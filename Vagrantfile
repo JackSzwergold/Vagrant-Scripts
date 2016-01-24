@@ -15,6 +15,12 @@ Vagrant.configure(2) do |config|
     # Set the Vagrant user’s main group to be the 'www-readwrite' group.
     sudo usermod -g www-readwrite vagrant
 
+    # Install 'sysstat'.
+    sudo aptitude install -y sysstat
+
+    # Enable 'sysstat'.
+    sudo sed -i 's/ENABLED="false"/ENABLED="true"/g' /etc/default/sysstat
+
     # Add the user to the 'www-readwrite' group:
     sudo adduser vagrant www-readwrite
 
