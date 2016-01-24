@@ -9,6 +9,9 @@ Vagrant.configure(2) do |config|
   # Shell script to provision the server.
   config.vm.provision "shell", inline: <<-SHELL
 
+    # Setting the 'DEBIAN_FRONTEND' to a non-interactive mode.
+    export DEBIAN_FRONTEND=noninteractive
+
     # Create the 'www-readwrite' group.
     sudo groupadd -f www-readwrite
 
@@ -52,8 +55,8 @@ Vagrant.configure(2) do |config|
     # Install Git via PPA.
     sudo aptitude install -q -y python-software-properties
     sudo add-apt-repository -y ppa:git-core/ppa
-    sudo aptitude update
-    sudo aptitude upgrade
+    sudo aptitude update -q -y
+    sudo aptitude upgrade -q -y
     sudo aptitude install -q -y subversion git git-core git-svn
 
     # Install postfix and general mail stuff.
