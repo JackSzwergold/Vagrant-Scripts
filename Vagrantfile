@@ -6,6 +6,11 @@ Vagrant.configure(2) do |config|
   config.vm.network "private_network", ip: "192.168.56.20"
   config.vm.hostname = "vagrant"
 
+  config.vm.provider :virtualbox do |v|
+    v.customize ["modifyvm", :id, "--memory", 512]
+    v.customize ["modifyvm", :id, "--cpus", 1]
+  end
+
   # Shell script to provision the server.
   config.vm.provision "shell", inline: <<-SHELL
 
