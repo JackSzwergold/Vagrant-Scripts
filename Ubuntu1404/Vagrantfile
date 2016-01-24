@@ -100,5 +100,10 @@ Vagrant.configure(2) do |config|
 	sudo rm -f /etc/update-motd.d/50-landscape-sysinfo
 	sudo rm -f /etc/update-motd.d/51-cloudguest
 
+    # Comment out the content of these MOTD scripts:
+	sudo sed -i '/^#/!s/\(.*\)/# \1/g' /etc/update-motd.d/90-updates-available
+	sudo sed -i '/^#/!s/\(.*\)/# \1/g' /etc/update-motd.d/91-release-upgrade
+	sudo sed -i '/^#/!s/\(.*\)/# \1/g' /etc/update-motd.d/95-hwe-eol
+
   SHELL
 end
