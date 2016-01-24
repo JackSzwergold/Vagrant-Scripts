@@ -9,6 +9,8 @@ Vagrant.configure(2) do |config|
   config.vm.provider :virtualbox do |v|
     v.customize ["modifyvm", :id, "--memory", 512]
     v.customize ["modifyvm", :id, "--cpus", 1]
+    # v.customize ["modifyvm", :id, "--name", "Vagrant"]
+    v.name = "Vagrant"
   end
 
   # Shell script to provision the server.
