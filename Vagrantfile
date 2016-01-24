@@ -28,6 +28,9 @@ Vagrant.configure(2) do |config|
     echo "America/New_York" > /etc/timezone
     dpkg-reconfigure -f noninteractive tzdata
 
+    # Edit the 'sources.list' to enable partner package updates.
+    sudo sed -i "/^#.*deb.*partner$/s/^# //g" /etc/apt/sources.list
+
     # Install 'sysstat'.
     sudo aptitude install -y --assume-yes -q sysstat
 
@@ -62,7 +65,7 @@ Vagrant.configure(2) do |config|
     sudo add-apt-repository -y ppa:git-core/ppa
     sudo aptitude update -y --assume-yes -q
     sudo aptitude upgrade -y --assume-yes -q
-    sudo aptitude install -y --assume-yes -q subversion git git-core git-svn
+    sudo aptitude install -y --assume-yes -q git git-core subversion git-svn
 
     # Install postfix and general mail stuff.
     debconf-set-selections <<< "postfix postfix/mailname string vagrant.local"
