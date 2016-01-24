@@ -56,5 +56,14 @@ Vagrant.configure(2) do |config|
     # Set the server login banner with figlet.
     figlet Vagrant > /etc/motd
 
+    # Set the default UMASK value in 'login.defs' to be 002 instead of 022.
+    sudo sed -i 's/UMASK[ \t]*022/UMASK\t\t002/g' /etc/login.defs
+
+    # Set the default UMASK value in 'common-session' to be 002 instead of 022.
+    sudo sed -i 's/session optional[ \t]*pam_umask\.so/session\soptional\t\tpam_umask\.so\t\tumask=0002/g' /etc/pam.d/common-session
+
+    # Fix for slow SSH client connections.
+    sudo echo "\tPreferredAuthentications publickey,password,gssapi-with-mic,hostbased,keyboard-interactive" >> /etc/ssh/ssh_config
+
   SHELL
 end
