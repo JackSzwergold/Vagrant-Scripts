@@ -44,7 +44,7 @@ Vagrant.configure(2) do |config|
     echo -e "PROVISIONING: Set the date and time stuff.\n"
 
     # Sync with the time/date server.
-    sudo ntpdate ntp.ubuntu.com
+    sudo ntpdate -u ntp.ubuntu.com
 
     # Set the time zone data.
     # debconf-set-selections <<< "tzdata tzdata/Areas select America"
