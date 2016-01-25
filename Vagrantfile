@@ -1,5 +1,6 @@
 Vagrant.configure(2) do |config|
 
+  # Basic configuration options.
   config.vm.box = "ubuntu/trusty64"
   config.vm.define "vagrant"
   config.vm.hostname = "vagrant"
@@ -8,6 +9,7 @@ Vagrant.configure(2) do |config|
   config.vm.network "private_network", ip: "192.168.56.20"
   config.vm.synced_folder ".", "/vagrant", :disabled => true
 
+  # VirtualBox specific configuration options.
   config.vm.provider :virtualbox do |v|
     v.customize ["modifyvm", :id, "--memory", 512]
     v.customize ["modifyvm", :id, "--cpus", 1]
@@ -15,13 +17,13 @@ Vagrant.configure(2) do |config|
     v.name = "Vagrant (Ubuntu 14.04; Base)"
   end
 
-  # Copy files from the Vagrant host to the Vagrant guest.
-  config.vm.provision "file", source: "ipset.conf", destination: "ipset.conf"
-  config.vm.provision "file", source: "iptables.conf", destination: "iptables.conf"
-  config.vm.provision "file", source: "iptables-persistent-ipset.patch", destination: "iptables-persistent-ipset.patch"
-  config.vm.provision "file", source: "000-default.conf", destination: "000-default.conf"
-  config.vm.provision "file", source: "common.conf", destination: "common.conf"
-  config.vm.provision "file", source: "index.php", destination: "index.php"
+  # Copy configuration files from the Vagrant host to the Vagrant guest.
+  config.vm.provision "file", source: "config_files/ipset.conf", destination: "ipset.conf"
+  config.vm.provision "file", source: "config_files/iptables.conf", destination: "iptables.conf"
+  config.vm.provision "file", source: "config_files/iptables-persistent-ipset.patch", destination: "iptables-persistent-ipset.patch"
+  config.vm.provision "file", source: "config_files/000-default.conf", destination: "000-default.conf"
+  config.vm.provision "file", source: "config_files/common.conf", destination: "common.conf"
+  config.vm.provision "file", source: "config_files/index.php", destination: "index.php"
 
   # Shell script to provision the server.
   config.vm.provision :shell, :path => "provision.sh"
