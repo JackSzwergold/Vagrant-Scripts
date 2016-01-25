@@ -265,8 +265,25 @@ fi
 sudo cp "000-default.conf" "/etc/apache2/sites-available/000-default.conf"
 sudo cp "common.conf" "/etc/apache2/sites-available/common.conf"
 
+# Ditch the default Apache directory and set a new default page.
 sudo rm -rf "/var/www/html"
 sudo cp "index.php" "/var/www/index.php"
 
 # Gracefully restart Apache to get the new config settings loaded.
 sudo service apache2 graceful
+
+######################################################################################
+# Apache Logs
+######################################################################################
+
+# Adjust the Apache log rotation script.
+APACHE_LOGROTATE_PATH="/etc/logrotate.d/apache2";
+if [ -f "${APACHE_SECURITY_PATH}" ]; then
+  sudo sed -i 's/rotate 52/rotate 13/g' "${APACHE_LOGROTATE_PATH}";
+  sudo sed -i 's/create 640 root adm/create 640 root www-readwrite/g' "${APACHE_LOGROTATE_PATH}";
+fi
+
+# Adjust permissions on log files.
+sudo chmod o+rx /var/log/apache2
+sudo chgrp www-readwrite /var/log/apache2/*
+sudo chmod 644 /var/log/apache2/*
