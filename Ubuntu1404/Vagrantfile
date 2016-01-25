@@ -98,8 +98,8 @@ Vagrant.configure(2) do |config|
     sudo aptitude install -y --assume-yes -q iptables iptables-persistent ipset
 
     # Get rid of the symbolic link to `50-landscape-sysinfo` and similar for cloud installs.
-	sudo rm -f /etc/update-motd.d/50-landscape-sysinfo
-	sudo rm -f /etc/update-motd.d/51-cloudguest
+	if [ -f "/etc/update-motd.d/50-landscape-sysinfo" ]; then sudo rm -f /etc/update-motd.d/50-landscape-sysinfo; fi
+	if [ -f "/etc/update-motd.d/51-cloudguest" ]; then sudo rm -f /etc/update-motd.d/51-cloudguest; fi
 
     # Comment out the content of these MOTD scripts:
     if [ -f "/etc/update-motd.d/90-updates-available" ]; then sudo sed -i '/^#/!s/\(.*\)/# \1/g' /etc/update-motd.d/90-updates-available; fi
