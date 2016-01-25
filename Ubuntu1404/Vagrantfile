@@ -172,11 +172,11 @@ Vagrant.configure(2) do |config|
     figlet "Vagrant" > "${MOTD_PATH}";
 
     # Disable these MOTD scripts.
-	sudo chmod -f 600 "/etc/update-motd.d/50-landscape-sysinfo";
-	sudo chmod -f 600 "/etc/update-motd.d/51-cloudguest";
-	sudo chmod -f 600 "/etc/update-motd.d/90-updates-available";
-	sudo chmod -f 600 "/etc/update-motd.d/91-release-upgrade";
-	sudo chmod -f 600 "/etc/update-motd.d/95-hwe-eol";
+	sudo chmod -f -x "/etc/update-motd.d/50-landscape-sysinfo";
+	sudo chmod -f -x "/etc/update-motd.d/51-cloudguest";
+	sudo chmod -f -x "/etc/update-motd.d/90-updates-available";
+	sudo chmod -f -x "/etc/update-motd.d/91-release-upgrade";
+	sudo chmod -f -x "/etc/update-motd.d/95-hwe-eol";
 
     ######################################################################################
     # IPTables and IPSet
