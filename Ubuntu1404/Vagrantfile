@@ -14,6 +14,7 @@ Vagrant.configure(2) do |config|
   end
 
   # Shell script to provision the server.
+  # config.vm.provision :shell, :path => "provision.sh"
   config.vm.provision "shell", inline: <<-SHELL
 
     # Setting the 'DEBIAN_FRONTEND' to a non-interactive mode.
@@ -101,9 +102,9 @@ Vagrant.configure(2) do |config|
 	sudo rm -f /etc/update-motd.d/51-cloudguest
 
     # Comment out the content of these MOTD scripts:
-    if [ -f "/etc/update-motd.d/90-updates-available" ]; then sudo sed -e '/^#/!s/\(.*\)/# \1/g' /etc/update-motd.d/90-updates-available; fi
-    if [ -f "/etc/update-motd.d/91-release-upgrade" ]; then sudo sed -e '/^#/!s/\(.*\)/# \1/g' /etc/update-motd.d/91-release-upgrade; fi
-    if [ -f "/etc/update-motd.d/95-hwe-eol" ]; then sudo sed -e '/^#/!s/\(.*\)/# \1/g' /etc/update-motd.d/95-hwe-eol; fi
+    if [ -f "/etc/update-motd.d/90-updates-available" ]; then sudo sed -i '/^#/!s/\(.*\)/# \1/g' /etc/update-motd.d/90-updates-available; fi
+    if [ -f "/etc/update-motd.d/91-release-upgrade" ]; then sudo sed -i '/^#/!s/\(.*\)/# \1/g' /etc/update-motd.d/91-release-upgrade; fi
+    if [ -f "/etc/update-motd.d/95-hwe-eol" ]; then sudo sed -i '/^#/!s/\(.*\)/# \1/g' /etc/update-motd.d/95-hwe-eol; fi
 
   SHELL
 end
