@@ -303,6 +303,9 @@ echo -e "PROVISIONING: Installing and configuring MySQL stuff.\n"
 # Install the MySQL server and client.
 sudo -E aptitude install -y --assume-yes -q mysql-server mysql-client
 
+# Secure the MySQL installation.
+sudo -E mysql -u root < "mysql_secure_installation.sql";
+
 # Use this to prevent MySQL from coming up on reboot.
 sudo -E service mysql stop
 sudo -E update-rc.d -f mysql remove
