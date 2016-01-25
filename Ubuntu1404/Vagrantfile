@@ -35,7 +35,7 @@ Vagrant.configure(2) do |config|
     sudo usermod -g www-readwrite vagrant
 
     # Add the user to the 'www-readwrite' group:
-    sudo adduser vagrant www-readwrite
+    sudo adduser --quiet vagrant www-readwrite
 
     ######################################################################################
     # Date and Time
@@ -49,12 +49,14 @@ Vagrant.configure(2) do |config|
     # debconf-set-selections <<< "tzdata tzdata/Areas select America"
     # debconf-set-selections <<< "tzdata tzdata/Zones/America select New_York"
     # sudo dpkg-reconfigure tzdata
-    echo 'America/New_York' > /etc/timezone
+    TIMEZONE="America/New_York";
+    echo "${TIMEZONE}" > /etc/timezone
     dpkg-reconfigure -f noninteractive tzdata
 
     # Edit the 'sources.list' to enable partner package updates.
-    if [ -f "/etc/apt/sources.list" ]; then
-      sudo sed -i '/^#.*deb.*partner$/s/^# //g' "/etc/apt/sources.list"
+    SOURCES_LIST="/etc/apt/sources.list";
+    if [ -f "${SOURCES_LIST}" ]; then
+      sudo sed -i '/^#.*deb.*partner$/s/^# //g' "${SOURCES_LIST}"
     fi
 
     # Install Avahi daemon stuff.
@@ -69,8 +71,9 @@ Vagrant.configure(2) do |config|
     sudo aptitude install -y --assume-yes -q sysstat
 
     # Enable 'sysstat'.
-    if [ -f "/etc/default/sysstat" ]; then
-      sudo sed -i 's/ENABLED="false"/ENABLED="true"/g' "/etc/default/sysstat";
+    SYSSTAT_CONFIG_PATH="/etc/default/sysstat";
+    if [ -f "${SYSSTAT_CONFIG_PATH}" ]; then
+      sudo sed -i 's/ENABLED="false"/ENABLED="true"/g' "${SYSSTAT_CONFIG_PATH}";
     fi
 
     # Restart 'sysstat'.
@@ -135,13 +138,15 @@ Vagrant.configure(2) do |config|
     echo -e "PROVISIONING: Adjusting the UMASK stuff.\n"
 
     # Set the default UMASK value in 'login.defs' to be 002 instead of 022.
-    if [ -f "/etc/pam.d/common-session" ]; then
-      sudo sed -i 's/UMASK[ \t]*022/UMASK\t\t002/g' "/etc/login.defs";
+    LOGIN_DEFS_PATH="/etc/login.defs";
+    if [ -f "${LOGIN_DEFS_PATH}" ]; then
+      sudo sed -i 's/UMASK[ \t]*022/UMASK\t\t002/g' "${LOGIN_DEFS_PATH}";
     fi
 
     # Set the default UMASK value in 'common-session' to be 002 instead of 022.
-    if [ -f "/etc/pam.d/common-session" ]; then
-      sudo sed -i 's/^session optional[ \t]*pam_umask\.so$/session\soptional\t\tpam_umask\.so\t\tumask=0002/g' "/etc/pam.d/common-session";
+    COMMON_SESSION_PATH="/etc/pam.d/common-session";
+    if [ -f "${COMMON_SESSION_PATH}" ]; then
+      sudo sed -i 's/^session optional[ \t]*pam_umask\.so$/session\soptional\t\tpam_umask\.so\t\tumask=0002/g' "${COMMON_SESSION_PATH}";
     fi
 
     ######################################################################################
@@ -150,10 +155,11 @@ Vagrant.configure(2) do |config|
     echo -e "PROVISIONING: SSH adjustments.\n"
 
     # Fix for slow SSH client connections.
-    if [ -f "/etc/ssh/ssh_config" ]; then
-      # sudo echo "    PreferredAuthentications publickey,password,gssapi-with-mic,hostbased,keyboard-interactive" >> "/etc/ssh/ssh_config";
+    SSH_CONFIG_PATH="/etc/ssh/ssh_config";
+    if [ -f "${SSH_CONFIG_PATH}" ]; then
+      # sudo echo "    PreferredAuthentications publickey,password,gssapi-with-mic,hostbased,keyboard-interactive" >> "${SSH_CONFIG_PATH}";
       SSH_APPEND="    PreferredAuthentications publickey,password,gssapi-with-mic,hostbased,keyboard-interactive";
-      sudo grep -q -F "${SSH_APPEND}" "/etc/ssh/ssh_config" || echo "${SSH_APPEND}" >> "/etc/ssh/ssh_config";
+      sudo grep -q -F "${SSH_APPEND}" "${SSH_CONFIG_PATH}" || echo "${SSH_APPEND}" >> "${SSH_CONFIG_PATH}";
     fi
 
     ######################################################################################
@@ -162,7 +168,8 @@ Vagrant.configure(2) do |config|
     echo -e "PROVISIONING: MOTD adjustments.\n"
 
     # Set the server login banner with figlet.
-    figlet "Vagrant" > "/etc/motd"
+    MOTD_PATH="/etc/motd";
+    figlet "Vagrant" > "${MOTD_PATH}"
 
     sudo sed -i 's/^\([^#].*\)/# \1/g' "/etc/update-motd.d/90-updates-available";
     sudo sed -i 's/^\([^#].*\)/# \1/g' "/etc/update-motd.d/91-release-upgrade";
