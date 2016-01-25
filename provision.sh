@@ -228,7 +228,7 @@ sudo aptitude install -y --assume-yes -q \
 sudo php5enmod mcrypt
 
 # Enable these core Apache modules.
-sudo a2enmod rewrite headers expires include proxy proxy_http cgi
+sudo a2enmod -q rewrite headers expires include proxy proxy_http cgi
 
 ######################################################################################
 # Apache and PHP (Configuring)
