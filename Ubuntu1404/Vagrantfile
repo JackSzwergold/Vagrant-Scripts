@@ -149,14 +149,16 @@ Vagrant.configure(2) do |config|
     figlet "Vagrant" > "/etc/motd"
 
     # Comment out the content of these MOTD scripts:
+    sudo sed -i 's/^\([^#].*\)/# \1/g' "/etc/update-motd.d/90-updates-available";
+    sudo sed -i 's/^\([^#].*\)/# \1/g' "/etc/update-motd.d/91-release-upgrade";
     if [ -f "/etc/update-motd.d/90-updates-available" ]; then
-      sudo sed -i '/^#/!s/\(.*\)/# \1/g' "/etc/update-motd.d/90-updates-available";
+      sudo sed -i 's/^\([^#].*\)/# \1/g' "/etc/update-motd.d/90-updates-available";
     fi
     if [ -f "/etc/update-motd.d/91-release-upgrade" ]; then
-      sudo sed -i '/^#/!s/\(.*\)/# \1/g' "/etc/update-motd.d/91-release-upgrade";
+      sudo sed -i 's/^\([^#].*\)/# \1/g' "/etc/update-motd.d/91-release-upgrade";
     fi
     if [ -f "/etc/update-motd.d/95-hwe-eol" ]; then
-      sudo sed -i '/^#/!s/\(.*\)/# \1/g' "/etc/update-motd.d/95-hwe-eol";
+      sudo sed -i 's/^\([^#].*\)/# \1/g' "/etc/update-motd.d/95-hwe-eol";
     fi
 
     # Get rid of the symbolic link to `50-landscape-sysinfo` and similar for cloud installs.
