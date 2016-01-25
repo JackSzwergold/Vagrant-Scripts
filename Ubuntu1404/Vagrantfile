@@ -37,13 +37,17 @@ Vagrant.configure(2) do |config|
     dpkg-reconfigure -f noninteractive tzdata
 
     # Edit the 'sources.list' to enable partner package updates.
-    sudo sed -i '/^#.*deb.*partner$/s/^# //g' /etc/apt/sources.list
+    if [ -e "/etc/apt/sources.list" ]; then
+      sudo sed -i '/^#.*deb.*partner$/s/^# //g' "/etc/apt/sources.list"
+    fi
 
     # Install 'sysstat'.
     sudo aptitude install -y --assume-yes -q sysstat
 
     # Enable 'sysstat'.
-    sudo sed -i 's/ENABLED="false"/ENABLED="true"/g' /etc/default/sysstat
+    if [ -e "/etc/default/sysstat" ]; then
+      sudo sed -i 's/ENABLED="false"/ENABLED="true"/g' "/etc/default/sysstat";
+    fi
 
     # Restart 'sysstat'.
     sudo service sysstat restart
@@ -81,16 +85,22 @@ Vagrant.configure(2) do |config|
     sudo aptitude install -y --assume-yes -q postfix mailutils
 
     # Set the server login banner with figlet.
-    figlet Vagrant > /etc/motd
+    figlet "Vagrant" > "/etc/motd"
 
     # Set the default UMASK value in 'login.defs' to be 002 instead of 022.
-    sudo sed -i 's/UMASK[ \t]*022/UMASK\t\t002/g' /etc/login.defs
+    if [ -e "/etc/pam.d/common-session" ]; then
+      sudo sed -i 's/UMASK[ \t]*022/UMASK\t\t002/g' "/etc/login.defs";
+    fi
 
     # Set the default UMASK value in 'common-session' to be 002 instead of 022.
-    sudo sed -i 's/session optional[ \t]*pam_umask\.so/session\soptional\t\tpam_umask\.so\t\tumask=0002/g' /etc/pam.d/common-session
+    if [ -e "/etc/pam.d/common-session" ]; then
+      sudo sed -i 's/session optional[ \t]*pam_umask\.so/session\soptional\t\tpam_umask\.so\t\tumask=0002/g' "/etc/pam.d/common-session";
+    fi
 
     # Fix for slow SSH client connections.
-    sudo echo "\tPreferredAuthentications publickey,password,gssapi-with-mic,hostbased,keyboard-interactive" >> /etc/ssh/ssh_config
+    if [ -e "/etc/ssh/ssh_config" ]; then
+      sudo echo "    PreferredAuthentications publickey,password,gssapi-with-mic,hostbased,keyboard-interactive" >> "/etc/ssh/ssh_config";
+    fi
 
     # Install IPTables and IPSet stuff.
     debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v4 boolean true"
@@ -98,13 +108,13 @@ Vagrant.configure(2) do |config|
     sudo aptitude install -y --assume-yes -q iptables iptables-persistent ipset
 
     # Get rid of the symbolic link to `50-landscape-sysinfo` and similar for cloud installs.
-	if [ -f "/etc/update-motd.d/50-landscape-sysinfo" ]; then sudo rm -f /etc/update-motd.d/50-landscape-sysinfo; fi
-	if [ -f "/etc/update-motd.d/51-cloudguest" ]; then sudo rm -f /etc/update-motd.d/51-cloudguest; fi
+	if [ -e "/etc/update-motd.d/50-landscape-sysinfo" ]; then sudo rm -f /etc/update-motd.d/50-landscape-sysinfo; fi
+	if [ -e "/etc/update-motd.d/51-cloudguest" ]; then sudo rm -f /etc/update-motd.d/51-cloudguest; fi
 
     # Comment out the content of these MOTD scripts:
-    if [ -f "/etc/update-motd.d/90-updates-available" ]; then sudo sed -i '/^#/!s/\(.*\)/# \1/g' /etc/update-motd.d/90-updates-available; fi
-    if [ -f "/etc/update-motd.d/91-release-upgrade" ]; then sudo sed -i '/^#/!s/\(.*\)/# \1/g' /etc/update-motd.d/91-release-upgrade; fi
-    if [ -f "/etc/update-motd.d/95-hwe-eol" ]; then sudo sed -i '/^#/!s/\(.*\)/# \1/g' /etc/update-motd.d/95-hwe-eol; fi
+    if [ -e "/etc/update-motd.d/90-updates-available" ]; then sudo sed -i '/^#/!s/\(.*\)/# \1/g' "/etc/update-motd.d/90-updates-available"; fi
+    if [ -e "/etc/update-motd.d/91-release-upgrade" ]; then sudo sed -i '/^#/!s/\(.*\)/# \1/g' "/etc/update-motd.d/90-updates-available"; fi
+    if [ -e "/etc/update-motd.d/95-hwe-eol" ]; then sudo sed -i '/^#/!s/\(.*\)/# \1/g' "/etc/update-motd.d/90-updates-available"; fi
 
   SHELL
 end
