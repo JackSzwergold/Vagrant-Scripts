@@ -193,3 +193,44 @@ fi
 if [ -f "/etc/init.d/iptables-persistent" ] && [ -f "iptables-persistent-ipset.patch" ]; then
   sudo patch -fsb "/etc/init.d/iptables-persistent" < "iptables-persistent-ipset.patch"
 fi
+
+######################################################################################
+# Apache and PHP
+######################################################################################
+
+# Install the base Apache stuff.
+sudo aptitude install -y --assume-yes -q \
+  apache2 apache2-threaded-dev php5 \
+  libapache2-mod-php5 php-pear
+
+# Install other PHP related stuff.
+sudo aptitude install -y --assume-yes -q \
+  php5-mysql php5-pgsql php5-odbc php5-sybase php5-sqlite \
+  php5-xmlrpc php5-json php5-xsl php5-curl php5-geoip \
+  php-getid3 php5-imap php5-ldap php5-mcrypt \
+  php5-pspell php5-gmp php5-gd
+
+# Enable the PHP mcrypt module.
+sudo php5enmod mcrypt
+
+# Enable these core Apache modules.
+sudo a2enmod rewrite headers expires include proxy proxy_http cgi
+
+# Adjust the PHP config.
+PHP_CONFIG_PATH="/etc/php5/apache2/php.ini";
+if [ -f "${PHP_CONFIG_PATH}" ]; then
+  # Harden PHP by disabling 'expose_php'.
+  sudo sed -i 's/expose_php = On/expose_php = Off/g' "${PHP_CONFIG_PATH}";
+  # Disable the PHP 5.5 opcache.
+  sudo sed -i 's/;opcache.enable=0/opcache.enable=0/g' "${PHP_CONFIG_PATH}";
+fi
+
+# Harden Apache.
+APACHE_SECURITY_PATH="/etc/apache2/conf-available/security.conf";
+if [ -f "${APACHE_SECURITY_PATH}" ]; then
+  sudo sed -i 's/^ServerTokens OS/ServerTokens Prod/g' "${APACHE_SECURITY_PATH}";
+  sudo sed -i 's/^ServerSignature On/ServerSignature Off/g' "${APACHE_SECURITY_PATH}";
+  sudo sed -i 's/^TraceEnable On/TraceEnable Off/g' "${APACHE_SECURITY_PATH}";
+fi
+
+
