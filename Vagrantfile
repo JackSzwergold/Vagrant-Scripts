@@ -19,6 +19,9 @@ Vagrant.configure(2) do |config|
   config.vm.provision "file", source: "ipset.conf", destination: "ipset.conf"
   config.vm.provision "file", source: "iptables.conf", destination: "iptables.conf"
   config.vm.provision "file", source: "iptables-persistent-ipset.patch", destination: "iptables-persistent-ipset.patch"
+  config.vm.provision "file", source: "000-default.conf", destination: "000-default.conf"
+  config.vm.provision "file", source: "common.conf", destination: "common.conf"
+  config.vm.provision "file", source: "index.php", destination: "index.php"
 
   # Shell script to provision the server.
   config.vm.provision :shell, :path => "provision.sh"

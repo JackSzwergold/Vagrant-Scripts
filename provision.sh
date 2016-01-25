@@ -3,12 +3,14 @@
 ######################################################################################
 # DEBIAN_FRONTEND
 ######################################################################################
+
 echo -e "PROVISIONING: Set the Debian frontend to non-interactive mode.\n"
 export DEBIAN_FRONTEND=noninteractive
 
 ######################################################################################
 # User and Group
 ######################################################################################
+
 echo -e "PROVISIONING: User and group related stuff.\n"
 
 # Create the 'www-readwrite' group.
@@ -23,6 +25,7 @@ sudo adduser --quiet vagrant www-readwrite
 ######################################################################################
 # Date and Time
 ######################################################################################
+
 echo -e "PROVISIONING: Set the date and time stuff.\n"
 
 # Sync with the time/date server.
@@ -51,6 +54,7 @@ sudo aptitude install -y --assume-yes -q avahi-daemon avahi-utils
 ######################################################################################
 # Sysstat
 ######################################################################################
+
 echo -e "PROVISIONING: Sysstat related stuff.\n"
 
 # Install 'sysstat'.
@@ -68,6 +72,7 @@ sudo service sysstat restart
 ######################################################################################
 # Generic Tools
 ######################################################################################
+
 echo -e "PROVISIONING: Installing a set of generic tools.\n"
 
 # Install generic tools.
@@ -80,6 +85,7 @@ sudo aptitude install -y --assume-yes -q \
 ######################################################################################
 # Locate
 ######################################################################################
+
 echo -e "PROVISIONING: Installing the locate tool and updating the database.\n"
 
 # Install and update the locate database.
@@ -89,6 +95,7 @@ sudo updatedb
 ######################################################################################
 # Compiler
 ######################################################################################
+
 echo -e "PROVISIONING: Installing the core compiler tools.\n"
 
 # Install the core compiler and built options.
@@ -97,6 +104,7 @@ sudo aptitude install -y --assume-yes -q build-essential
 ######################################################################################
 # Git
 ######################################################################################
+
 echo -e "PROVISIONING: Installing Git and related stuff.\n"
 
 # Install Git via PPA.
@@ -111,6 +119,7 @@ fi
 ######################################################################################
 # Postfix and Mail
 ######################################################################################
+
 echo -e "PROVISIONING: Installing Postfix and related mail stuff.\n"
 
 # Install postfix and general mail stuff.
@@ -121,6 +130,7 @@ sudo aptitude install -y --assume-yes -q postfix mailutils
 ######################################################################################
 # UMASK
 ######################################################################################
+
 echo -e "PROVISIONING: Adjusting the UMASK stuff.\n"
 
 # Set the default UMASK value in 'login.defs' to be 002 instead of 022.
@@ -138,12 +148,12 @@ fi
 ######################################################################################
 # SSH
 ######################################################################################
+
 echo -e "PROVISIONING: SSH adjustments.\n"
 
 # Fix for slow SSH client connections.
 SSH_CONFIG_PATH="/etc/ssh/ssh_config";
 if [ -f "${SSH_CONFIG_PATH}" ]; then
-  # sudo echo "    PreferredAuthentications publickey,password,gssapi-with-mic,hostbased,keyboard-interactive" >> "${SSH_CONFIG_PATH}";
   SSH_APPEND="    PreferredAuthentications publickey,password,gssapi-with-mic,hostbased,keyboard-interactive";
   sudo grep -q -F "${SSH_APPEND}" "${SSH_CONFIG_PATH}" || echo "${SSH_APPEND}" >> "${SSH_CONFIG_PATH}";
 fi
@@ -151,6 +161,7 @@ fi
 ######################################################################################
 # MOTD
 ######################################################################################
+
 echo -e "PROVISIONING: MOTD adjustments.\n"
 
 # Set the server login banner with figlet.
@@ -170,6 +181,7 @@ sudo chmod -f -x "/etc/update-motd.d/98-cloudguest";
 ######################################################################################
 # IPTables and IPSet
 ######################################################################################
+
 echo -e "PROVISIONING: IPTables and IPSet stuff.\n"
 
 # Install IPTables and IPSet stuff.
@@ -195,8 +207,10 @@ if [ -f "/etc/init.d/iptables-persistent" ] && [ -f "iptables-persistent-ipset.p
 fi
 
 ######################################################################################
-# Apache and PHP
+# Apache and PHP (Installing)
 ######################################################################################
+
+echo -e "PROVISIONING: Installing Apache and PHP stuff.\n"
 
 # Install the base Apache stuff.
 sudo aptitude install -y --assume-yes -q \
@@ -216,6 +230,12 @@ sudo php5enmod mcrypt
 # Enable these core Apache modules.
 sudo a2enmod rewrite headers expires include proxy proxy_http cgi
 
+######################################################################################
+# Apache and PHP (Configuring)
+######################################################################################
+
+echo -e "PROVISIONING: Configuring the Apache and PHP stuff.\n"
+
 # Adjust the PHP config.
 PHP_CONFIG_PATH="/etc/php5/apache2/php.ini";
 if [ -f "${PHP_CONFIG_PATH}" ]; then
@@ -233,4 +253,20 @@ if [ -f "${APACHE_SECURITY_PATH}" ]; then
   sudo sed -i 's/^TraceEnable On/TraceEnable Off/g' "${APACHE_SECURITY_PATH}";
 fi
 
+# Adjust the Apache run group and UMASK.
+APACHE_ENVVARS_PATH="/etc/apache2/envvars";
+if [ -f "${APACHE_ENVVARS_PATH}" ]; then
+  sudo sed -i 's/^export APACHE_RUN_GROUP=www-data/export APACHE_RUN_GROUP=www-readwrite/g' "${APACHE_ENVVARS_PATH}";
+  APACHE_APPEND="umask 002";
+  sudo grep -q -F "${APACHE_APPEND}" "${APACHE_ENVVARS_PATH}" || echo -e "\n${APACHE_APPEND}" >> "${APACHE_ENVVARS_PATH}";
+fi
 
+# Set the config files for Apache.
+sudo cp "000-default.conf" "/etc/apache2/sites-available/000-default.conf"
+sudo cp "common.conf" "/etc/apache2/sites-available/common.conf"
+
+sudo rm -rf "/var/www/html"
+sudo cp "index.php" "/var/www/index.php"
+
+# Gracefully restart Apache to get the new config settings loaded.
+sudo service apache2 graceful
