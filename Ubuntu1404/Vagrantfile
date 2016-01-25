@@ -171,26 +171,12 @@ Vagrant.configure(2) do |config|
     MOTD_PATH="/etc/motd";
     figlet "Vagrant" > "${MOTD_PATH}";
 
-    # Get rid of the symbolic link to `50-landscape-sysinfo` and similar for cloud installs.
-	sudo rm -f "/etc/update-motd.d/50-landscape-sysinfo";
-	sudo rm -f "/etc/update-motd.d/51-cloudguest";
-
-    # Comment out the content of these MOTD scripts.
-    if [ -f "/etc/update-motd.d/90-updates-available" ]; then
-      sudo sed -i 's/^\([^#].*\)/# \1/g' "/etc/update-motd.d/90-updates-available";
-    fi
-
-    if [ -f "/etc/update-motd.d/91-release-upgrade" ]; then
-      sudo sed -i 's/^\([^#].*\)/# \1/g' "/etc/update-motd.d/91-release-upgrade";
-    fi
-
-    if [ -f "/etc/update-motd.d/95-hwe-eol" ]; then
-      sudo sed -i 's/^\([^#].*\)/# \1/g' "/etc/update-motd.d/95-hwe-eol";
-    fi
-
-    # MOTD_90_PATH="/etc/update-motd.d/90-updates-available"
-    # sudo echo $(awk '$0 && $0 !~ /^#/ {printf "# "}1' "${MOTD_90_PATH}") > "${MOTD_90_PATH}";
-    # sudo gawk -i inplace '$0 && $0 !~ /^#/ {printf "# "}1' "${MOTD_90_PATH}"
+    # Disable these MOTD scripts.
+	sudo chmod -f 600 "/etc/update-motd.d/50-landscape-sysinfo";
+	sudo chmod -f 600 "/etc/update-motd.d/51-cloudguest";
+	sudo chmod -f 600 "/etc/update-motd.d/90-updates-available";
+	sudo chmod -f 600 "/etc/update-motd.d/91-release-upgrade";
+	sudo chmod -f 600 "/etc/update-motd.d/95-hwe-eol";
 
     ######################################################################################
     # IPTables and IPSet
