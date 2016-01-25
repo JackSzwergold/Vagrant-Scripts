@@ -24,6 +24,8 @@ Vagrant.configure(2) do |config|
   config.vm.provision "file", source: "config_files/000-default.conf", destination: "000-default.conf"
   config.vm.provision "file", source: "config_files/common.conf", destination: "common.conf"
   config.vm.provision "file", source: "config_files/index.php", destination: "index.php"
+  config.vm.provision "file", source: "config_files/apache2.conf", destination: "apache2.conf"
+  config.vm.provision "file", source: "config_files/mpm_prefork.conf", destination: "mpm_prefork.conf"
 
   # Shell script to provision the server.
   config.vm.provision :shell, :path => "provision.sh"

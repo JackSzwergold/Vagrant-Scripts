@@ -269,6 +269,10 @@ sudo cp "common.conf" "/etc/apache2/sites-available/common.conf"
 sudo rm -rf "/var/www/html"
 sudo cp "index.php" "/var/www/index.php"
 
+# Replace the default man Apache config and the MPM prefork config with something simpler and more resource friendly.
+sudo cp "apache2.conf" "/etc/apache2/apache2.conf"
+sudo cp "mpm_prefork.conf" "/etc/apache2/mods-available/mpm_prefork.conf"
+
 # Gracefully restart Apache to get the new config settings loaded.
 sudo service apache2 graceful
 
