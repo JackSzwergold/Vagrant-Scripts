@@ -20,11 +20,22 @@ Vagrant.configure(2) do |config|
     # Setting the 'DEBIAN_FRONTEND' to a non-interactive mode.
     export DEBIAN_FRONTEND=noninteractive
 
+    ######################################################################################
+    # User and Group
+    ######################################################################################
+
     # Create the 'www-readwrite' group.
     sudo groupadd -f www-readwrite
 
     # Set the Vagrant user’s main group to be the 'www-readwrite' group.
     sudo usermod -g www-readwrite vagrant
+
+    # Add the user to the 'www-readwrite' group:
+    sudo adduser vagrant www-readwrite
+
+    ######################################################################################
+    # Date and Time
+    ######################################################################################
 
     # Sync with the time/date server.
     sudo ntpdate ntp.ubuntu.com
@@ -41,6 +52,13 @@ Vagrant.configure(2) do |config|
       sudo sed -i '/^#.*deb.*partner$/s/^# //g' "/etc/apt/sources.list"
     fi
 
+    # Install Avahi daemon stuff.
+    sudo aptitude install -y --assume-yes -q avahi-daemon avahi-utils
+
+    ######################################################################################
+    # Sysstat
+    ######################################################################################
+
     # Install 'sysstat'.
     sudo aptitude install -y --assume-yes -q sysstat
 
@@ -52,11 +70,9 @@ Vagrant.configure(2) do |config|
     # Restart 'sysstat'.
     sudo service sysstat restart
 
-    # Add the user to the 'www-readwrite' group:
-    sudo adduser vagrant www-readwrite
-
-    # Install Avahi daemon stuff.
-    sudo aptitude install -y --assume-yes -q avahi-daemon avahi-utils
+    ######################################################################################
+    # Generic Tools
+    ######################################################################################
 
     # Install generic tools.
     sudo aptitude install -y --assume-yes -q \
@@ -65,12 +81,24 @@ Vagrant.configure(2) do |config|
 	  dkms mc elinks ntp dos2unix p7zip-full nfs-common imagemagick \
 	  slurm sharutils uuid-runtime chkconfig quota pv trickle apachetop
 
+    ######################################################################################
+    # Locate
+    ######################################################################################
+
     # Install and update the locate database.
 	sudo aptitude install -y --assume-yes -q locate
 	sudo updatedb
 
+    ######################################################################################
+    # Compiler
+    ######################################################################################
+
     # Install the core compiler and built options.
     sudo aptitude install -y --assume-yes -q build-essential
+
+    ######################################################################################
+    # Git
+    ######################################################################################
 
     # Install Git via PPA.
     sudo aptitude install -y --assume-yes -q python-software-properties
@@ -79,13 +107,18 @@ Vagrant.configure(2) do |config|
     sudo aptitude upgrade -y --assume-yes -q
     sudo aptitude install -y --assume-yes -q git git-core subversion git-svn
 
+    ######################################################################################
+    # Postfix and Mail
+    ######################################################################################
+
     # Install postfix and general mail stuff.
     debconf-set-selections <<< "postfix postfix/mailname string vagrant.local"
     debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'"
     sudo aptitude install -y --assume-yes -q postfix mailutils
 
-    # Set the server login banner with figlet.
-    figlet "Vagrant" > "/etc/motd"
+    ######################################################################################
+    # UMASK
+    ######################################################################################
 
     # Set the default UMASK value in 'login.defs' to be 002 instead of 022.
     if [ -e "/etc/pam.d/common-session" ]; then
@@ -94,27 +127,52 @@ Vagrant.configure(2) do |config|
 
     # Set the default UMASK value in 'common-session' to be 002 instead of 022.
     if [ -e "/etc/pam.d/common-session" ]; then
-      sudo sed -i 's/session optional[ \t]*pam_umask\.so/session\soptional\t\tpam_umask\.so\t\tumask=0002/g' "/etc/pam.d/common-session";
+      sudo sed -i 's/^session optional[ \t]*pam_umask\.so$/session\soptional\t\tpam_umask\.so\t\tumask=0002/g' "/etc/pam.d/common-session";
     fi
+
+    ######################################################################################
+    # SSH
+    ######################################################################################
 
     # Fix for slow SSH client connections.
     if [ -e "/etc/ssh/ssh_config" ]; then
       sudo echo "    PreferredAuthentications publickey,password,gssapi-with-mic,hostbased,keyboard-interactive" >> "/etc/ssh/ssh_config";
     fi
 
+    ######################################################################################
+    # MOTD
+    ######################################################################################
+
+    # Set the server login banner with figlet.
+    figlet "Vagrant" > "/etc/motd"
+
+    # Comment out the content of these MOTD scripts:
+    if [ -e "/etc/update-motd.d/90-updates-available" ]; then
+      sudo sed -i '/^#/!s/\(.*\)/# \1/g' "/etc/update-motd.d/90-updates-available";
+    fi
+    if [ -e "/etc/update-motd.d/91-release-upgrade" ]; then
+      sudo sed -i '/^#/!s/\(.*\)/# \1/g' "/etc/update-motd.d/90-updates-available";
+    fi
+    if [ -e "/etc/update-motd.d/95-hwe-eol" ]; then
+      sudo sed -i '/^#/!s/\(.*\)/# \1/g' "/etc/update-motd.d/90-updates-available";
+    fi
+
+    # Get rid of the symbolic link to `50-landscape-sysinfo` and similar for cloud installs.
+	if [ -e "/etc/update-motd.d/50-landscape-sysinfo" ]; then
+	  sudo rm -f "/etc/update-motd.d/50-landscape-sysinfo";
+	fi
+	if [ -e "/etc/update-motd.d/51-cloudguest" ]; then
+	  sudo rm -f "/etc/update-motd.d/51-cloudguest";
+	fi
+
+    ######################################################################################
+    # IPTables and IPSet
+    ######################################################################################
+
     # Install IPTables and IPSet stuff.
     debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v4 boolean true"
     debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v6 boolean true"
     sudo aptitude install -y --assume-yes -q iptables iptables-persistent ipset
-
-    # Get rid of the symbolic link to `50-landscape-sysinfo` and similar for cloud installs.
-	if [ -e "/etc/update-motd.d/50-landscape-sysinfo" ]; then sudo rm -f "/etc/update-motd.d/50-landscape-sysinfo"; fi
-	if [ -e "/etc/update-motd.d/51-cloudguest" ]; then sudo rm -f "/etc/update-motd.d/51-cloudguest"; fi
-
-    # Comment out the content of these MOTD scripts:
-    if [ -e "/etc/update-motd.d/90-updates-available" ]; then sudo sed -i '/^#/!s/\(.*\)/# \1/g' "/etc/update-motd.d/90-updates-available"; fi
-    if [ -e "/etc/update-motd.d/91-release-upgrade" ]; then sudo sed -i '/^#/!s/\(.*\)/# \1/g' "/etc/update-motd.d/90-updates-available"; fi
-    if [ -e "/etc/update-motd.d/95-hwe-eol" ]; then sudo sed -i '/^#/!s/\(.*\)/# \1/g' "/etc/update-motd.d/90-updates-available"; fi
 
   SHELL
 end
