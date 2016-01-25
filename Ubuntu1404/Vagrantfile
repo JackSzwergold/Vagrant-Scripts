@@ -50,8 +50,11 @@ Vagrant.configure(2) do |config|
     # debconf-set-selections <<< "tzdata tzdata/Zones/America select New_York"
     # sudo dpkg-reconfigure tzdata
     TIMEZONE="America/New_York";
-    echo "${TIMEZONE}" > /etc/timezone
-    dpkg-reconfigure -f noninteractive tzdata
+    TIMEZONE_PATH="/etc/timezone";
+    if [ "${TIMEZONE}" != $(cat "${TIMEZONE_PATH}") ]; then
+      sudo echo "${TIMEZONE}" > "${TIMEZONE_PATH}";
+      sudo dpkg-reconfigure -f noninteractive tzdata;
+    fi
 
     # Edit the 'sources.list' to enable partner package updates.
     SOURCES_LIST="/etc/apt/sources.list";
