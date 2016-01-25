@@ -172,6 +172,7 @@ Vagrant.configure(2) do |config|
     echo -e "PROVISIONING: MOTD adjustments.\n"
 
     # Set the server login banner with figlet.
+    # MOTD_PATH="/etc/motd.tail";
     MOTD_PATH="/etc/motd";
     figlet "Vagrant" > "${MOTD_PATH}";
     echo "" >> "${MOTD_PATH}";
