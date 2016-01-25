@@ -17,6 +17,7 @@ Vagrant.configure(2) do |config|
   # Copy files from the Vagrant host to the Vagrant guest.
   config.vm.provision "file", source: "ipset.conf", destination: "ipset.conf"
   config.vm.provision "file", source: "iptables.conf", destination: "iptables.conf"
+  config.vm.provision "file", source: "iptables-persistent-ipset.patch", destination: "iptables-persistent-ipset.patch"
 
   # Shell script to provision the server.
   # config.vm.provision :shell, :path => "provision.sh"
@@ -209,6 +210,11 @@ Vagrant.configure(2) do |config|
     if [ -f "iptables.conf" ]; then
       sudo iptables-restore < "iptables.conf"
       sudo cp "iptables.conf" "/etc/iptables/rules.v4"
+    fi
+
+    # Patch 'iptables-persistent' if the patch exists and the original 'iptables-persistent' exists.
+    if [ -f "/etc/init.d/iptables-persistent" ] && [ -f "iptables-persistent-ipset.patch" ]; then
+      sudo patch -fsb "/etc/init.d/iptables-persistent" < "iptables-persistent-ipset.patch"
     fi
 
   SHELL
