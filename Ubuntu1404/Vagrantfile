@@ -118,7 +118,7 @@ Vagrant.configure(2) do |config|
     echo -e "PROVISIONING: Installing Git and related stuff.\n"
 
     # Install Git via PPA.
-    if ! grep -q "git-core" /etc/apt/sources.list /etc/apt/sources.list*/*; then
+    if ! grep -q -s "git-core" /etc/apt/sources.list /etc/apt/sources.list.d/*; then
       sudo aptitude install -y --assume-yes -q python-software-properties
       sudo add-apt-repository -y ppa:git-core/ppa
       sudo aptitude update -y --assume-yes -q
