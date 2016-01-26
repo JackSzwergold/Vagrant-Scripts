@@ -392,9 +392,9 @@ echo -e "PROVISIONING: Installing and configuring phpMyAdmin stuff.\n";
 if [ ! -d "/usr/share/phpmyadmin" ]; then
 
   # Do this little dance to get things installed.
-  sudo -E curl -ss -O -L "https://files.phpmyadmin.net/phpMyAdmin/4.0.10.11/phpMyAdmin-4.0.10.11-all-languages.tar.gz";
-  sudo -E tar -xf "phpMyAdmin-4.0.10.11-all-languages.tar.gz";
-  sudo -E rm -f "phpMyAdmin-4.0.10.11-all-languages.tar.gz";
+  curl -ss -O -L "https://files.phpmyadmin.net/phpMyAdmin/4.0.10.11/phpMyAdmin-4.0.10.11-all-languages.tar.gz";
+  tar -xf "phpMyAdmin-4.0.10.11-all-languages.tar.gz";
+  rm -f "phpMyAdmin-4.0.10.11-all-languages.tar.gz";
   sudo -E mv -f "phpMyAdmin-4.0.10.11-all-languages" "/usr/share/phpmyadmin";
 
   # Copy and set the patched 'Header.class.php' file.
@@ -452,7 +452,7 @@ if [ ! -f "/usr/local/bin/geoiplookup" ]; then
   sudo aptitude install -y --assume-yes -q build-essential zlib1g-dev libtool
 
   # Install from source code.
-  sudo -E curl -ss -O -L "http://www.maxmind.com/download/geoip/api/c/GeoIP-latest.tar.gz";
+  curl -ss -O -L "http://www.maxmind.com/download/geoip/api/c/GeoIP-latest.tar.gz";
   tar -xf "GeoIP-latest.tar.gz";
   cd ./GeoIP*;
   libtoolize -f;
@@ -521,10 +521,6 @@ if [ ! -d "${GEOIP_DATAFILE_PATH}" ]; then
   fi
 
 fi
-
-######################################################################################
-# AWStats
-######################################################################################
 
 ######################################################################################
 # Update the locate database.
