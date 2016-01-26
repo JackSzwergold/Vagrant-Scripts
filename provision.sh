@@ -553,6 +553,12 @@ if [ ! -d "/usr/share/awstats-7.3" ]; then
   sudo -E mkdir -p "/usr/share/awstats-7.3/wwwroot/data";
   sudo -E chmod -f g+w "/usr/share/awstats-7.3/wwwroot/data";
   
+  # Now install CPANminus like this.
+  sudo aptitude install cpanminus;
+
+  # With that done, install all of the GeoIP related modules like this.
+  sudo cpanm -i -f YAML Geo::IP Geo::IPfree Geo::IP::PurePerl URI::Escape Net::IP Net::DNS Net::XWhois Time::HiRes Time::Local;
+  
   # Copy over a basic config file.
   sudo -E cp -f "awstats.vagrant.local.conf" "/usr/share/awstats-7.3/wwwroot/cgi-bin/awstats.vagrant.local.conf";
 
