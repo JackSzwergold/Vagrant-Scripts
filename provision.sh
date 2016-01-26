@@ -560,7 +560,7 @@ if [ ! -d "/usr/share/awstats-7.3" ]; then
   sudo cpanm -i -f YAML Geo::IP Geo::IPfree Geo::IP::PurePerl URI::Escape Net::IP Net::DNS Net::XWhois Time::HiRes Time::Local;
   
   # Copy over a basic config file.
-  sudo -E cp -f "awstats.vagrant.local.conf" "/usr/share/awstats-7.3/wwwroot/cgi-bin/awstats.vagrant.local.conf";
+  sudo -E cp -f "awstats.model.deployment.conf" "/usr/share/awstats-7.3/wwwroot/cgi-bin/awstats.vagrant.local.conf";
 
   # Set permissions to root for owner and group.
   sudo -E chown -f root:root -R "/usr/share/awstats-7.3";
