@@ -1,6 +1,13 @@
 #!/bin/bash
 
 ######################################################################################
+# Set some basic variables.
+######################################################################################
+
+WORKING_DIR=$(pwd);
+echo -e "WORKING DIRECTORY: ${WORKING_DIR}.\n\n"
+
+######################################################################################
 # DEBIAN_FRONTEND
 ######################################################################################
 
@@ -452,6 +459,7 @@ if [ ! -f "/usr/local/bin/geoiplookup" ]; then
   sudo aptitude install -y --assume-yes -q build-essential zlib1g-dev libtool
 
   # Install from source code.
+  cd "${WORKING_DIR}";
   curl -ss -O -L "http://www.maxmind.com/download/geoip/api/c/GeoIP-latest.tar.gz";
   tar -xf "GeoIP-latest.tar.gz";
   cd ./GeoIP*;
@@ -459,7 +467,7 @@ if [ ! -f "/usr/local/bin/geoiplookup" ]; then
   ./configure;
   make -s;
   sudo -E make -s install;
-  cd ..; # This stupid path bouncing around mixes things up. Maybe should set a 'pwd' variable at the outset and use that throughout the script.
+  cd "${WORKING_DIR}";
 
 fi
 
