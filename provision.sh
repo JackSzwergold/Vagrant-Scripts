@@ -226,12 +226,18 @@ sudo -E aptitude install -y --assume-yes -q \
   apache2 apache2-threaded-dev php5 \
   libapache2-mod-php5 php-pear
 
+# Stop Apache.
+sudo -E service apache2 stop
+
 # Install other PHP related stuff.
 sudo -E aptitude install -y --assume-yes -q \
   php5-mysql php5-pgsql php5-odbc php5-sybase php5-sqlite \
   php5-xmlrpc php5-json php5-xsl php5-curl php5-geoip \
   php-getid3 php5-imap php5-ldap php5-mcrypt \
   php5-pspell php5-gmp php5-gd
+
+# Stop Apache.
+sudo -E service apache2 stop
 
 # Enable the PHP mcrypt module.
 sudo -E php5enmod mcrypt
