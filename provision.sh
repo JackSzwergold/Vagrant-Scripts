@@ -560,7 +560,7 @@ if [ ! -d "/usr/share/awstats-7.3" ]; then
   sudo -E chown -f root:root -R "/usr/share/awstats-7.3";
   
   # Update the data for the 'vagrant.local' config.
-  sudo -E /usr/share/awstats-7.3/wwwroot/cgi-bin/awstats.pl -config=vagrant.local -update
+  sudo -E "/usr/share/awstats-7.3/wwwroot/cgi-bin/awstats.pl" -config="vagrant.local" -update
   
 fi
 
