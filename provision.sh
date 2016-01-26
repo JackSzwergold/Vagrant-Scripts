@@ -523,6 +523,42 @@ if [ ! -d "${GEOIP_DATAFILE_PATH}" ]; then
 fi
 
 ######################################################################################
+# AWStats
+######################################################################################
+
+echo -e "PROVISIONING: Installing the AWStats stuff.\n";
+
+# Install AWStats from source.
+if [ ! -d "/usr/share/awstats-7.3" ]; then
+
+  # Do this little dance to get things installed.
+  curl -ss -O -L "http://prdownloads.sourceforge.net/awstats/awstats-7.3.tar.gz";
+  tar -xf "awstats-7.3.tar.gz";
+  rm -f "awstats-7.3.tar.gz";
+  sudo -E mv -f "awstats-7.3" "/usr/share/awstats-7.3";
+
+  # Copy and enable the AWStats Apache config.
+  AWSTATS_APACHE_CONFIG_PATH="/etc/apache2/conf-available/awstats.conf";
+  if [ -f "apache-awstats.conf" ] && [ ! -f "${AWSTATS_APACHE_CONFIG_PATH}" ]; then
+    sudo -E cp -f "apache-awstats.conf" "${AWSTATS_APACHE_CONFIG_PATH}";
+    sudo -E a2enconf -q awstats;
+    sudo -E service apache2 restart;
+  fi
+
+  # Set an index page for AWStats.
+  sudo -E cp -f "awstatstotals.php" "/usr/share/awstats-7.3/wwwroot/cgi-bin/index.php";
+  sudo -E chmod a+r "/usr/share/awstats-7.3/wwwroot/cgi-bin/index.php";
+  
+  # Create the AWStats data directory.
+  sudo -E mkdir -p "/usr/share/awstats-7.3/wwwroot/data";
+  sudo -E chmod -f g+w "/usr/share/awstats-7.3/wwwroot/data";
+
+  # Set permissions to root for owner and group.
+  sudo -E chown -f root:root -R "/usr/share/awstats-7.3";
+  
+fi
+
+######################################################################################
 # Update the locate database.
 ######################################################################################
 

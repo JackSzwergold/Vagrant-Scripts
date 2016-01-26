@@ -45,6 +45,10 @@ Vagrant.configure(2) do |config|
   config.vm.provision "file", source: "config_files/phpmyadmin-config.inc.php", destination: "phpmyadmin-config.inc.php"
   config.vm.provision "file", source: "config_files/phpmyadmin-Header.class.php", destination: "phpmyadmin-Header.class.php"
 
+  # Copy over the AWStats related config files.
+  config.vm.provision "file", source: "config_files/apache-awstats.conf", destination: "apache-awstats.conf"
+  config.vm.provision "file", source: "config_files/awstatstotals.php", destination: "awstatstotals.php"
+
   # Set the shell script to provision the server.
   config.vm.provision :shell, :path => "provision.sh"
 
