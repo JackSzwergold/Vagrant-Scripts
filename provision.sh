@@ -377,6 +377,9 @@ echo -e "PROVISIONING: Installing the Apache Munin config.\n"
 if [ -f "munin.conf" ]; then
   sudo -E cp "apache-munin.conf" "/etc/apache2/conf-available/munin.conf"
   sudo -E a2enconf -q munin
+  sudo -E service apache2 restart
 fi
+
+
 
 
