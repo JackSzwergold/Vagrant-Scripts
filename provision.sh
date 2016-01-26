@@ -459,7 +459,7 @@ if [ ! -f "/usr/local/bin/geoiplookup" ]; then
   ./configure;
   make -s;
   sudo -E make -s install;
-  cd ~;
+  cd ..; # This stupid path bouncing around mixes things up. Maybe should set a 'pwd' variable at the outset and use that throughout the script.
 
 fi
 
