@@ -201,13 +201,13 @@ sudo -E aptitude install -y --assume-yes -q iptables iptables-persistent ipset
 # Load the IPSet stuff if the file exists.
 if [ -f "ipset.conf" ]; then
   sudo -E ipset restore < "ipset.conf"
-  sudo -E cp "ipset.conf" "/etc/iptables/rules.ipsets"
+  sudo -E cp -f "ipset.conf" "/etc/iptables/rules.ipsets"
 fi
 
 # Load the IPTables stuff if the file exists.
 if [ -f "iptables.conf" ]; then
   sudo -E iptables-restore < "iptables.conf"
-  sudo -E cp "iptables.conf" "/etc/iptables/rules.v4"
+  sudo -E cp -f "iptables.conf" "/etc/iptables/rules.v4"
 fi
 
 # Patch 'iptables-persistent' if the patch exists and the original 'iptables-persistent' exists.
@@ -271,16 +271,16 @@ if [ -f "${APACHE_ENVVARS_PATH}" ]; then
 fi
 
 # Set the config files for Apache.
-sudo -E cp "000-default.conf" "/etc/apache2/sites-available/000-default.conf"
-sudo -E cp "common.conf" "/etc/apache2/sites-available/common.conf"
+sudo -E cp -f "000-default.conf" "/etc/apache2/sites-available/000-default.conf"
+sudo -E cp -f "common.conf" "/etc/apache2/sites-available/common.conf"
 
 # Ditch the default Apache directory and set a new default page.
 sudo -E rm -rf "/var/www/html"
-sudo -E cp "index.php" "/var/www/index.php"
+sudo -E cp -f "index.php" "/var/www/index.php"
 
 # Replace the default man Apache config and the MPM prefork config with something simpler and more resource friendly.
-sudo -E cp "apache2.conf" "/etc/apache2/apache2.conf"
-sudo -E cp "mpm_prefork.conf" "/etc/apache2/mods-available/mpm_prefork.conf"
+sudo -E cp -f "apache2.conf" "/etc/apache2/apache2.conf"
+sudo -E cp -f "mpm_prefork.conf" "/etc/apache2/mods-available/mpm_prefork.conf"
 
 # Restart Apache to get the new config settings loaded.
 sudo -E service apache2 restart
@@ -331,7 +331,7 @@ sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q munin munin-node munin-pl
 # Install the copied Munin config if it exists.
 MUNIN_CONF_PATH="/etc/munin/munin.conf";
 if [ -f "munin.conf" ]; then
-  sudo -E cp "munin.conf" "${MUNIN_CONF_PATH}";
+  sudo -E cp -f "munin.conf" "${MUNIN_CONF_PATH}";
 fi
 
 # Edit the Munin config.
@@ -374,9 +374,37 @@ sudo -E service munin-node restart
 echo -e "PROVISIONING: Installing the Apache Munin config.\n"
 
 # Copy and enable the Munin Apache config.
-if [ -f "munin.conf" ]; then
-  sudo -E cp "apache-munin.conf" "/etc/apache2/conf-available/munin.conf"
+if [ -f "apache-munin.conf" ]; then
+  sudo -E cp -f "apache-munin.conf" "/etc/apache2/conf-available/munin.conf"
   sudo -E a2enconf -q munin
+  sudo -E service apache2 restart
+fi
+
+######################################################################################
+# phpMyAdmin
+######################################################################################
+
+echo -e "PROVISIONING: Installing and configuring phpMyAdmin stuff.\n"
+
+# Install phpMyAdmin from source.
+if [ ! -f "/usr/share/phpmyadmin" ]; then
+  cd "/usr/share";
+  sudo -E curl -ss -O -L "https://files.phpmyadmin.net/phpMyAdmin/4.0.10.11/phpMyAdmin-4.0.10.11-all-languages.tar.gz";
+  sudo -E tar -xf "phpMyAdmin-4.0.10.11-all-languages.tar.gz"
+  sudo -E rm -f "phpMyAdmin-4.0.10.11-all-languages.tar.gz";
+  sudo -E mv -f "phpMyAdmin-4.0.10.11-all-languages" "phpmyadmin";
+  sudo -E cp -f "/usr/share/phpmyadmin/config.sample.inc.php" "/usr/share/phpmyadmin/config.inc.php";
+  sudo -E chown -f root:root -R "/usr/share/phpmyadmin";
+fi
+
+# Disable the phpMyAdmin PDF export stuff; never works right and can crash a server quite quickly.
+sudo rm -f "/usr/share/phpmyadmin/libraries/plugins/export/PMA_ExportPdf.class.php"
+sudo rm -f "/usr/share/phpmyadmin/libraries/plugins/export/ExportPdf.class.php"
+
+# Copy and enable the Apache phpMyAdmin config.
+if [ -f "apache-phpmyadmin.conf" ]; then
+  sudo -E cp -f "apache-phpmyadmin.conf" "/etc/apache2/conf-available/phpmyadmin.conf"
+  sudo -E a2enconf -q phpmyadmin
   sudo -E service apache2 restart
 fi
 

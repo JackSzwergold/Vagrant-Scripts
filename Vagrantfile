@@ -40,6 +40,9 @@ Vagrant.configure(2) do |config|
   config.vm.provision "file", source: "config_files/apache-munin.conf", destination: "apache-munin.conf"
   config.vm.provision "file", source: "config_files/munin.conf", destination: "munin.conf"
 
+  # Copy over the phpMyAdmin related config files.
+  config.vm.provision "file", source: "config_files/apache-phpmyadmin.conf", destination: "apache-phpmyadmin.conf"
+
   # Set the shell script to provision the server.
   config.vm.provision :shell, :path => "provision.sh"
 
