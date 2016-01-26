@@ -326,6 +326,10 @@ if [ -f "${MUNIN_CONF}" ]; then
   sudo -E sed -i 's/^\[localhost.localdomain\]/\[vagrant.local\]/g' "${MUNIN_CONF}";
 fi
 
+# Ditch the default 'localdomain' stuff from the system.
+sudo -E rm -rf "/var/lib/munin/localdomain";
+sudo -E rm -rf "/var/cache/munin/www/localdomain";
+
 # Activate the Apache related Munin plug-ins.
 sudo -E ln -fs "/usr/share/munin/plugins/apache_accesses" "/etc/munin/plugins/apache_accesses"
 sudo -E ln -fs "/usr/share/munin/plugins/apache_processes" "/etc/munin/plugins/apache_processes"
