@@ -48,6 +48,7 @@ Vagrant.configure(2) do |config|
   # Copy over the AWStats related config files.
   config.vm.provision "file", source: "config_files/apache-awstats.conf", destination: "apache-awstats.conf"
   config.vm.provision "file", source: "config_files/awstatstotals.php", destination: "awstatstotals.php"
+  config.vm.provision "file", source: "config_files/awstats.vagrant.local.conf", destination: "awstats.vagrant.local.conf"
 
   # Set the shell script to provision the server.
   config.vm.provision :shell, :path => "provision.sh"

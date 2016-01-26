@@ -552,9 +552,15 @@ if [ ! -d "/usr/share/awstats-7.3" ]; then
   # Create the AWStats data directory.
   sudo -E mkdir -p "/usr/share/awstats-7.3/wwwroot/data";
   sudo -E chmod -f g+w "/usr/share/awstats-7.3/wwwroot/data";
+  
+  # Copy over a basic config file.
+  sudo -E cp -f "awstats.vagrant.local.conf" "/usr/share/awstats-7.3/wwwroot/cgi-bin/awstats.vagrant.local.conf";
 
   # Set permissions to root for owner and group.
   sudo -E chown -f root:root -R "/usr/share/awstats-7.3";
+  
+  # Update the data for the 'vagrant.local' config.
+  sudo -E /usr/share/awstats-7.3/wwwroot/cgi-bin/awstats.pl -config=vagrant.local -update
   
 fi
 
