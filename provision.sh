@@ -107,7 +107,7 @@ sudo -E updatedb;
 
 echo -e "PROVISIONING: Installing the core compiler tools.\n";
 
-# Install the core compiler and built options.
+# Install the core compiler and build options.
 sudo -E aptitude install -y --assume-yes -q build-essential;
 
 ######################################################################################
@@ -375,7 +375,8 @@ echo -e "PROVISIONING: Installing the Apache Munin config.\n";
 
 # Copy and enable the Munin Apache config.
 MUNIN_APACHE_CONFIG_PATH="/etc/apache2/conf-available/munin.conf";
-if [ -f "apache-munin.conf" ] && [ ! -f "${MUNIN_APACHE_CONFIG_PATH}" ]; then
+if [ -f "apache-munin.conf" ] && [ -h "${MUNIN_APACHE_CONFIG_PATH}" ]; then
+  sudo -E rm -f "${MUNIN_APACHE_CONFIG_PATH}";
   sudo -E cp -f "apache-munin.conf" "${MUNIN_APACHE_CONFIG_PATH}";
   sudo -E a2enconf -q munin;
   sudo -E service apache2 restart;
@@ -436,6 +437,80 @@ if [ -f "apache-phpmyadmin.conf" ] && [ ! -f "${PHPMYADMIN_APACHE_CONFIG_PATH}" 
   sudo -E cp -f "apache-phpmyadmin.conf" "${PHPMYADMIN_APACHE_CONFIG_PATH}";
   sudo -E a2enconf -q phpmyadmin;
   sudo -E service apache2 restart;
+fi
+
+######################################################################################
+# GeoIP
+######################################################################################
+
+echo -e "PROVISIONING: Installing and configuring GeoIP stuff.\n";
+
+# Install GeoIP from source.
+if [ ! -f "/usr/local/bin/geoiplookup" ]; then
+
+  # Install the core compiler and build options.
+  sudo aptitude install -y --assume-yes -q build-essential zlib1g-dev libtool
+
+  # Install from source code.
+  sudo -E curl -ss -O -L "http://www.maxmind.com/download/geoip/api/c/GeoIP-latest.tar.gz";
+  tar -xf "GeoIP-latest.tar.gz";
+  cd ./GeoIP*;
+  libtoolize -f;
+  ./configure;
+  make -s;
+  sudo -E make -s install;
+  cd ~;
+
+fi
+
+# Install the GeoIP databases.
+GEOIP_DATAFILE_PATH="/usr/local/share/GeoIP/";
+if [ ! -d "${GEOIP_DATAFILE_PATH}" ]; then
+
+  # Get the GeoIP databases.
+  if [ ! -f "GeoIP.dat.gz" ]; then
+    curl -ss -L "http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz" > "/tmp/GeoIP.dat.gz";
+  fi
+  if [ ! -f "GeoLiteCity.dat.gz" ]; then
+    curl -ss -L "http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz" > "/tmp/GeoLiteCity.dat.gz";
+  fi
+  if [ ! -f "GeoIPASNum.dat.gz" ]; then
+    curl -ss -L "http://geolite.maxmind.com/download/geoip/database/asnum/GeoIPASNum.dat.gz" > "/tmp/GeoIPASNum.dat.gz";
+  fi
+  if [ ! -f "GeoIPCountryCSV.zip" ]; then
+    curl -ss -L "http://geolite.maxmind.com/download/geoip/database/GeoIPCountryCSV.zip" > "/tmp/GeoIPCountryCSV.zip";
+  fi
+
+  # Create the GeoIP directory—if it doesn't exist—like this:
+  sudo mkdir -p "${GEOIP_DATAFILE_PATH}";
+
+  if [ -d "${GEOIP_DATAFILE_PATH}" ]; then
+
+    # Move and decompressthe databases to GeoIP data path.
+    if [ -f "/tmp/GeoIP.dat.gz" ]; then
+      sudo -E mv "/tmp/GeoIP.dat.gz" "${GEOIP_DATAFILE_PATH}";
+      sudo -E gzip -d -q -f "${GEOIP_DATAFILE_PATH}GeoIP.dat.gz";
+    fi
+    if [ -f "/tmp/GeoLiteCity.dat.gz" ]; then
+      sudo -E mv "/tmp/GeoLiteCity.dat.gz" "${GEOIP_DATAFILE_PATH}";
+      sudo -E gzip -d -q -f "${GEOIP_DATAFILE_PATH}GeoLiteCity.dat.gz";
+      sudo -E mv "${GEOIP_DATAFILE_PATH}GeoLiteCity.dat" "${GEOIP_DATAFILE_PATH}GeoIPCity.dat";
+    fi
+    if [ -f "/tmp/GeoIPASNum.dat.gz" ]; then
+      sudo -E mv "/tmp/GeoIPASNum.dat.gz" "${GEOIP_DATAFILE_PATH}";
+      sudo -E gzip -d -q -f "${GEOIP_DATAFILE_PATH}GeoIPASNum.dat.gz";
+    fi
+    if [ -f "/tmp/GeoIPCountryCSV.zip" ]; then
+      sudo -E mv "/tmp/GeoIPCountryCSV.zip" "${GEOIP_DATAFILE_PATH}";
+      sudo -E unzip -o -q -d "${GEOIP_DATAFILE_PATH}" "${GEOIP_DATAFILE_PATH}GeoIPCountryCSV.zip";
+      sudo -E rm -f "${GEOIP_DATAFILE_PATH}GeoIPCountryCSV.zip";
+    fi
+
+    # Set permissions to root for owner and group.
+    sudo -E chown root:root -R "/usr/local/share/GeoIP/";
+
+  fi
+
 fi
 
 ######################################################################################
