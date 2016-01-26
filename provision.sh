@@ -374,8 +374,9 @@ sudo -E service munin-node restart;
 echo -e "PROVISIONING: Installing the Apache Munin config.\n";
 
 # Copy and enable the Munin Apache config.
-if [ -f "apache-munin.conf" ]; then
-  sudo -E cp -f "apache-munin.conf" "/etc/apache2/conf-available/munin.conf";
+MUNIN_APACHE_CONFIG_PATH="/etc/apache2/conf-available/munin.conf";
+if [ -f "apache-munin.conf" ] && [ ! -f "${MUNIN_APACHE_CONFIG_PATH}" ]; then
+  sudo -E cp -f "apache-munin.conf" "${MUNIN_APACHE_CONFIG_PATH}";
   sudo -E a2enconf -q munin;
   sudo -E service apache2 restart;
 fi
