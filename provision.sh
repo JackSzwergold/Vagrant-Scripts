@@ -384,4 +384,6 @@ fi
 # Update the locate database.
 ######################################################################################
 
+echo -e "PROVISIONING: Updating the locate database.\n"
+
 sudo -E updatedb
