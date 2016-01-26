@@ -392,12 +392,24 @@ if [ ! -f "/usr/share/phpmyadmin" ]; then
   sudo -E tar -xf "phpMyAdmin-4.0.10.11-all-languages.tar.gz"
   sudo -E rm -f "phpMyAdmin-4.0.10.11-all-languages.tar.gz";
   sudo -E mv -f "phpMyAdmin-4.0.10.11-all-languages" "/usr/share/phpmyadmin";
-  # Copy the phpMyAdmin configuration file into place.
-  # sudo -E cp -f "/usr/share/phpmyadmin/config.sample.inc.php" "/usr/share/phpmyadmin/config.inc.php";
-  if [ -f "phpmyadmin-config.inc.php" ]; then
-    sudo -E cp -f "phpmyadmin-config.inc.php" "/usr/share/phpmyadmin/config.inc.php"
-  fi
+  # Set permissions to root for owner and group.
   sudo -E chown -f root:root -R "/usr/share/phpmyadmin";
+fi
+
+# Copy the phpMyAdmin configuration file into place.
+PHPMYADMIN_CONFIG_PATH="/usr/share/phpmyadmin/config.inc.php";
+if [ ! -f "${PHPMYADMIN_CONFIG_PATH}" ]; then
+  if [ -f "phpmyadmin-config.inc.php" ]; then
+    sudo -E cp -f "phpmyadmin-config.inc.php" "${PHPMYADMIN_CONFIG_PATH}"
+  else
+    sudo -E cp -f "/usr/share/phpmyadmin/config.sample.inc.php" "${PHPMYADMIN_CONFIG_PATH}";
+  fi
+  # Set the blowfish secret stuff.
+  if [ -f "${PHPMYADMIN_CONFIG_PATH}" ]; then
+    BLOWFISH_SECRET_DEFAULT='a8b7c6d';
+    BLOWFISH_SECRET_NEW=$(openssl rand -base64 30);
+    sudo -E sed -i "s|cfg\['blowfish_secret'\] = '${BLOWFISH_SECRET_DEFAULT}'|cfg['blowfish_secret'] = '${BLOWFISH_SECRET_NEW}'|" "${PHPMYADMIN_CONFIG_PATH}";
+  fi
 fi
 
 # Disable the phpMyAdmin PDF export stuff; never works right and can crash a server quite quickly.
