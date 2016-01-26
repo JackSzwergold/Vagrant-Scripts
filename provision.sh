@@ -387,7 +387,7 @@ fi
 echo -e "PROVISIONING: Installing and configuring phpMyAdmin stuff.\n"
 
 # Install phpMyAdmin from source.
-if [ ! -f "/usr/share/phpmyadmin" ]; then
+if [ ! -d "/usr/share/phpmyadmin" ]; then
   sudo -E curl -ss -O -L "https://files.phpmyadmin.net/phpMyAdmin/4.0.10.11/phpMyAdmin-4.0.10.11-all-languages.tar.gz";
   sudo -E tar -xf "phpMyAdmin-4.0.10.11-all-languages.tar.gz"
   sudo -E rm -f "phpMyAdmin-4.0.10.11-all-languages.tar.gz";
