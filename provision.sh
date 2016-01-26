@@ -554,7 +554,7 @@ if [ ! -d "/usr/share/awstats-7.3" ]; then
   sudo -E chmod -f g+w "/usr/share/awstats-7.3/wwwroot/data";
   
   # Now install CPANminus like this.
-  sudo aptitude install cpanminus;
+  sudo -E aptitude install -y --assume-yes -q cpanminus;
 
   # With that done, install all of the GeoIP related modules like this.
   sudo cpanm -i -f YAML Geo::IP Geo::IPfree Geo::IP::PurePerl URI::Escape Net::IP Net::DNS Net::XWhois Time::HiRes Time::Local;
