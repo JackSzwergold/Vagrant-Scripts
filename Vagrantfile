@@ -37,6 +37,7 @@ Vagrant.configure(2) do |config|
   config.vm.provision "file", source: "config_files/mysql_secure_installation.sql", destination: "mysql_secure_installation.sql"
 
   # Copy over the Munin related config files.
+  config.vm.provision "file", source: "config_files/apache-munin.conf", destination: "apache-munin.conf"
   config.vm.provision "file", source: "config_files/munin.conf", destination: "munin.conf"
 
   # Set the shell script to provision the server.

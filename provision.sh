@@ -331,10 +331,15 @@ sudo -E aptitude install -y --assume-yes -q munin munin-node munin-plugins-extra
 # Stop the Munin node.
 sudo -E service munin-node stop
 
+# Install the copied Munin config if it exists.
+MUNIN_CONF_PATH="/etc/munin/munin.conf";
+if [ -f "munin.conf" ]; then
+  sudo -E cp "munin.conf" "${MUNIN_CONF_PATH}";
+fi
+
 # Edit the Munin config.
-MUNIN_CONF="/etc/munin/munin.conf";
-if [ -f "${MUNIN_CONF}" ]; then
-  sudo -E sed -i 's/^\[localhost.localdomain\]/\[vagrant.local\]/g' "${MUNIN_CONF}";
+if [ -f "${MUNIN_CONF_PATH}" ]; then
+  sudo -E sed -i 's/^\[localhost.localdomain\]/\[vagrant.local\]/g' "${MUNIN_CONF_PATH}";
 fi
 
 # Ditch the default 'localdomain' stuff from the system.
@@ -359,6 +364,9 @@ sudo -E ln -fs "/usr/share/munin/plugins/postfix_mailvolume" "/etc/munin/plugins
 # Activate the Fail2Ban related Munin plug-ins.
 sudo -E ln -fs "/usr/share/munin/plugins/fail2ban" "/etc/munin/plugins/fail2ban"
 
+# Repair Munin permissions.
+sudo -E munin-check --fix-permissions
+
 # Start the Munin node.
 sudo -E service munin-node start
 
@@ -368,9 +376,9 @@ sudo -E service munin-node start
 
 echo -e "PROVISIONING: Installing the Apache Munin config.\n"
 
-# Enable the Munin Apache config.
+# Copy and enable the Munin Apache config.
 if [ -f "munin.conf" ]; then
-  sudo -E cp "munin.conf" "/etc/apache2/conf-available/munin.conf"
+  sudo -E cp "apache-munin.conf" "/etc/apache2/conf-available/munin.conf"
   sudo -E a2enconf -q munin
 fi
 
