@@ -121,15 +121,17 @@ sudo -E aptitude install -y --assume-yes -q build-essential;
 # Git
 ######################################################################################
 
-echo -e "PROVISIONING: Installing Git and related stuff.\n";
-
 # Install Git via PPA.
 if ! grep -q -s "git-core" /etc/apt/sources.list /etc/apt/sources.list.d/*; then
+
+  echo -e "PROVISIONING: Installing Git and related stuff.\n";
+
   sudo -E aptitude install -y --assume-yes -q python-software-properties;
   sudo -E add-apt-repository -y ppa:git-core/ppa;
   sudo -E aptitude update -y --assume-yes -q;
   sudo -E aptitude upgrade -y --assume-yes -q;
   sudo -E aptitude install -y --assume-yes -q git git-core subversion git-svn;
+
 fi
 
 ######################################################################################
@@ -165,11 +167,12 @@ fi
 # SSH
 ######################################################################################
 
-echo -e "PROVISIONING: SSH adjustments.\n";
-
 # Fix for slow SSH client connections.
 SSH_CONFIG_PATH="/etc/ssh/ssh_config";
 if [ -f "${SSH_CONFIG_PATH}" ]; then
+
+  echo -e "PROVISIONING: SSH adjustments.\n";
+
   SSH_APPEND="    PreferredAuthentications publickey,password,gssapi-with-mic,hostbased,keyboard-interactive";
   sudo -E grep -q -F "${SSH_APPEND}" "${SSH_CONFIG_PATH}" || echo "${SSH_APPEND}" >> "${SSH_CONFIG_PATH}";
 fi
@@ -250,32 +253,44 @@ sudo -E a2enmod -q rewrite headers expires include proxy proxy_http cgi;
 # Apache and PHP (Configuring)
 ######################################################################################
 
-echo -e "PROVISIONING: Configuring the Apache and PHP stuff.\n";
-
 # Adjust the PHP config.
 PHP_CONFIG_PATH="/etc/php5/apache2/php.ini";
 if [ -f "${PHP_CONFIG_PATH}" ]; then
+
+  echo -e "PROVISIONING: Hardening PHP.\n";
+
   # Harden PHP by disabling 'expose_php'.
   sudo -E sed -i 's/expose_php = On/expose_php = Off/g' "${PHP_CONFIG_PATH}";
   # Disable the PHP 5.5 opcache.
   sudo -E sed -i 's/;opcache.enable=0/opcache.enable=0/g' "${PHP_CONFIG_PATH}";
+
 fi
 
 # Harden Apache.
 APACHE_SECURITY_PATH="/etc/apache2/conf-available/security.conf";
 if [ -f "${APACHE_SECURITY_PATH}" ]; then
+
+  echo -e "PROVISIONING: Hardening Apache.\n";
+
   sudo -E sed -i 's/^ServerTokens OS/ServerTokens Prod/g' "${APACHE_SECURITY_PATH}";
   sudo -E sed -i 's/^ServerSignature On/ServerSignature Off/g' "${APACHE_SECURITY_PATH}";
   sudo -E sed -i 's/^TraceEnable On/TraceEnable Off/g' "${APACHE_SECURITY_PATH}";
+
 fi
 
 # Adjust the Apache run group and UMASK.
 APACHE_ENVVARS_PATH="/etc/apache2/envvars";
 if [ -f "${APACHE_ENVVARS_PATH}" ]; then
+
+  echo -e "PROVISIONING: Adjusting Apache group and UMASK.\n";
+
   sudo -E sed -i 's/^export APACHE_RUN_GROUP=www-data/export APACHE_RUN_GROUP=www-readwrite/g' "${APACHE_ENVVARS_PATH}";
   APACHE_APPEND="umask 002";
   sudo -E grep -q -F "${APACHE_APPEND}" "${APACHE_ENVVARS_PATH}" || echo -e "\n${APACHE_APPEND}" >> "${APACHE_ENVVARS_PATH}";
+
 fi
+
+echo -e "PROVISIONING: Configuring Apache stuff.\n";
 
 # Set the config files for Apache.
 sudo -E cp -f "000-default.conf" "/etc/apache2/sites-available/000-default.conf";
@@ -296,19 +311,21 @@ sudo -E service apache2 restart;
 # Apache Logs
 ######################################################################################
 
-echo -e "PROVISIONING: Adjusting Apache log rotation.\n";
-
 # Adjust the Apache log rotation script.
 APACHE_LOGROTATE_PATH="/etc/logrotate.d/apache2";
 if [ -f "${APACHE_SECURITY_PATH}" ]; then
+
+  echo -e "PROVISIONING: Adjusting Apache log rotation.\n";
+
   sudo -E sed -i 's/rotate 52/rotate 13/g' "${APACHE_LOGROTATE_PATH}";
   sudo -E sed -i 's/create 640 root adm/create 640 root www-readwrite/g' "${APACHE_LOGROTATE_PATH}";
-fi
 
-# Adjust permissions on log files.
-sudo -E chmod o+rx /var/log/apache2;
-sudo -E chgrp www-readwrite /var/log/apache2/*;
-sudo -E chmod 644 /var/log/apache2/*;
+  # Adjust permissions on log files.
+  sudo -E chmod o+rx /var/log/apache2;
+  sudo -E chgrp www-readwrite /var/log/apache2/*;
+  sudo -E chmod 644 /var/log/apache2/*;
+
+fi
 
 ######################################################################################
 # MySQL
@@ -378,25 +395,28 @@ sudo -E service munin-node restart;
 # Munin Apache config.
 ######################################################################################
 
-echo -e "PROVISIONING: Installing the Apache Munin config.\n";
 
 # Copy and enable the Munin Apache config.
 MUNIN_APACHE_CONFIG_PATH="/etc/apache2/conf-available/munin.conf";
 if [ -f "apache-munin.conf" ] && [ -h "${MUNIN_APACHE_CONFIG_PATH}" ]; then
+
+  echo -e "PROVISIONING: Installing the Apache Munin config.\n";
+
   sudo -E rm -f "${MUNIN_APACHE_CONFIG_PATH}";
   sudo -E cp -f "apache-munin.conf" "${MUNIN_APACHE_CONFIG_PATH}";
   sudo -E a2enconf -q munin;
   sudo -E service apache2 restart;
+
 fi
 
 ######################################################################################
 # phpMyAdmin
 ######################################################################################
 
-echo -e "PROVISIONING: Installing and configuring phpMyAdmin stuff.\n";
-
 # Install phpMyAdmin from source.
 if [ ! -d "/usr/share/phpmyadmin" ]; then
+
+  echo -e "PROVISIONING: Installing phpMyAdmin stuff.\n";
 
   # Do this little dance to get things installed.
   curl -ss -O -L "https://files.phpmyadmin.net/phpMyAdmin/4.0.10.11/phpMyAdmin-4.0.10.11-all-languages.tar.gz";
@@ -422,6 +442,8 @@ fi
 PHPMYADMIN_CONFIG_PATH="/usr/share/phpmyadmin/config.inc.php";
 if [ ! -f "${PHPMYADMIN_CONFIG_PATH}" ]; then
 
+  echo -e "PROVISIONING: Configuring phpMyAdmin stuff.\n";
+
   # Set the phpMyAdmin config file.
   if [ -f "phpmyadmin-config.inc.php" ]; then
     sudo -E cp -f "phpmyadmin-config.inc.php" "${PHPMYADMIN_CONFIG_PATH}";
@@ -441,19 +463,23 @@ fi
 # Copy and enable the Apache phpMyAdmin config.
 PHPMYADMIN_APACHE_CONFIG_PATH="/etc/apache2/conf-available/phpmyadmin.conf";
 if [ -f "apache-phpmyadmin.conf" ] && [ ! -f "${PHPMYADMIN_APACHE_CONFIG_PATH}" ]; then
+
+  echo -e "PROVISIONING: Installing the Apache phpMyAdmin config.\n";
+
   sudo -E cp -f "apache-phpmyadmin.conf" "${PHPMYADMIN_APACHE_CONFIG_PATH}";
   sudo -E a2enconf -q phpmyadmin;
   sudo -E service apache2 restart;
+
 fi
 
 ######################################################################################
 # GeoIP
 ######################################################################################
 
-echo -e "PROVISIONING: Installing the GeoIP binary.\n";
-
 # Install GeoIP from source.
 if [ ! -f "/usr/local/bin/geoiplookup" ]; then
+
+  echo -e "PROVISIONING: Installing the GeoIP binary.\n";
 
   # Install the core compiler and build options.
   sudo aptitude install -y --assume-yes -q build-essential zlib1g-dev libtool
@@ -471,12 +497,12 @@ if [ ! -f "/usr/local/bin/geoiplookup" ]; then
 
 fi
 
-echo -e "PROVISIONING: Installing the GeoIP databases.\n";
-
 # Install the GeoIP databases.
 GEOIP_TMP_PATH="/tmp/";
 GEOIP_DATAFILE_PATH="/usr/local/share/GeoIP/";
 if [ ! -d "${GEOIP_DATAFILE_PATH}" ]; then
+
+  echo -e "PROVISIONING: Installing the GeoIP databases.\n";
 
   # Get the GeoIP databases.
   if [ ! -f "/${GEOIP_TMP_PATH}/GeoIP.dat.gz" ] && [ ! -f "${GEOIP_DATAFILE_PATH}GeoIP.dat" ]; then
@@ -534,10 +560,10 @@ fi
 # AWStats
 ######################################################################################
 
-echo -e "PROVISIONING: Installing the AWStats stuff.\n";
-
 # Install AWStats from source.
 if [ ! -d "/usr/share/awstats-7.3" ]; then
+
+  echo -e "PROVISIONING: Installing the AWStats stuff.\n";
 
   # Do this little dance to get things installed.
   curl -ss -O -L "http://prdownloads.sourceforge.net/awstats/awstats-7.3.tar.gz";
@@ -556,26 +582,26 @@ if [ ! -d "/usr/share/awstats-7.3" ]; then
   # Set an index page for AWStats.
   sudo -E cp -f "awstatstotals.php" "/usr/share/awstats-7.3/wwwroot/cgi-bin/index.php";
   sudo -E chmod a+r "/usr/share/awstats-7.3/wwwroot/cgi-bin/index.php";
-  
+
   # Create the AWStats data directory.
   sudo -E mkdir -p "/usr/share/awstats-7.3/wwwroot/data";
   sudo -E chmod -f g+w "/usr/share/awstats-7.3/wwwroot/data";
-  
+
   # Now install CPANminus like this.
   sudo -E aptitude install -y --assume-yes -q cpanminus;
 
   # With that done, install all of the GeoIP related modules like this.
   sudo cpanm -i -f YAML Geo::IP Geo::IPfree Geo::IP::PurePerl URI::Escape Net::IP Net::DNS Net::XWhois Time::HiRes Time::Local;
-  
+
   # Copy over a basic config file.
   sudo -E cp -f "awstats.model.deployment.conf" "/usr/share/awstats-7.3/wwwroot/cgi-bin/awstats.vagrant.local.conf";
 
   # Set permissions to root for owner and group.
   sudo -E chown -f root:root -R "/usr/share/awstats-7.3";
-  
+
   # Update the data for the 'vagrant.local' config.
   sudo -E "/usr/share/awstats-7.3/wwwroot/cgi-bin/awstats.pl" -config="vagrant.local" -update
-  
+
 fi
 
 ######################################################################################
