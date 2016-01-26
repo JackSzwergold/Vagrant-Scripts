@@ -379,7 +379,3 @@ if [ -f "munin.conf" ]; then
   sudo -E a2enconf -q munin
   sudo -E service apache2 restart
 fi
-
-
-
-
