@@ -388,12 +388,15 @@ echo -e "PROVISIONING: Installing and configuring phpMyAdmin stuff.\n"
 
 # Install phpMyAdmin from source.
 if [ ! -f "/usr/share/phpmyadmin" ]; then
-  cd "/usr/share";
   sudo -E curl -ss -O -L "https://files.phpmyadmin.net/phpMyAdmin/4.0.10.11/phpMyAdmin-4.0.10.11-all-languages.tar.gz";
   sudo -E tar -xf "phpMyAdmin-4.0.10.11-all-languages.tar.gz"
   sudo -E rm -f "phpMyAdmin-4.0.10.11-all-languages.tar.gz";
-  sudo -E mv -f "phpMyAdmin-4.0.10.11-all-languages" "phpmyadmin";
-  sudo -E cp -f "/usr/share/phpmyadmin/config.sample.inc.php" "/usr/share/phpmyadmin/config.inc.php";
+  sudo -E mv -f "phpMyAdmin-4.0.10.11-all-languages" "/usr/share/phpmyadmin";
+  # sudo -E cp -f "/usr/share/phpmyadmin/config.sample.inc.php" "/usr/share/phpmyadmin/config.inc.php";
+  # Copy the phpMyAdmin configuration file into place.
+  if [ -f "phpmyadmin-config.inc.php" ]; then
+    sudo -E cp -f "phpmyadmin-config.inc.php" "/usr/share/phpmyadmin/config.inc.php"
+  fi
   sudo -E chown -f root:root -R "/usr/share/phpmyadmin";
 fi
 

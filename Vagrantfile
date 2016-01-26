@@ -42,6 +42,7 @@ Vagrant.configure(2) do |config|
 
   # Copy over the phpMyAdmin related config files.
   config.vm.provision "file", source: "config_files/apache-phpmyadmin.conf", destination: "apache-phpmyadmin.conf"
+  config.vm.provision "file", source: "config_files/phpmyadmin-config.inc.php", destination: "phpmyadmin-config.inc.php"
 
   # Set the shell script to provision the server.
   config.vm.provision :shell, :path => "provision.sh"
