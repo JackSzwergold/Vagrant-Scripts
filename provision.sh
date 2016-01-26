@@ -222,22 +222,16 @@ fi
 echo -e "PROVISIONING: Installing Apache and PHP stuff.\n"
 
 # Install the base Apache stuff.
-sudo -E aptitude install -y --assume-yes -q \
+sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q \
   apache2 apache2-threaded-dev php5 \
   libapache2-mod-php5 php-pear
 
-# Stop Apache.
-sudo -E service apache2 stop
-
 # Install other PHP related stuff.
-sudo -E aptitude install -y --assume-yes -q \
+sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q \
   php5-mysql php5-pgsql php5-odbc php5-sybase php5-sqlite \
   php5-xmlrpc php5-json php5-xsl php5-curl php5-geoip \
   php-getid3 php5-imap php5-ldap php5-mcrypt \
   php5-pspell php5-gmp php5-gd
-
-# Stop Apache.
-sudo -E service apache2 stop
 
 # Enable the PHP mcrypt module.
 sudo -E php5enmod mcrypt
@@ -288,8 +282,8 @@ sudo -E cp "index.php" "/var/www/index.php"
 sudo -E cp "apache2.conf" "/etc/apache2/apache2.conf"
 sudo -E cp "mpm_prefork.conf" "/etc/apache2/mods-available/mpm_prefork.conf"
 
-# Gracefully restart Apache to get the new config settings loaded.
-sudo -E service apache2 graceful
+# Restart Apache to get the new config settings loaded.
+sudo -E service apache2 restart
 
 ######################################################################################
 # Apache Logs
@@ -316,7 +310,7 @@ sudo -E chmod 644 /var/log/apache2/*
 echo -e "PROVISIONING: Installing and configuring MySQL stuff.\n"
 
 # Install the MySQL server and client.
-sudo -E aptitude install -y --assume-yes -q mysql-server mysql-client
+sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q mysql-server mysql-client
 
 # Secure the MySQL installation.
 mysql -sfu root < "mysql_secure_installation.sql";
@@ -332,10 +326,7 @@ sudo -E update-rc.d -f mysql remove
 echo -e "PROVISIONING: Installing and configuring Munin stuff.\n"
 
 # Install Munin.
-sudo -E aptitude install -y --assume-yes -q munin munin-node munin-plugins-extra libwww-perl
-
-# Stop the Munin node.
-sudo -E service munin-node stop
+sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q munin munin-node munin-plugins-extra libwww-perl
 
 # Install the copied Munin config if it exists.
 MUNIN_CONF_PATH="/etc/munin/munin.conf";
@@ -374,7 +365,7 @@ sudo -E ln -fs "/usr/share/munin/plugins/fail2ban" "/etc/munin/plugins/fail2ban"
 sudo -E munin-check --fix-permissions
 
 # Start the Munin node.
-sudo -E service munin-node start
+sudo -E service munin-node restart
 
 ######################################################################################
 # Munin Apache config.
