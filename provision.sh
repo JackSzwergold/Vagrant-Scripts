@@ -45,7 +45,7 @@ fi
 # Edit the 'sources.list' to enable partner package updates.
 SOURCES_LIST="/etc/apt/sources.list";
 if [ -f "${SOURCES_LIST}" ]; then
-  sudo -E sed -i '/^#.*deb.*partner$/s/^# //g' "${SOURCES_LIST}"
+  sudo -E sed -i '/^#.*deb.*partner$/s/^# //g' "${SOURCES_LIST}";
 fi
 
 # Install Avahi daemon stuff.
@@ -309,3 +309,41 @@ mysql -sfu root < "mysql_secure_installation.sql";
 # Run these commands to prevent MySQL from coming up on reboot.
 sudo -E service mysql stop
 sudo -E update-rc.d -f mysql remove
+
+######################################################################################
+# Munin
+######################################################################################
+
+# Install Munin.
+sudo -E aptitude install -y --assume-yes -q munin munin-node munin-plugins-extra libwww-perl
+
+# Stop the Munin node.
+sudo -E service munin-node stop
+
+# Edit the Munin config.
+MUNIN_CONF="/etc/munin/munin.conf";
+if [ -f "${MUNIN_CONF}" ]; then
+  sudo -E sed -i 's/^\[localhost.localdomain\]/\[vagrant.local\]/g' "${MUNIN_CONF}";
+fi
+
+# Activate the Apache related Munin plug-ins.
+sudo -E ln -fs "/usr/share/munin/plugins/apache_accesses" "/etc/munin/plugins/apache_accesses"
+sudo -E ln -fs "/usr/share/munin/plugins/apache_processes" "/etc/munin/plugins/apache_processes"
+sudo -E ln -fs "/usr/share/munin/plugins/apache_volume" "/etc/munin/plugins/apache_volume"
+
+# Activate the MySQL related Munin plug-ins.
+sudo -E ln -fs "/usr/share/munin/plugins/mysql_bytes" "/etc/munin/plugins/mysql_bytes"
+sudo -E ln -fs "/usr/share/munin/plugins/mysql_queries" "/etc/munin/plugins/mysql_queries"
+sudo -E ln -fs "/usr/share/munin/plugins/mysql_slowqueries" "/etc/munin/plugins/mysql_slowqueries"
+sudo -E ln -fs "/usr/share/munin/plugins/mysql_threads" "/etc/munin/plugins/mysql_threads"
+
+# Activate the Postfix related Munin plug-ins.
+sudo -E ln -fs "/usr/share/munin/plugins/postfix_mailqueue" "/etc/munin/plugins/postfix_mailqueue"
+sudo -E ln -fs "/usr/share/munin/plugins/postfix_mailvolume" "/etc/munin/plugins/postfix_mailvolume"
+
+# Activate the Fail2Ban related Munin plug-ins.
+sudo -E ln -fs "/usr/share/munin/plugins/fail2ban" "/etc/munin/plugins/fail2ban"
+
+# Start the Munin node.
+sudo -E service munin-node start
+
