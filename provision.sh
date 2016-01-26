@@ -23,6 +23,15 @@ sudo -E usermod -g www-readwrite vagrant
 sudo -E adduser --quiet vagrant www-readwrite
 
 ######################################################################################
+# Environment
+######################################################################################
+
+# echo -e "PROVISIONING: Environment stuff.\n"
+
+# Set the selected editor to Nano.
+# sudo -u vagrant echo 'SELECTED_EDITOR="/bin/nano"' > ".selected_editor";
+
+######################################################################################
 # Date and Time
 ######################################################################################
 
@@ -314,6 +323,8 @@ sudo -E update-rc.d -f mysql remove
 # Munin
 ######################################################################################
 
+echo -e "PROVISIONING: Installing and configuring Munin stuff.\n"
+
 # Install Munin.
 sudo -E aptitude install -y --assume-yes -q munin munin-node munin-plugins-extra libwww-perl
 
@@ -350,4 +361,17 @@ sudo -E ln -fs "/usr/share/munin/plugins/fail2ban" "/etc/munin/plugins/fail2ban"
 
 # Start the Munin node.
 sudo -E service munin-node start
+
+######################################################################################
+# Munin Apache config.
+######################################################################################
+
+echo -e "PROVISIONING: Installing the Apache Munin config.\n"
+
+# Enable the Munin Apache config.
+if [ -f "munin.conf" ]; then
+  sudo -E cp "munin.conf" "/etc/apache2/conf-available/munin.conf"
+  sudo -E a2enconf -q munin
+fi
+
 

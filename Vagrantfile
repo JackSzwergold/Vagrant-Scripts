@@ -17,6 +17,9 @@ Vagrant.configure(2) do |config|
   config.vm.network "private_network", ip: "192.168.56.20"
   config.vm.synced_folder ".", "/vagrant", :disabled => true
 
+  # Copy over the environment related config files.
+  config.vm.provision "file", source: "config_files/selected_editor", destination: ".selected_editor"
+
   # Copy over the IPTables and IPSet related config files.
   config.vm.provision "file", source: "config_files/ipset.conf", destination: "ipset.conf"
   config.vm.provision "file", source: "config_files/iptables.conf", destination: "iptables.conf"
@@ -32,8 +35,11 @@ Vagrant.configure(2) do |config|
   # Copy over the MySQL related config files.
   config.vm.provision "file", source: "config_files/000-default.conf", destination: "000-default.conf"
   config.vm.provision "file", source: "config_files/mysql_secure_installation.sql", destination: "mysql_secure_installation.sql"
- 
-  # Shell script to provision the server.
+
+  # Copy over the Munin related config files.
+  config.vm.provision "file", source: "config_files/munin.conf", destination: "munin.conf"
+
+  # Set the shell script to provision the server.
   config.vm.provision :shell, :path => "provision.sh"
 
 end
