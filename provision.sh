@@ -392,8 +392,8 @@ if [ ! -f "/usr/share/phpmyadmin" ]; then
   sudo -E tar -xf "phpMyAdmin-4.0.10.11-all-languages.tar.gz"
   sudo -E rm -f "phpMyAdmin-4.0.10.11-all-languages.tar.gz";
   sudo -E mv -f "phpMyAdmin-4.0.10.11-all-languages" "/usr/share/phpmyadmin";
-  # sudo -E cp -f "/usr/share/phpmyadmin/config.sample.inc.php" "/usr/share/phpmyadmin/config.inc.php";
   # Copy the phpMyAdmin configuration file into place.
+  # sudo -E cp -f "/usr/share/phpmyadmin/config.sample.inc.php" "/usr/share/phpmyadmin/config.inc.php";
   if [ -f "phpmyadmin-config.inc.php" ]; then
     sudo -E cp -f "phpmyadmin-config.inc.php" "/usr/share/phpmyadmin/config.inc.php"
   fi
