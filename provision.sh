@@ -195,19 +195,20 @@ hash postfix 2>/dev/null || {
 # UMASK
 ######################################################################################
 
-echo -e "PROVISIONING: Adjusting the UMASK stuff.\n";
-
 # Set the default UMASK value in 'login.defs' to be 002 instead of 022.
 LOGIN_DEFS_PATH="/etc/login.defs";
-if [ -f "${LOGIN_DEFS_PATH}" ]; then
-  sudo -E sed -i 's/UMASK[ \t]*022/UMASK\t\t002/g' "${LOGIN_DEFS_PATH}";
+LOGIN_DEFS_PATTERN="^UMASK.*022$";
+if [ -f "${LOGIN_DEFS_PATH}" ] && grep -E -q "${LOGIN_DEFS_PATTERN}" "${LOGIN_DEFS_PATH}"; then
+
+  echo -e "PROVISIONING: Adjusting the UMASK setting in ${LOGIN_DEFS_PATH}.\n";
+
+  # Adjust the UMASK setting in 'login.defs'.
+  sudo -E sed -i "s/${LOGIN_DEFS_PATTERN}/UMASK\t\t002/g" "${LOGIN_DEFS_PATH}";
+
 fi
 
 # Set the default UMASK value in 'common-session' to be 002 instead of 022.
-COMMON_SESSION_PATH="/etc/pam.d/common-session";
-if [ -f "${COMMON_SESSION_PATH}" ]; then
-  sudo -E sed -i 's/^session optional[ \t]*pam_umask\.so$/session\soptional\t\tpam_umask\.so\t\tumask=0002/g' "${COMMON_SESSION_PATH}";
-fi
+ 
 
 ######################################################################################
 # SSH
@@ -219,8 +220,8 @@ if [ -f "${SSH_CONFIG_PATH}" ]; then
 
   echo -e "PROVISIONING: SSH adjustments.\n";
 
-  SSH_APPEND="    PreferredAuthentications publickey,password,gssapi-with-mic,hostbased,keyboard-interactive";
-  sudo -E grep -q -F "${SSH_APPEND}" "${SSH_CONFIG_PATH}" || echo "${SSH_APPEND}" >> "${SSH_CONFIG_PATH}";
+  SSH_CONFIG_APPEND="    PreferredAuthentications publickey,password,gssapi-with-mic,hostbased,keyboard-interactive";
+  sudo -E grep -q -F "${SSH_CONFIG_APPEND}" "${SSH_CONFIG_PATH}" || echo "${SSH_CONFIG_APPEND}" >> "${SSH_CONFIG_PATH}";
 
 fi
 
