@@ -28,25 +28,25 @@ Vagrant.configure(2) do |config|
 
   # Copy over the Apache related config files.
   config.vm.provision "file", source: "config_files/apache2.conf", destination: "apache2.conf"
-  config.vm.provision "file", source: "config_files/apache-mpm_prefork.conf", destination: "apache-mpm_prefork.conf"
-  config.vm.provision "file", source: "config_files/apache-common.conf", destination: "apache-common.conf"
-  config.vm.provision "file", source: "config_files/apache-000-default.conf", destination: "apache-000-default.conf"
+  config.vm.provision "file", source: "config_files/apache2-mpm_prefork.conf", destination: "apache2-mpm_prefork.conf"
+  config.vm.provision "file", source: "config_files/apache2-common.conf", destination: "apache2-common.conf"
+  config.vm.provision "file", source: "config_files/apache2-000-default.conf", destination: "apache2-000-default.conf"
   config.vm.provision "file", source: "config_files/index.php", destination: "index.php"
 
   # Copy over the MySQL related config files.
   config.vm.provision "file", source: "config_files/mysql_secure_installation.sql", destination: "mysql_secure_installation.sql"
 
   # Copy over the Munin related config files.
-  config.vm.provision "file", source: "config_files/apache-munin.conf", destination: "apache-munin.conf"
+  config.vm.provision "file", source: "config_files/apache2-munin.conf", destination: "apache2-munin.conf"
   config.vm.provision "file", source: "config_files/munin.conf", destination: "munin.conf"
 
   # Copy over the phpMyAdmin related config files.
-  config.vm.provision "file", source: "config_files/apache-phpmyadmin.conf", destination: "apache-phpmyadmin.conf"
+  config.vm.provision "file", source: "config_files/apache2-phpmyadmin.conf", destination: "apache2-phpmyadmin.conf"
   config.vm.provision "file", source: "config_files/phpmyadmin-config.inc.php", destination: "phpmyadmin-config.inc.php"
   config.vm.provision "file", source: "config_files/phpmyadmin-Header.class.php", destination: "phpmyadmin-Header.class.php"
 
   # Copy over the AWStats related config files.
-  config.vm.provision "file", source: "config_files/apache-awstats.conf", destination: "apache-awstats.conf"
+  config.vm.provision "file", source: "config_files/apache2-awstats.conf", destination: "apache2-awstats.conf"
   config.vm.provision "file", source: "config_files/awstatstotals.php", destination: "awstatstotals.php"
   config.vm.provision "file", source: "config_files/awstats.model.deployment.conf", destination: "awstats.model.deployment.conf"
 
