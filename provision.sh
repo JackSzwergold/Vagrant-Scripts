@@ -766,4 +766,5 @@ sudo -E updatedb;
 
 sudo -E service apache2 restart;
 
+# Ditch the config files in the working directory.
 # sudo -E rm -f "${WORKING_DIR}"/*.{conf,patch,php,sql}
