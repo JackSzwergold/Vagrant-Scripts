@@ -27,14 +27,13 @@ Vagrant.configure(2) do |config|
   config.vm.provision "file", source: "config_files/iptables-persistent-ipset.patch", destination: "iptables-persistent-ipset.patch"
 
   # Copy over the Apache related config files.
-  config.vm.provision "file", source: "config_files/000-default.conf", destination: "000-default.conf"
-  config.vm.provision "file", source: "config_files/common.conf", destination: "common.conf"
-  config.vm.provision "file", source: "config_files/index.php", destination: "index.php"
   config.vm.provision "file", source: "config_files/apache2.conf", destination: "apache2.conf"
-  config.vm.provision "file", source: "config_files/mpm_prefork.conf", destination: "mpm_prefork.conf"
+  config.vm.provision "file", source: "config_files/apache-mpm_prefork.conf", destination: "apache-mpm_prefork.conf"
+  config.vm.provision "file", source: "config_files/apache-common.conf", destination: "apache-common.conf"
+  config.vm.provision "file", source: "config_files/apache-000-default.conf", destination: "apache-000-default.conf"
+  config.vm.provision "file", source: "config_files/index.php", destination: "index.php"
 
   # Copy over the MySQL related config files.
-  config.vm.provision "file", source: "config_files/000-default.conf", destination: "000-default.conf"
   config.vm.provision "file", source: "config_files/mysql_secure_installation.sql", destination: "mysql_secure_installation.sql"
 
   # Copy over the Munin related config files.

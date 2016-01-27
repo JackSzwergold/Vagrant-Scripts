@@ -415,10 +415,10 @@ if [ ! -f "${APACHE_COMMON_CONFIG_PATH}" ]; then
   echo -e "PROVISIONING: Setting Apache configs.\n";
 
   # Copy the config files into place.
-  sudo -E cp -f "common.conf" "${APACHE_COMMON_CONFIG_PATH}";
   sudo -E cp -f "apache2.conf" "/etc/apache2/apache2.conf";
-  sudo -E cp -f "000-default.conf" "/etc/apache2/sites-available/000-default.conf";
-  sudo -E cp -f "mpm_prefork.conf" "/etc/apache2/mods-available/mpm_prefork.conf";
+  sudo -E cp -f "apache-mpm_prefork.conf" "/etc/apache2/mods-available/mpm_prefork.conf";
+  sudo -E cp -f "apache-common.conf" "${APACHE_COMMON_CONFIG_PATH}";
+  sudo -E cp -f "apache-000-default.conf" "/etc/apache2/sites-available/000-default.conf";
 
 fi
 
