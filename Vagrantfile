@@ -19,6 +19,7 @@ Vagrant.configure(2) do |config|
 
   # Copy over the environment related config files.
   config.vm.provision "file", source: "config_files/selected_editor", destination: ".selected_editor"
+  config.vm.provision "file", source: "config_files/crontab.conf", destination: "crontab.conf"
 
   # Copy over the IPTables and IPSet related config files.
   config.vm.provision "file", source: "config_files/ipset.conf", destination: "ipset.conf"

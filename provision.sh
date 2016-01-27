@@ -71,19 +71,24 @@ sudo -E aptitude install -y --assume-yes -q avahi-daemon avahi-utils;
 # Sysstat
 ######################################################################################
 
-echo -e "PROVISIONING: Sysstat related stuff.\n";
+# Check if Sysstat is installed and if not, install it.
+hash sar 2>/dev/null || { 
 
-# Install 'sysstat'.
-sudo -E aptitude install -y --assume-yes -q sysstat;
+  # Install Sysstat.
+  echo -e "PROVISIONING: Sysstat related stuff.\n";
 
-# Enable 'sysstat'.
-SYSSTAT_CONFIG_PATH="/etc/default/sysstat";
-if [ -f "${SYSSTAT_CONFIG_PATH}" ]; then
-  sudo -E sed -i 's/ENABLED="false"/ENABLED="true"/g' "${SYSSTAT_CONFIG_PATH}";
-fi
+  # Install Sysstat.
+  sudo -E aptitude install -y --assume-yes -q sysstat;
 
-# Restart 'sysstat'.
-sudo -E service sysstat restart;
+  # Enable Sysstat.
+  SYSSTAT_CONFIG_PATH="/etc/default/sysstat";
+  SYSSTAT_ENABLED='ENABLED="true"';
+  if [ -f "${SYSSTAT_CONFIG_PATH}" ]  &&  [ ! $(grep -F "${SYSSTAT_ENABLED}" "${SYSSTAT_CONFIG_PATH}") ]; then
+    sudo -E sed -i 's/ENABLED="false"/ENABLED="true"/g' "${SYSSTAT_CONFIG_PATH}";
+    sudo -E service sysstat restart;
+  fi
+
+}
 
 ######################################################################################
 # Generic Tools
@@ -102,20 +107,32 @@ sudo -E aptitude install -y --assume-yes -q \
 # Locate
 ######################################################################################
 
-echo -e "PROVISIONING: Installing the locate tool and updating the database.\n";
+# Check if Locate is installed and if not, install it.
+hash updatedb 2>/dev/null || { 
 
-# Install and update the locate database.
-sudo -E aptitude install -y --assume-yes -q locate;
-sudo -E updatedb;
+  echo -e "PROVISIONING: Installing the locate tool and updating the database.\n";
+
+  # Install Locate.
+  sudo -E aptitude install -y --assume-yes -q mlocate;
+
+  # Update Locate.
+  sudo -E updatedb;
+
+}
 
 ######################################################################################
 # Compiler
 ######################################################################################
 
-echo -e "PROVISIONING: Installing the core compiler tools.\n";
+# Check if the core compiler and build tools are installed and if not, install it.
+hash libtool 2>/dev/null || { 
 
-# Install the core compiler and build options.
-sudo -E aptitude install -y --assume-yes -q build-essential;
+  echo -e "PROVISIONING: Installing the core compiler tools.\n";
+
+  # Install the core compiler and build tools.
+  sudo -E aptitude install -y --assume-yes -q build-essential libtool;
+
+}
 
 ######################################################################################
 # Git
@@ -126,6 +143,10 @@ if ! grep -q -s "git-core" /etc/apt/sources.list /etc/apt/sources.list.d/*; then
 
   echo -e "PROVISIONING: Installing Git and related stuff.\n";
 
+  # Purge any already installed version of Git.
+  sudo -E aptitude purge -y --assume-yes -q git git-core subversion git-svn;
+
+  # Now install Git via PPA.
   sudo -E aptitude install -y --assume-yes -q python-software-properties;
   sudo -E add-apt-repository -y ppa:git-core/ppa;
   sudo -E aptitude update -y --assume-yes -q;
@@ -138,12 +159,17 @@ fi
 # Postfix and Mail
 ######################################################################################
 
-echo -e "PROVISIONING: Installing Postfix and related mail stuff.\n";
+# Check if Postfix and related mail tools are installed and if not, install it.
+hash postfix 2>/dev/null || { 
 
-# Install postfix and general mail stuff.
-debconf-set-selections <<< "postfix postfix/mailname string vagrant.local";
-debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'";
-sudo -E aptitude install -y --assume-yes -q postfix mailutils;
+  echo -e "PROVISIONING: Installing Postfix and related mail stuff.\n";
+
+  # Install postfix and general mail stuff.
+  debconf-set-selections <<< "postfix postfix/mailname string vagrant.local";
+  debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'";
+  sudo -E aptitude install -y --assume-yes -q postfix mailutils;
+
+}
 
 ######################################################################################
 # UMASK
@@ -487,7 +513,7 @@ if [ ! -f "/usr/local/bin/geoiplookup" ]; then
   echo -e "PROVISIONING: Installing the GeoIP binary.\n";
 
   # Install the core compiler and build options.
-  sudo aptitude install -y --assume-yes -q build-essential zlib1g-dev libtool
+  sudo aptitude install -y --assume-yes -q build-essential zlib1g-dev libtool;
 
   # Install from source code.
   cd "${WORKING_DIR}";
