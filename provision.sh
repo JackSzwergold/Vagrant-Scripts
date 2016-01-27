@@ -228,53 +228,63 @@ sudo -E chmod -f -x "/etc/update-motd.d/98-cloudguest";
 # IPTables and IPSet
 ######################################################################################
 
-echo -e "PROVISIONING: IPTables and IPSet stuff.\n";
+# Check if IPTables and IPSet are installed and if not, install it.
+hash iptables 2>/dev/null || { 
 
-# Install IPTables and IPSet stuff.
-debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v4 boolean true";
-debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v6 boolean true";
-sudo -E aptitude install -y --assume-yes -q iptables iptables-persistent ipset;
+  echo -e "PROVISIONING: IPTables and IPSet stuff.\n";
 
-# Load the IPSet stuff if the file exists.
-if [ -f "ipset.conf" ]; then
-  sudo -E ipset restore < "ipset.conf";
-  sudo -E cp -f "ipset.conf" "/etc/iptables/rules.ipsets";
-fi
+  # Install IPTables and IPSet stuff.
+  debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v4 boolean true";
+  debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v6 boolean true";
+  sudo -E aptitude install -y --assume-yes -q iptables iptables-persistent ipset;
 
-# Load the IPTables stuff if the file exists.
-if [ -f "iptables.conf" ]; then
-  sudo -E iptables-restore < "iptables.conf";
-  sudo -E cp -f "iptables.conf" "/etc/iptables/rules.v4";
-fi
+  # Load the IPSet stuff if the file exists.
+  if [ -f "ipset.conf" ]; then
+    sudo -E ipset restore < "ipset.conf";
+    sudo -E cp -f "ipset.conf" "/etc/iptables/rules.ipsets";
+  fi
 
-# Patch 'iptables-persistent' if the patch exists and the original 'iptables-persistent' exists.
-if [ -f "/etc/init.d/iptables-persistent" ] && [ -f "iptables-persistent-ipset.patch" ]; then
-  sudo -E patch -fsb "/etc/init.d/iptables-persistent" < "iptables-persistent-ipset.patch";
-fi
+  # Load the IPTables stuff if the file exists.
+  if [ -f "iptables.conf" ]; then
+    sudo -E iptables-restore < "iptables.conf";
+    sudo -E cp -f "iptables.conf" "/etc/iptables/rules.v4";
+  fi
+
+  # Patch 'iptables-persistent' if the patch exists and the original 'iptables-persistent' exists.
+  if [ -f "/etc/init.d/iptables-persistent" ] && [ -f "iptables-persistent-ipset.patch" ]; then
+    sudo -E patch -fsb "/etc/init.d/iptables-persistent" < "iptables-persistent-ipset.patch";
+  fi
+
+}
 
 ######################################################################################
 # Apache and PHP (Installing)
 ######################################################################################
 
-echo -e "PROVISIONING: Installing Apache and PHP stuff.\n"
+# Check if IPTables and IPSet are installed and if not, install it.
+hash iptables 2>/dev/null || { 
 
-# Install the base Apache stuff.
-sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q \
-  apache2 apache2-threaded-dev php5 \
-  libapache2-mod-php5 php-pear;
+  echo -e "PROVISIONING: Installing Apache and PHP stuff.\n"
 
-# Install other PHP related stuff.
-sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q \
-  php5-mysql php5-pgsql php5-odbc php5-sybase php5-sqlite \
-  php5-xmlrpc php5-json php5-xsl php5-curl php5-geoip \
-  php-getid3 php5-imap php5-ldap php5-mcrypt \
-  php5-pspell php5-gmp php5-gd;
+  # Install the base Apache stuff.
+  sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q \
+    apache2 apache2-threaded-dev php5 \
+    libapache2-mod-php5 php-pear;
 
-# Enable the PHP mcrypt module.
-sudo -E php5enmod mcrypt;
+  # Install other PHP related stuff.
+  sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q \
+    php5-mysql php5-pgsql php5-odbc php5-sybase php5-sqlite \
+    php5-xmlrpc php5-json php5-xsl php5-curl php5-geoip \
+    php-getid3 php5-imap php5-ldap php5-mcrypt \
+    php5-pspell php5-gmp php5-gd;
 
-# Enable these core Apache modules.
-sudo -E a2enmod -q rewrite headers expires include proxy proxy_http cgi;
+  # Enable the PHP mcrypt module.
+  sudo -E php5enmod mcrypt;
+
+  # Enable these core Apache modules.
+  sudo -E a2enmod -q rewrite headers expires include proxy proxy_http cgi;
+
+}
 
 ######################################################################################
 # Apache and PHP (Configuring)
