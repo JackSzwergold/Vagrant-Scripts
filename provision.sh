@@ -313,6 +313,7 @@ if [ -f "${PHP_CONFIG_PATH}" ]; then
 
   # Harden PHP by disabling 'expose_php'.
   sudo -E sed -i 's/expose_php = On/expose_php = Off/g' "${PHP_CONFIG_PATH}";
+
   # Disable the PHP 5.5 opcache.
   sudo -E sed -i 's/;opcache.enable=0/opcache.enable=0/g' "${PHP_CONFIG_PATH}";
 
@@ -324,8 +325,13 @@ if [ -f "${APACHE_SECURITY_PATH}" ]; then
 
   echo -e "PROVISIONING: Hardening Apache.\n";
 
+  # Set 'ServerTokens' to Prod.
   sudo -E sed -i 's/^ServerTokens OS/ServerTokens Prod/g' "${APACHE_SECURITY_PATH}";
+
+  # Disable 'ServerSignature'.
   sudo -E sed -i 's/^ServerSignature On/ServerSignature Off/g' "${APACHE_SECURITY_PATH}";
+
+  # Disable 'TraceEnable'.
   sudo -E sed -i 's/^TraceEnable On/TraceEnable Off/g' "${APACHE_SECURITY_PATH}";
 
 fi
@@ -336,8 +342,10 @@ if [ -f "${APACHE_ENVVARS_PATH}" ]; then
 
   echo -e "PROVISIONING: Adjusting Apache group and UMASK.\n";
 
+  # Set 'APACHE_RUN_GROUP' to 'www-readwrite'.
   sudo -E sed -i 's/^export APACHE_RUN_GROUP=www-data/export APACHE_RUN_GROUP=www-readwrite/g' "${APACHE_ENVVARS_PATH}";
 
+  # Set the UMASK to 002.
   APACHE_APPEND="umask 002";
   sudo -E grep -q -F "${APACHE_APPEND}" "${APACHE_ENVVARS_PATH}" || echo -e "\n${APACHE_APPEND}" >> "${APACHE_ENVVARS_PATH}";
 
