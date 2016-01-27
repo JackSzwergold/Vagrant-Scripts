@@ -208,7 +208,16 @@ if [ -f "${LOGIN_DEFS_PATH}" ] && grep -E -q "${LOGIN_DEFS_PATTERN}" "${LOGIN_DE
 fi
 
 # Set the default UMASK value in 'common-session' to be 002 instead of 022.
- 
+COMMON_SESSION_PATH="/etc/pam.d/common-session";
+COMMON_SESSION_PATTERN="^session\soptional.*pam_umask.so$";
+if [ -f "${COMMON_SESSION_PATH}" ] && grep -E -q "${COMMON_SESSION_PATTERN}" "${COMMON_SESSION_PATH}"; then
+
+  echo -e "PROVISIONING: Adjusting the UMASK setting in ${COMMON_SESSION_PATH}.\n";
+
+  # Adjust the UMASK setting in 'common-session'.
+  sudo -E sed -i "s/${COMMON_SESSION_PATTERN}/session\soptional\t\tpam_umask\.so\t\tumask=0002/g" "${COMMON_SESSION_PATH}";
+
+fi
 
 ######################################################################################
 # SSH
@@ -216,11 +225,11 @@ fi
 
 # Fix for slow SSH client connections.
 SSH_CONFIG_PATH="/etc/ssh/ssh_config";
+SSH_CONFIG_APPEND="    PreferredAuthentications publickey,password,gssapi-with-mic,hostbased,keyboard-interactive";
 if [ -f "${SSH_CONFIG_PATH}" ]; then
 
   echo -e "PROVISIONING: SSH adjustments.\n";
 
-  SSH_CONFIG_APPEND="    PreferredAuthentications publickey,password,gssapi-with-mic,hostbased,keyboard-interactive";
   sudo -E grep -q -F "${SSH_CONFIG_APPEND}" "${SSH_CONFIG_PATH}" || echo "${SSH_CONFIG_APPEND}" >> "${SSH_CONFIG_PATH}";
 
 fi
