@@ -470,6 +470,7 @@ if [ ! -d "/usr/share/phpmyadmin" ]; then
   echo -e "PROVISIONING: Installing phpMyAdmin stuff.\n";
 
   # Do this little dance to get things installed.
+  cd "${WORKING_DIR}";
   curl -ss -O -L "https://files.phpmyadmin.net/phpMyAdmin/4.0.10.11/phpMyAdmin-4.0.10.11-all-languages.tar.gz";
   tar -xf "phpMyAdmin-4.0.10.11-all-languages.tar.gz";
   rm -f "phpMyAdmin-4.0.10.11-all-languages.tar.gz";
@@ -617,6 +618,7 @@ if [ ! -d "/usr/share/awstats-7.3" ]; then
   echo -e "PROVISIONING: Installing the AWStats stuff.\n";
 
   # Do this little dance to get things installed.
+  cd "${WORKING_DIR}";
   curl -ss -O -L "http://prdownloads.sourceforge.net/awstats/awstats-7.3.tar.gz";
   tar -xf "awstats-7.3.tar.gz";
   rm -f "awstats-7.3.tar.gz";
