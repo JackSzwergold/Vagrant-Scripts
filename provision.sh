@@ -351,18 +351,24 @@ if [ -f "${APACHE_ENVVARS_PATH}" ]; then
 
 fi
 
-echo -e "PROVISIONING: Configuring Apache stuff.\n";
-
 # Set the config files for Apache.
-sudo -E cp -f "common.conf" "/etc/apache2/sites-available/common.conf";
-sudo -E cp -f "apache2.conf" "/etc/apache2/apache2.conf";
-sudo -E cp -f "000-default.conf" "/etc/apache2/sites-available/000-default.conf";
-sudo -E cp -f "mpm_prefork.conf" "/etc/apache2/mods-available/mpm_prefork.conf";
+APACHE_COMMON_CONFIG_PATH="/etc/apache2/sites-available/common.conf";
+if [ ! -f "${APACHE_COMMON_CONFIG_PATH}" ]; then
+
+  echo -e "PROVISIONING: Setting Apache configs.\n";
+
+  # Copy the config files into place.
+  sudo -E cp -f "common.conf" "${APACHE_COMMON_CONFIG_PATH}";
+  sudo -E cp -f "apache2.conf" "/etc/apache2/apache2.conf";
+  sudo -E cp -f "000-default.conf" "/etc/apache2/sites-available/000-default.conf";
+  sudo -E cp -f "mpm_prefork.conf" "/etc/apache2/mods-available/mpm_prefork.conf";
+
+fi
 
 # Ditch the default Apache directory and set a new default page.
 if [ -d "/var/www/html" ]; then
 
-  echo -e "PROVISIONING: Adjusting the Apache document root.\n";
+  echo -e "PROVISIONING: Adjusting the Apache root directory and default file.\n";
 
   sudo -E rm -rf "/var/www/html";
   sudo -E cp -f "index.php" "/var/www/index.php";
@@ -377,7 +383,7 @@ fi
 APACHE_LOGROTATE_PATH="/etc/logrotate.d/apache2";
 if [ -f "${APACHE_SECURITY_PATH}" ]; then
 
-  echo -e "PROVISIONING: Adjusting Apache log rotation.\n";
+  echo -e "PROVISIONING: Adjusting the Apache log rotation script.\n";
 
   sudo -E sed -i 's/rotate 52/rotate 13/g' "${APACHE_LOGROTATE_PATH}";
   sudo -E sed -i 's/create 640 root adm/create 640 root www-readwrite/g' "${APACHE_LOGROTATE_PATH}";
