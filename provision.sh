@@ -38,10 +38,14 @@ sudo -E adduser --quiet vagrant www-readwrite;
 # Environment
 ######################################################################################
 
-# echo -e "PROVISIONING: Adjusting Vagrant user related items.\n";
+echo -e "PROVISIONING: Setting the selected edtor.\n";
 
 # Set the selected editor to Nano.
-# sudo -u vagrant echo 'SELECTED_EDITOR="/bin/nano"' > ".selected_editor";
+
+if [ ! -f "${BASE_DIR}/.selected_editor" ]; then
+  echo 'SELECTED_EDITOR="/bin/nano"' > "${BASE_DIR}/.selected_editor";
+  sudo -E chown -f vagrant:www-readwrite "${BASE_DIR}/.selected_editor";
+fi
 
 echo -e "PROVISIONING: Importing the crontab.\n";
 
