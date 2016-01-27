@@ -4,8 +4,12 @@
 # Set some basic variables.
 ######################################################################################
 
-WORKING_DIR=$(pwd);
-echo -e "WORKING DIRECTORY: ${WORKING_DIR}.\n\n"
+BASE_DIR=$(pwd);
+echo -e "PROVISIONING: Base directory is: ${BASE_DIR}.\n\n";
+
+CONFIG_DIR="config_dir";
+echo -e "PROVISIONING: Config directory is: ${CONFIG_DIR}.\n\n";
+cd ${CONFIG_DIR};
 
 ######################################################################################
 # DEBIAN_FRONTEND
@@ -558,7 +562,7 @@ if [ ! -d "/usr/share/phpmyadmin" ]; then
   echo -e "PROVISIONING: Installing phpMyAdmin related items.\n";
 
   # Do this little dance to get things installed.
-  cd "${WORKING_DIR}";
+  cd "${BASE_DIR}/${CONFIG_DIR}";
   curl -ss -O -L "https://files.phpmyadmin.net/phpMyAdmin/4.0.10.11/phpMyAdmin-4.0.10.11-all-languages.tar.gz";
   tar -xf "phpMyAdmin-4.0.10.11-all-languages.tar.gz";
   rm -f "phpMyAdmin-4.0.10.11-all-languages.tar.gz";
@@ -625,7 +629,7 @@ hash geoiplookup 2>/dev/null || {
   sudo aptitude install -y --assume-yes -q build-essential zlib1g-dev libtool;
 
   # Install GeoIP from source code.
-  cd "${WORKING_DIR}";
+  cd "${BASE_DIR}/${CONFIG_DIR}";
   curl -ss -O -L "http://www.maxmind.com/download/geoip/api/c/GeoIP-latest.tar.gz";
   tar -xf "GeoIP-latest.tar.gz";
   rm -f "GeoIP-latest.tar.gz";
@@ -634,7 +638,7 @@ hash geoiplookup 2>/dev/null || {
   ./configure;
   make -s;
   sudo -E make -s install;
-  cd "${WORKING_DIR}";
+  cd "${BASE_DIR}/${CONFIG_DIR}";
   sudo -E rm -rf ./GeoIP*;
 
 }
@@ -713,7 +717,7 @@ if [ ! -d "/usr/share/awstats-7.3" ]; then
   echo -e "PROVISIONING: Installing the AWStats related items.\n";
 
   # Do this little dance to get things installed.
-  cd "${WORKING_DIR}";
+  cd "${BASE_DIR}/${CONFIG_DIR}";
   curl -ss -O -L "http://prdownloads.sourceforge.net/awstats/awstats-7.3.tar.gz";
   tar -xf "awstats-7.3.tar.gz";
   rm -f "awstats-7.3.tar.gz";
@@ -767,4 +771,4 @@ sudo -E updatedb;
 sudo -E service apache2 restart;
 
 # Ditch the config files in the working directory.
-# sudo -E rm -f "${WORKING_DIR}"/*.{conf,patch,php,sql}
+# sudo -E rm -f "${BASE_DIR}"/*.{conf,patch,php,sql}
