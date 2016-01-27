@@ -38,6 +38,11 @@ sudo -E adduser --quiet vagrant www-readwrite;
 # Set the selected editor to Nano.
 # sudo -u vagrant echo 'SELECTED_EDITOR="/bin/nano"' > ".selected_editor";
 
+echo -e "PROVISIONING: Importing the crontab.\n";
+
+# Importing the crontab.
+sudo -E crontab < "crontab.conf";
+
 ######################################################################################
 # Date and Time
 ######################################################################################
@@ -299,14 +304,14 @@ hash iptables 2>/dev/null || {
 # Check if Apache is installed and if not, install it.
 hash apachectl 2>/dev/null || {
 
-  echo -e "PROVISIONING: Installing Apache and PHP stuff.\n"
+  echo -e "PROVISIONING: Installing Apache and PHP related items.\n"
 
-  # Install the base Apache stuff.
+  # Install the base Apache related items.
   sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q \
     apache2 apache2-dev php5 \
     libapache2-mod-php5 php-pear;
 
-  # Install other PHP related stuff.
+  # Install other PHP related related items.
   sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q \
     php5-mysql php5-pgsql php5-odbc php5-sybase php5-sqlite \
     php5-xmlrpc php5-json php5-xsl php5-curl php5-geoip \
@@ -459,7 +464,7 @@ fi
 # Check if MySQL is installed and if not, install it.
 hash mysql 2>/dev/null || {
 
-  echo -e "PROVISIONING: Installing and configuring MySQL stuff.\n";
+  echo -e "PROVISIONING: Installing and configuring MySQL related items.\n";
 
   # Install the MySQL server and client.
   sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q mysql-server mysql-client;
@@ -480,7 +485,7 @@ hash mysql 2>/dev/null || {
 # Check if Munin is installed and if not, install it.
 hash munin-node 2>/dev/null || {
 
-  echo -e "PROVISIONING: Installing and configuring Munin stuff.\n";
+  echo -e "PROVISIONING: Installing and configuring Munin related items.\n";
 
   # Install Munin.
   sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q munin munin-node munin-plugins-extra libwww-perl;
@@ -550,7 +555,7 @@ fi
 # Install phpMyAdmin from source.
 if [ ! -d "/usr/share/phpmyadmin" ]; then
 
-  echo -e "PROVISIONING: Installing phpMyAdmin stuff.\n";
+  echo -e "PROVISIONING: Installing phpMyAdmin related items.\n";
 
   # Do this little dance to get things installed.
   cd "${WORKING_DIR}";
@@ -577,7 +582,7 @@ fi
 PHPMYADMIN_CONFIG_PATH="/usr/share/phpmyadmin/config.inc.php";
 if [ ! -f "${PHPMYADMIN_CONFIG_PATH}" ]; then
 
-  echo -e "PROVISIONING: Configuring phpMyAdmin stuff.\n";
+  echo -e "PROVISIONING: Configuring phpMyAdmin related items.\n";
 
   # Set the phpMyAdmin config file.
   if [ -f "phpmyadmin-config.inc.php" ]; then
@@ -586,7 +591,7 @@ if [ ! -f "${PHPMYADMIN_CONFIG_PATH}" ]; then
     sudo -E cp -f "/usr/share/phpmyadmin/config.sample.inc.php" "${PHPMYADMIN_CONFIG_PATH}";
   fi
 
-  # Set the blowfish secret stuff.
+  # Set the blowfish secret related items.
   if [ -f "${PHPMYADMIN_CONFIG_PATH}" ]; then
     BLOWFISH_SECRET_DEFAULT='a8b7c6d';
     BLOWFISH_SECRET_NEW=$(openssl rand -base64 30);
@@ -698,7 +703,7 @@ fi
 # Install AWStats from source.
 if [ ! -d "/usr/share/awstats-7.3" ]; then
 
-  echo -e "PROVISIONING: Installing the AWStats stuff.\n";
+  echo -e "PROVISIONING: Installing the AWStats related items.\n";
 
   # Do this little dance to get things installed.
   cd "${WORKING_DIR}";
