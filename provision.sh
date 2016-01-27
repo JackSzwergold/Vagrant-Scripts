@@ -285,6 +285,7 @@ if [ -f "${APACHE_ENVVARS_PATH}" ]; then
   echo -e "PROVISIONING: Adjusting Apache group and UMASK.\n";
 
   sudo -E sed -i 's/^export APACHE_RUN_GROUP=www-data/export APACHE_RUN_GROUP=www-readwrite/g' "${APACHE_ENVVARS_PATH}";
+
   APACHE_APPEND="umask 002";
   sudo -E grep -q -F "${APACHE_APPEND}" "${APACHE_ENVVARS_PATH}" || echo -e "\n${APACHE_APPEND}" >> "${APACHE_ENVVARS_PATH}";
 
