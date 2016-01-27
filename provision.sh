@@ -42,30 +42,46 @@ sudo -E adduser --quiet vagrant www-readwrite;
 # Date and Time
 ######################################################################################
 
-echo -e "PROVISIONING: Set the date and time stuff.\n";
+echo -e "PROVISIONING: Syncing with the time/date server.\n";
 
-# Sync with the time/date server.
+# Syncing with the time/date server.
 sudo -E ntpdate -u ntp.ubuntu.com;
 
-# Set the time zone data.
-# debconf-set-selections <<< "tzdata tzdata/Areas select America"
-# debconf-set-selections <<< "tzdata tzdata/Zones/America select New_York"
-# sudo -E dpkg-reconfigure tzdata
 TIMEZONE="America/New_York";
 TIMEZONE_PATH="/etc/timezone";
 if [ "${TIMEZONE}" != $(cat "${TIMEZONE_PATH}") ]; then
+
+  echo -e "PROVISIONING: Setting timezone data.\n";
+
+  # debconf-set-selections <<< "tzdata tzdata/Areas select America"
+  # debconf-set-selections <<< "tzdata tzdata/Zones/America select New_York"
+  # sudo -E dpkg-reconfigure tzdata
   sudo -E echo "${TIMEZONE}" > "${TIMEZONE_PATH}";
   sudo -E dpkg-reconfigure -f noninteractive tzdata;
+
 fi
 
-# Edit the 'sources.list' to enable partner package updates.
+echo -e "PROVISIONING: Adjusting the sources list.\n";
+
+# Edit the sources list.
 SOURCES_LIST="/etc/apt/sources.list";
 if [ -f "${SOURCES_LIST}" ]; then
   sudo -E sed -i '/^#.*deb.*partner$/s/^# //g' "${SOURCES_LIST}";
 fi
 
-# Install Avahi daemon stuff.
-sudo -E aptitude install -y --assume-yes -q avahi-daemon avahi-utils;
+######################################################################################
+# Avahi
+######################################################################################
+
+# Check if Sysstat is installed and if not, install it.
+hash sar 2>/dev/null || {
+
+  echo -e "PROVISIONING: Sysstat related stuff.\n";
+
+  # Install Avahi.
+  sudo -E aptitude install -y --assume-yes -q avahi-daemon avahi-utils;
+
+}
 
 ######################################################################################
 # Sysstat
@@ -74,7 +90,6 @@ sudo -E aptitude install -y --assume-yes -q avahi-daemon avahi-utils;
 # Check if Sysstat is installed and if not, install it.
 hash sar 2>/dev/null || {
 
-  # Install Sysstat.
   echo -e "PROVISIONING: Sysstat related stuff.\n";
 
   # Install Sysstat.
