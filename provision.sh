@@ -201,6 +201,7 @@ if [ -f "${SSH_CONFIG_PATH}" ]; then
 
   SSH_APPEND="    PreferredAuthentications publickey,password,gssapi-with-mic,hostbased,keyboard-interactive";
   sudo -E grep -q -F "${SSH_APPEND}" "${SSH_CONFIG_PATH}" || echo "${SSH_APPEND}" >> "${SSH_CONFIG_PATH}";
+
 fi
 
 ######################################################################################
