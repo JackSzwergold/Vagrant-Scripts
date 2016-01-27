@@ -5,11 +5,12 @@
 ######################################################################################
 
 BASE_DIR=$(pwd);
-echo -e "PROVISIONING: Base directory is: ${BASE_DIR}.\n\n";
+echo -e "PROVISIONING: Base directory is: '${BASE_DIR}'.\n\n";
 
 CONFIG_DIR="config_dir";
-echo -e "PROVISIONING: Config directory is: ${CONFIG_DIR}.\n\n";
-cd ${CONFIG_DIR};
+echo -e "PROVISIONING: Config directory is: '${CONFIG_DIR}'.\n\n";
+
+cd "${BASE_DIR}"/"${CONFIG_DIR}";
 
 ######################################################################################
 # DEBIAN_FRONTEND
@@ -637,7 +638,7 @@ hash geoiplookup 2>/dev/null || {
   libtoolize -f;
   ./configure;
   make -s;
-  sudo -E make -s install;
+  sudo -E make --silent install;
   cd "${BASE_DIR}/${CONFIG_DIR}";
   sudo -E rm -rf ./GeoIP*;
 
@@ -645,63 +646,63 @@ hash geoiplookup 2>/dev/null || {
 
 # Install the GeoIP databases.
 GEOIP_TMP_PATH="/tmp";
-GEOIP_DATAFILE_PATH="/usr/local/share/GeoIP";
-GEOIP_SYMLINK_PATH="/usr/share/GeoIP";
-if [ ! -d "${GEOIP_DATAFILE_PATH}" ]; then
+GEOIP_DATA_PATH="/usr/local/share/GeoIP";
+GEOIP_DATA_SYMLINK_PATH="/usr/share/GeoIP";
+if [ ! -d "${GEOIP_DATA_PATH}" ]; then
 
   echo -e "PROVISIONING: Installing the GeoIP databases.\n";
 
   # Get the GeoIP databases.
-  if [ ! -f "${GEOIP_TMP_PATH}/GeoIP.dat.gz" ] && [ ! -f "${GEOIP_DATAFILE_PATH}/GeoIP.dat" ]; then
+  if [ ! -f "${GEOIP_TMP_PATH}/GeoIP.dat.gz" ] && [ ! -f "${GEOIP_DATA_PATH}/GeoIP.dat" ]; then
     curl -ss -L "http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz" > "${GEOIP_TMP_PATH}/GeoIP.dat.gz";
   fi
 
-  if [ ! -f "${GEOIP_TMP_PATH}/GeoLiteCity.dat.gz" ] && [ ! -f "${GEOIP_DATAFILE_PATH}/GeoIPCity.dat" ]; then
+  if [ ! -f "${GEOIP_TMP_PATH}/GeoLiteCity.dat.gz" ] && [ ! -f "${GEOIP_DATA_PATH}/GeoIPCity.dat" ]; then
     curl -ss -L "http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz" > "${GEOIP_TMP_PATH}/GeoLiteCity.dat.gz";
   fi
 
-  if [ ! -f "${GEOIP_TMP_PATH}/GeoIPASNum.dat.gz" ] && [ ! -f "${GEOIP_DATAFILE_PATH}/GeoIPASNum.dat" ]; then
+  if [ ! -f "${GEOIP_TMP_PATH}/GeoIPASNum.dat.gz" ] && [ ! -f "${GEOIP_DATA_PATH}/GeoIPASNum.dat" ]; then
     curl -ss -L "http://geolite.maxmind.com/download/geoip/database/asnum/GeoIPASNum.dat.gz" > "${GEOIP_TMP_PATH}/GeoIPASNum.dat.gz";
   fi
 
-  if [ ! -f "${GEOIP_TMP_PATH}/GeoIPCountryCSV.zip" ] && [ ! -f "${GEOIP_DATAFILE_PATH}/GeoIPCountryWhois.csv" ]; then
+  if [ ! -f "${GEOIP_TMP_PATH}/GeoIPCountryCSV.zip" ] && [ ! -f "${GEOIP_DATA_PATH}/GeoIPCountryWhois.csv" ]; then
     curl -ss -L "http://geolite.maxmind.com/download/geoip/database/GeoIPCountryCSV.zip" > "${GEOIP_TMP_PATH}/GeoIPCountryCSV.zip";
   fi
 
   # Create the GeoIP directory—if it doesn't exist—like this.
-  sudo mkdir -p "${GEOIP_DATAFILE_PATH}/";
+  sudo mkdir -p "${GEOIP_DATA_PATH}/";
 
   # Move and decompress the databases to GeoIP data path.
-  if [ -d "${GEOIP_DATAFILE_PATH}" ]; then
+  if [ -d "${GEOIP_DATA_PATH}" ]; then
 
     if [ -f "${GEOIP_TMP_PATH}/GeoIP.dat.gz" ]; then
-      sudo -E mv "${GEOIP_TMP_PATH}/GeoIP.dat.gz" "${GEOIP_DATAFILE_PATH}/";
-      sudo -E gzip -d -q -f "${GEOIP_DATAFILE_PATH}/GeoIP.dat.gz";
-      sudo -E ln -s -f "${GEOIP_DATAFILE_PATH}/GeoIP.dat" "${GEOIP_SYMLINK_PATH}/";
+      sudo -E mv "${GEOIP_TMP_PATH}/GeoIP.dat.gz" "${GEOIP_DATA_PATH}/";
+      sudo -E gzip -d -q -f "${GEOIP_DATA_PATH}/GeoIP.dat.gz";
+      sudo -E ln -s -f "${GEOIP_DATA_PATH}/GeoIP.dat" "${GEOIP_DATA_SYMLINK_PATH}/";
     fi
 
     if [ -f "${GEOIP_TMP_PATH}/GeoLiteCity.dat.gz" ]; then
-      sudo -E mv "${GEOIP_TMP_PATH}/GeoLiteCity.dat.gz" "${GEOIP_DATAFILE_PATH}/";
-      sudo -E gzip -d -q -f "${GEOIP_DATAFILE_PATH}/GeoLiteCity.dat.gz";
-      sudo -E mv "${GEOIP_DATAFILE_PATH}/GeoLiteCity.dat" "${GEOIP_DATAFILE_PATH}/GeoIPCity.dat";
-      sudo -E ln -s -f "${GEOIP_DATAFILE_PATH}/GeoIPCity.dat" "${GEOIP_SYMLINK_PATH}/";
+      sudo -E mv "${GEOIP_TMP_PATH}/GeoLiteCity.dat.gz" "${GEOIP_DATA_PATH}/";
+      sudo -E gzip -d -q -f "${GEOIP_DATA_PATH}/GeoLiteCity.dat.gz";
+      sudo -E mv "${GEOIP_DATA_PATH}/GeoLiteCity.dat" "${GEOIP_DATA_PATH}/GeoIPCity.dat";
+      sudo -E ln -s -f "${GEOIP_DATA_PATH}/GeoIPCity.dat" "${GEOIP_DATA_SYMLINK_PATH}/";
     fi
 
     if [ -f "${GEOIP_TMP_PATH}/GeoIPASNum.dat.gz" ]; then
-      sudo -E mv "${GEOIP_TMP_PATH}/GeoIPASNum.dat.gz" "${GEOIP_DATAFILE_PATH}/";
-      sudo -E gzip -d -q -f "${GEOIP_DATAFILE_PATH}/GeoIPASNum.dat.gz";
-      sudo -E ln -s -f "${GEOIP_DATAFILE_PATH}/GeoIPASNum.dat" "${GEOIP_SYMLINK_PATH}/";
+      sudo -E mv "${GEOIP_TMP_PATH}/GeoIPASNum.dat.gz" "${GEOIP_DATA_PATH}/";
+      sudo -E gzip -d -q -f "${GEOIP_DATA_PATH}/GeoIPASNum.dat.gz";
+      sudo -E ln -s -f "${GEOIP_DATA_PATH}/GeoIPASNum.dat" "${GEOIP_DATA_SYMLINK_PATH}/";
     fi
 
     if [ -f "${GEOIP_TMP_PATH}/GeoIPCountryCSV.zip" ]; then
-      sudo -E mv "${GEOIP_TMP_PATH}/GeoIPCountryCSV.zip" "${GEOIP_DATAFILE_PATH}/";
-      sudo -E unzip -o -q -d "${GEOIP_DATAFILE_PATH}/" "${GEOIP_DATAFILE_PATH}/GeoIPCountryCSV.zip";
-      sudo -E rm -f "${GEOIP_DATAFILE_PATH}/GeoIPCountryCSV.zip";
-      sudo -E ln -s -f "${GEOIP_DATAFILE_PATH}/GeoIPCountryWhois.csv" "${GEOIP_SYMLINK_PATH}/";
+      sudo -E mv "${GEOIP_TMP_PATH}/GeoIPCountryCSV.zip" "${GEOIP_DATA_PATH}/";
+      sudo -E unzip -o -q -d "${GEOIP_DATA_PATH}/" "${GEOIP_DATA_PATH}/GeoIPCountryCSV.zip";
+      sudo -E rm -f "${GEOIP_DATA_PATH}/GeoIPCountryCSV.zip";
+      sudo -E ln -s -f "${GEOIP_DATA_PATH}/GeoIPCountryWhois.csv" "${GEOIP_DATA_SYMLINK_PATH}/";
     fi
 
     # Set permissions to root for owner and group.
-    sudo -E chown root:root -R "${GEOIP_DATAFILE_PATH}/";
+    sudo -E chown root:root -R "${GEOIP_DATA_PATH}/";
 
   fi
 
@@ -712,7 +713,8 @@ fi
 ######################################################################################
 
 # Install AWStats from source.
-if [ ! -d "/usr/share/awstats-7.3" ]; then
+AWSTATS_ROOT_DIR="/usr/share/awstats-7.3";
+if [ ! -d "${AWSTATS_ROOT_DIR}" ]; then
 
   echo -e "PROVISIONING: Installing the AWStats related items.\n";
 
@@ -721,7 +723,7 @@ if [ ! -d "/usr/share/awstats-7.3" ]; then
   curl -ss -O -L "http://prdownloads.sourceforge.net/awstats/awstats-7.3.tar.gz";
   tar -xf "awstats-7.3.tar.gz";
   rm -f "awstats-7.3.tar.gz";
-  sudo -E mv -f "awstats-7.3" "/usr/share/awstats-7.3";
+  sudo -E mv -f "awstats-7.3" "${AWSTATS_ROOT_DIR}";
 
   # Copy and enable the AWStats Apache config.
   AWSTATS_APACHE_CONFIG_PATH="/etc/apache2/conf-available/awstats.conf";
@@ -732,27 +734,29 @@ if [ ! -d "/usr/share/awstats-7.3" ]; then
   fi
 
   # Set an index page for AWStats.
-  sudo -E cp -f "awstatstotals.php" "/usr/share/awstats-7.3/wwwroot/cgi-bin/index.php";
-  sudo -E chmod a+r "/usr/share/awstats-7.3/wwwroot/cgi-bin/index.php";
+  sudo -E cp -f "awstatstotals.php" "${AWSTATS_ROOT_DIR}/wwwroot/cgi-bin/index.php";
+  sudo -E chmod a+r "${AWSTATS_ROOT_DIR}/wwwroot/cgi-bin/index.php";
 
   # Create the AWStats data directory.
-  sudo -E mkdir -p "/usr/share/awstats-7.3/wwwroot/data";
-  sudo -E chmod -f g+w "/usr/share/awstats-7.3/wwwroot/data";
+  sudo -E mkdir -p "${AWSTATS_ROOT_DIR}/wwwroot/data";
+  sudo -E chmod -f g+w "${AWSTATS_ROOT_DIR}/wwwroot/data";
 
   # Now install CPANminus like this.
-  sudo -E aptitude install -y --assume-yes -q cpanminus;
+  hash cpanminus 2>/dev/null || {
+    sudo -E aptitude install -y --assume-yes -q cpanminus;
+  }
 
-  # With that done, install all of the GeoIP related modules like this.
-  sudo cpanm -i -f YAML Geo::IP Geo::IPfree Geo::IP::PurePerl URI::Escape Net::IP Net::DNS Net::XWhois Time::HiRes Time::Local;
+  # With that done, install all of the GeoIP related CPAN modules like this.
+  sudo cpanm --install --force --notest --quiet --skip-installed YAML Geo::IP Geo::IPfree Geo::IP::PurePerl URI::Escape Net::IP Net::DNS Net::XWhois Time::HiRes Time::Local;
 
   # Copy over a basic config file.
-  sudo -E cp -f "awstats.model.deployment.conf" "/usr/share/awstats-7.3/wwwroot/cgi-bin/awstats.vagrant.local.conf";
+  sudo -E cp -f "awstats.model.deployment.conf" "${AWSTATS_ROOT_DIR}/wwwroot/cgi-bin/awstats.vagrant.local.conf";
 
   # Set permissions to root for owner and group.
-  sudo -E chown -f root:root -R "/usr/share/awstats-7.3";
+  sudo -E chown -f root:root -R "${AWSTATS_ROOT_DIR}";
 
   # Update the data for the 'vagrant.local' config.
-  sudo -E "/usr/share/awstats-7.3/wwwroot/cgi-bin/awstats.pl" -config="vagrant.local" -update
+  sudo -E "${AWSTATS_ROOT_DIR}/wwwroot/cgi-bin/awstats.pl" -config="vagrant.local" -update
 
 fi
 

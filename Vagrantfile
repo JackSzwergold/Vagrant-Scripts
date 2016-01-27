@@ -19,7 +19,7 @@ Vagrant.configure(2) do |config|
 
   # Copy over the configuration directory.
   # config.vm.provision :file, source: "config_dir", destination: "config_dir"
-  config.vm.synced_folder "config_dir/", "/home/vagrant/config_dir", type: "rsync", rsync__exclude: ".DS_Store"
+  config.vm.synced_folder "config_dir", "/home/vagrant/config_dir", type: "rsync", rsync__exclude: ".DS_Store"
 
   # Set the shell script to provision the server.
   config.vm.provision :shell, :path => "provision.sh"
