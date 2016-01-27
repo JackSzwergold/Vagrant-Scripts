@@ -293,16 +293,20 @@ fi
 echo -e "PROVISIONING: Configuring Apache stuff.\n";
 
 # Set the config files for Apache.
-sudo -E cp -f "000-default.conf" "/etc/apache2/sites-available/000-default.conf";
 sudo -E cp -f "common.conf" "/etc/apache2/sites-available/common.conf";
+sudo -E cp -f "apache2.conf" "/etc/apache2/apache2.conf";
+sudo -E cp -f "000-default.conf" "/etc/apache2/sites-available/000-default.conf";
+sudo -E cp -f "mpm_prefork.conf" "/etc/apache2/mods-available/mpm_prefork.conf";
 
 # Ditch the default Apache directory and set a new default page.
-sudo -E rm -rf "/var/www/html";
-sudo -E cp -f "index.php" "/var/www/index.php";
+if [ -d "/var/www/html" ]; then
 
-# Replace the default man Apache config and the MPM prefork config with something simpler and more resource friendly.
-sudo -E cp -f "apache2.conf" "/etc/apache2/apache2.conf";
-sudo -E cp -f "mpm_prefork.conf" "/etc/apache2/mods-available/mpm_prefork.conf";
+  echo -e "PROVISIONING: Adjusting the Apache document root.\n";
+
+  sudo -E rm -rf "/var/www/html";
+  sudo -E cp -f "index.php" "/var/www/index.php";
+
+fi
 
 # Restart Apache to get the new config settings loaded.
 sudo -E service apache2 restart;
