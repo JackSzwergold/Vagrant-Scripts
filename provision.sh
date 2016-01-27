@@ -73,10 +73,10 @@ fi
 # Avahi
 ######################################################################################
 
-# Check if Sysstat is installed and if not, install it.
-hash sar 2>/dev/null || {
+# Check if Avahi is installed and if not, install it.
+hash avahi-daemon 2>/dev/null || {
 
-  echo -e "PROVISIONING: Sysstat related stuff.\n";
+  echo -e "PROVISIONING: Avahi related stuff.\n";
 
   # Install Avahi.
   sudo -E aptitude install -y --assume-yes -q avahi-daemon avahi-utils;
@@ -98,7 +98,7 @@ hash sar 2>/dev/null || {
   # Enable Sysstat.
   SYSSTAT_CONFIG_PATH="/etc/default/sysstat";
   SYSSTAT_ENABLED='ENABLED="true"';
-  if [ -f "${SYSSTAT_CONFIG_PATH}" ]  &&  [ ! $(grep -F "${SYSSTAT_ENABLED}" "${SYSSTAT_CONFIG_PATH}") ]; then
+  if [ -f "${SYSSTAT_CONFIG_PATH}" ] && [ ! $(grep -F "${SYSSTAT_ENABLED}" "${SYSSTAT_CONFIG_PATH}") ]; then
     sudo -E sed -i 's/ENABLED="false"/ENABLED="true"/g' "${SYSSTAT_CONFIG_PATH}";
     sudo -E service sysstat restart;
   fi
