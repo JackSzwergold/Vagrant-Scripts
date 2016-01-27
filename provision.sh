@@ -322,6 +322,12 @@ hash apachectl 2>/dev/null || {
 }
 
 ######################################################################################
+# Stop Apache while other things happen.
+######################################################################################
+
+sudo -E service apache2 stop;
+
+######################################################################################
 # Apache and PHP (Configuring)
 ######################################################################################
 
@@ -446,9 +452,6 @@ if [ -f "${APACHE_SECURITY_PATH}" ]; then
 
 fi
 
-# Restart Apache to get the new config settings loaded.
-sudo -E service apache2 restart;
-
 ######################################################################################
 # MySQL
 ######################################################################################
@@ -536,7 +539,7 @@ if [ -f "apache-munin.conf" ] && [ -h "${MUNIN_APACHE_CONFIG_PATH}" ]; then
   sudo -E rm -f "${MUNIN_APACHE_CONFIG_PATH}";
   sudo -E cp -f "apache-munin.conf" "${MUNIN_APACHE_CONFIG_PATH}";
   sudo -E a2enconf -q munin;
-  sudo -E service apache2 restart;
+  # sudo -E service apache2 restart;
 
 fi
 
@@ -600,7 +603,7 @@ if [ -f "apache-phpmyadmin.conf" ] && [ ! -f "${PHPMYADMIN_APACHE_CONFIG_PATH}" 
 
   sudo -E cp -f "apache-phpmyadmin.conf" "${PHPMYADMIN_APACHE_CONFIG_PATH}";
   sudo -E a2enconf -q phpmyadmin;
-  sudo -E service apache2 restart;
+  # sudo -E service apache2 restart;
 
 fi
 
@@ -709,7 +712,7 @@ if [ ! -d "/usr/share/awstats-7.3" ]; then
   if [ -f "apache-awstats.conf" ] && [ ! -f "${AWSTATS_APACHE_CONFIG_PATH}" ]; then
     sudo -E cp -f "apache-awstats.conf" "${AWSTATS_APACHE_CONFIG_PATH}";
     sudo -E a2enconf -q awstats;
-    sudo -E service apache2 restart;
+    # sudo -E service apache2 restart;
   fi
 
   # Set an index page for AWStats.
@@ -744,3 +747,9 @@ fi
 echo -e "PROVISIONING: Updating the locate database.\n";
 
 sudo -E updatedb;
+
+######################################################################################
+# Restart Apache now that we’re done.
+######################################################################################
+
+sudo -E service apache2 restart;
