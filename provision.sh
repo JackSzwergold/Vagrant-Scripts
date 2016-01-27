@@ -103,7 +103,7 @@ hash sar 2>/dev/null || {
   # Enable Sysstat.
   SYSSTAT_CONFIG_PATH="/etc/default/sysstat";
   SYSSTAT_ENABLED='ENABLED="true"';
-  if [ -f "${SYSSTAT_CONFIG_PATH}" ] && [ ! $(grep -F "${SYSSTAT_ENABLED}" "${SYSSTAT_CONFIG_PATH}") ]; then
+  if [ -f "${SYSSTAT_CONFIG_PATH}" ] && ! grep -F -q "${SYSSTAT_ENABLED}" "${SYSSTAT_CONFIG_PATH}"; then
     sudo -E sed -i 's/ENABLED="false"/ENABLED="true"/g' "${SYSSTAT_CONFIG_PATH}";
     sudo -E service sysstat restart;
   fi
