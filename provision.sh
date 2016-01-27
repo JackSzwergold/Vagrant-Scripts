@@ -261,14 +261,14 @@ hash iptables 2>/dev/null || {
 # Apache and PHP (Installing)
 ######################################################################################
 
-# Check if IPTables and IPSet are installed and if not, install it.
-hash iptables 2>/dev/null || { 
+# Check if Apache is installed and if not, install it.
+hash apachectl 2>/dev/null || { 
 
   echo -e "PROVISIONING: Installing Apache and PHP stuff.\n"
 
   # Install the base Apache stuff.
   sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q \
-    apache2 apache2-threaded-dev php5 \
+    apache2 apache2-dev php5 \
     libapache2-mod-php5 php-pear;
 
   # Install other PHP related stuff.
@@ -373,70 +373,79 @@ fi
 # MySQL
 ######################################################################################
 
-echo -e "PROVISIONING: Installing and configuring MySQL stuff.\n";
+# Check if MySQL is installed and if not, install it.
+hash mysql 2>/dev/null || { 
 
-# Install the MySQL server and client.
-sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q mysql-server mysql-client;
+  echo -e "PROVISIONING: Installing and configuring MySQL stuff.\n";
 
-# Secure the MySQL installation.
-mysql -sfu root < "mysql_secure_installation.sql";
+  # Install the MySQL server and client.
+  sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q mysql-server mysql-client;
 
-# Run these commands to prevent MySQL from coming up on reboot.
-sudo -E service mysql stop;
-sudo -E update-rc.d -f mysql remove;
+  # Secure the MySQL installation.
+  mysql -sfu root < "mysql_secure_installation.sql";
+
+  # Run these commands to prevent MySQL from coming up on reboot.
+  sudo -E service mysql stop;
+  sudo -E update-rc.d -f mysql remove;
+
+}
 
 ######################################################################################
 # Munin
 ######################################################################################
 
-echo -e "PROVISIONING: Installing and configuring Munin stuff.\n";
+# Check if Munin is installed and if not, install it.
+hash munin-node 2>/dev/null || { 
 
-# Install Munin.
-sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q munin munin-node munin-plugins-extra libwww-perl;
+  echo -e "PROVISIONING: Installing and configuring Munin stuff.\n";
 
-# Install the copied Munin config if it exists.
-MUNIN_CONF_PATH="/etc/munin/munin.conf";
-if [ -f "munin.conf" ]; then
-  sudo -E cp -f "munin.conf" "${MUNIN_CONF_PATH}";
-fi
+  # Install Munin.
+  sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q munin munin-node munin-plugins-extra libwww-perl;
 
-# Edit the Munin config.
-if [ -f "${MUNIN_CONF_PATH}" ]; then
-  sudo -E sed -i 's/^\[localhost.localdomain\]/\[vagrant.local\]/g' "${MUNIN_CONF_PATH}";
-fi
+  # Install the copied Munin config if it exists.
+  MUNIN_CONF_PATH="/etc/munin/munin.conf";
+  if [ -f "munin.conf" ]; then
+    sudo -E cp -f "munin.conf" "${MUNIN_CONF_PATH}";
+  fi
 
-# Ditch the default 'localdomain' stuff from the system.
-sudo -E rm -rf "/var/lib/munin/localdomain";
-sudo -E rm -rf "/var/cache/munin/www/localdomain";
+  # Edit the Munin config.
+  if [ -f "${MUNIN_CONF_PATH}" ]; then
+    sudo -E sed -i 's/^\[localhost.localdomain\]/\[vagrant.local\]/g' "${MUNIN_CONF_PATH}";
+  fi
 
-# Activate the Apache related Munin plug-ins.
-sudo -E ln -fs "/usr/share/munin/plugins/apache_accesses" "/etc/munin/plugins/apache_accesses";
-sudo -E ln -fs "/usr/share/munin/plugins/apache_processes" "/etc/munin/plugins/apache_processes";
-sudo -E ln -fs "/usr/share/munin/plugins/apache_volume" "/etc/munin/plugins/apache_volume";
+  # Ditch the default 'localdomain' stuff from the system.
+  sudo -E rm -rf "/var/lib/munin/localdomain";
+  sudo -E rm -rf "/var/cache/munin/www/localdomain";
 
-# Activate the MySQL related Munin plug-ins.
-sudo -E ln -fs "/usr/share/munin/plugins/mysql_bytes" "/etc/munin/plugins/mysql_bytes";
-sudo -E ln -fs "/usr/share/munin/plugins/mysql_queries" "/etc/munin/plugins/mysql_queries";
-sudo -E ln -fs "/usr/share/munin/plugins/mysql_slowqueries" "/etc/munin/plugins/mysql_slowqueries";
-sudo -E ln -fs "/usr/share/munin/plugins/mysql_threads" "/etc/munin/plugins/mysql_threads";
+  # Activate the Apache related Munin plug-ins.
+  sudo -E ln -fs "/usr/share/munin/plugins/apache_accesses" "/etc/munin/plugins/apache_accesses";
+  sudo -E ln -fs "/usr/share/munin/plugins/apache_processes" "/etc/munin/plugins/apache_processes";
+  sudo -E ln -fs "/usr/share/munin/plugins/apache_volume" "/etc/munin/plugins/apache_volume";
 
-# Activate the Postfix related Munin plug-ins.
-sudo -E ln -fs "/usr/share/munin/plugins/postfix_mailqueue" "/etc/munin/plugins/postfix_mailqueue";
-sudo -E ln -fs "/usr/share/munin/plugins/postfix_mailvolume" "/etc/munin/plugins/postfix_mailvolume";
+  # Activate the MySQL related Munin plug-ins.
+  sudo -E ln -fs "/usr/share/munin/plugins/mysql_bytes" "/etc/munin/plugins/mysql_bytes";
+  sudo -E ln -fs "/usr/share/munin/plugins/mysql_queries" "/etc/munin/plugins/mysql_queries";
+  sudo -E ln -fs "/usr/share/munin/plugins/mysql_slowqueries" "/etc/munin/plugins/mysql_slowqueries";
+  sudo -E ln -fs "/usr/share/munin/plugins/mysql_threads" "/etc/munin/plugins/mysql_threads";
 
-# Activate the Fail2Ban related Munin plug-ins.
-sudo -E ln -fs "/usr/share/munin/plugins/fail2ban" "/etc/munin/plugins/fail2ban";
+  # Activate the Postfix related Munin plug-ins.
+  sudo -E ln -fs "/usr/share/munin/plugins/postfix_mailqueue" "/etc/munin/plugins/postfix_mailqueue";
+  sudo -E ln -fs "/usr/share/munin/plugins/postfix_mailvolume" "/etc/munin/plugins/postfix_mailvolume";
 
-# Repair Munin permissions.
-sudo -E munin-check --fix-permissions;
+  # Activate the Fail2Ban related Munin plug-ins.
+  sudo -E ln -fs "/usr/share/munin/plugins/fail2ban" "/etc/munin/plugins/fail2ban";
 
-# Start the Munin node.
-sudo -E service munin-node restart;
+  # Repair Munin permissions.
+  sudo -E munin-check --fix-permissions;
+
+  # Start the Munin node.
+  sudo -E service munin-node restart;
+
+}
 
 ######################################################################################
 # Munin Apache config.
 ######################################################################################
-
 
 # Copy and enable the Munin Apache config.
 MUNIN_APACHE_CONFIG_PATH="/etc/apache2/conf-available/munin.conf";
