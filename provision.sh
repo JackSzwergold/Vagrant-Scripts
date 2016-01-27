@@ -573,8 +573,8 @@ if [ ! -d "/usr/share/phpmyadmin" ]; then
   sudo -E chown -f root:root -R "/usr/share/phpmyadmin";
 
   # Disable the phpMyAdmin PDF export stuff; never works right and can crash a server quite quickly.
-  sudo rm -f "/usr/share/phpmyadmin/libraries/plugins/export/PMA_ExportPdf.class.php";
-  sudo rm -f "/usr/share/phpmyadmin/libraries/plugins/export/ExportPdf.class.php";
+  sudo -E rm -f "/usr/share/phpmyadmin/libraries/plugins/export/PMA_ExportPdf.class.php";
+  sudo -E rm -f "/usr/share/phpmyadmin/libraries/plugins/export/ExportPdf.class.php";
 
 fi
 
@@ -617,25 +617,27 @@ fi
 ######################################################################################
 
 # Install GeoIP from source.
-if [ ! -f "/usr/local/bin/geoiplookup" ]; then
+hash geoiplookup 2>/dev/null || {
 
   echo -e "PROVISIONING: Installing the GeoIP binary.\n";
 
   # Install the core compiler and build options.
   sudo aptitude install -y --assume-yes -q build-essential zlib1g-dev libtool;
 
-  # Install from source code.
+  # Install GeoIP from source code.
   cd "${WORKING_DIR}";
   curl -ss -O -L "http://www.maxmind.com/download/geoip/api/c/GeoIP-latest.tar.gz";
   tar -xf "GeoIP-latest.tar.gz";
+  rm -f "GeoIP-latest.tar.gz";
   cd ./GeoIP*;
   libtoolize -f;
   ./configure;
   make -s;
   sudo -E make -s install;
   cd "${WORKING_DIR}";
+  sudo -E rm -rf ./GeoIP*;
 
-fi
+}
 
 # Install the GeoIP databases.
 GEOIP_TMP_PATH="/tmp/";
