@@ -670,23 +670,27 @@ if [ ! -d "${GEOIP_DATAFILE_PATH}" ]; then
     if [ -f "/${GEOIP_TMP_PATH}/GeoIP.dat.gz" ]; then
       sudo -E mv "/${GEOIP_TMP_PATH}/GeoIP.dat.gz" "${GEOIP_DATAFILE_PATH}";
       sudo -E gzip -d -q -f "${GEOIP_DATAFILE_PATH}GeoIP.dat.gz";
+      sudo -E ln -s -f "${GEOIP_DATAFILE_PATH}GeoIP.dat" "/usr/share/GeoIP/";
     fi
 
     if [ -f "/${GEOIP_TMP_PATH}/GeoLiteCity.dat.gz" ]; then
       sudo -E mv "/${GEOIP_TMP_PATH}/GeoLiteCity.dat.gz" "${GEOIP_DATAFILE_PATH}";
       sudo -E gzip -d -q -f "${GEOIP_DATAFILE_PATH}GeoLiteCity.dat.gz";
       sudo -E mv "${GEOIP_DATAFILE_PATH}GeoLiteCity.dat" "${GEOIP_DATAFILE_PATH}GeoIPCity.dat";
+      sudo -E ln -s -f "${GEOIP_DATAFILE_PATH}GeoIPCity.dat" "/usr/share/GeoIP/";
     fi
 
     if [ -f "/${GEOIP_TMP_PATH}/GeoIPASNum.dat.gz" ]; then
       sudo -E mv "/${GEOIP_TMP_PATH}/GeoIPASNum.dat.gz" "${GEOIP_DATAFILE_PATH}";
       sudo -E gzip -d -q -f "${GEOIP_DATAFILE_PATH}GeoIPASNum.dat.gz";
+      sudo -E ln -s -f "${GEOIP_DATAFILE_PATH}GeoIPASNum.dat" "/usr/share/GeoIP/";
     fi
 
     if [ -f "/${GEOIP_TMP_PATH}/GeoIPCountryCSV.zip" ]; then
       sudo -E mv "/${GEOIP_TMP_PATH}/GeoIPCountryCSV.zip" "${GEOIP_DATAFILE_PATH}";
       sudo -E unzip -o -q -d "${GEOIP_DATAFILE_PATH}" "${GEOIP_DATAFILE_PATH}GeoIPCountryCSV.zip";
       sudo -E rm -f "${GEOIP_DATAFILE_PATH}GeoIPCountryCSV.zip";
+      sudo -E ln -s -f "${GEOIP_DATAFILE_PATH}GeoIPCountryWhois.csv" "/usr/share/GeoIP/";
     fi
 
     # Set permissions to root for owner and group.
