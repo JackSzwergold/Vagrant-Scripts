@@ -640,63 +640,64 @@ hash geoiplookup 2>/dev/null || {
 }
 
 # Install the GeoIP databases.
-GEOIP_TMP_PATH="/tmp/";
-GEOIP_DATAFILE_PATH="/usr/local/share/GeoIP/";
+GEOIP_TMP_PATH="/tmp";
+GEOIP_DATAFILE_PATH="/usr/local/share/GeoIP";
+GEOIP_SYMLINK_PATH="/usr/share/GeoIP";
 if [ ! -d "${GEOIP_DATAFILE_PATH}" ]; then
 
   echo -e "PROVISIONING: Installing the GeoIP databases.\n";
 
   # Get the GeoIP databases.
-  if [ ! -f "/${GEOIP_TMP_PATH}/GeoIP.dat.gz" ] && [ ! -f "${GEOIP_DATAFILE_PATH}GeoIP.dat" ]; then
-    curl -ss -L "http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz" > "/${GEOIP_TMP_PATH}/GeoIP.dat.gz";
+  if [ ! -f "${GEOIP_TMP_PATH}/GeoIP.dat.gz" ] && [ ! -f "${GEOIP_DATAFILE_PATH}/GeoIP.dat" ]; then
+    curl -ss -L "http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz" > "${GEOIP_TMP_PATH}/GeoIP.dat.gz";
   fi
 
-  if [ ! -f "/${GEOIP_TMP_PATH}/GeoLiteCity.dat.gz" ] && [ ! -f "${GEOIP_DATAFILE_PATH}GeoIPCity.dat" ]; then
-    curl -ss -L "http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz" > "/${GEOIP_TMP_PATH}/GeoLiteCity.dat.gz";
+  if [ ! -f "${GEOIP_TMP_PATH}/GeoLiteCity.dat.gz" ] && [ ! -f "${GEOIP_DATAFILE_PATH}/GeoIPCity.dat" ]; then
+    curl -ss -L "http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz" > "${GEOIP_TMP_PATH}/GeoLiteCity.dat.gz";
   fi
 
-  if [ ! -f "/${GEOIP_TMP_PATH}/GeoIPASNum.dat.gz" ] && [ ! -f "${GEOIP_DATAFILE_PATH}GeoIPASNum.dat" ]; then
-    curl -ss -L "http://geolite.maxmind.com/download/geoip/database/asnum/GeoIPASNum.dat.gz" > "/${GEOIP_TMP_PATH}/GeoIPASNum.dat.gz";
+  if [ ! -f "${GEOIP_TMP_PATH}/GeoIPASNum.dat.gz" ] && [ ! -f "${GEOIP_DATAFILE_PATH}/GeoIPASNum.dat" ]; then
+    curl -ss -L "http://geolite.maxmind.com/download/geoip/database/asnum/GeoIPASNum.dat.gz" > "${GEOIP_TMP_PATH}/GeoIPASNum.dat.gz";
   fi
 
-  if [ ! -f "/${GEOIP_TMP_PATH}/GeoIPCountryCSV.zip" ] && [ ! -f "${GEOIP_DATAFILE_PATH}GeoIPCountryWhois.csv" ]; then
-    curl -ss -L "http://geolite.maxmind.com/download/geoip/database/GeoIPCountryCSV.zip" > "/${GEOIP_TMP_PATH}/GeoIPCountryCSV.zip";
+  if [ ! -f "${GEOIP_TMP_PATH}/GeoIPCountryCSV.zip" ] && [ ! -f "${GEOIP_DATAFILE_PATH}/GeoIPCountryWhois.csv" ]; then
+    curl -ss -L "http://geolite.maxmind.com/download/geoip/database/GeoIPCountryCSV.zip" > "${GEOIP_TMP_PATH}/GeoIPCountryCSV.zip";
   fi
 
   # Create the GeoIP directory—if it doesn't exist—like this.
-  sudo mkdir -p "${GEOIP_DATAFILE_PATH}";
+  sudo mkdir -p "${GEOIP_DATAFILE_PATH}/";
 
   # Move and decompress the databases to GeoIP data path.
   if [ -d "${GEOIP_DATAFILE_PATH}" ]; then
 
-    if [ -f "/${GEOIP_TMP_PATH}/GeoIP.dat.gz" ]; then
-      sudo -E mv "/${GEOIP_TMP_PATH}/GeoIP.dat.gz" "${GEOIP_DATAFILE_PATH}";
-      sudo -E gzip -d -q -f "${GEOIP_DATAFILE_PATH}GeoIP.dat.gz";
-      sudo -E ln -s -f "${GEOIP_DATAFILE_PATH}GeoIP.dat" "/usr/share/GeoIP/";
+    if [ -f "${GEOIP_TMP_PATH}/GeoIP.dat.gz" ]; then
+      sudo -E mv "${GEOIP_TMP_PATH}/GeoIP.dat.gz" "${GEOIP_DATAFILE_PATH}/";
+      sudo -E gzip -d -q -f "${GEOIP_DATAFILE_PATH}/GeoIP.dat.gz";
+      sudo -E ln -s -f "${GEOIP_DATAFILE_PATH}/GeoIP.dat" "${GEOIP_SYMLINK_PATH}/";
     fi
 
-    if [ -f "/${GEOIP_TMP_PATH}/GeoLiteCity.dat.gz" ]; then
-      sudo -E mv "/${GEOIP_TMP_PATH}/GeoLiteCity.dat.gz" "${GEOIP_DATAFILE_PATH}";
-      sudo -E gzip -d -q -f "${GEOIP_DATAFILE_PATH}GeoLiteCity.dat.gz";
-      sudo -E mv "${GEOIP_DATAFILE_PATH}GeoLiteCity.dat" "${GEOIP_DATAFILE_PATH}GeoIPCity.dat";
-      sudo -E ln -s -f "${GEOIP_DATAFILE_PATH}GeoIPCity.dat" "/usr/share/GeoIP/";
+    if [ -f "${GEOIP_TMP_PATH}/GeoLiteCity.dat.gz" ]; then
+      sudo -E mv "${GEOIP_TMP_PATH}/GeoLiteCity.dat.gz" "${GEOIP_DATAFILE_PATH}/";
+      sudo -E gzip -d -q -f "${GEOIP_DATAFILE_PATH}/GeoLiteCity.dat.gz";
+      sudo -E mv "${GEOIP_DATAFILE_PATH}/GeoLiteCity.dat" "${GEOIP_DATAFILE_PATH}/GeoIPCity.dat";
+      sudo -E ln -s -f "${GEOIP_DATAFILE_PATH}/GeoIPCity.dat" "${GEOIP_SYMLINK_PATH}/";
     fi
 
-    if [ -f "/${GEOIP_TMP_PATH}/GeoIPASNum.dat.gz" ]; then
-      sudo -E mv "/${GEOIP_TMP_PATH}/GeoIPASNum.dat.gz" "${GEOIP_DATAFILE_PATH}";
-      sudo -E gzip -d -q -f "${GEOIP_DATAFILE_PATH}GeoIPASNum.dat.gz";
-      sudo -E ln -s -f "${GEOIP_DATAFILE_PATH}GeoIPASNum.dat" "/usr/share/GeoIP/";
+    if [ -f "${GEOIP_TMP_PATH}/GeoIPASNum.dat.gz" ]; then
+      sudo -E mv "${GEOIP_TMP_PATH}/GeoIPASNum.dat.gz" "${GEOIP_DATAFILE_PATH}/";
+      sudo -E gzip -d -q -f "${GEOIP_DATAFILE_PATH}/GeoIPASNum.dat.gz";
+      sudo -E ln -s -f "${GEOIP_DATAFILE_PATH}/GeoIPASNum.dat" "${GEOIP_SYMLINK_PATH}/";
     fi
 
-    if [ -f "/${GEOIP_TMP_PATH}/GeoIPCountryCSV.zip" ]; then
-      sudo -E mv "/${GEOIP_TMP_PATH}/GeoIPCountryCSV.zip" "${GEOIP_DATAFILE_PATH}";
-      sudo -E unzip -o -q -d "${GEOIP_DATAFILE_PATH}" "${GEOIP_DATAFILE_PATH}GeoIPCountryCSV.zip";
-      sudo -E rm -f "${GEOIP_DATAFILE_PATH}GeoIPCountryCSV.zip";
-      sudo -E ln -s -f "${GEOIP_DATAFILE_PATH}GeoIPCountryWhois.csv" "/usr/share/GeoIP/";
+    if [ -f "${GEOIP_TMP_PATH}/GeoIPCountryCSV.zip" ]; then
+      sudo -E mv "${GEOIP_TMP_PATH}/GeoIPCountryCSV.zip" "${GEOIP_DATAFILE_PATH}/";
+      sudo -E unzip -o -q -d "${GEOIP_DATAFILE_PATH}/" "${GEOIP_DATAFILE_PATH}/GeoIPCountryCSV.zip";
+      sudo -E rm -f "${GEOIP_DATAFILE_PATH}/GeoIPCountryCSV.zip";
+      sudo -E ln -s -f "${GEOIP_DATAFILE_PATH}/GeoIPCountryWhois.csv" "${GEOIP_SYMLINK_PATH}/";
     fi
 
     # Set permissions to root for owner and group.
-    sudo -E chown root:root -R "${GEOIP_DATAFILE_PATH}";
+    sudo -E chown root:root -R "${GEOIP_DATAFILE_PATH}/";
 
   fi
 
@@ -764,3 +765,5 @@ sudo -E updatedb;
 ######################################################################################
 
 sudo -E service apache2 restart;
+
+# sudo -E rm -f "${WORKING_DIR}"/*.{conf,patch,php,sql}
