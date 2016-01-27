@@ -309,7 +309,7 @@ hash apachectl 2>/dev/null || {
 PHP_CONFIG_PATH="/etc/php5/apache2/php.ini";
 if [ -f "${PHP_CONFIG_PATH}" ]; then
 
-  echo -e "PROVISIONING: Hardening PHP.\n";
+  echo -e "PROVISIONING: Adjusting the PHP config.\n";
 
   # Harden PHP by disabling 'expose_php'.
   sudo -E sed -i 's/expose_php = On/expose_php = Off/g' "${PHP_CONFIG_PATH}";
@@ -319,11 +319,11 @@ if [ -f "${PHP_CONFIG_PATH}" ]; then
 
 fi
 
-# Harden Apache.
+# Adjust the Apache security config.
 APACHE_SECURITY_PATH="/etc/apache2/conf-available/security.conf";
 if [ -f "${APACHE_SECURITY_PATH}" ]; then
 
-  echo -e "PROVISIONING: Hardening Apache.\n";
+  echo -e "PROVISIONING: Adjusting the Apache security config.\n";
 
   # Set 'ServerTokens' to Prod.
   sudo -E sed -i 's/^ServerTokens OS/ServerTokens Prod/g' "${APACHE_SECURITY_PATH}";
