@@ -72,7 +72,7 @@ sudo -E aptitude install -y --assume-yes -q avahi-daemon avahi-utils;
 ######################################################################################
 
 # Check if Sysstat is installed and if not, install it.
-hash sar 2>/dev/null || { 
+hash sar 2>/dev/null || {
 
   # Install Sysstat.
   echo -e "PROVISIONING: Sysstat related stuff.\n";
@@ -108,7 +108,7 @@ sudo -E aptitude install -y --assume-yes -q \
 ######################################################################################
 
 # Check if Locate is installed and if not, install it.
-hash updatedb 2>/dev/null || { 
+hash updatedb 2>/dev/null || {
 
   echo -e "PROVISIONING: Installing the locate tool and updating the database.\n";
 
@@ -125,7 +125,7 @@ hash updatedb 2>/dev/null || {
 ######################################################################################
 
 # Check if the core compiler and build tools are installed and if not, install it.
-hash libtool 2>/dev/null || { 
+hash libtool 2>/dev/null || {
 
   echo -e "PROVISIONING: Installing the core compiler tools.\n";
 
@@ -160,7 +160,7 @@ fi
 ######################################################################################
 
 # Check if Postfix and related mail tools are installed and if not, install it.
-hash postfix 2>/dev/null || { 
+hash postfix 2>/dev/null || {
 
   echo -e "PROVISIONING: Installing Postfix and related mail stuff.\n";
 
@@ -229,7 +229,7 @@ sudo -E chmod -f -x "/etc/update-motd.d/98-cloudguest";
 ######################################################################################
 
 # Check if IPTables and IPSet are installed and if not, install it.
-hash iptables 2>/dev/null || { 
+hash iptables 2>/dev/null || {
 
   echo -e "PROVISIONING: IPTables and IPSet stuff.\n";
 
@@ -262,7 +262,7 @@ hash iptables 2>/dev/null || {
 ######################################################################################
 
 # Check if Apache is installed and if not, install it.
-hash apachectl 2>/dev/null || { 
+hash apachectl 2>/dev/null || {
 
   echo -e "PROVISIONING: Installing Apache and PHP stuff.\n"
 
@@ -374,7 +374,7 @@ sudo -E service apache2 restart;
 ######################################################################################
 
 # Check if MySQL is installed and if not, install it.
-hash mysql 2>/dev/null || { 
+hash mysql 2>/dev/null || {
 
   echo -e "PROVISIONING: Installing and configuring MySQL stuff.\n";
 
@@ -395,7 +395,7 @@ hash mysql 2>/dev/null || {
 ######################################################################################
 
 # Check if Munin is installed and if not, install it.
-hash munin-node 2>/dev/null || { 
+hash munin-node 2>/dev/null || {
 
   echo -e "PROVISIONING: Installing and configuring Munin stuff.\n";
 
