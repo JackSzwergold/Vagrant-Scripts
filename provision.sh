@@ -381,16 +381,24 @@ fi
 
 # Adjust the Apache run group and UMASK.
 APACHE_ENVVARS_PATH="/etc/apache2/envvars";
-if [ -f "${APACHE_ENVVARS_PATH}" ]; then
+APACHE_RUN_GROUP="^export APACHE_RUN_GROUP=www-data";
+if [ -f "${APACHE_ENVVARS_PATH}" ] && grep -E -q "${APACHE_RUN_GROUP}" "${APACHE_ENVVARS_PATH}"; then
 
-  echo -e "PROVISIONING: Adjusting Apache group and UMASK.\n";
+  echo -e "PROVISIONING: Adjusting Apache group setting.\n";
 
   # Set 'APACHE_RUN_GROUP' to 'www-readwrite'.
-  sudo -E sed -i 's/^export APACHE_RUN_GROUP=www-data/export APACHE_RUN_GROUP=www-readwrite/g' "${APACHE_ENVVARS_PATH}";
+  sudo -E sed -i "s/${APACHE_RUN_GROUP}/export APACHE_RUN_GROUP=www-readwrite/g" "${APACHE_ENVVARS_PATH}";
 
-  # Set the UMASK to 002.
-  APACHE_APPEND="umask 002";
-  sudo -E grep -q -F "${APACHE_APPEND}" "${APACHE_ENVVARS_PATH}" || echo -e "\n${APACHE_APPEND}" >> "${APACHE_ENVVARS_PATH}";
+fi
+
+APACHE_UMASK_APPEND="umask 002";
+if [ -f "${APACHE_ENVVARS_PATH}" ] && ! grep -E -q "^${APACHE_UMASK_APPEND}" "${APACHE_ENVVARS_PATH}"; then
+
+  echo -e "PROVISIONING: Adjusting Apache UMASK value.\n";
+
+  # Adjusting Apache UMASK value.
+  # sudo -E grep -q -E "${APACHE_UMASK_APPEND}" "${APACHE_ENVVARS_PATH}" || echo -e "\n${APACHE_UMASK_APPEND}" >> "${APACHE_ENVVARS_PATH}";
+  sudo sh -c "echo '${APACHE_UMASK_APPEND}' >> '${APACHE_ENVVARS_PATH}'";
 
 fi
 
