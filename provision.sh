@@ -11,14 +11,14 @@ echo -e "WORKING DIRECTORY: ${WORKING_DIR}.\n\n"
 # DEBIAN_FRONTEND
 ######################################################################################
 
-echo -e "PROVISIONING: Set the Debian frontend to non-interactive mode.\n"
+echo -e "PROVISIONING: Setting the Debian frontend to non-interactive mode.\n"
 export DEBIAN_FRONTEND=noninteractive;
 
 ######################################################################################
 # User and Group
 ######################################################################################
 
-echo -e "PROVISIONING: Adjust user and group related stuff.\n";
+echo -e "PROVISIONING: Adjusting user and group related items.\n";
 
 # Create the 'www-readwrite' group.
 sudo -E groupadd -f www-readwrite;
@@ -33,7 +33,7 @@ sudo -E adduser --quiet vagrant www-readwrite;
 # Environment
 ######################################################################################
 
-# echo -e "PROVISIONING: Environment stuff.\n";
+# echo -e "PROVISIONING: Adjusting Vagrant user related items.\n";
 
 # Set the selected editor to Nano.
 # sudo -u vagrant echo 'SELECTED_EDITOR="/bin/nano"' > ".selected_editor";
@@ -61,12 +61,17 @@ if [ "${TIMEZONE}" != $(cat "${TIMEZONE_PATH}") ]; then
 
 fi
 
-echo -e "PROVISIONING: Adjusting the sources list.\n";
 
 # Edit the sources list.
 SOURCES_LIST="/etc/apt/sources.list";
-if [ -f "${SOURCES_LIST}" ]; then
-  sudo -E sed -i '/^#.*deb.*partner$/s/^# //g' "${SOURCES_LIST}";
+DEB_URL_PATTERN="^#.*deb.*partner$";
+if [ -f "${SOURCES_LIST}" ] && grep -E -q "${DEB_URL_PATTERN}" "${SOURCES_LIST}"; then
+
+  echo -e "PROVISIONING: Adjusting the sources list.\n";
+
+  # Adjust the sources list.
+  sudo -E sed -i "/${DEB_URL_PATTERN}/s/^# //g" "${SOURCES_LIST}";
+
 fi
 
 ######################################################################################
