@@ -241,13 +241,15 @@ fi
 # MOTD
 ######################################################################################
 
-echo -e "PROVISIONING: MOTD adjustments.\n";
+echo -e "PROVISIONING: Setting the MOTD banner.\n";
 
 # Set the server login banner with figlet.
 # MOTD_PATH="/etc/motd.tail";
 MOTD_PATH="/etc/motd";
 figlet "Vagrant" > "${MOTD_PATH}";
 echo "" >> "${MOTD_PATH}";
+
+echo -e "PROVISIONING: Disabling MOTD scripts.\n";
 
 # Disable these MOTD scripts.
 sudo -E chmod -f -x "/etc/update-motd.d/50-landscape-sysinfo";
@@ -325,32 +327,55 @@ hash apachectl 2>/dev/null || {
 
 # Adjust the PHP config.
 PHP_CONFIG_PATH="/etc/php5/apache2/php.ini";
-if [ -f "${PHP_CONFIG_PATH}" ]; then
+EXPOSE_PHP_PATTERN="^expose_php.*=.*On$";
+if [ -f "${PHP_CONFIG_PATH}" ] && grep -E -q "${EXPOSE_PHP_PATTERN}" "${PHP_CONFIG_PATH}"; then
 
-  echo -e "PROVISIONING: Adjusting the PHP config.\n";
+  echo -e "PROVISIONING: Disable 'expose_php'.\n";
 
   # Harden PHP by disabling 'expose_php'.
-  sudo -E sed -i 's/expose_php = On/expose_php = Off/g' "${PHP_CONFIG_PATH}";
+  sudo -E sed -i "s/${EXPOSE_PHP_PATTERN}/expose_php = Off/g" "${PHP_CONFIG_PATH}";
 
-  # Disable the PHP 5.5 opcache.
-  sudo -E sed -i 's/;opcache.enable=0/opcache.enable=0/g' "${PHP_CONFIG_PATH}";
+fi
+
+OPCACHE_PATTERN="^;opcache.enable=0$";
+if [ -f "${PHP_CONFIG_PATH}" ] && grep -E -q "${OPCACHE_PATTERN}" "${PHP_CONFIG_PATH}"; then
+
+  echo -e "PROVISIONING: Disable the PHP 5.5 OPcache.\n";
+
+  # Disable the PHP 5.5 OPcache.
+  sudo -E sed -i "s/${OPCACHE_PATTERN}/opcache.enable=0/g" "${PHP_CONFIG_PATH}";
 
 fi
 
 # Adjust the Apache security config.
 APACHE_SECURITY_PATH="/etc/apache2/conf-available/security.conf";
-if [ -f "${APACHE_SECURITY_PATH}" ]; then
+APACHE_SERVERTOKENS="^ServerTokens OS$";
+if [ -f "${APACHE_SECURITY_PATH}" ] && grep -E -q "${APACHE_SERVERTOKENS}" "${APACHE_SECURITY_PATH}"; then
 
-  echo -e "PROVISIONING: Adjusting the Apache security config.\n";
+  echo -e "PROVISIONING: Adjusting the Apache 'ServerTokens' setting.\n";
 
   # Set 'ServerTokens' to Prod.
-  sudo -E sed -i 's/^ServerTokens OS/ServerTokens Prod/g' "${APACHE_SECURITY_PATH}";
+  sudo -E sed -i "s/${APACHE_SERVERTOKENS}/ServerTokens Prod/g" "${APACHE_SECURITY_PATH}";
 
-  # Disable 'ServerSignature'.
-  sudo -E sed -i 's/^ServerSignature On/ServerSignature Off/g' "${APACHE_SECURITY_PATH}";
+fi
 
-  # Disable 'TraceEnable'.
-  sudo -E sed -i 's/^TraceEnable On/TraceEnable Off/g' "${APACHE_SECURITY_PATH}";
+APACHE_SERVERSIGNATURE="^ServerSignature On";
+if [ -f "${APACHE_SECURITY_PATH}" ] && grep -E -q "${APACHE_SERVERSIGNATURE}" "${APACHE_SECURITY_PATH}"; then
+
+  echo -e "PROVISIONING: Adjusting the Apache 'ServerSignature' setting.\n";
+
+  # Set 'ServerSignature' to Off.
+  sudo -E sed -i "s/${APACHE_SERVERSIGNATURE}/ServerSignature Off/g" "${APACHE_SECURITY_PATH}";
+
+fi
+
+APACHE_TRACEENABLE="^TraceEnable On";
+if [ -f "${APACHE_SECURITY_PATH}" ] && grep -E -q "${APACHE_TRACEENABLE}" "${APACHE_SECURITY_PATH}"; then
+
+  echo -e "PROVISIONING: Adjusting the Apache 'TraceEnable' setting.\n";
+
+  # Set 'TraceEnable' to Off.
+  sudo -E sed -i "s/${APACHE_TRACEENABLE}/TraceEnable Off/g" "${APACHE_SECURITY_PATH}";
 
 fi
 
