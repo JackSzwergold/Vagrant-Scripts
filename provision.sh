@@ -346,9 +346,6 @@ if [ -d "/var/www/html" ]; then
 
 fi
 
-# Restart Apache to get the new config settings loaded.
-sudo -E service apache2 restart;
-
 ######################################################################################
 # Apache Logs
 ######################################################################################
@@ -368,6 +365,9 @@ if [ -f "${APACHE_SECURITY_PATH}" ]; then
   sudo -E chmod 644 /var/log/apache2/*;
 
 fi
+
+# Restart Apache to get the new config settings loaded.
+sudo -E service apache2 restart;
 
 ######################################################################################
 # MySQL
