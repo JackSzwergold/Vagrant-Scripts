@@ -426,9 +426,9 @@ if [ ! -f "${APACHE_COMMON_CONFIG_PATH}" ]; then
 
   # Copy the config files into place.
   sudo -E cp -f "apache2.conf" "/etc/apache2/apache2.conf";
-  sudo -E cp -f "apache-mpm_prefork.conf" "/etc/apache2/mods-available/mpm_prefork.conf";
-  sudo -E cp -f "apache-common.conf" "${APACHE_COMMON_CONFIG_PATH}";
-  sudo -E cp -f "apache-000-default.conf" "/etc/apache2/sites-available/000-default.conf";
+  sudo -E cp -f "apache2-mpm_prefork.conf" "/etc/apache2/mods-available/mpm_prefork.conf";
+  sudo -E cp -f "apache2-common.conf" "${APACHE_COMMON_CONFIG_PATH}";
+  sudo -E cp -f "apache2-000-default.conf" "/etc/apache2/sites-available/000-default.conf";
 
 fi
 
@@ -542,12 +542,12 @@ hash munin-node 2>/dev/null || {
 
 # Copy and enable the Munin Apache config.
 MUNIN_APACHE_CONFIG_PATH="/etc/apache2/conf-available/munin.conf";
-if [ -f "apache-munin.conf" ] && [ -h "${MUNIN_APACHE_CONFIG_PATH}" ]; then
+if [ -f "apache2-munin.conf" ] && [ -h "${MUNIN_APACHE_CONFIG_PATH}" ]; then
 
   echo -e "PROVISIONING: Installing the Apache Munin config.\n";
 
   sudo -E rm -f "${MUNIN_APACHE_CONFIG_PATH}";
-  sudo -E cp -f "apache-munin.conf" "${MUNIN_APACHE_CONFIG_PATH}";
+  sudo -E cp -f "apache2-munin.conf" "${MUNIN_APACHE_CONFIG_PATH}";
   sudo -E a2enconf -q munin;
   # sudo -E service apache2 restart;
 
@@ -577,11 +577,11 @@ if [ ! -d "/usr/share/phpmyadmin" ]; then
   # Set permissions to root for owner and group.
   sudo -E chown -f root:root -R "/usr/share/phpmyadmin";
 
-  # Disable the phpMyAdmin PDF export stuff; never works right and can crash a server quite quickly.
-  sudo -E rm -f "/usr/share/phpmyadmin/libraries/plugins/export/PMA_ExportPdf.class.php";
-  sudo -E rm -f "/usr/share/phpmyadmin/libraries/plugins/export/ExportPdf.class.php";
-
 fi
+
+######################################################################################
+# phpMyAdmin config.
+######################################################################################
 
 # Copy the phpMyAdmin configuration file into place.
 PHPMYADMIN_CONFIG_PATH="/usr/share/phpmyadmin/config.inc.php";
@@ -603,15 +603,23 @@ if [ ! -f "${PHPMYADMIN_CONFIG_PATH}" ]; then
     sudo -E sed -i "s|cfg\['blowfish_secret'\] = '${BLOWFISH_SECRET_DEFAULT}'|cfg['blowfish_secret'] = '${BLOWFISH_SECRET_NEW}'|" "${PHPMYADMIN_CONFIG_PATH}";
   fi
 
+  # Disable the phpMyAdmin PDF export stuff; never works right and can crash a server quite quickly.
+  sudo -E rm -f "/usr/share/phpmyadmin/libraries/plugins/export/PMA_ExportPdf.class.php";
+  sudo -E rm -f "/usr/share/phpmyadmin/libraries/plugins/export/ExportPdf.class.php";
+
 fi
 
-# Copy and enable the Apache phpMyAdmin config.
+######################################################################################
+# phpMyAdmin Apache config.
+######################################################################################
+
+# Copy and enable the AWStats phpMyAdmin config.
 PHPMYADMIN_APACHE_CONFIG_PATH="/etc/apache2/conf-available/phpmyadmin.conf";
-if [ -f "apache-phpmyadmin.conf" ] && [ ! -f "${PHPMYADMIN_APACHE_CONFIG_PATH}" ]; then
+if [ -f "apache2-phpmyadmin.conf" ] && [ ! -f "${PHPMYADMIN_APACHE_CONFIG_PATH}" ]; then
 
   echo -e "PROVISIONING: Installing the Apache phpMyAdmin config.\n";
 
-  sudo -E cp -f "apache-phpmyadmin.conf" "${PHPMYADMIN_APACHE_CONFIG_PATH}";
+  sudo -E cp -f "apache2-phpmyadmin.conf" "${PHPMYADMIN_APACHE_CONFIG_PATH}";
   sudo -E a2enconf -q phpmyadmin;
   # sudo -E service apache2 restart;
 
@@ -725,14 +733,6 @@ if [ ! -d "${AWSTATS_ROOT_DIR}" ]; then
   rm -f "awstats-7.3.tar.gz";
   sudo -E mv -f "awstats-7.3" "${AWSTATS_ROOT_DIR}";
 
-  # Copy and enable the AWStats Apache config.
-  AWSTATS_APACHE_CONFIG_PATH="/etc/apache2/conf-available/awstats.conf";
-  if [ -f "apache-awstats.conf" ] && [ ! -f "${AWSTATS_APACHE_CONFIG_PATH}" ]; then
-    sudo -E cp -f "apache-awstats.conf" "${AWSTATS_APACHE_CONFIG_PATH}";
-    sudo -E a2enconf -q awstats;
-    # sudo -E service apache2 restart;
-  fi
-
   # Set an index page for AWStats.
   sudo -E cp -f "awstatstotals.php" "${AWSTATS_ROOT_DIR}/wwwroot/cgi-bin/index.php";
   sudo -E chmod a+r "${AWSTATS_ROOT_DIR}/wwwroot/cgi-bin/index.php";
@@ -757,6 +757,22 @@ if [ ! -d "${AWSTATS_ROOT_DIR}" ]; then
 
   # Update the data for the 'vagrant.local' config.
   sudo -E "${AWSTATS_ROOT_DIR}/wwwroot/cgi-bin/awstats.pl" -config="vagrant.local" -update
+
+fi
+
+######################################################################################
+# AWStats Apache config.
+######################################################################################
+
+# Copy and enable the AWStats Apache config.
+AWSTATS_APACHE_CONFIG_PATH="/etc/apache2/conf-available/awstats.conf";
+if [ -f "apache2-awstats.conf" ] && [ ! -f "${AWSTATS_APACHE_CONFIG_PATH}" ]; then
+
+  echo -e "PROVISIONING: Installing the Apache AWStats config.\n";
+
+  sudo -E cp -f "apache2-awstats.conf" "${AWSTATS_APACHE_CONFIG_PATH}";
+  sudo -E a2enconf -q awstats;
+  # sudo -E service apache2 restart;
 
 fi
 
