@@ -18,7 +18,7 @@ export DEBIAN_FRONTEND=noninteractive;
 # User and Group
 ######################################################################################
 
-echo -e "PROVISIONING: User and group related stuff.\n";
+echo -e "PROVISIONING: Adjust user and group related stuff.\n";
 
 # Create the 'www-readwrite' group.
 sudo -E groupadd -f www-readwrite;
