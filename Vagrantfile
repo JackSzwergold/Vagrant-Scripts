@@ -15,11 +15,11 @@ Vagrant.configure(2) do |config|
   config.ssh.username = "vagrant"
   config.vm.box_check_update = false
   config.vm.network "private_network", ip: "192.168.56.20"
-  config.vm.synced_folder ".", "/vagrant", :disabled => true
+  config.vm.synced_folder ".", "/vagrant", disabled: true
 
   # Copy over the configuration directory.
-  config.vm.provision :file, source: "config_dir", destination: "config_dir"
-  # config.vm.synced_folder "config_dir/", "/home/vagrant/config_dir", type: "rsync"
+  # config.vm.provision :file, source: "config_dir", destination: "config_dir"
+  config.vm.synced_folder "config_dir/", "/home/vagrant/config_dir", type: "rsync", rsync__exclude: ".DS_Store"
 
   # Set the shell script to provision the server.
   config.vm.provision :shell, :path => "provision.sh"
