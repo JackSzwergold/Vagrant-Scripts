@@ -81,6 +81,7 @@ if mkdir ${LOCK_DIR} 2>/dev/null; then
       wait ${FILE_PERM_FIX_PID};
 
       # Adjust permissions for files in directories named 'bin/'.
+      # find `find ${DOCUMENT_ROOT}${DIRECTORY_NAME}'/' -type d \( -name "bin" -o -name "cgi-bin" \)` -maxdepth 1 -type f -print0 | xargs --no-run-if-empty -0 ls -la
       # find `find ${DOCUMENT_ROOT}${DIRECTORY_NAME}'/' -type d \( -name "bin" -o -name "cgi-bin" \)` -maxdepth 1 -type f -print0 | xargs --no-run-if-empty -0 chmod -R ${CHMOD_EXEC_FILE} >/dev/null & FILE_PERM_FIX_PID=(`jobs -l | awk '{print $2}'`);
       # wait ${FILE_PERM_FIX_PID};
 
