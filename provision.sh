@@ -919,6 +919,19 @@ if [ -f "monit/monitrc" ]; then
 fi
 
 ######################################################################################
+# Scripts.
+######################################################################################
+
+# Copy and configure various system scripts.
+SCRIPT_PATH="/opt";
+
+echo -e "PROVISIONING: Installing configuring various system scripts.\n";
+
+sudo -E cp -f "scripts/"*.sh "${SCRIPT_PATH}/";
+sudo -E chown -f -R root:root "scripts/"*.sh "${SCRIPT_PATH}/";
+sudo -E chmod -f -R 700 "${SCRIPT_PATH}/"*.sh;
+
+######################################################################################
 # Update the locate database.
 ######################################################################################
 
