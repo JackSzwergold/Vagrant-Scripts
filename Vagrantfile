@@ -5,7 +5,7 @@ Vagrant.configure(2) do |config|
     v.customize ["modifyvm", :id, "--memory", 512]
     v.customize ["modifyvm", :id, "--cpus", 1]
     # v.customize ["modifyvm", :id, "--name", "Vagrant"]
-    v.name = "Sandbox_VAGRANT"
+    v.name = "Sandbox_UBUNTU_1404"
   end
 
   # Basic virtual machine configuration options.

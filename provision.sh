@@ -290,7 +290,7 @@ sudo -E chmod -f -x "/etc/update-motd.d/98-cloudguest";
 ######################################################################################
 
 # Check if IPTables and IPSet are installed and if not, install it.
-hash ipset 2>/dev/null || {
+hash iptables && hash ipset 2>/dev/null || {
 
   echo -e "PROVISIONING: IPTables and IPSet stuff.\n";
 
@@ -511,7 +511,7 @@ fi
 ######################################################################################
 
 # Check if MySQL is installed and if not, install it.
-hash mysql 2>/dev/null || {
+hash mysql && hash mysqld 2>/dev/null || {
 
   echo -e "PROVISIONING: Installing and configuring MySQL related items.\n";
 
