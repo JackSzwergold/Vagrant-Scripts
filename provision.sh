@@ -4,11 +4,23 @@
 # Set some basic variables.
 ######################################################################################
 
+MACHINE_NAME="vagrant";
+if [ -n "$1" ]; then
+  MACHINE_NAME="${1}";
+fi
+echo -e "PROVISIONING: Machine name is: '${MACHINE_NAME}'.\n";
+
+USER_NAME="vagrant";
+if [ -n "$2" ]; then
+  USER_NAME="${2}";
+fi
+echo -e "PROVISIONING: Machine user name is: '${USER_NAME}'.\n";
+
 BASE_DIR=$(pwd);
-echo -e "PROVISIONING: Base directory is: '${BASE_DIR}'.\n\n";
+echo -e "PROVISIONING: Base directory is: '${BASE_DIR}'.\n";
 
 CONFIG_DIR="deployment_configs";
-echo -e "PROVISIONING: Config directory is: '${CONFIG_DIR}'.\n\n";
+echo -e "PROVISIONING: Config directory is: '${CONFIG_DIR}'.\n";
 
 cd "${BASE_DIR}"/"${CONFIG_DIR}";
 
@@ -28,11 +40,11 @@ echo -e "PROVISIONING: Adjusting user and group related items.\n";
 # Create the 'www-readwrite' group.
 sudo -E groupadd -f www-readwrite;
 
-# Set the Vagrant users main group to be the 'www-readwrite' group.
-sudo -E usermod -g www-readwrite vagrant;
+# Set the user’s main group to be the 'www-readwrite' group.
+sudo -E usermod -g www-readwrite "${USER_NAME}";
 
 # Add the user to the 'www-readwrite' group:
-sudo -E adduser --quiet vagrant www-readwrite;
+sudo -E adduser --quiet "${USER_NAME}" www-readwrite;
 
 ######################################################################################
 # Environment
@@ -44,7 +56,7 @@ echo -e "PROVISIONING: Setting the selected editor.\n";
 
 if [ ! -f "${BASE_DIR}/.selected_editor" ]; then
   echo 'SELECTED_EDITOR="/bin/nano"' > "${BASE_DIR}/.selected_editor";
-  sudo -E chown -f vagrant:www-readwrite "${BASE_DIR}/.selected_editor";
+  sudo -E chown -f "${USER_NAME}":www-readwrite "${BASE_DIR}/.selected_editor";
 fi
 
 echo -e "PROVISIONING: Importing the crontab.\n";
@@ -199,7 +211,7 @@ hash postfix 2>/dev/null || {
   echo -e "PROVISIONING: Installing Postfix and related mail stuff.\n";
 
   # Install postfix and general mail stuff.
-  debconf-set-selections <<< "postfix postfix/mailname string vagrant.local";
+  debconf-set-selections <<< "postfix postfix/mailname string ${MACHINE_NAME}.local";
   debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'";
   sudo -E aptitude install -y --assume-yes -q postfix mailutils;
 
@@ -260,7 +272,7 @@ echo -e "PROVISIONING: Setting the MOTD banner.\n";
 # Set the server login banner with figlet.
 # MOTD_PATH="/etc/motd.tail";
 MOTD_PATH="/etc/motd";
-figlet "Vagrant" > "${MOTD_PATH}";
+figlet "${MACHINE_NAME^}" > "${MOTD_PATH}";
 echo "" >> "${MOTD_PATH}";
 
 echo -e "PROVISIONING: Disabling MOTD scripts.\n";
@@ -433,8 +445,8 @@ if [ ! -f "${APACHE_COMMON_CONFIG_PATH}" ]; then
   sudo -E cp -f "apache2/mpm_prefork.conf" "/etc/apache2/mods-available/mpm_prefork.conf";
   sudo -E cp -f "apache2/common.conf" "${APACHE_COMMON_CONFIG_PATH}";
   sudo -E cp -f "apache2/000-default.conf" "/etc/apache2/sites-available/000-default.conf";
-  sudo -E cp -f "apache2/vagrant.local.conf" "/etc/apache2/sites-available/vagrant.local.conf";
-  sudo -E a2ensite vagrant.local;
+  sudo -E cp -f "apache2/${MACHINE_NAME}.local.conf" "/etc/apache2/sites-available/${MACHINE_NAME}.local.conf";
+  sudo -E a2ensite ${MACHINE_NAME}.local;
 
 fi
 
@@ -455,22 +467,22 @@ if [ ! -d "${WEB_DOCUMENT_ROOT}builds" ]; then
   echo -e "PROVISIONING: Creating the web code deployment directories.\n";
 
   sudo -E mkdir -p "${WEB_DOCUMENT_ROOT}"{builds,configs,content};
-  sudo -E chown -f -R vagrant:www-readwrite "${WEB_DOCUMENT_ROOT}"{builds,configs,content};
+  sudo -E chown -f -R "${USER_NAME}":www-readwrite "${WEB_DOCUMENT_ROOT}"{builds,configs,content};
   sudo -E chmod -f -R 775 "${WEB_DOCUMENT_ROOT}"{builds,configs,content};
 
 fi
 
 # Create the web server document root directories.
 WEB_DOCUMENT_ROOT="/var/www/";
-if [ ! -d "${WEB_DOCUMENT_ROOT}vagrant.local" ]; then
+if [ ! -d "${WEB_DOCUMENT_ROOT}${MACHINE_NAME}.local" ]; then
 
   echo -e "PROVISIONING: Creating the web server document root directories.\n";
 
-  sudo -E mkdir -p "${WEB_DOCUMENT_ROOT}vagrant.local/site";
-  sudo -E cp -f "apache2/index.php" "${WEB_DOCUMENT_ROOT}vagrant.local/site/index.php";
-  sudo -E chown -f -R vagrant:www-readwrite "${WEB_DOCUMENT_ROOT}vagrant.local";
-  sudo -E chmod -f -R 775 "${WEB_DOCUMENT_ROOT}vagrant.local";
-  sudo -E chmod -f -R 664 "${WEB_DOCUMENT_ROOT}vagrant.local/site/index.php";
+  sudo -E mkdir -p "${WEB_DOCUMENT_ROOT}${MACHINE_NAME}.local/site";
+  sudo -E cp -f "apache2/index.php" "${WEB_DOCUMENT_ROOT}${MACHINE_NAME}.local/site/index.php";
+  sudo -E chown -f -R "${USER_NAME}":www-readwrite "${WEB_DOCUMENT_ROOT}${MACHINE_NAME}.local";
+  sudo -E chmod -f -R 775 "${WEB_DOCUMENT_ROOT}${MACHINE_NAME}.local";
+  sudo -E chmod -f -R 664 "${WEB_DOCUMENT_ROOT}${MACHINE_NAME}.local/site/index.php";
 
 fi
 
@@ -537,7 +549,7 @@ hash munin-node 2>/dev/null || {
 
   # Edit the Munin config.
   if [ -f "${MUNIN_CONF_PATH}" ]; then
-    sudo -E sed -i 's/^\[localhost.localdomain\]/\[vagrant.local\]/g' "${MUNIN_CONF_PATH}";
+    sudo -E sed -i "s/^\[localhost.localdomain\]/\[${MACHINE_NAME}.local\]/g" "${MUNIN_CONF_PATH}";
   fi
 
   # Ditch the default 'localdomain' stuff from the system.
@@ -797,13 +809,13 @@ if [ ! -d "${AWSTATS_ROOT_DIR}" ]; then
   sudo cpanm --install --force --notest --quiet --skip-installed YAML Geo::IP Geo::IPfree Geo::IP::PurePerl URI::Escape Net::IP Net::DNS Net::XWhois Time::HiRes Time::Local;
 
   # Copy over a basic config file.
-  sudo -E cp -f "awstats/awstats.model.deployment.conf" "${AWSTATS_ROOT_DIR}/wwwroot/cgi-bin/awstats.vagrant.local.conf";
+  sudo -E cp -f "awstats/awstats.model.deployment.conf" "${AWSTATS_ROOT_DIR}/wwwroot/cgi-bin/awstats.${MACHINE_NAME}.local.conf";
 
   # Set permissions to root for owner and group.
   sudo -E chown -f root:root -R "${AWSTATS_ROOT_DIR}";
 
-  # Update the data for the 'vagrant.local' config.
-  sudo -E "${AWSTATS_ROOT_DIR}/wwwroot/cgi-bin/awstats.pl" -config="vagrant.local" -update
+  # Update the data for the '${MACHINE_NAME}.local' config.
+  sudo -E "${AWSTATS_ROOT_DIR}/wwwroot/cgi-bin/awstats.pl" -config="${MACHINE_NAME}.local" -update
 
 fi
 
