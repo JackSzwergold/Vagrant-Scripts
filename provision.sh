@@ -547,13 +547,21 @@ hash munin-node 2>/dev/null || {
 ######################################################################################
 
 # Copy and enable the Munin Apache config.
-MUNIN_APACHE_CONFIG_PATH="/etc/apache2/conf-available/munin.conf";
-if [ -f "apache2/munin.conf" ] && [ -h "${MUNIN_APACHE_CONFIG_PATH}" ]; then
+MUNIN_APACHE_AVAILABLE_PATH="/etc/apache2/conf-available/munin.conf";
+MUNIN_APACHE_ENABLED_PATH="/etc/apache2/conf-enabled/munin.conf";
+if [ -f "apache2/munin.conf" ] && [ -h "${MUNIN_APACHE_AVAILABLE_PATH}" ]; then
 
   echo -e "PROVISIONING: Installing the Apache Munin config.\n";
 
-  sudo -E rm -f "${MUNIN_APACHE_CONFIG_PATH}";
-  sudo -E cp -f "apache2/munin.conf" "${MUNIN_APACHE_CONFIG_PATH}";
+  sudo -E rm -f "${MUNIN_APACHE_AVAILABLE_PATH}";
+  sudo -E cp -f "apache2/munin.conf" "${MUNIN_APACHE_AVAILABLE_PATH}";
+  sudo -E a2enconf -q munin;
+  # sudo -E service apache2 restart;
+
+elif [ -f "apache2/munin.conf" ] && [ ! -h "${MUNIN_APACHE_ENABLED_PATH}" ]; then
+
+  echo -e "PROVISIONING: Enabling the Apache Munin config.\n";
+
   sudo -E a2enconf -q munin;
   # sudo -E service apache2 restart;
 
