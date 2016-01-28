@@ -573,11 +573,6 @@ if [ ! -d "/usr/share/phpmyadmin" ]; then
   rm -f "phpMyAdmin-4.0.10.11-all-languages.tar.gz";
   sudo -E mv -f "phpMyAdmin-4.0.10.11-all-languages" "/usr/share/phpmyadmin";
 
-  # Copy and set the patched 'Header.class.php' file.
-  if [ -f "phpmyadmin/Header.class.php" ]; then
-    sudo -E cp -f "phpmyadmin/Header.class.php" "/usr/share/phpmyadmin/libraries/Header.class.php";
-  fi
-
   # Set permissions to root for owner and group.
   sudo -E chown -f root:root -R "/usr/share/phpmyadmin";
 
@@ -589,27 +584,37 @@ fi
 
 # Copy the phpMyAdmin configuration file into place.
 PHPMYADMIN_CONFIG_PATH="/usr/share/phpmyadmin/config.inc.php";
-if [ ! -f "${PHPMYADMIN_CONFIG_PATH}" ]; then
+if [ -f "phpmyadmin/config.inc.php" ] && [ ! -f "${PHPMYADMIN_CONFIG_PATH}" ]; then
 
   echo -e "PROVISIONING: Configuring phpMyAdmin related items.\n";
 
   # Set the phpMyAdmin config file.
-  if [ -f "phpmyadmin/config.inc.php" ]; then
-    sudo -E cp -f "phpmyadmin/config.inc.php" "${PHPMYADMIN_CONFIG_PATH}";
-  else
-    sudo -E cp -f "/usr/share/phpmyadmin/config.sample.inc.php" "${PHPMYADMIN_CONFIG_PATH}";
-  fi
+  sudo -E cp -f "phpmyadmin/config.inc.php" "${PHPMYADMIN_CONFIG_PATH}";
 
-  # Set the blowfish secret related items.
-  if [ -f "${PHPMYADMIN_CONFIG_PATH}" ]; then
-    BLOWFISH_SECRET_DEFAULT='a8b7c6d';
-    BLOWFISH_SECRET_NEW=$(openssl rand -base64 30);
-    sudo -E sed -i "s|cfg\['blowfish_secret'\] = '${BLOWFISH_SECRET_DEFAULT}'|cfg['blowfish_secret'] = '${BLOWFISH_SECRET_NEW}'|" "${PHPMYADMIN_CONFIG_PATH}";
+  # Copy and set the patched 'Header.class.php' file.
+  if [ -f "phpmyadmin/Header.class.php" ]; then
+    sudo -E cp -f "phpmyadmin/Header.class.php" "/usr/share/phpmyadmin/libraries/Header.class.php";
   fi
 
   # Disable the phpMyAdmin PDF export stuff; never works right and can crash a server quite quickly.
-  sudo -E rm -f "/usr/share/phpmyadmin/libraries/plugins/export/PMA_ExportPdf.class.php";
-  sudo -E rm -f "/usr/share/phpmyadmin/libraries/plugins/export/ExportPdf.class.php";
+  PHPMYADMIN_PLUGIN_PATH="/usr/share/phpmyadmin/libraries/plugins/export/";
+  if grep -q -s {PMA_,}ExportPdf.class.php "${PHPMYADMIN_PLUGIN_PATH}"*; then
+    sudo -E rm -f "${PHPMYADMIN_PLUGIN_PATH}"{PMA_,}ExportPdf.class.php;
+  fi
+
+fi
+
+######################################################################################
+# phpMyAdmin blowfish secret.
+######################################################################################
+
+BLOWFISH_SECRET_PATTERN="a8b7c6d";
+if [ -f "${PHPMYADMIN_CONFIG_PATH}" ] && grep -E -q "${BLOWFISH_SECRET_PATTERN}" "${PHPMYADMIN_CONFIG_PATH}"; then
+
+  echo -e "PROVISIONING: Setting a new phpMyAdmin blowfish secret value.\n";
+
+  BLOWFISH_SECRET_NEW=$(openssl rand -base64 30);
+  sudo -E sed -i "s/'${BLOWFISH_SECRET_PATTERN}'/'${BLOWFISH_SECRET_NEW}'/g" "${PHPMYADMIN_CONFIG_PATH}";
 
 fi
 
