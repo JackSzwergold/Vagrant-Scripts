@@ -445,23 +445,18 @@ sudo -E service apache2 stop;
 # Apache: Common Configuration Files
 ######################################################################################
 
-# Set the config files for Apache.
-APACHE_COMMON_CONFIG_PATH="/etc/apache2/sites-available/common.conf";
-if [ ! -f "${APACHE_COMMON_CONFIG_PATH}" ]; then
+echo -e "PROVISIONING: Setting Apache and PHP configs.\n";
 
-  echo -e "PROVISIONING: Setting Apache configs.\n";
-
-  # Copy the config files into place.
-  sudo -E cp -f "apache2/apache2.conf" "/etc/apache2/apache2.conf";
-  sudo -E cp -f "apache2/envvars" "/etc/apache2/envvars";
-  sudo -E cp -f "apache2/mpm_prefork.conf" "/etc/apache2/mods-available/mpm_prefork.conf";
-  sudo -E cp -f "apache2/security.conf" "/etc/apache2/conf-available/security.conf";
-  sudo -E cp -f "apache2/common.conf" "${APACHE_COMMON_CONFIG_PATH}";
-  sudo -E cp -f "apache2/000-default.conf" "/etc/apache2/sites-available/000-default.conf";
-  sudo -E cp -f "apache2/${MACHINE_NAME}.local.conf" "/etc/apache2/sites-available/${MACHINE_NAME}.local.conf";
-  sudo -E a2ensite ${MACHINE_NAME}.local;
-
-fi
+# Copy the config files into place.
+sudo -E cp -f "apache2/apache2.conf" "/etc/apache2/apache2.conf";
+sudo -E cp -f "apache2/envvars" "/etc/apache2/envvars";
+sudo -E cp -f "apache2/mpm_prefork.conf" "/etc/apache2/mods-available/mpm_prefork.conf";
+sudo -E cp -f "apache2/security.conf" "/etc/apache2/conf-available/security.conf";
+sudo -E cp -f "apache2/common.conf" "/etc/apache2/sites-available/common.conf";
+sudo -E cp -f "apache2/000-default.conf" "/etc/apache2/sites-available/000-default.conf";
+sudo -E cp -f "apache2/${MACHINE_NAME}.local.conf" "/etc/apache2/sites-available/${MACHINE_NAME}.local.conf";
+sudo -E cp -f "php/php.ini" "/etc/php5/apache2/php.ini";
+sudo -E a2ensite ${MACHINE_NAME}.local;
 
 # Ditch the default Apache directory and set a new default page.
 if [ -d "/var/www/html" ]; then
