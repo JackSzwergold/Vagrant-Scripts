@@ -2,9 +2,16 @@
 
 ##########################################################################################
 #
-# Adjust FileDir Permissions (adjust_filedir_permissions.sh)
+# Adjust FileDir Permissions (adjust_filedir_permissions.sh) (c) by Jack Szwergold
 #
-# Programming: Jack Szwergold
+# Adjust FileDir Permissions is licensed under a
+# Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
+#
+# You should have received a copy of the license along with this
+# work. If not, see <http://creativecommons.org/licenses/by-nc-sa/4.0/>. 
+#
+# w: http://www.preworn.com
+# e: me@preworn.com
 #
 # Created: 2014-07-28, js
 # Version: 2014-07-28, js: creation
@@ -24,7 +31,7 @@ PID_FILE="${LOCK_DIR}"'/'"${LOCK_NAME}"'.pid'
 # Set the config file.
 CONFIG_FILE="./adjust_filedir_permissions.cfg.sh"
 
-# Checks if the base secript directory exists.
+# Checks if the base script directory exists.
 if [ -f "${CONFIG_FILE}" ]; then
   source "${CONFIG_FILE}"
 else
@@ -74,8 +81,8 @@ if mkdir ${LOCK_DIR} 2>/dev/null; then
       wait ${FILE_PERM_FIX_PID};
 
       # Adjust permissions for files in directories named 'bin/'.
-      find `find ${DOCUMENT_ROOT}${DIRECTORY_NAME}'/' -type d \( -name "bin" -o -name "cgi-bin" \)` -maxdepth 1 -type f -print0 | xargs --no-run-if-empty -0 chmod -R ${CHMOD_EXEC_FILE} >/dev/null & FILE_PERM_FIX_PID=(`jobs -l | awk '{print $2}'`);
-      wait ${FILE_PERM_FIX_PID};
+      # find `find ${DOCUMENT_ROOT}${DIRECTORY_NAME}'/' -type d \( -name "bin" -o -name "cgi-bin" \)` -maxdepth 1 -type f -print0 | xargs --no-run-if-empty -0 chmod -R ${CHMOD_EXEC_FILE} >/dev/null & FILE_PERM_FIX_PID=(`jobs -l | awk '{print $2}'`);
+      # wait ${FILE_PERM_FIX_PID};
 
     fi
 
@@ -96,4 +103,3 @@ else
     exit
   fi
 fi
-

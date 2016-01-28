@@ -52,4 +52,3 @@ COUNTRY_ARRAY[1]='RU'; # Russian Federation
 COUNTRY_ARRAY[2]='UA'; # Ukraine
 COUNTRY_ARRAY[3]='IN'; # India
 COUNTRY_ARRAY[4]='BR'; # Brazil
-

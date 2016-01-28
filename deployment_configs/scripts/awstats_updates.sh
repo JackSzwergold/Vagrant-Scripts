@@ -2,9 +2,16 @@
 
 ##########################################################################################
 #
-# AWStats Updates (awstats_updates.sh)
+# AWStats Updates (awstats_updates.sh) (c) by Jack Szwergold
 #
-# Programming: Jack Szwergold
+# AWStats Updates is licensed under a
+# Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
+#
+# You should have received a copy of the license along with this
+# work. If not, see <http://creativecommons.org/licenses/by-nc-sa/4.0/>. 
+#
+# w: http://www.preworn.com
+# e: me@preworn.com
 #
 # Created: 2011-12-01, js
 # Version: 2011-12-01, js: creation
@@ -23,7 +30,7 @@ PID_FILE="${LOCK_DIR}"'/'"${LOCK_NAME}"'.pid'
 # Set the config file.
 CONFIG_FILE="./awstats_updates.cfg.sh"
 
-# Checks if the base secript directory exists.
+# Checks if the base script directory exists.
 if [ -f "${CONFIG_FILE}" ]; then
   source "${CONFIG_FILE}"
 else
@@ -63,4 +70,3 @@ else
     exit
   fi
 fi
-
