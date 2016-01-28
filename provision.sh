@@ -288,20 +288,20 @@ hash iptables 2>/dev/null || {
   sudo -E aptitude install -y --assume-yes -q iptables iptables-persistent ipset;
 
   # Load the IPSet stuff if the file exists.
-  if [ -f "ipset.conf" ]; then
-    sudo -E ipset restore < "ipset.conf";
-    sudo -E cp -f "ipset.conf" "/etc/iptables/rules.ipsets";
+  if [ -f "iptables/ipset.conf" ]; then
+    sudo -E ipset restore < "iptables/ipset.conf";
+    sudo -E cp -f "iptables/ipset.conf" "/etc/iptables/rules.ipsets";
   fi
 
   # Load the IPTables stuff if the file exists.
-  if [ -f "iptables.conf" ]; then
-    sudo -E iptables-restore < "iptables.conf";
-    sudo -E cp -f "iptables.conf" "/etc/iptables/rules.v4";
+  if [ -f "iptables/iptables.conf" ]; then
+    sudo -E iptables-restore < "iptables/iptables.conf";
+    sudo -E cp -f "iptables/iptables.conf" "/etc/iptables/rules.v4";
   fi
 
   # Patch 'iptables-persistent' if the patch exists and the original 'iptables-persistent' exists.
-  if [ -f "/etc/init.d/iptables-persistent" ] && [ -f "iptables-persistent-ipset.patch" ]; then
-    sudo -E patch -fsb "/etc/init.d/iptables-persistent" < "iptables-persistent-ipset.patch";
+  if [ -f "/etc/init.d/iptables-persistent" ] && [ -f "iptables/iptables-persistent-ipset.patch" ]; then
+    sudo -E patch -fsb "/etc/init.d/iptables-persistent" < "iptables/iptables-persistent-ipset.patch";
   fi
 
 }
