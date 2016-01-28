@@ -574,8 +574,8 @@ if [ ! -d "/usr/share/phpmyadmin" ]; then
   sudo -E mv -f "phpMyAdmin-4.0.10.11-all-languages" "/usr/share/phpmyadmin";
 
   # Copy and set the patched 'Header.class.php' file.
-  if [ -f "phpmyadmin-Header.class.php" ]; then
-    sudo -E cp -f "phpmyadmin-Header.class.php" "/usr/share/phpmyadmin/libraries/Header.class.php";
+  if [ -f "phpmyadmin/Header.class.php" ]; then
+    sudo -E cp -f "phpmyadmin/Header.class.php" "/usr/share/phpmyadmin/libraries/Header.class.php";
   fi
 
   # Set permissions to root for owner and group.
@@ -594,8 +594,8 @@ if [ ! -f "${PHPMYADMIN_CONFIG_PATH}" ]; then
   echo -e "PROVISIONING: Configuring phpMyAdmin related items.\n";
 
   # Set the phpMyAdmin config file.
-  if [ -f "phpmyadmin-config.inc.php" ]; then
-    sudo -E cp -f "phpmyadmin-config.inc.php" "${PHPMYADMIN_CONFIG_PATH}";
+  if [ -f "phpmyadmin/config.inc.php" ]; then
+    sudo -E cp -f "phpmyadmin/config.inc.php" "${PHPMYADMIN_CONFIG_PATH}";
   else
     sudo -E cp -f "/usr/share/phpmyadmin/config.sample.inc.php" "${PHPMYADMIN_CONFIG_PATH}";
   fi
