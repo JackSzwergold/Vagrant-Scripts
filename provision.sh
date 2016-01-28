@@ -272,7 +272,7 @@ echo -e "PROVISIONING: Setting the MOTD banner.\n";
 # Set the server login banner with figlet.
 # MOTD_PATH="/etc/motd.tail";
 MOTD_PATH="/etc/motd";
-figlet "${MACHINE_NAME^}" > "${MOTD_PATH}";
+echo "$(figlet ${MACHINE_NAME^} | head -n -1).local" > "${MOTD_PATH}";
 echo "" >> "${MOTD_PATH}";
 
 echo -e "PROVISIONING: Disabling MOTD scripts.\n";
