@@ -738,7 +738,7 @@ if [ ! -d "${AWSTATS_ROOT_DIR}" ]; then
   sudo -E mv -f "awstats-7.3" "${AWSTATS_ROOT_DIR}";
 
   # Set an index page for AWStats.
-  sudo -E cp -f "awstatstotals.php" "${AWSTATS_ROOT_DIR}/wwwroot/cgi-bin/index.php";
+  sudo -E cp -f "awstats/awstatstotals.php" "${AWSTATS_ROOT_DIR}/wwwroot/cgi-bin/index.php";
   sudo -E chmod a+r "${AWSTATS_ROOT_DIR}/wwwroot/cgi-bin/index.php";
 
   # Create the AWStats data directory.
@@ -754,7 +754,7 @@ if [ ! -d "${AWSTATS_ROOT_DIR}" ]; then
   sudo cpanm --install --force --notest --quiet --skip-installed YAML Geo::IP Geo::IPfree Geo::IP::PurePerl URI::Escape Net::IP Net::DNS Net::XWhois Time::HiRes Time::Local;
 
   # Copy over a basic config file.
-  sudo -E cp -f "awstats.model.deployment.conf" "${AWSTATS_ROOT_DIR}/wwwroot/cgi-bin/awstats.vagrant.local.conf";
+  sudo -E cp -f "awstats/awstats.model.deployment.conf" "${AWSTATS_ROOT_DIR}/wwwroot/cgi-bin/awstats.vagrant.local.conf";
 
   # Set permissions to root for owner and group.
   sudo -E chown -f root:root -R "${AWSTATS_ROOT_DIR}";
