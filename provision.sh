@@ -7,7 +7,7 @@
 BASE_DIR=$(pwd);
 echo -e "PROVISIONING: Base directory is: '${BASE_DIR}'.\n\n";
 
-CONFIG_DIR="config_dir";
+CONFIG_DIR="deployment_configs";
 echo -e "PROVISIONING: Config directory is: '${CONFIG_DIR}'.\n\n";
 
 cd "${BASE_DIR}"/"${CONFIG_DIR}";
