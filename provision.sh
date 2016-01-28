@@ -429,10 +429,10 @@ if [ ! -f "${APACHE_COMMON_CONFIG_PATH}" ]; then
   echo -e "PROVISIONING: Setting Apache configs.\n";
 
   # Copy the config files into place.
-  sudo -E cp -f "apache2.conf" "/etc/apache2/apache2.conf";
-  sudo -E cp -f "apache2-mpm_prefork.conf" "/etc/apache2/mods-available/mpm_prefork.conf";
-  sudo -E cp -f "apache2-common.conf" "${APACHE_COMMON_CONFIG_PATH}";
-  sudo -E cp -f "apache2-000-default.conf" "/etc/apache2/sites-available/000-default.conf";
+  sudo -E cp -f "apache2/apache2.conf" "/etc/apache2/apache2.conf";
+  sudo -E cp -f "apache2/mpm_prefork.conf" "/etc/apache2/mods-available/mpm_prefork.conf";
+  sudo -E cp -f "apache2/common.conf" "${APACHE_COMMON_CONFIG_PATH}";
+  sudo -E cp -f "apache2/000-default.conf" "/etc/apache2/sites-available/000-default.conf";
 
 fi
 
@@ -535,7 +535,7 @@ hash munin-node 2>/dev/null || {
   # Repair Munin permissions.
   sudo -E munin-check --fix-permissions;
 
-  # Start the Munin node.
+  # Restart the Munin node.
   sudo -E service munin-node restart;
 
 }
@@ -546,12 +546,12 @@ hash munin-node 2>/dev/null || {
 
 # Copy and enable the Munin Apache config.
 MUNIN_APACHE_CONFIG_PATH="/etc/apache2/conf-available/munin.conf";
-if [ -f "apache2-munin.conf" ] && [ -h "${MUNIN_APACHE_CONFIG_PATH}" ]; then
+if [ -f "apache2/munin.conf" ] && [ -h "${MUNIN_APACHE_CONFIG_PATH}" ]; then
 
   echo -e "PROVISIONING: Installing the Apache Munin config.\n";
 
   sudo -E rm -f "${MUNIN_APACHE_CONFIG_PATH}";
-  sudo -E cp -f "apache2-munin.conf" "${MUNIN_APACHE_CONFIG_PATH}";
+  sudo -E cp -f "apache2/munin.conf" "${MUNIN_APACHE_CONFIG_PATH}";
   sudo -E a2enconf -q munin;
   # sudo -E service apache2 restart;
 
@@ -619,11 +619,11 @@ fi
 
 # Copy and enable the AWStats phpMyAdmin config.
 PHPMYADMIN_APACHE_CONFIG_PATH="/etc/apache2/conf-available/phpmyadmin.conf";
-if [ -f "apache2-phpmyadmin.conf" ] && [ ! -f "${PHPMYADMIN_APACHE_CONFIG_PATH}" ]; then
+if [ -f "apache2/phpmyadmin.conf" ] && [ ! -f "${PHPMYADMIN_APACHE_CONFIG_PATH}" ]; then
 
   echo -e "PROVISIONING: Installing the Apache phpMyAdmin config.\n";
 
-  sudo -E cp -f "apache2-phpmyadmin.conf" "${PHPMYADMIN_APACHE_CONFIG_PATH}";
+  sudo -E cp -f "apache2/phpmyadmin.conf" "${PHPMYADMIN_APACHE_CONFIG_PATH}";
   sudo -E a2enconf -q phpmyadmin;
   # sudo -E service apache2 restart;
 
@@ -770,15 +770,43 @@ fi
 
 # Copy and enable the AWStats Apache config.
 AWSTATS_APACHE_CONFIG_PATH="/etc/apache2/conf-available/awstats.conf";
-if [ -f "apache2-awstats.conf" ] && [ ! -f "${AWSTATS_APACHE_CONFIG_PATH}" ]; then
+if [ -f "apache2/awstats.conf" ] && [ ! -f "${AWSTATS_APACHE_CONFIG_PATH}" ]; then
 
   echo -e "PROVISIONING: Installing the Apache AWStats config.\n";
 
-  sudo -E cp -f "apache2-awstats.conf" "${AWSTATS_APACHE_CONFIG_PATH}";
+  sudo -E cp -f "apache2/awstats.conf" "${AWSTATS_APACHE_CONFIG_PATH}";
   sudo -E a2enconf -q awstats;
   # sudo -E service apache2 restart;
 
 fi
+
+######################################################################################
+# Fail2Ban
+######################################################################################
+
+# Check if Fail2Ban is installed and if not, install it.
+hash fail2ban-client 2>/dev/null || {
+
+  echo -e "PROVISIONING: Fail2Ban related stuff.\n";
+
+  # Install Fail2Ban.
+  sudo -E RUNLEVEL=1 aptitude purge -y --assume-yes -q fail2ban;
+  sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q gamin libgamin0 python-central python-gamin python-support;
+  curl -ss -O -L "http://old-releases.ubuntu.com/ubuntu/pool/universe/f/fail2ban/fail2ban_0.8.13-1_all.deb";
+  sudo -E RUNLEVEL=1 dpkg --force-all -i "fail2ban_0.8.13-1_all.deb";
+
+  # Set the Fail2Ban configs.
+  sudo -E cp -f "fail2ban-jail.local" "/etc/fail2ban/jail.local";
+  sudo -E cp -f "fail2ban-ddos.conf" "/etc/fail2ban/filter.d/ddos.conf";
+
+  # Restart Fail2Ban.
+  sudo -E service fail2ban restart;
+
+  # Run these commands to prevent Fail2Ban from coming up on reboot.
+  sudo -E service fail2ban stop;
+  sudo -E update-rc.d -f fail2ban remove;
+
+}
 
 ######################################################################################
 # Update the locate database.
