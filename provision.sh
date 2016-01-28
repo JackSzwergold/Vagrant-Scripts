@@ -38,7 +38,7 @@ sudo -E adduser --quiet vagrant www-readwrite;
 # Environment
 ######################################################################################
 
-echo -e "PROVISIONING: Setting the selected edtor.\n";
+echo -e "PROVISIONING: Setting the selected editor.\n";
 
 # Set the selected editor to Nano.
 
