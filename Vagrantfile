@@ -10,7 +10,7 @@ Vagrant.configure(2) do |config|
 
   # Basic virtual machine configuration options.
   config.vm.box = "ubuntu/trusty64"
-  config.vm.define "sandbox"
+  config.vm.define "Sandbox_UBUNTU_1404"
   config.vm.hostname = "sandbox"
   config.ssh.username = "vagrant"
   config.vm.box_check_update = false
