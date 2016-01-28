@@ -795,8 +795,23 @@ hash fail2ban-client 2>/dev/null || {
   curl -ss -O -L "http://old-releases.ubuntu.com/ubuntu/pool/universe/f/fail2ban/fail2ban_0.8.13-1_all.deb";
   sudo -E RUNLEVEL=1 dpkg --force-all -i "fail2ban_0.8.13-1_all.deb";
 
-  # Set the Fail2Ban configs.
-  sudo -E cp -f "fail2ban-jail.local" "/etc/fail2ban/jail.local";
+  # Run these commands to prevent Fail2Ban from coming up on reboot.
+  sudo -E service fail2ban stop;
+  sudo -E update-rc.d -f fail2ban remove;
+
+}
+
+######################################################################################
+# Fail2Ban config.
+######################################################################################
+
+# Copy and enable the Fail2Ban configs.
+FAIL2BAN_LOCAL_JAIL_PATH="/etc/fail2ban/jail.local";
+if [ -f "fail2ban-jail.local" ] && [ ! -f "${FAIL2BAN_LOCAL_JAIL_PATH}" ]; then
+
+  echo -e "PROVISIONING: Installing the Fail2Ban configs.\n";
+
+  sudo -E cp -f "fail2ban-jail.local" "${FAIL2BAN_LOCAL_JAIL_PATH}";
   sudo -E cp -f "fail2ban-ddos.conf" "/etc/fail2ban/filter.d/ddos.conf";
 
   # Restart Fail2Ban.
@@ -806,7 +821,7 @@ hash fail2ban-client 2>/dev/null || {
   sudo -E service fail2ban stop;
   sudo -E update-rc.d -f fail2ban remove;
 
-}
+fi
 
 ######################################################################################
 # Update the locate database.
