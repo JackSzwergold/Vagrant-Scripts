@@ -479,7 +479,9 @@ hash mysql 2>/dev/null || {
   sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q mysql-server mysql-client;
 
   # Secure the MySQL installation.
-  mysql -sfu root < "mysql_secure_installation.sql";
+  if [ -f "mysql/mysql_secure_installation.sql" ]; then
+    mysql -sfu root < "mysql/mysql_secure_installation.sql";
+  fi
 
   # Run these commands to prevent MySQL from coming up on reboot.
   sudo -E service mysql stop;
@@ -501,8 +503,8 @@ hash munin-node 2>/dev/null || {
 
   # Install the copied Munin config if it exists.
   MUNIN_CONF_PATH="/etc/munin/munin.conf";
-  if [ -f "munin.conf" ]; then
-    sudo -E cp -f "munin.conf" "${MUNIN_CONF_PATH}";
+  if [ -f "munin/munin.conf" ]; then
+    sudo -E cp -f "munin/munin.conf" "${MUNIN_CONF_PATH}";
   fi
 
   # Edit the Munin config.
