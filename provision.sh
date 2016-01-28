@@ -807,12 +807,12 @@ hash fail2ban-client 2>/dev/null || {
 
 # Copy and enable the Fail2Ban configs.
 FAIL2BAN_LOCAL_JAIL_PATH="/etc/fail2ban/jail.local";
-if [ -f "fail2ban-jail.local" ] && [ ! -f "${FAIL2BAN_LOCAL_JAIL_PATH}" ]; then
+if [ -f "fail2ban/jail.local" ] && [ ! -f "${FAIL2BAN_LOCAL_JAIL_PATH}" ]; then
 
   echo -e "PROVISIONING: Installing the Fail2Ban configs.\n";
 
-  sudo -E cp -f "fail2ban-jail.local" "${FAIL2BAN_LOCAL_JAIL_PATH}";
-  sudo -E cp -f "fail2ban-ddos.conf" "/etc/fail2ban/filter.d/ddos.conf";
+  sudo -E cp -f "fail2ban/jail.local" "${FAIL2BAN_LOCAL_JAIL_PATH}";
+  sudo -E cp -f "fail2ban/ddos.conf" "/etc/fail2ban/filter.d/ddos.conf";
 
   # Restart Fail2Ban.
   sudo -E service fail2ban restart;
