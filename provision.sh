@@ -354,85 +354,96 @@ hash apachectl 2>/dev/null || {
 sudo -E service apache2 stop;
 
 ######################################################################################
-# Apache and PHP (Configuring)
+# PHP: Configuration
 ######################################################################################
 
 # Adjust the PHP config.
-PHP_CONFIG_PATH="/etc/php5/apache2/php.ini";
-EXPOSE_PHP_PATTERN="^expose_php.*=.*On$";
-if [ -f "${PHP_CONFIG_PATH}" ] && grep -E -q "${EXPOSE_PHP_PATTERN}" "${PHP_CONFIG_PATH}"; then
+# PHP_CONFIG_PATH="/etc/php5/apache2/php.ini";
+# EXPOSE_PHP_PATTERN="^expose_php.*=.*On$";
+# if [ -f "${PHP_CONFIG_PATH}" ] && grep -E -q "${EXPOSE_PHP_PATTERN}" "${PHP_CONFIG_PATH}"; then
 
-  echo -e "PROVISIONING: Disable 'expose_php'.\n";
+#   echo -e "PROVISIONING: Disable 'expose_php'.\n";
 
-  # Harden PHP by disabling 'expose_php'.
-  sudo -E sed -i "s/${EXPOSE_PHP_PATTERN}/expose_php = Off/g" "${PHP_CONFIG_PATH}";
+#   # Harden PHP by disabling 'expose_php'.
+#   sudo -E sed -i "s/${EXPOSE_PHP_PATTERN}/expose_php = Off/g" "${PHP_CONFIG_PATH}";
 
-fi
+# fi
 
-OPCACHE_PATTERN="^;opcache.enable=0$";
-if [ -f "${PHP_CONFIG_PATH}" ] && grep -E -q "${OPCACHE_PATTERN}" "${PHP_CONFIG_PATH}"; then
+# OPCACHE_PATTERN="^;opcache.enable=0$";
+# if [ -f "${PHP_CONFIG_PATH}" ] && grep -E -q "${OPCACHE_PATTERN}" "${PHP_CONFIG_PATH}"; then
 
-  echo -e "PROVISIONING: Disable the PHP 5.5 OPcache.\n";
+#   echo -e "PROVISIONING: Disable the PHP 5.5 OPcache.\n";
 
-  # Disable the PHP 5.5 OPcache.
-  sudo -E sed -i "s/${OPCACHE_PATTERN}/opcache.enable=0/g" "${PHP_CONFIG_PATH}";
+#   # Disable the PHP 5.5 OPcache.
+#   sudo -E sed -i "s/${OPCACHE_PATTERN}/opcache.enable=0/g" "${PHP_CONFIG_PATH}";
 
-fi
+# fi
 
-# Adjust the Apache security config.
-APACHE_SECURITY_PATH="/etc/apache2/conf-available/security.conf";
-APACHE_SERVERTOKENS="^ServerTokens OS$";
-if [ -f "${APACHE_SECURITY_PATH}" ] && grep -E -q "${APACHE_SERVERTOKENS}" "${APACHE_SECURITY_PATH}"; then
+######################################################################################
+# Apache: Security (Configuring)
+######################################################################################
 
-  echo -e "PROVISIONING: Adjusting the Apache 'ServerTokens' setting.\n";
+# APACHE_SECURITY_PATH="/etc/apache2/conf-available/security.conf";
+# APACHE_SERVERTOKENS="^ServerTokens OS$";
+# if [ -f "${APACHE_SECURITY_PATH}" ] && grep -E -q "${APACHE_SERVERTOKENS}" "${APACHE_SECURITY_PATH}"; then
 
-  # Set 'ServerTokens' to Prod.
-  sudo -E sed -i "s/${APACHE_SERVERTOKENS}/ServerTokens Prod/g" "${APACHE_SECURITY_PATH}";
+#   echo -e "PROVISIONING: Adjusting the Apache 'ServerTokens' setting.\n";
 
-fi
+#   # Set 'ServerTokens' to Prod.
+#   sudo -E sed -i "s/${APACHE_SERVERTOKENS}/ServerTokens Prod/g" "${APACHE_SECURITY_PATH}";
 
-APACHE_SERVERSIGNATURE="^ServerSignature On";
-if [ -f "${APACHE_SECURITY_PATH}" ] && grep -E -q "${APACHE_SERVERSIGNATURE}" "${APACHE_SECURITY_PATH}"; then
+# fi
 
-  echo -e "PROVISIONING: Adjusting the Apache 'ServerSignature' setting.\n";
+# APACHE_SERVERSIGNATURE="^ServerSignature On";
+# if [ -f "${APACHE_SECURITY_PATH}" ] && grep -E -q "${APACHE_SERVERSIGNATURE}" "${APACHE_SECURITY_PATH}"; then
 
-  # Set 'ServerSignature' to Off.
-  sudo -E sed -i "s/${APACHE_SERVERSIGNATURE}/ServerSignature Off/g" "${APACHE_SECURITY_PATH}";
+#   echo -e "PROVISIONING: Adjusting the Apache 'ServerSignature' setting.\n";
 
-fi
+#   # Set 'ServerSignature' to Off.
+#   sudo -E sed -i "s/${APACHE_SERVERSIGNATURE}/ServerSignature Off/g" "${APACHE_SECURITY_PATH}";
 
-APACHE_TRACEENABLE="^TraceEnable On";
-if [ -f "${APACHE_SECURITY_PATH}" ] && grep -E -q "${APACHE_TRACEENABLE}" "${APACHE_SECURITY_PATH}"; then
+# fi
 
-  echo -e "PROVISIONING: Adjusting the Apache 'TraceEnable' setting.\n";
+# APACHE_TRACEENABLE="^TraceEnable On";
+# if [ -f "${APACHE_SECURITY_PATH}" ] && grep -E -q "${APACHE_TRACEENABLE}" "${APACHE_SECURITY_PATH}"; then
 
-  # Set 'TraceEnable' to Off.
-  sudo -E sed -i "s/${APACHE_TRACEENABLE}/TraceEnable Off/g" "${APACHE_SECURITY_PATH}";
+#   echo -e "PROVISIONING: Adjusting the Apache 'TraceEnable' setting.\n";
 
-fi
+#   # Set 'TraceEnable' to Off.
+#   sudo -E sed -i "s/${APACHE_TRACEENABLE}/TraceEnable Off/g" "${APACHE_SECURITY_PATH}";
+
+# fi
+
+######################################################################################
+# Apache: Environment Variables (Configuring)
+######################################################################################
 
 # Adjust the Apache run group and UMASK.
-APACHE_ENVVARS_PATH="/etc/apache2/envvars";
-APACHE_RUN_GROUP="^export APACHE_RUN_GROUP=www-data";
-if [ -f "${APACHE_ENVVARS_PATH}" ] && grep -E -q "${APACHE_RUN_GROUP}" "${APACHE_ENVVARS_PATH}"; then
+# APACHE_ENVVARS_PATH="/etc/apache2/envvars";
+# APACHE_RUN_GROUP="^export APACHE_RUN_GROUP=www-data";
+# if [ -f "${APACHE_ENVVARS_PATH}" ] && grep -E -q "${APACHE_RUN_GROUP}" "${APACHE_ENVVARS_PATH}"; then
 
-  echo -e "PROVISIONING: Adjusting Apache group setting.\n";
+#   echo -e "PROVISIONING: Adjusting Apache group setting.\n";
 
-  # Set 'APACHE_RUN_GROUP' to 'www-readwrite'.
-  sudo -E sed -i "s/${APACHE_RUN_GROUP}/export APACHE_RUN_GROUP=www-readwrite/g" "${APACHE_ENVVARS_PATH}";
+#   # Set 'APACHE_RUN_GROUP' to 'www-readwrite'.
+#   sudo -E sed -i "s/${APACHE_RUN_GROUP}/export APACHE_RUN_GROUP=www-readwrite/g" "${APACHE_ENVVARS_PATH}";
 
-fi
+# fi
 
-APACHE_UMASK_APPEND="umask 002";
-if [ -f "${APACHE_ENVVARS_PATH}" ] && ! grep -E -q "^${APACHE_UMASK_APPEND}" "${APACHE_ENVVARS_PATH}"; then
+# APACHE_UMASK_APPEND="umask 002";
+# if [ -f "${APACHE_ENVVARS_PATH}" ] && ! grep -E -q "^${APACHE_UMASK_APPEND}" "${APACHE_ENVVARS_PATH}"; then
 
-  echo -e "PROVISIONING: Adjusting Apache UMASK value.\n";
+#   echo -e "PROVISIONING: Adjusting Apache UMASK value.\n";
 
-  # Adjusting Apache UMASK value.
-  # sudo -E grep -q -E "${APACHE_UMASK_APPEND}" "${APACHE_ENVVARS_PATH}" || echo -e "\n${APACHE_UMASK_APPEND}" >> "${APACHE_ENVVARS_PATH}";
-  sudo sh -c "echo '${APACHE_UMASK_APPEND}' >> '${APACHE_ENVVARS_PATH}'";
+#   # Adjusting Apache UMASK value.
+#   # sudo -E grep -q -E "${APACHE_UMASK_APPEND}" "${APACHE_ENVVARS_PATH}" || echo -e "\n${APACHE_UMASK_APPEND}" >> "${APACHE_ENVVARS_PATH}";
+#   sudo sh -c "echo '${APACHE_UMASK_APPEND}' >> '${APACHE_ENVVARS_PATH}'";
 
-fi
+# fi
+
+######################################################################################
+# Apache: Common Configuration Files
+######################################################################################
 
 # Set the config files for Apache.
 APACHE_COMMON_CONFIG_PATH="/etc/apache2/sites-available/common.conf";
@@ -442,7 +453,9 @@ if [ ! -f "${APACHE_COMMON_CONFIG_PATH}" ]; then
 
   # Copy the config files into place.
   sudo -E cp -f "apache2/apache2.conf" "/etc/apache2/apache2.conf";
+  sudo -E cp -f "apache2/envvars" "/etc/apache2/envvars";
   sudo -E cp -f "apache2/mpm_prefork.conf" "/etc/apache2/mods-available/mpm_prefork.conf";
+  sudo -E cp -f "apache2/security.conf" "/etc/apache2/conf-available/security.conf";
   sudo -E cp -f "apache2/common.conf" "${APACHE_COMMON_CONFIG_PATH}";
   sudo -E cp -f "apache2/000-default.conf" "/etc/apache2/sites-available/000-default.conf";
   sudo -E cp -f "apache2/${MACHINE_NAME}.local.conf" "/etc/apache2/sites-available/${MACHINE_NAME}.local.conf";
