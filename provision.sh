@@ -442,7 +442,7 @@ if [ -d "/var/www/html" ]; then
   echo -e "PROVISIONING: Adjusting the Apache root directory and default file.\n";
 
   sudo -E rm -rf "/var/www/html";
-  sudo -E cp -f "index.php" "/var/www/index.php";
+  sudo -E cp -f "apache2/index.php" "/var/www/index.php";
 
 fi
 
