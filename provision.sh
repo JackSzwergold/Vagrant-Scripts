@@ -290,7 +290,7 @@ sudo -E chmod -f -x "/etc/update-motd.d/98-cloudguest";
 ######################################################################################
 
 # Check if IPTables and IPSet are installed and if not, install it.
-hash iptables 2>/dev/null || {
+hash ipset 2>/dev/null || {
 
   echo -e "PROVISIONING: IPTables and IPSet stuff.\n";
 
