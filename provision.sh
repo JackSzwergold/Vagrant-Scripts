@@ -829,6 +829,46 @@ if [ -f "fail2ban/jail.local" ] && [ ! -f "${FAIL2BAN_LOCAL_JAIL_PATH}" ]; then
 fi
 
 ######################################################################################
+# Monit
+######################################################################################
+
+# Check if Monit is installed and if not, install it.
+hash monit 2>/dev/null || {
+
+  echo -e "PROVISIONING: Monit related stuff.\n";
+
+  # Install Monit.
+  sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q monit;
+
+  # Run these commands to prevent Monit from coming up on reboot.
+  sudo -E service monit stop;
+  sudo -E update-rc.d -f monit remove;
+
+}
+
+######################################################################################
+# Monit config.
+######################################################################################
+
+# Copy and enable the Monit configs.
+MONIT_CONFIG_PATH="/etc/monit/monitrc";
+if [ -f "monit/monitrc" ]; then
+
+  echo -e "PROVISIONING: Installing the Monit configs.\n";
+
+  sudo -E cp -f "monit/monitrc" "${MONIT_CONFIG_PATH}";
+  sudo -E cp -f "monit/apache2.conf" "/etc/monit/conf.d/apache2.conf";
+
+  # Restart Monit.
+  sudo -E service monit restart;
+
+  # Run these commands to prevent Monit from coming up on reboot.
+  sudo -E service monit stop;
+  sudo -E update-rc.d -f monit remove;
+
+fi
+
+######################################################################################
 # Update the locate database.
 ######################################################################################
 
