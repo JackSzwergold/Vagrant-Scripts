@@ -14,7 +14,7 @@ Vagrant.configure(2) do |config|
   config.vm.hostname = "sandbox"
   config.ssh.username = "vagrant"
   config.vm.box_check_update = false
-  config.vm.network "private_network", ip: "192.168.56.20"
+  config.vm.network "private_network", ip: "192.168.56.10"
   config.vm.synced_folder ".", "/vagrant", disabled: true
 
   # Copy over the configuration directory.
