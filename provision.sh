@@ -433,6 +433,8 @@ if [ ! -f "${APACHE_COMMON_CONFIG_PATH}" ]; then
   sudo -E cp -f "apache2/mpm_prefork.conf" "/etc/apache2/mods-available/mpm_prefork.conf";
   sudo -E cp -f "apache2/common.conf" "${APACHE_COMMON_CONFIG_PATH}";
   sudo -E cp -f "apache2/000-default.conf" "/etc/apache2/sites-available/000-default.conf";
+  sudo -E cp -f "apache2/vagrant.local.conf" "/etc/apache2/sites-available/vagrant.local.conf";
+  sudo -E a2ensite vagrant.local;
 
 fi
 
@@ -443,6 +445,32 @@ if [ -d "/var/www/html" ]; then
 
   sudo -E rm -rf "/var/www/html";
   sudo -E cp -f "apache2/index.php" "/var/www/index.php";
+
+fi
+
+# Create the web code deployment directories.
+WEB_DOCUMENT_ROOT="/var/www/";
+if [ ! -d "${WEB_DOCUMENT_ROOT}builds" ]; then
+
+  echo -e "PROVISIONING: Creating the web code deployment directories.\n";
+
+  sudo -E mkdir -p "${WEB_DOCUMENT_ROOT}"{builds,configs,content};
+  sudo -E chown -f -R vagrant:www-readwrite "${WEB_DOCUMENT_ROOT}"{builds,configs,content};
+  sudo -E chmod -f -R 775 "${WEB_DOCUMENT_ROOT}"{builds,configs,content};
+
+fi
+
+# Create the web server document root directories.
+WEB_DOCUMENT_ROOT="/var/www/";
+if [ ! -d "${WEB_DOCUMENT_ROOT}vagrant.local" ]; then
+
+  echo -e "PROVISIONING: Creating the web server document root directories.\n";
+
+  sudo -E mkdir -p "${WEB_DOCUMENT_ROOT}vagrant.local/site";
+  sudo -E cp -f "apache2/index.php" "${WEB_DOCUMENT_ROOT}vagrant.local/site/index.php";
+  sudo -E chown -f -R vagrant:www-readwrite "${WEB_DOCUMENT_ROOT}vagrant.local";
+  sudo -E chmod -f -R 775 "${WEB_DOCUMENT_ROOT}vagrant.local";
+  sudo -E chmod -f -R 664 "${WEB_DOCUMENT_ROOT}vagrant.local/site/index.php";
 
 fi
 
