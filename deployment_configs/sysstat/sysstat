@@ -7,4 +7,3 @@
 # are "true" and "false". Please do not put other values, they
 # will be overwritten by debconf!
 ENABLED="true"
-

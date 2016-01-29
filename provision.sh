@@ -452,6 +452,11 @@ hash mysql && hash mysqld 2>/dev/null || {
     mysql -sfu root < "mysql/mysql_secure_installation.sql";
   fi
 
+  # Set the MySQL configuration.
+  if [ -f "mysql/my.cnf" ]; then
+    sudo -E cp -f "mysql/my.cnf" "/etc/mysql/my.cnf";
+  fi
+
   # Run these commands to prevent MySQL from coming up on reboot.
   sudo -E service mysql stop;
   sudo -E update-rc.d -f mysql remove;

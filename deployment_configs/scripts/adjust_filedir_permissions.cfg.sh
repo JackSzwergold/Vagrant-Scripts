@@ -20,4 +20,3 @@ CHMOD_FILE='0664'
 CHMOD_EXEC_FILE='0775'
 CHGRP_USER='www-data'
 CHGRP_GROUP='www-readwrite'
-
