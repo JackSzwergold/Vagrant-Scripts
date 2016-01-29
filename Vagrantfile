@@ -1,11 +1,11 @@
 Vagrant.configure(2) do |config|
 
   # VirtualBox specific configuration options.
-  config.vm.provider :virtualbox do |v|
-    v.customize ["modifyvm", :id, "--memory", 512]
-    v.customize ["modifyvm", :id, "--cpus", 1]
-    # v.customize ["modifyvm", :id, "--name", "Vagrant"]
-    v.name = "Sandbox_UBUNTU_1404"
+  config.vm.provider :virtualbox do |vbox|
+    vbox.customize ["modifyvm", :id, "--memory", 512]
+    vbox.customize ["modifyvm", :id, "--cpus", 1]
+    # vbox.customize ["modifyvm", :id, "--name", "Vagrant"]
+    vbox.name = "Sandbox_UBUNTU_1404"
   end
 
   # Basic virtual machine configuration options.
