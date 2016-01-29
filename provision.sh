@@ -883,6 +883,7 @@ echo -e "PROVISIONING: Installing ImageMagick from source.\n";
   cd "${BASE_DIR}/${CONFIG_DIR}";
   curl -ss -O -L "http://www.imagemagick.org/download/ImageMagick.tar.gz";
   tar -xf "ImageMagick.tar.gz";
+  rm -f "ImageMagick.tar.gz";
   cd ./ImageMagick-*;
   ./configure;
   sudo checkinstall -y;
