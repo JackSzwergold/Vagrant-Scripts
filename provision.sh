@@ -369,7 +369,7 @@ sudo -E cp -f "apache2/security.conf" "/etc/apache2/conf-available/security.conf
 sudo -E cp -f "apache2/common.conf" "/etc/apache2/sites-available/common.conf";
 sudo -E cp -f "apache2/000-default.conf" "/etc/apache2/sites-available/000-default.conf";
 
-# Copy and configure the virtual host config file.
+# Copy and configure the Apache virtual host config file.
 sudo -E cp -f "apache2/vagrant.local.conf" "/etc/apache2/sites-available/${HOST_NAME}.conf";
 sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "/etc/apache2/sites-available/${HOST_NAME}.conf";
 HOST_NAME_ESCAPED=$(echo "${HOST_NAME}" | sed 's/\./\\\\./g');
@@ -734,7 +734,9 @@ if [ ! -d "${AWSTATS_ROOT_DIR}" ]; then
   sudo cpanm --install --force --notest --quiet --skip-installed YAML Geo::IP Geo::IPfree Geo::IP::PurePerl URI::Escape Net::IP Net::DNS Net::XWhois Time::HiRes Time::Local;
 
   # Copy over a basic config file.
-  sudo -E cp -f "awstats/awstats.vagrant_config.conf" "${AWSTATS_ROOT_DIR}/wwwroot/cgi-bin/awstats.${HOST_NAME}.conf";
+  sudo -E cp -f "awstats/awstats.vagrant.local.conf" "${AWSTATS_ROOT_DIR}/wwwroot/cgi-bin/awstats.${HOST_NAME}.conf";
+  sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "${AWSTATS_ROOT_DIR}/wwwroot/cgi-bin/awstats.${HOST_NAME}.conf";
+
 
   # Set permissions to root for owner and group.
   sudo -E chown -f root:root -R "${AWSTATS_ROOT_DIR}";
