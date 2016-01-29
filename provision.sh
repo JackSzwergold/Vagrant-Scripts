@@ -203,7 +203,6 @@ if ! grep -q -s "git-core" /etc/apt/sources.list /etc/apt/sources.list.d/*; then
   sudo -E aptitude install -y --assume-yes -q python-software-properties;
   sudo -E add-apt-repository -y ppa:git-core/ppa;
   sudo -E aptitude update -y --assume-yes -q;
-  sudo -E aptitude upgrade -y --assume-yes -q;
   sudo -E aptitude install -y --assume-yes -q git git-core subversion git-svn;
 
 fi
@@ -225,48 +224,44 @@ hash postfix 2>/dev/null || {
 }
 
 ######################################################################################
-# UMASK
+# Setting the 'login.defs' config file.
 ######################################################################################
 
-# Set the default UMASK value in 'login.defs' to be 002 instead of 022.
 LOGIN_DEFS_PATH="/etc/login.defs";
-LOGIN_DEFS_PATTERN="^.*UMASK.*022.*$";
-if [ -f "${LOGIN_DEFS_PATH}" ] && grep -E -q "${LOGIN_DEFS_PATTERN}" "${LOGIN_DEFS_PATH}"; then
+if [ -f "${LOGIN_DEFS_PATH}" ] && [ -f "system/login.defs" ]; then
 
-  echo -e "PROVISIONING: Adjusting the UMASK setting in ${LOGIN_DEFS_PATH}.\n";
+  echo -e "PROVISIONING: Setting the 'login.defs' config file.\n";
 
-  # Adjust the UMASK setting in 'login.defs'.
-  sudo -E sed -i "s/${LOGIN_DEFS_PATTERN}/UMASK\t\t002/g" "${LOGIN_DEFS_PATH}";
+  # Copy the 'login.defs' file in place.
+  sudo -E cp -f "system/login.defs" "${LOGIN_DEFS_PATH}";
 
 fi
 
-# Set the default UMASK value in 'common-session' to be 002 instead of 022.
+######################################################################################
+# Setting the 'common-session' config file.
+######################################################################################
+
 COMMON_SESSION_PATH="/etc/pam.d/common-session";
-COMMON_SESSION_PATTERN="^.*session\soptional.*pam_umask.so$";
-if [ -f "${COMMON_SESSION_PATH}" ] && grep -E -q "${COMMON_SESSION_PATTERN}" "${COMMON_SESSION_PATH}"; then
+if [ -f "${COMMON_SESSION_PATH}" ] && [ -f "system/common-session" ]; then
 
-  echo -e "PROVISIONING: Adjusting the UMASK setting in ${COMMON_SESSION_PATH}.\n";
+  echo -e "PROVISIONING: Setting the 'common-session' config file.\n";
 
-  # Adjust the UMASK setting in 'common-session'.
-  sudo -E sed -i "s/${COMMON_SESSION_PATTERN}/session optional\t\tpam_umask.so\t\tumask=0002/g" "${COMMON_SESSION_PATH}";
+  # Copy the 'login.defs' file in place.
+  sudo -E cp -f "system/common-session" "${COMMON_SESSION_PATH}";
 
 fi
 
 ######################################################################################
-# SSH
+# Setting the SSH config file.
 ######################################################################################
 
-# Fix for slow SSH client connections.
 SSH_CONFIG_PATH="/etc/ssh/ssh_config";
-SSH_CONFIG_APPEND="    PreferredAuthentications publickey,password,gssapi-with-mic,hostbased,keyboard-interactive";
-if [ -f "${SSH_CONFIG_PATH}" ] && ! grep -F -q "${SSH_CONFIG_APPEND}" "${SSH_CONFIG_PATH}"; then
+if [ -f "${SSH_CONFIG_PATH}" ] && [ -f "ssh/ssh_config" ]; then
 
-  echo -e "PROVISIONING: SSH adjustments.\n";
+  echo -e "PROVISIONING: Setting the SSH config file.\n";
 
-  # Append the new preferred authentications setting to the end of the file.
-  # sudo -E grep -F -q "${SSH_CONFIG_APPEND}" "${SSH_CONFIG_PATH}" || echo "${SSH_CONFIG_APPEND}" >> "${SSH_CONFIG_PATH}";
-  # echo "${SSH_CONFIG_APPEND}" | sudo tee -a "${SSH_CONFIG_PATH}";
-  sudo sh -c "echo '${SSH_CONFIG_APPEND}' >> '${SSH_CONFIG_PATH}'";
+  # Copy the 'login.defs' file in place.
+  sudo -E cp -f "ssh/ssh_config" "${SSH_CONFIG_PATH}";
 
 fi
 
