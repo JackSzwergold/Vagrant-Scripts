@@ -467,11 +467,7 @@ hash munin-node 2>/dev/null || {
   MUNIN_CONF_PATH="/etc/munin/munin.conf";
   if [ -f "munin/munin.conf" ]; then
     sudo -E cp -f "munin/munin.conf" "${MUNIN_CONF_PATH}";
-  fi
-
-  # Edit the Munin config.
-  if [ -f "${MUNIN_CONF_PATH}" ]; then
-    sudo -E sed -i "s/^\[localhost.localdomain\]/\[${HOST_NAME}\]/g" "${MUNIN_CONF_PATH}";
+    sudo -E sed -i "s/^\[vagrant.local\]/\[${HOST_NAME}\]/g" "${MUNIN_CONF_PATH}";
   fi
 
   # Ditch the default 'localdomain' stuff from the system.
