@@ -851,20 +851,6 @@ if [ -f "monit/monitrc" ]; then
 fi
 
 ######################################################################################
-# Scripts.
-######################################################################################
-
-# Copy and configure various system scripts.
-SCRIPT_PATH="/opt";
-
-echo -e "PROVISIONING: Installing configuring various system scripts.\n";
-
-sudo -E cp -f "scripts/"*.sh "${SCRIPT_PATH}/";
-sudo -E chown -f -R root:root "scripts/"*.sh "${SCRIPT_PATH}/";
-sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "${SCRIPT_PATH}/"*.cfg.sh;
-sudo -E chmod -f -R 700 "${SCRIPT_PATH}/"*.sh;
-
-######################################################################################
 # ImageMagick
 ######################################################################################
 
@@ -898,6 +884,20 @@ echo -e "PROVISIONING: Installing ImageMagick from source.\n";
   sudo -E rm -rf ./ImageMagick-*;
 
 }
+
+######################################################################################
+# Scripts.
+######################################################################################
+
+# Copy and configure various system scripts.
+SCRIPT_PATH="/opt";
+
+echo -e "PROVISIONING: Installing configuring various system scripts.\n";
+
+sudo -E cp -f "scripts/"*.sh "${SCRIPT_PATH}/";
+sudo -E chown -f -R root:root "scripts/"*.sh "${SCRIPT_PATH}/";
+sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "${SCRIPT_PATH}/"*.cfg.sh;
+sudo -E chmod -f -R 700 "${SCRIPT_PATH}/"*.sh;
 
 ######################################################################################
 # Update the locate database.
