@@ -220,7 +220,7 @@ hash postfix 2>/dev/null || {
   echo -e "PROVISIONING: Installing Postfix and related mail stuff.\n";
 
   # Install postfix and general mail stuff.
-  debconf-set-selections <<< "postfix postfix/mailname string ${MACHINE_NAME}.local";
+  debconf-set-selections <<< "postfix postfix/mailname string ${HOST_NAME}";
   debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'";
   sudo -E aptitude install -y --assume-yes -q postfix mailutils;
 
@@ -375,9 +375,9 @@ sudo -E cp -f "apache2/mpm_prefork.conf" "/etc/apache2/mods-available/mpm_prefor
 sudo -E cp -f "apache2/security.conf" "/etc/apache2/conf-available/security.conf";
 sudo -E cp -f "apache2/common.conf" "/etc/apache2/sites-available/common.conf";
 sudo -E cp -f "apache2/000-default.conf" "/etc/apache2/sites-available/000-default.conf";
-sudo -E cp -f "apache2/${MACHINE_NAME}.local.conf" "/etc/apache2/sites-available/${MACHINE_NAME}.local.conf";
+sudo -E cp -f "apache2/${HOST_NAME}.conf" "/etc/apache2/sites-available/${HOST_NAME}.conf";
 sudo -E cp -f "php/php.ini" "/etc/php5/apache2/php.ini";
-sudo -E a2ensite ${MACHINE_NAME}.local;
+sudo -E a2ensite ${HOST_NAME};
 
 # Ditch the default Apache directory and set a new default page.
 if [ -d "/var/www/html" ]; then
@@ -403,15 +403,15 @@ fi
 
 # Create the web server document root directories.
 WEB_DOCUMENT_ROOT="/var/www/";
-if [ ! -d "${WEB_DOCUMENT_ROOT}${MACHINE_NAME}.local" ]; then
+if [ ! -d "${WEB_DOCUMENT_ROOT}${HOST_NAME}" ]; then
 
   echo -e "PROVISIONING: Creating the web server document root directories.\n";
 
-  sudo -E mkdir -p "${WEB_DOCUMENT_ROOT}${MACHINE_NAME}.local/site";
-  sudo -E cp -f "apache2/index.php" "${WEB_DOCUMENT_ROOT}${MACHINE_NAME}.local/site/index.php";
-  sudo -E chown -f -R "${USER_NAME}":www-readwrite "${WEB_DOCUMENT_ROOT}${MACHINE_NAME}.local";
-  sudo -E chmod -f -R 775 "${WEB_DOCUMENT_ROOT}${MACHINE_NAME}.local";
-  sudo -E chmod -f -R 664 "${WEB_DOCUMENT_ROOT}${MACHINE_NAME}.local/site/index.php";
+  sudo -E mkdir -p "${WEB_DOCUMENT_ROOT}${HOST_NAME}/site";
+  sudo -E cp -f "apache2/index.php" "${WEB_DOCUMENT_ROOT}${HOST_NAME}/site/index.php";
+  sudo -E chown -f -R "${USER_NAME}":www-readwrite "${WEB_DOCUMENT_ROOT}${HOST_NAME}";
+  sudo -E chmod -f -R 775 "${WEB_DOCUMENT_ROOT}${HOST_NAME}";
+  sudo -E chmod -f -R 664 "${WEB_DOCUMENT_ROOT}${HOST_NAME}/site/index.php";
 
 fi
 
@@ -478,7 +478,7 @@ hash munin-node 2>/dev/null || {
 
   # Edit the Munin config.
   if [ -f "${MUNIN_CONF_PATH}" ]; then
-    sudo -E sed -i "s/^\[localhost.localdomain\]/\[${MACHINE_NAME}.local\]/g" "${MUNIN_CONF_PATH}";
+    sudo -E sed -i "s/^\[localhost.localdomain\]/\[${HOST_NAME}\]/g" "${MUNIN_CONF_PATH}";
   fi
 
   # Ditch the default 'localdomain' stuff from the system.
@@ -738,13 +738,13 @@ if [ ! -d "${AWSTATS_ROOT_DIR}" ]; then
   sudo cpanm --install --force --notest --quiet --skip-installed YAML Geo::IP Geo::IPfree Geo::IP::PurePerl URI::Escape Net::IP Net::DNS Net::XWhois Time::HiRes Time::Local;
 
   # Copy over a basic config file.
-  sudo -E cp -f "awstats/awstats.model.deployment.conf" "${AWSTATS_ROOT_DIR}/wwwroot/cgi-bin/awstats.${MACHINE_NAME}.local.conf";
+  sudo -E cp -f "awstats/awstats.vagrant_config.conf" "${AWSTATS_ROOT_DIR}/wwwroot/cgi-bin/awstats.${HOST_NAME}.conf";
 
   # Set permissions to root for owner and group.
   sudo -E chown -f root:root -R "${AWSTATS_ROOT_DIR}";
 
-  # Update the data for the '${MACHINE_NAME}.local' config.
-  sudo -E "${AWSTATS_ROOT_DIR}/wwwroot/cgi-bin/awstats.pl" -config="${MACHINE_NAME}.local" -update
+  # Update the data for the '${HOST_NAME}' config.
+  sudo -E "${AWSTATS_ROOT_DIR}/wwwroot/cgi-bin/awstats.pl" -config="${HOST_NAME}" -update
 
 fi
 
