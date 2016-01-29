@@ -135,11 +135,9 @@ hash sar 2>/dev/null || {
   # Install Sysstat.
   sudo -E aptitude install -y --assume-yes -q sysstat;
 
-  # Enable Sysstat.
-  SYSSTAT_CONFIG_PATH="/etc/default/sysstat";
-  SYSSTAT_ENABLED='ENABLED="true"';
-  if [ -f "${SYSSTAT_CONFIG_PATH}" ] && ! grep -F -q "${SYSSTAT_ENABLED}" "${SYSSTAT_CONFIG_PATH}"; then
-    sudo -E sed -i 's/ENABLED="false"/ENABLED="true"/g' "${SYSSTAT_CONFIG_PATH}";
+  # Copy the Sysstat config file in place and restart sysstat.
+  if [ -f "sysstat/sysstat" ]; then
+    sudo -E cp -f "sysstat/sysstat" "/etc/default/sysstat";
     sudo -E service sysstat restart;
   fi
 
