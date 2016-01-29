@@ -22,6 +22,6 @@ Vagrant.configure(2) do |config|
   config.vm.synced_folder "deployment_configs", "/home/vagrant/deployment_configs", type: "rsync", rsync__exclude: ".DS_Store"
 
   # Set the shell script to provision the server.
-  config.vm.provision :shell, :path => "provision.sh", :args => "vagrant sandbox sandbox.local"
+  config.vm.provision :shell, :path => "provision.sh", :args => "deployment_configs vagrant sandbox sandbox.local"
 
 end
