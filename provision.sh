@@ -361,16 +361,23 @@ sudo -E service apache2 stop;
 
 echo -e "PROVISIONING: Setting Apache and PHP configs.\n";
 
-# Copy the config files into place.
+# Copy the Apache config files into place.
 sudo -E cp -f "apache2/apache2.conf" "/etc/apache2/apache2.conf";
 sudo -E cp -f "apache2/envvars" "/etc/apache2/envvars";
 sudo -E cp -f "apache2/mpm_prefork.conf" "/etc/apache2/mods-available/mpm_prefork.conf";
 sudo -E cp -f "apache2/security.conf" "/etc/apache2/conf-available/security.conf";
 sudo -E cp -f "apache2/common.conf" "/etc/apache2/sites-available/common.conf";
 sudo -E cp -f "apache2/000-default.conf" "/etc/apache2/sites-available/000-default.conf";
-sudo -E cp -f "apache2/${HOST_NAME}.conf" "/etc/apache2/sites-available/${HOST_NAME}.conf";
-sudo -E cp -f "php/php.ini" "/etc/php5/apache2/php.ini";
+
+# Copy and configure the virtual host config file.
+sudo -E cp -f "apache2/vagrant.local.conf" "/etc/apache2/sites-available/${HOST_NAME}.conf";
+sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "/etc/apache2/sites-available/${HOST_NAME}.conf";
+HOST_NAME_ESCAPED=$(echo "${HOST_NAME}" | sed 's/\./\\\\./g');
+sudo -E sed -i "s/vagrant\\\.local/${HOST_NAME_ESCAPED}/" "/etc/apache2/sites-available/${HOST_NAME}.conf";
 sudo -E a2ensite ${HOST_NAME};
+
+# Copy the PHP config files into place.
+sudo -E cp -f "php/php.ini" "/etc/php5/apache2/php.ini";
 
 # Ditch the default Apache directory and set a new default page.
 if [ -d "/var/www/html" ]; then
@@ -847,6 +854,7 @@ echo -e "PROVISIONING: Installing configuring various system scripts.\n";
 
 sudo -E cp -f "scripts/"*.sh "${SCRIPT_PATH}/";
 sudo -E chown -f -R root:root "scripts/"*.sh "${SCRIPT_PATH}/";
+sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "${SCRIPT_PATH}/"*.cfg.sh;
 sudo -E chmod -f -R 700 "${SCRIPT_PATH}/"*.sh;
 
 ######################################################################################
