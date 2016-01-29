@@ -153,7 +153,7 @@ echo -e "PROVISIONING: Installing a set of generic tools.\n";
 sudo -E aptitude install -y --assume-yes -q \
   dnsutils traceroute nmap bc htop finger curl whois rsync lsof \
   iftop figlet lynx mtr-tiny iperf nload zip unzip attr sshpass \
-  dkms mc elinks ntp dos2unix p7zip-full nfs-common imagemagick \
+  dkms mc elinks ntp dos2unix p7zip-full nfs-common \
   slurm sharutils uuid-runtime chkconfig quota pv trickle apachetop;
 
 ######################################################################################
@@ -777,8 +777,8 @@ hash fail2ban-client 2>/dev/null || {
   echo -e "PROVISIONING: Fail2Ban related stuff.\n";
 
   # Install Fail2Ban.
-  sudo -E RUNLEVEL=1 aptitude purge -y --assume-yes -q fail2ban;
-  sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q gamin libgamin0 python-central python-gamin python-support;
+  sudo -E aptitude purge -y --assume-yes -q fail2ban;
+  sudo -E aptitude install -y --assume-yes -q gamin libgamin0 python-central python-gamin python-support;
   curl -ss -O -L "http://old-releases.ubuntu.com/ubuntu/pool/universe/f/fail2ban/fail2ban_0.8.13-1_all.deb";
   sudo -E RUNLEVEL=1 dpkg --force-all -i "fail2ban_0.8.13-1_all.deb";
 
@@ -863,6 +863,40 @@ sudo -E cp -f "scripts/"*.sh "${SCRIPT_PATH}/";
 sudo -E chown -f -R root:root "scripts/"*.sh "${SCRIPT_PATH}/";
 sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "${SCRIPT_PATH}/"*.cfg.sh;
 sudo -E chmod -f -R 700 "${SCRIPT_PATH}/"*.sh;
+
+######################################################################################
+# ImageMagick
+######################################################################################
+
+hash convert 2>/dev/null || {
+
+echo -e "PROVISIONING: Installing ImageMagick from source.\n";
+
+  # Install and build the dependencies for ImageMagick.
+  sudo -E aptitude install -y --assume-yes -q \
+    build-essential checkinstall \
+    libx11-dev libxext-dev zlib1g-dev libpng12-dev \
+    libjpeg-dev libfreetype6-dev libxml2-dev;
+  sudo aptitude build-dep -y --assume-yes -q imagemagick;
+
+  # Build ImageMagick from source code.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+  curl -ss -O -L "http://www.imagemagick.org/download/ImageMagick.tar.gz";
+  tar -xf "ImageMagick.tar.gz";
+  cd ./ImageMagick-*;
+  ./configure;
+  sudo checkinstall -y;
+
+  # Install ImageMagick from the DEB package.
+  IMAGEMAGICK_DEB=$(ls -1 imagemagick-*.deb);
+  sudo -E RUNLEVEL=1 dpkg --force-all -i "${IMAGEMAGICK_DEB}";
+  sudo ldconfig "/usr/local/lib";
+
+  # Cleanup to get rid of the installer stuff.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+  sudo -E rm -rf ./ImageMagick-*;
+
+}
 
 ######################################################################################
 # Update the locate database.
