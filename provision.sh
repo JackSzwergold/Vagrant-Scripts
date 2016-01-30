@@ -515,27 +515,28 @@ hash munin-node 2>/dev/null || {
 ######################################################################################
 # Munin Apache config.
 ######################################################################################
-
-# Copy and enable the Munin Apache config.
-MUNIN_APACHE_AVAILABLE_PATH="/etc/apache2/conf-available/munin.conf";
-MUNIN_APACHE_ENABLED_PATH="/etc/apache2/conf-enabled/munin.conf";
-if [ -f "apache2/munin.conf" ] && [ -h "${MUNIN_APACHE_AVAILABLE_PATH}" ]; then
+function configure_munin_apache () {
 
   echo -e "PROVISIONING: Installing the Apache Munin config.\n";
 
-  sudo -E rm -f "${MUNIN_APACHE_AVAILABLE_PATH}";
-  sudo -E cp -f "apache2/munin.conf" "${MUNIN_APACHE_AVAILABLE_PATH}";
+  sudo -E rm -f "/etc/apache2/conf-available/munin.conf";
+  sudo -E cp -f "apache2/munin.conf" "/etc/apache2/conf-available/munin.conf";
   sudo -E a2enconf -q munin;
   # sudo -E service apache2 restart;
 
-elif [ -f "apache2/munin.conf" ] && [ ! -h "${MUNIN_APACHE_ENABLED_PATH}" ]; then
+} # configure_munin_apache
+
+######################################################################################
+# Munin Apache config enable.
+######################################################################################
+function enable_munin_apache () {
 
   echo -e "PROVISIONING: Enabling the Apache Munin config.\n";
 
   sudo -E a2enconf -q munin;
   # sudo -E service apache2 restart;
 
-fi
+}  # enable_munin_apache
 
 ######################################################################################
 # phpMyAdmin
@@ -887,33 +888,66 @@ function update_locate_db () {
 # Call the functions here.
 ######################################################################################
 
+# Munin
+if [ -f "apache2/munin.conf" ] && [ -h "/etc/apache2/conf-available/munin.conf" ]; then
+  configure_munin_apache;
+elif [ -f "apache2/munin.conf" ] && [ ! -h "/etc/apache2/conf-enabled/munin.conf" ]; then
+  enable_munin_apache;
+fi
+
 # phpMyAdmin
-if [ ! -d "/usr/share/phpmyadmin" ]; then install_phpmyadmin; fi
-if [ -f "phpmyadmin/config.inc.php" ] && [ ! -f "/usr/share/phpmyadmin/config.inc.php" ]; then configure_phpmyadmin; fi
-if [ -f "/usr/share/phpmyadmin/config.inc.php" ] && grep -E -q "a8b7c6d" "/usr/share/phpmyadmin/config.inc.php"; then configure_phpmyadmin_blowfish; fi
-if [ -f "apache2/phpmyadmin.conf" ] && [ ! -f "/etc/apache2/conf-available/phpmyadmin.conf" ]; then configure_awstats_apache; fi
+if [ ! -d "/usr/share/phpmyadmin" ]; then
+  install_phpmyadmin;
+fi
+if [ -f "phpmyadmin/config.inc.php" ] && [ ! -f "/usr/share/phpmyadmin/config.inc.php" ]; then
+  configure_phpmyadmin;
+fi
+if [ -f "/usr/share/phpmyadmin/config.inc.php" ] && grep -E -q "a8b7c6d" "/usr/share/phpmyadmin/config.inc.php"; then
+  configure_phpmyadmin_blowfish;
+fi
+if [ -f "apache2/phpmyadmin.conf" ] && [ ! -f "/etc/apache2/conf-available/phpmyadmin.conf" ]; then
+  configure_awstats_apache;
+fi
 
 # GeoIP
 hash geoiplookup 2>/dev/null || { install_geoip; }
-if [ ! -d "/usr/local/share/GeoIP" ]; then install_geoip_databases; fi
+if [ ! -d "/usr/local/share/GeoIP" ]; then
+  install_geoip_databases;
+fi
 
 # AWStats
-if [ ! -d "/usr/share/awstats-7.3" ]; then install_awstats; fi
-if [ -f "apache2/awstats.conf" ] && [ ! -f "/etc/apache2/conf-available/awstats.conf" ]; then configure_awstats_apache; fi
+if [ ! -d "/usr/share/awstats-7.3" ]; then
+  install_awstats;
+fi
+if [ -f "apache2/awstats.conf" ] && [ ! -f "/etc/apache2/conf-available/awstats.conf" ]; then
+  configure_awstats_apache;
+fi
 
 # Fail2Ban
-hash fail2ban-client 2>/dev/null || { install_fail2ban; }
-if [ -f "fail2ban/jail.local" ] && [ ! -f "/etc/fail2ban/jail.local" ]; then configure_fail2ban; fi
+hash fail2ban-client 2>/dev/null || {
+  install_fail2ban;
+}
+if [ -f "fail2ban/jail.local" ] && [ ! -f "/etc/fail2ban/jail.local" ]; then
+  configure_fail2ban;
+fi
 
 # Monit
-hash monit 2>/dev/null || { install_monit; }
-if [ -f "monit/monitrc" ]; then configure_monit; fi
+hash monit 2>/dev/null || {
+  install_monit;
+}
+if [ -f "monit/monitrc" ]; then
+  configure_monit;
+fi
 
 # ImageMagick
-hash convert 2>/dev/null || { install_imagemagick; }
+hash convert 2>/dev/null || {
+  install_imagemagick;
+}
 
+# Install system scripts.
 install_system_scripts;
 
+# Update the locate database.
 update_locate_db;
 
 ######################################################################################
