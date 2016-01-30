@@ -888,24 +888,35 @@ hash convert 2>/dev/null || {
 ######################################################################################
 # Scripts.
 ######################################################################################
+function install_system_scripts () {
 
-# Copy and configure various system scripts.
-SCRIPT_PATH="/opt";
+  echo -e "PROVISIONING: Installing configuring various system scripts.\n";
 
-echo -e "PROVISIONING: Installing configuring various system scripts.\n";
+  # Copy and configure various system scripts.
+  sudo -E cp -f "scripts/"*.sh "/opt/";
+  sudo -E chown -f -R root:root "scripts/"*.sh "/opt/";
+  sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "/opt/"*.cfg.sh;
+  sudo -E chmod -f -R 700 "/opt/"*.sh;
 
-sudo -E cp -f "scripts/"*.sh "${SCRIPT_PATH}/";
-sudo -E chown -f -R root:root "scripts/"*.sh "${SCRIPT_PATH}/";
-sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "${SCRIPT_PATH}/"*.cfg.sh;
-sudo -E chmod -f -R 700 "${SCRIPT_PATH}/"*.sh;
+} # install_system_scripts
 
 ######################################################################################
 # Update the locate database.
 ######################################################################################
+function update_locate_db () {
 
-echo -e "PROVISIONING: Updating the locate database.\n";
+  echo -e "PROVISIONING: Updating the locate database.\n";
 
-sudo -E updatedb;
+  sudo -E updatedb;
+
+} # update_locate_db
+
+######################################################################################
+# Call the functions here.
+######################################################################################
+
+install_system_scripts;
+update_locate_db;
 
 ######################################################################################
 # Restart Apache now that we’re done.
