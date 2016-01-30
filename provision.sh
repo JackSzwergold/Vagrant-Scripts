@@ -595,8 +595,6 @@ function configure_phpmyadmin_blowfish () {
 ######################################################################################
 # phpMyAdmin Apache config.
 ######################################################################################
-
-# Copy and enable the AWStats phpMyAdmin config.
 function configure_awstats_apache () {
 
   echo -e "PROVISIONING: Installing the Apache phpMyAdmin config.\n";
