@@ -710,8 +710,7 @@ fi
 ######################################################################################
 
 # Install AWStats from source.
-AWSTATS_ROOT_DIR="/usr/share/awstats-7.3";
-if [ ! -d "${AWSTATS_ROOT_DIR}" ]; then
+if [ ! -d "/usr/share/awstats-7.3" ]; then
 
   echo -e "PROVISIONING: Installing the AWStats related items.\n";
 
@@ -720,15 +719,15 @@ if [ ! -d "${AWSTATS_ROOT_DIR}" ]; then
   curl -ss -O -L "http://prdownloads.sourceforge.net/awstats/awstats-7.3.tar.gz";
   tar -xf "awstats-7.3.tar.gz";
   rm -f "awstats-7.3.tar.gz";
-  sudo -E mv -f "awstats-7.3" "${AWSTATS_ROOT_DIR}";
+  sudo -E mv -f "awstats-7.3" "/usr/share/awstats-7.3";
 
   # Set an index page for AWStats.
-  sudo -E cp -f "awstats/awstatstotals.php" "${AWSTATS_ROOT_DIR}/wwwroot/cgi-bin/index.php";
-  sudo -E chmod a+r "${AWSTATS_ROOT_DIR}/wwwroot/cgi-bin/index.php";
+  sudo -E cp -f "awstats/awstatstotals.php" "/usr/share/awstats-7.3/wwwroot/cgi-bin/index.php";
+  sudo -E chmod a+r "/usr/share/awstats-7.3/wwwroot/cgi-bin/index.php";
 
   # Create the AWStats data directory.
-  sudo -E mkdir -p "${AWSTATS_ROOT_DIR}/wwwroot/data";
-  sudo -E chmod -f g+w "${AWSTATS_ROOT_DIR}/wwwroot/data";
+  sudo -E mkdir -p "/usr/share/awstats-7.3/wwwroot/data";
+  sudo -E chmod -f g+w "/usr/share/awstats-7.3/wwwroot/data";
 
   # Now install CPANminus like this.
   hash cpanminus 2>/dev/null || {
@@ -739,40 +738,35 @@ if [ ! -d "${AWSTATS_ROOT_DIR}" ]; then
   sudo cpanm --install --force --notest --quiet --skip-installed YAML Geo::IP Geo::IPfree Geo::IP::PurePerl URI::Escape Net::IP Net::DNS Net::XWhois Time::HiRes Time::Local;
 
   # Copy over a basic config file.
-  sudo -E cp -f "awstats/awstats.vagrant.local.conf" "${AWSTATS_ROOT_DIR}/wwwroot/cgi-bin/awstats.${HOST_NAME}.conf";
-  sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "${AWSTATS_ROOT_DIR}/wwwroot/cgi-bin/awstats.${HOST_NAME}.conf";
+  sudo -E cp -f "awstats/awstats.vagrant.local.conf" "/usr/share/awstats-7.3/wwwroot/cgi-bin/awstats.${HOST_NAME}.conf";
+  sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "/usr/share/awstats-7.3/wwwroot/cgi-bin/awstats.${HOST_NAME}.conf";
 
 
   # Set permissions to root for owner and group.
-  sudo -E chown -f root:root -R "${AWSTATS_ROOT_DIR}";
+  sudo -E chown -f root:root -R "/usr/share/awstats-7.3";
 
   # Update the data for the '${HOST_NAME}' config.
-  sudo -E "${AWSTATS_ROOT_DIR}/wwwroot/cgi-bin/awstats.pl" -config="${HOST_NAME}" -update
+  sudo -E "/usr/share/awstats-7.3/wwwroot/cgi-bin/awstats.pl" -config="${HOST_NAME}" -update
 
 fi
 
 ######################################################################################
 # AWStats Apache config.
 ######################################################################################
-
-# Copy and enable the AWStats Apache config.
-AWSTATS_APACHE_CONFIG_PATH="/etc/apache2/conf-available/awstats.conf";
-if [ -f "apache2/awstats.conf" ] && [ ! -f "${AWSTATS_APACHE_CONFIG_PATH}" ]; then
+function configure_apache_awstats () {
 
   echo -e "PROVISIONING: Installing the Apache AWStats config.\n";
 
-  sudo -E cp -f "apache2/awstats.conf" "${AWSTATS_APACHE_CONFIG_PATH}";
+  sudo -E cp -f "apache2/awstats.conf" "/etc/apache2/conf-available/awstats.conf";
   sudo -E a2enconf -q awstats;
   # sudo -E service apache2 restart;
 
-fi
+} # configure_apache_awstats
 
 ######################################################################################
 # Fail2Ban
 ######################################################################################
-
-# Check if Fail2Ban is installed and if not, install it.
-hash fail2ban-client 2>/dev/null || {
+function install_fail2ban () {
 
   echo -e "PROVISIONING: Fail2Ban related stuff.\n";
 
@@ -786,19 +780,16 @@ hash fail2ban-client 2>/dev/null || {
   sudo -E service fail2ban stop;
   sudo -E update-rc.d -f fail2ban remove;
 
-}
+} # install_fail2ban
 
 ######################################################################################
 # Fail2Ban config.
 ######################################################################################
-
-# Copy and enable the Fail2Ban configs.
-FAIL2BAN_LOCAL_JAIL_PATH="/etc/fail2ban/jail.local";
-if [ -f "fail2ban/jail.local" ] && [ ! -f "${FAIL2BAN_LOCAL_JAIL_PATH}" ]; then
+function configure_fail2ban () {
 
   echo -e "PROVISIONING: Installing the Fail2Ban configs.\n";
 
-  sudo -E cp -f "fail2ban/jail.local" "${FAIL2BAN_LOCAL_JAIL_PATH}";
+  sudo -E cp -f "fail2ban/jail.local" "/etc/fail2ban/jail.local";
   sudo -E cp -f "fail2ban/ddos.conf" "/etc/fail2ban/filter.d/ddos.conf";
 
   # Restart Fail2Ban.
@@ -808,14 +799,12 @@ if [ -f "fail2ban/jail.local" ] && [ ! -f "${FAIL2BAN_LOCAL_JAIL_PATH}" ]; then
   sudo -E service fail2ban stop;
   sudo -E update-rc.d -f fail2ban remove;
 
-fi
+} # configure_fail2ban
 
 ######################################################################################
 # Monit
 ######################################################################################
-
-# Check if Monit is installed and if not, install it.
-hash monit 2>/dev/null || {
+function install_monit () {
 
   echo -e "PROVISIONING: Monit related stuff.\n";
 
@@ -826,19 +815,16 @@ hash monit 2>/dev/null || {
   sudo -E service monit stop;
   sudo -E update-rc.d -f monit remove;
 
-}
+} # install_monit
 
 ######################################################################################
 # Monit config.
 ######################################################################################
-
-# Copy and enable the Monit configs.
-MONIT_CONFIG_PATH="/etc/monit/monitrc";
-if [ -f "monit/monitrc" ]; then
+function configure_monit () {
 
   echo -e "PROVISIONING: Installing the Monit configs.\n";
 
-  sudo -E cp -f "monit/monitrc" "${MONIT_CONFIG_PATH}";
+  sudo -E cp -f "monit/monitrc" "/etc/monit/monitrc";
   sudo -E cp -f "monit/apache2.conf" "/etc/monit/conf.d/apache2.conf";
 
   # Restart Monit.
@@ -848,12 +834,11 @@ if [ -f "monit/monitrc" ]; then
   sudo -E service monit stop;
   sudo -E update-rc.d -f monit remove;
 
-fi
+} # configure_monit
 
 ######################################################################################
 # ImageMagick
 ######################################################################################
-
 function install_imagemagick () {
 
   echo -e "PROVISIONING: Installing ImageMagick from source.\n";
@@ -915,6 +900,11 @@ function update_locate_db () {
 # Call the functions here.
 ######################################################################################
 
+if [ -f "apache2/awstats.conf" ] && [ ! -f "/etc/apache2/conf-available/awstats.conf" ]; then configure_apache_awstats; fi
+hash fail2ban-client 2>/dev/null || { install_fail2ban; }
+if [ -f "fail2ban/jail.local" ] && [ ! -f "/etc/fail2ban/jail.local" ]; then configure_fail2ban; fi
+hash monit 2>/dev/null || { install_monit; }
+if [ -f "monit/monitrc" ]; then configure_monit; fi
 hash convert 2>/dev/null || { install_imagemagick; }
 install_system_scripts;
 update_locate_db;
