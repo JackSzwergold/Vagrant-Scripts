@@ -176,23 +176,19 @@ hash updatedb 2>/dev/null || {
 ##########################################################################################
 # Compiler
 ##########################################################################################
-
-# Check if the core compiler and build tools are installed and if not, install it.
-hash libtool 2>/dev/null || {
+function install_compiler () {
 
   echo -e "PROVISIONING: Installing the core compiler tools.\n";
 
   # Install the core compiler and build tools.
   sudo -E aptitude install -y --assume-yes -q build-essential libtool;
 
-}
+} # install_compiler
 
 ##########################################################################################
 # Git
 ##########################################################################################
-
-# Install Git via PPA.
-if ! grep -q -s "git-core" /etc/apt/sources.list /etc/apt/sources.list.d/*; then
+function install_git () {
 
   echo -e "PROVISIONING: Installing Git and related stuff.\n";
 
@@ -205,7 +201,7 @@ if ! grep -q -s "git-core" /etc/apt/sources.list /etc/apt/sources.list.d/*; then
   sudo -E aptitude update -y --assume-yes -q;
   sudo -E aptitude install -y --assume-yes -q git git-core subversion git-svn;
 
-fi
+} # install_git
 
 ##########################################################################################
 # Postfix and Mail
@@ -874,6 +870,14 @@ function update_locate_db () {
 ##########################################################################################
 # Call the functions here.
 ##########################################################################################
+
+hash libtool 2>/dev/null || {
+  install_compiler;
+}
+
+if ! grep -q -s "git-core" /etc/apt/sources.list /etc/apt/sources.list.d/*; then
+  install_git;
+fi
 
 hash postfix 2>/dev/null || {
   install_postfix;
