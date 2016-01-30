@@ -210,9 +210,7 @@ fi
 ##########################################################################################
 # Postfix and Mail
 ##########################################################################################
-
-# Check if Postfix and related mail tools are installed and if not, install it.
-hash postfix 2>/dev/null || {
+function install_postfix () {
 
   echo -e "PROVISIONING: Installing Postfix and related mail stuff.\n";
 
@@ -221,49 +219,43 @@ hash postfix 2>/dev/null || {
   debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'";
   sudo -E aptitude install -y --assume-yes -q postfix mailutils;
 
-}
+} # install_postfix
 
 ##########################################################################################
 # Setting the 'login.defs' config file.
 ##########################################################################################
-
-LOGIN_DEFS_PATH="/etc/login.defs";
-if [ -f "${LOGIN_DEFS_PATH}" ] && [ -f "system/login.defs" ]; then
+function configure_login_defs () {
 
   echo -e "PROVISIONING: Setting the 'login.defs' config file.\n";
 
   # Copy the 'login.defs' file in place.
-  sudo -E cp -f "system/login.defs" "${LOGIN_DEFS_PATH}";
+  sudo -E cp -f "system/login.defs" "/etc/login.defs";
 
-fi
+} # configure_login_defs
 
 ##########################################################################################
 # Setting the 'common-session' config file.
 ##########################################################################################
-
-COMMON_SESSION_PATH="/etc/pam.d/common-session";
-if [ -f "${COMMON_SESSION_PATH}" ] && [ -f "system/common-session" ]; then
+function configure_common_session () {
 
   echo -e "PROVISIONING: Setting the 'common-session' config file.\n";
 
   # Copy the 'login.defs' file in place.
-  sudo -E cp -f "system/common-session" "${COMMON_SESSION_PATH}";
+  sudo -E cp -f "system/common-session" "/etc/pam.d/common-session";
 
-fi
+} # configure_common_session
 
 ##########################################################################################
-# Setting the SSH config file.
+# SSH configure.
 ##########################################################################################
-
-SSH_CONFIG_PATH="/etc/ssh/ssh_config";
-if [ -f "${SSH_CONFIG_PATH}" ] && [ -f "ssh/ssh_config" ]; then
+function configure_ssh () {
 
   echo -e "PROVISIONING: Setting the SSH config file.\n";
 
   # Copy the 'login.defs' file in place.
-  sudo -E cp -f "ssh/ssh_config" "${SSH_CONFIG_PATH}";
+  sudo -E cp -f "ssh/ssh_config" "/etc/ssh/ssh_config";
 
-fi
+} # configure_ssh
 
 ##########################################################################################
 # MOTD
@@ -876,8 +868,28 @@ function update_locate_db () {
 } # update_locate_db
 
 ##########################################################################################
+##########################################################################################
+##########################################################################################
+
+##########################################################################################
 # Call the functions here.
 ##########################################################################################
+
+hash postfix 2>/dev/null || {
+  install_postfix;
+}
+
+if [ -f "/etc/login.defs" ] && [ -f "system/login.defs" ]; then
+  configure_login_defs;
+fi
+
+if [ -f "/etc/pam.d/common-session" ] && [ -f "system/common-session" ]; then
+  configure_common_session;
+fi
+
+if [ -f "/etc/ssh/ssh_config" ] && [ -f "ssh/ssh_config" ]; then
+  configure_ssh;
+fi
 
 configure_motd;
 
