@@ -34,80 +34,92 @@ echo -e "PROVISIONING: Host name is: '${HOST_NAME}'.\n";
 cd "${BASE_DIR}"/"${CONFIG_DIR}";
 
 ##########################################################################################
-# DEBIAN_FRONTEND
+# Adjusting the Debian frontend stuff to noninteractive mode.
 ##########################################################################################
 
 echo -e "PROVISIONING: Setting the Debian frontend to non-interactive mode.\n"
 export DEBIAN_FRONTEND=noninteractive;
 
 ##########################################################################################
-# User and Group
+# Setting the functions here.
 ##########################################################################################
 
-echo -e "PROVISIONING: Adjusting user and group related items.\n";
+##########################################################################################
+# User and Group
+##########################################################################################
+function configure_user_and_group () {
 
-# Create the 'www-readwrite' group.
-sudo -E groupadd -f www-readwrite;
+  echo -e "PROVISIONING: Adjusting user and group related items.\n";
 
-# Set the user’s main group to be the 'www-readwrite' group.
-sudo -E usermod -g www-readwrite "${USER_NAME}";
+  # Create the 'www-readwrite' group.
+  sudo -E groupadd -f www-readwrite;
 
-# Add the user to the 'www-readwrite' group:
-sudo -E adduser --quiet "${USER_NAME}" www-readwrite;
+  # Set the user’s main group to be the 'www-readwrite' group.
+  sudo -E usermod -g www-readwrite "${USER_NAME}";
+
+  # Add the user to the 'www-readwrite' group:
+  sudo -E adduser --quiet "${USER_NAME}" www-readwrite;
+
+} # configure_user_and_group
 
 ##########################################################################################
 # Environment
 ##########################################################################################
+function set_environment () {
 
-echo -e "PROVISIONING: Setting the selected editor.\n";
+  echo -e "PROVISIONING: Setting the selected editor.\n";
 
-# Set the selected editor to Nano.
+  # Set the selected editor to be Nano.
+  if [ ! -f "${BASE_DIR}/.selected_editor" ]; then
+    echo 'SELECTED_EDITOR="/bin/nano"' > "${BASE_DIR}/.selected_editor";
+    sudo -E chown -f "${USER_NAME}":www-readwrite "${BASE_DIR}/.selected_editor";
+  fi
 
-if [ ! -f "${BASE_DIR}/.selected_editor" ]; then
-  echo 'SELECTED_EDITOR="/bin/nano"' > "${BASE_DIR}/.selected_editor";
-  sudo -E chown -f "${USER_NAME}":www-readwrite "${BASE_DIR}/.selected_editor";
-fi
+  echo -e "PROVISIONING: Importing the crontab.\n";
 
-echo -e "PROVISIONING: Importing the crontab.\n";
+  # Importing the crontab.
+  sudo -E crontab < "crontab.conf";
 
-# Importing the crontab.
-sudo -E crontab < "crontab.conf";
+} # set_environment
 
 ##########################################################################################
-# Date and Time
+# Timezone
 ##########################################################################################
+function set_timezone () {
 
-echo -e "PROVISIONING: Syncing with the time/date server.\n";
+  TIMEZONE="America/New_York";
+  TIMEZONE_PATH="/etc/timezone";
+  if [ "${TIMEZONE}" != $(cat "${TIMEZONE_PATH}") ]; then
 
-# Syncing with the time/date server.
-sudo -E ntpdate -u ntp.ubuntu.com;
+    echo -e "PROVISIONING: Setting timezone data.\n";
 
-TIMEZONE="America/New_York";
-TIMEZONE_PATH="/etc/timezone";
-if [ "${TIMEZONE}" != $(cat "${TIMEZONE_PATH}") ]; then
+    # debconf-set-selections <<< "tzdata tzdata/Areas select America"
+    # debconf-set-selections <<< "tzdata tzdata/Zones/America select New_York"
+    # sudo -E dpkg-reconfigure tzdata
+    sudo -E echo "${TIMEZONE}" > "${TIMEZONE_PATH}";
+    sudo -E dpkg-reconfigure -f noninteractive tzdata;
 
-  echo -e "PROVISIONING: Setting timezone data.\n";
+  fi
 
-  # debconf-set-selections <<< "tzdata tzdata/Areas select America"
-  # debconf-set-selections <<< "tzdata tzdata/Zones/America select New_York"
-  # sudo -E dpkg-reconfigure tzdata
-  sudo -E echo "${TIMEZONE}" > "${TIMEZONE_PATH}";
-  sudo -E dpkg-reconfigure -f noninteractive tzdata;
+} # set_timezone
 
-fi
+##########################################################################################
+# Sources List.
+##########################################################################################
+function configure_sources_list () {
 
+  SOURCES_LIST="/etc/apt/sources.list";
+  DEB_URL_PATTERN="^#.*deb.*partner$";
+  if [ -f "${SOURCES_LIST}" ] && grep -E -q "${DEB_URL_PATTERN}" "/etc/apt/sources.list"; then
 
-# Edit the sources list.
-SOURCES_LIST="/etc/apt/sources.list";
-DEB_URL_PATTERN="^#.*deb.*partner$";
-if [ -f "${SOURCES_LIST}" ] && grep -E -q "${DEB_URL_PATTERN}" "${SOURCES_LIST}"; then
+    echo -e "PROVISIONING: Adjusting the sources list.\n";
 
-  echo -e "PROVISIONING: Adjusting the sources list.\n";
+    # Adjust the sources list.
+    sudo -E sed -i "/${DEB_URL_PATTERN}/s/^# //g" "/etc/apt/sources.list";
 
-  # Adjust the sources list.
-  sudo -E sed -i "/${DEB_URL_PATTERN}/s/^# //g" "${SOURCES_LIST}";
+  fi
 
-fi
+} # configure_sources_list
 
 ##########################################################################################
 # Avahi
@@ -861,12 +873,18 @@ function update_locate_db () {
 } # update_locate_db
 
 ##########################################################################################
-##########################################################################################
+# Calling the functions here.
 ##########################################################################################
 
-##########################################################################################
-# Call the functions here.
-##########################################################################################
+# sudo -E ntpdate -u ntp.ubuntu.com;
+
+configure_user_and_group;
+
+set_environment;
+
+set_timezone;
+
+configure_sources_list;
 
 hash avahi-daemon 2>/dev/null || {
   install_avahi;
