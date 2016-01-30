@@ -856,7 +856,7 @@ fi
 
 hash convert 2>/dev/null || {
 
-echo -e "PROVISIONING: Installing ImageMagick from source.\n";
+  echo -e "PROVISIONING: Installing ImageMagick from source.\n";
 
   # Install and build the dependencies for ImageMagick.
   sudo -E aptitude install -y --assume-yes -q \
