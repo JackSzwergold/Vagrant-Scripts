@@ -411,7 +411,7 @@ function set_apache_deployment_directories () {
 } # set_apache_deployment_directories
 
 # Create the web server document root directories.
-if [ ! -d "/var/www/${HOST_NAME}" ]; then
+function set_apache_virtual_host_directory () {
 
   echo -e "PROVISIONING: Creating the web server document root directories.\n";
 
@@ -421,19 +421,18 @@ if [ ! -d "/var/www/${HOST_NAME}" ]; then
   sudo -E chmod -f -R 775 "/var/www/${HOST_NAME}";
   sudo -E chmod -f -R 664 "/var/www/${HOST_NAME}/site/index.php";
 
-fi
+} # set_apache_virtual_host_directory
 
 ######################################################################################
 # Apache logs.
 ######################################################################################
 
 # Adjust the Apache log rotation script.
-APACHE_LOGROTATE_PATH="/etc/logrotate.d/apache2";
-if [ -f "${APACHE_SECURITY_PATH}" ]; then
+if [ -f "/etc/logrotate.d/apache2" ]; then
 
   echo -e "PROVISIONING: Adjusting the Apache log rotation script.\n";
 
-  sudo -E sed -i 's/rotate 52/rotate 13/g' "${APACHE_LOGROTATE_PATH}";
+  sudo -E sed -i 's/rotate 52/rotate 13/g' "/etc/logrotate.d/apache2";
   sudo -E sed -i 's/create 640 root adm/create 640 root www-readwrite/g' "${APACHE_LOGROTATE_PATH}";
 
   # Adjust permissions on log files.
@@ -899,6 +898,10 @@ fi
 
 if [ ! -d "/var/www/builds" ]; then
   set_apache_deployment_directories;
+fi
+
+if [ ! -d "/var/www/${HOST_NAME}" ]; then
+  set_apache_virtual_host_directory;
 fi
 
 # MySQL
