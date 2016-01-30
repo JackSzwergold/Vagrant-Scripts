@@ -561,15 +561,12 @@ fi
 ######################################################################################
 # phpMyAdmin config.
 ######################################################################################
-
-# Copy the phpMyAdmin configuration file into place.
-PHPMYADMIN_CONFIG_PATH="/usr/share/phpmyadmin/config.inc.php";
-if [ -f "phpmyadmin/config.inc.php" ] && [ ! -f "${PHPMYADMIN_CONFIG_PATH}" ]; then
+function configure_phpmyadmin () {
 
   echo -e "PROVISIONING: Configuring phpMyAdmin related items.\n";
 
   # Set the phpMyAdmin config file.
-  sudo -E cp -f "phpmyadmin/config.inc.php" "${PHPMYADMIN_CONFIG_PATH}";
+  sudo -E cp -f "phpmyadmin/config.inc.php" "/usr/share/phpmyadmin/config.inc.php";
 
   # Copy and set the patched 'Header.class.php' file.
   if [ -f "phpmyadmin/Header.class.php" ]; then
@@ -582,44 +579,39 @@ if [ -f "phpmyadmin/config.inc.php" ] && [ ! -f "${PHPMYADMIN_CONFIG_PATH}" ]; t
     sudo -E rm -f "${PHPMYADMIN_PLUGIN_PATH}"{PMA_,}ExportPdf.class.php;
   fi
 
-fi
+}
 
 ######################################################################################
 # phpMyAdmin blowfish secret.
 ######################################################################################
-
-BLOWFISH_SECRET_PATTERN="a8b7c6d";
-if [ -f "${PHPMYADMIN_CONFIG_PATH}" ] && grep -E -q "${BLOWFISH_SECRET_PATTERN}" "${PHPMYADMIN_CONFIG_PATH}"; then
+function configure_phpmyadmin_blowfish () {
 
   echo -e "PROVISIONING: Setting a new phpMyAdmin blowfish secret value.\n";
 
-  BLOWFISH_SECRET_NEW=$(openssl rand -base64 30);
-  sudo -E sed -i "s/'${BLOWFISH_SECRET_PATTERN}'/'${BLOWFISH_SECRET_NEW}'/g" "${PHPMYADMIN_CONFIG_PATH}";
+  BLOWFISH_SECRET=$(openssl rand -base64 30);
+  sudo -E sed -i "s/'a8b7c6d'/'${BLOWFISH_SECRET}'/g" "/usr/share/phpmyadmin/config.inc.php";
 
-fi
+} # configure_phpmyadmin_blowfish
 
 ######################################################################################
 # phpMyAdmin Apache config.
 ######################################################################################
 
 # Copy and enable the AWStats phpMyAdmin config.
-PHPMYADMIN_APACHE_CONFIG_PATH="/etc/apache2/conf-available/phpmyadmin.conf";
-if [ -f "apache2/phpmyadmin.conf" ] && [ ! -f "${PHPMYADMIN_APACHE_CONFIG_PATH}" ]; then
+function configure_awstats_apache () {
 
   echo -e "PROVISIONING: Installing the Apache phpMyAdmin config.\n";
 
-  sudo -E cp -f "apache2/phpmyadmin.conf" "${PHPMYADMIN_APACHE_CONFIG_PATH}";
+  sudo -E cp -f "apache2/phpmyadmin.conf" "/etc/apache2/conf-available/phpmyadmin.conf";
   sudo -E a2enconf -q phpmyadmin;
   # sudo -E service apache2 restart;
 
-fi
+}
 
 ######################################################################################
 # GeoIP
 ######################################################################################
-
-# Install GeoIP from source.
-hash geoiplookup 2>/dev/null || {
+function install_geoip () {
 
   echo -e "PROVISIONING: Installing the GeoIP binary.\n";
 
@@ -639,71 +631,70 @@ hash geoiplookup 2>/dev/null || {
   cd "${BASE_DIR}/${CONFIG_DIR}";
   sudo -E rm -rf ./GeoIP*;
 
-}
+} # install_geoip
 
-# Install the GeoIP databases.
-GEOIP_TMP_PATH="/tmp";
-GEOIP_DATA_PATH="/usr/local/share/GeoIP";
-GEOIP_DATA_SYMLINK_PATH="/usr/share/GeoIP";
-if [ ! -d "${GEOIP_DATA_PATH}" ]; then
+######################################################################################
+# GeoIP databases.
+######################################################################################
+function install_geoip_databases () {
 
   echo -e "PROVISIONING: Installing the GeoIP databases.\n";
 
   # Get the GeoIP databases.
-  if [ ! -f "${GEOIP_TMP_PATH}/GeoIP.dat.gz" ] && [ ! -f "${GEOIP_DATA_PATH}/GeoIP.dat" ]; then
-    curl -ss -L "http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz" > "${GEOIP_TMP_PATH}/GeoIP.dat.gz";
+  if [ ! -f "/tmp/GeoIP.dat.gz" ] && [ ! -f "/usr/local/share/GeoIP/GeoIP.dat" ]; then
+    curl -ss -L "http://geolite.maxmind.com/download/geoip/database/GeoLiteCountry/GeoIP.dat.gz" > "/tmp/GeoIP.dat.gz";
   fi
 
-  if [ ! -f "${GEOIP_TMP_PATH}/GeoLiteCity.dat.gz" ] && [ ! -f "${GEOIP_DATA_PATH}/GeoIPCity.dat" ]; then
-    curl -ss -L "http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz" > "${GEOIP_TMP_PATH}/GeoLiteCity.dat.gz";
+  if [ ! -f "/tmp/GeoLiteCity.dat.gz" ] && [ ! -f "/usr/local/share/GeoIP/GeoIPCity.dat" ]; then
+    curl -ss -L "http://geolite.maxmind.com/download/geoip/database/GeoLiteCity.dat.gz" > "/tmp/GeoLiteCity.dat.gz";
   fi
 
-  if [ ! -f "${GEOIP_TMP_PATH}/GeoIPASNum.dat.gz" ] && [ ! -f "${GEOIP_DATA_PATH}/GeoIPASNum.dat" ]; then
-    curl -ss -L "http://geolite.maxmind.com/download/geoip/database/asnum/GeoIPASNum.dat.gz" > "${GEOIP_TMP_PATH}/GeoIPASNum.dat.gz";
+  if [ ! -f "/tmp/GeoIPASNum.dat.gz" ] && [ ! -f "/usr/local/share/GeoIP/GeoIPASNum.dat" ]; then
+    curl -ss -L "http://geolite.maxmind.com/download/geoip/database/asnum/GeoIPASNum.dat.gz" > "/tmp/GeoIPASNum.dat.gz";
   fi
 
-  if [ ! -f "${GEOIP_TMP_PATH}/GeoIPCountryCSV.zip" ] && [ ! -f "${GEOIP_DATA_PATH}/GeoIPCountryWhois.csv" ]; then
-    curl -ss -L "http://geolite.maxmind.com/download/geoip/database/GeoIPCountryCSV.zip" > "${GEOIP_TMP_PATH}/GeoIPCountryCSV.zip";
+  if [ ! -f "/tmp/GeoIPCountryCSV.zip" ] && [ ! -f "/usr/local/share/GeoIP/GeoIPCountryWhois.csv" ]; then
+    curl -ss -L "http://geolite.maxmind.com/download/geoip/database/GeoIPCountryCSV.zip" > "/tmp/GeoIPCountryCSV.zip";
   fi
 
   # Create the GeoIP directory—if it doesn't exist—like this.
-  sudo mkdir -p "${GEOIP_DATA_PATH}/";
+  sudo mkdir -p "/usr/local/share/GeoIP/";
 
   # Move and decompress the databases to GeoIP data path.
-  if [ -d "${GEOIP_DATA_PATH}" ]; then
+  if [ -d "/usr/local/share/GeoIP" ]; then
 
-    if [ -f "${GEOIP_TMP_PATH}/GeoIP.dat.gz" ]; then
-      sudo -E mv "${GEOIP_TMP_PATH}/GeoIP.dat.gz" "${GEOIP_DATA_PATH}/";
-      sudo -E gzip -d -q -f "${GEOIP_DATA_PATH}/GeoIP.dat.gz";
-      sudo -E ln -s -f "${GEOIP_DATA_PATH}/GeoIP.dat" "${GEOIP_DATA_SYMLINK_PATH}/";
+    if [ -f "/tmp/GeoIP.dat.gz" ]; then
+      sudo -E mv "/tmp/GeoIP.dat.gz" "/usr/local/share/GeoIP/";
+      sudo -E gzip -d -q -f "/usr/local/share/GeoIP/GeoIP.dat.gz";
+      sudo -E ln -s -f "/usr/local/share/GeoIP/GeoIP.dat" "/usr/share/GeoIP/";
     fi
 
-    if [ -f "${GEOIP_TMP_PATH}/GeoLiteCity.dat.gz" ]; then
-      sudo -E mv "${GEOIP_TMP_PATH}/GeoLiteCity.dat.gz" "${GEOIP_DATA_PATH}/";
-      sudo -E gzip -d -q -f "${GEOIP_DATA_PATH}/GeoLiteCity.dat.gz";
-      sudo -E mv "${GEOIP_DATA_PATH}/GeoLiteCity.dat" "${GEOIP_DATA_PATH}/GeoIPCity.dat";
-      sudo -E ln -s -f "${GEOIP_DATA_PATH}/GeoIPCity.dat" "${GEOIP_DATA_SYMLINK_PATH}/";
+    if [ -f "/tmp/GeoLiteCity.dat.gz" ]; then
+      sudo -E mv "/tmp/GeoLiteCity.dat.gz" "/usr/local/share/GeoIP/";
+      sudo -E gzip -d -q -f "/usr/local/share/GeoIP/GeoLiteCity.dat.gz";
+      sudo -E mv "/usr/local/share/GeoIP/GeoLiteCity.dat" "/usr/local/share/GeoIP/GeoIPCity.dat";
+      sudo -E ln -s -f "/usr/local/share/GeoIP/GeoIPCity.dat" "/usr/share/GeoIP/";
     fi
 
-    if [ -f "${GEOIP_TMP_PATH}/GeoIPASNum.dat.gz" ]; then
-      sudo -E mv "${GEOIP_TMP_PATH}/GeoIPASNum.dat.gz" "${GEOIP_DATA_PATH}/";
-      sudo -E gzip -d -q -f "${GEOIP_DATA_PATH}/GeoIPASNum.dat.gz";
-      sudo -E ln -s -f "${GEOIP_DATA_PATH}/GeoIPASNum.dat" "${GEOIP_DATA_SYMLINK_PATH}/";
+    if [ -f "/tmp/GeoIPASNum.dat.gz" ]; then
+      sudo -E mv "/tmp/GeoIPASNum.dat.gz" "/usr/local/share/GeoIP/";
+      sudo -E gzip -d -q -f "/usr/local/share/GeoIP/GeoIPASNum.dat.gz";
+      sudo -E ln -s -f "/usr/local/share/GeoIP/GeoIPASNum.dat" "/usr/share/GeoIP/";
     fi
 
-    if [ -f "${GEOIP_TMP_PATH}/GeoIPCountryCSV.zip" ]; then
-      sudo -E mv "${GEOIP_TMP_PATH}/GeoIPCountryCSV.zip" "${GEOIP_DATA_PATH}/";
-      sudo -E unzip -o -q -d "${GEOIP_DATA_PATH}/" "${GEOIP_DATA_PATH}/GeoIPCountryCSV.zip";
-      sudo -E rm -f "${GEOIP_DATA_PATH}/GeoIPCountryCSV.zip";
-      sudo -E ln -s -f "${GEOIP_DATA_PATH}/GeoIPCountryWhois.csv" "${GEOIP_DATA_SYMLINK_PATH}/";
+    if [ -f "/tmp/GeoIPCountryCSV.zip" ]; then
+      sudo -E mv "/tmp/GeoIPCountryCSV.zip" "/usr/local/share/GeoIP/";
+      sudo -E unzip -o -q -d "/usr/local/share/GeoIP/" "/usr/local/share/GeoIP/GeoIPCountryCSV.zip";
+      sudo -E rm -f "/usr/local/share/GeoIP/GeoIPCountryCSV.zip";
+      sudo -E ln -s -f "/usr/local/share/GeoIP/GeoIPCountryWhois.csv" "/usr/share/GeoIP/";
     fi
 
     # Set permissions to root for owner and group.
-    sudo -E chown root:root -R "${GEOIP_DATA_PATH}/";
+    sudo -E chown root:root -R "/usr/local/share/GeoIP/";
 
   fi
 
-fi
+} # install_geoip_databases
 
 ######################################################################################
 # AWStats
@@ -898,6 +889,11 @@ function update_locate_db () {
 # Call the functions here.
 ######################################################################################
 
+if [ -f "phpmyadmin/config.inc.php" ] && [ ! -f "/usr/share/phpmyadmin/config.inc.php" ]; then configure_phpmyadmin; fi
+if [ -f "/usr/share/phpmyadmin/config.inc.php" ] && grep -E -q "a8b7c6d" "/usr/share/phpmyadmin/config.inc.php"; then configure_phpmyadmin_blowfish; fi
+if [ -f "apache2/phpmyadmin.conf" ] && [ ! -f "/etc/apache2/conf-available/phpmyadmin.conf" ]; then configure_awstats_apache; fi
+hash geoiplookup 2>/dev/null || { install_geoip; }
+if [ ! -d "/usr/local/share/GeoIP" ]; then install_geoip_databases; fi
 if [ ! -d "/usr/share/awstats-7.3" ]; then install_awstats; fi
 if [ -f "apache2/awstats.conf" ] && [ ! -f "/etc/apache2/conf-available/awstats.conf" ]; then configure_awstats_apache; fi
 hash fail2ban-client 2>/dev/null || { install_fail2ban; }
