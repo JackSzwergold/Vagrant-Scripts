@@ -268,31 +268,32 @@ fi
 ##########################################################################################
 # MOTD
 ##########################################################################################
+function configure_motd () {
 
-echo -e "PROVISIONING: Setting the MOTD banner.\n";
+  echo -e "PROVISIONING: Setting the MOTD banner.\n";
 
-# Set the server login banner with figlet.
-# MOTD_PATH="/etc/motd.tail";
-MOTD_PATH="/etc/motd";
-echo "$(figlet ${MACHINE_NAME^} | head -n -1).local" > "${MOTD_PATH}";
-echo "" >> "${MOTD_PATH}";
+  # Set the server login banner with figlet.
+  # MOTD_PATH="/etc/motd.tail";
+  MOTD_PATH="/etc/motd";
+  echo "$(figlet ${MACHINE_NAME^} | head -n -1).local" > "${MOTD_PATH}";
+  echo "" >> "${MOTD_PATH}";
 
-echo -e "PROVISIONING: Disabling MOTD scripts.\n";
+  echo -e "PROVISIONING: Disabling MOTD scripts.\n";
 
-# Disable these MOTD scripts.
-sudo -E chmod -f -x "/etc/update-motd.d/50-landscape-sysinfo";
-sudo -E chmod -f -x "/etc/update-motd.d/51-cloudguest";
-sudo -E chmod -f -x "/etc/update-motd.d/90-updates-available";
-sudo -E chmod -f -x "/etc/update-motd.d/91-release-upgrade";
-sudo -E chmod -f -x "/etc/update-motd.d/95-hwe-eol";
-sudo -E chmod -f -x "/etc/update-motd.d/98-cloudguest";
+  # Disable these MOTD scripts.
+  sudo -E chmod -f -x "/etc/update-motd.d/50-landscape-sysinfo";
+  sudo -E chmod -f -x "/etc/update-motd.d/51-cloudguest";
+  sudo -E chmod -f -x "/etc/update-motd.d/90-updates-available";
+  sudo -E chmod -f -x "/etc/update-motd.d/91-release-upgrade";
+  sudo -E chmod -f -x "/etc/update-motd.d/95-hwe-eol";
+  sudo -E chmod -f -x "/etc/update-motd.d/98-cloudguest";
+
+} # configure_motd
 
 ##########################################################################################
 # IPTables and IPSet
 ##########################################################################################
-
-# Check if IPTables and IPSet are installed and if not, install it.
-hash iptables && hash ipset 2>/dev/null || {
+function install_iptables () {
 
   echo -e "PROVISIONING: IPTables and IPSet stuff.\n";
 
@@ -318,7 +319,7 @@ hash iptables && hash ipset 2>/dev/null || {
     sudo -E patch -fsb "/etc/init.d/iptables-persistent" < "iptables/iptables-persistent-ipset.patch";
   fi
 
-}
+} # install_iptables
 
 ##########################################################################################
 # Apache
@@ -877,6 +878,15 @@ function update_locate_db () {
 ##########################################################################################
 # Call the functions here.
 ##########################################################################################
+
+configure_motd;
+
+##########################################################################################
+# IPTables and IPSet
+##########################################################################################
+hash iptables && hash ipset 2>/dev/null || {
+  install_iptables;
+}
 
 ##########################################################################################
 # Apache
