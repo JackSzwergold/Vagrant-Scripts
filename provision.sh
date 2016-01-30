@@ -320,15 +320,10 @@ hash iptables && hash ipset 2>/dev/null || {
 
 }
 
-
-
-
 ##########################################################################################
-# Apache and PHP (Installing)
+# Apache
 ##########################################################################################
-
-# Check if Apache is installed and if not, install it.
-hash apachectl 2>/dev/null || {
+function install_apache () {
 
   echo -e "PROVISIONING: Installing Apache and PHP related items.\n"
 
@@ -350,7 +345,7 @@ hash apachectl 2>/dev/null || {
   # Enable these core Apache modules.
   sudo -E a2enmod -q rewrite headers expires include proxy proxy_http cgi;
 
-}
+} # install_apache
 
 ##########################################################################################
 # Apache configure.
@@ -886,6 +881,9 @@ function update_locate_db () {
 ##########################################################################################
 # Apache
 ##########################################################################################
+hash apachectl 2>/dev/null || {
+  install_apache;
+}
 
 sudo -E service apache2 stop;
 
