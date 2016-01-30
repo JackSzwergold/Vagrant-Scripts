@@ -410,8 +410,10 @@ function set_apache_deployment_directories () {
 
 } # set_apache_deployment_directories
 
-# Create the web server document root directories.
-function set_apache_virtual_host_directory () {
+######################################################################################
+# Apache virtual host directories.
+######################################################################################
+function set_apache_virtual_host_directories () {
 
   echo -e "PROVISIONING: Creating the web server document root directories.\n";
 
@@ -421,7 +423,7 @@ function set_apache_virtual_host_directory () {
   sudo -E chmod -f -R 775 "/var/www/${HOST_NAME}";
   sudo -E chmod -f -R 664 "/var/www/${HOST_NAME}/site/index.php";
 
-} # set_apache_virtual_host_directory
+} # set_apache_virtual_host_directories
 
 ######################################################################################
 # Apache logs.
@@ -901,7 +903,7 @@ if [ ! -d "/var/www/builds" ]; then
 fi
 
 if [ ! -d "/var/www/${HOST_NAME}" ]; then
-  set_apache_virtual_host_directory;
+  set_apache_virtual_host_directories;
 fi
 
 # MySQL
