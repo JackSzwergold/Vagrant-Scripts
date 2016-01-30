@@ -126,9 +126,7 @@ hash avahi-daemon 2>/dev/null || {
 ##########################################################################################
 # Sysstat
 ##########################################################################################
-
-# Check if Sysstat is installed and if not, install it.
-hash sar 2>/dev/null || {
+function install_sysstat () {
 
   echo -e "PROVISIONING: Sysstat related stuff.\n";
 
@@ -141,27 +139,28 @@ hash sar 2>/dev/null || {
     sudo -E service sysstat restart;
   fi
 
-}
+} # install_sysstat
 
 ##########################################################################################
-# Generic Tools
+# Basic Tools
 ##########################################################################################
+function install_basic_tools () {
 
-echo -e "PROVISIONING: Installing a set of generic tools.\n";
+  echo -e "PROVISIONING: Installing a set of generic tools.\n";
 
-# Install generic tools.
-sudo -E aptitude install -y --assume-yes -q \
-  dnsutils traceroute nmap bc htop finger curl whois rsync lsof \
-  iftop figlet lynx mtr-tiny iperf nload zip unzip attr sshpass \
-  dkms mc elinks ntp dos2unix p7zip-full nfs-common \
-  slurm sharutils uuid-runtime chkconfig quota pv trickle apachetop;
+  # Install generic tools.
+  sudo -E aptitude install -y --assume-yes -q \
+    dnsutils traceroute nmap bc htop finger curl whois rsync lsof \
+    iftop figlet lynx mtr-tiny iperf nload zip unzip attr sshpass \
+    dkms mc elinks ntp dos2unix p7zip-full nfs-common \
+    slurm sharutils uuid-runtime chkconfig quota pv trickle apachetop;
+
+} # install_basic_tools
 
 ##########################################################################################
 # Locate
 ##########################################################################################
-
-# Check if Locate is installed and if not, install it.
-hash updatedb 2>/dev/null || {
+function install_locate () {
 
   echo -e "PROVISIONING: Installing the locate tool and updating the database.\n";
 
@@ -171,7 +170,7 @@ hash updatedb 2>/dev/null || {
   # Update Locate.
   sudo -E updatedb;
 
-}
+} # install_locate
 
 ##########################################################################################
 # Compiler
@@ -870,6 +869,16 @@ function update_locate_db () {
 ##########################################################################################
 # Call the functions here.
 ##########################################################################################
+
+hash sar 2>/dev/null || {
+  install_sysstat;
+}
+
+install_basic_tools;
+
+hash updatedb 2>/dev/null || {
+  install_locate;
+}
 
 hash libtool 2>/dev/null || {
   install_compiler;
