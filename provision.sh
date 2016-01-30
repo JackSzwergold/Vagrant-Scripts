@@ -13,9 +13,9 @@
 # w: http://www.preworn.com
 # e: me@preworn.com
 #
-# Created: 2014-07-28, js
-# Version: 2014-07-28, js: creation
-#          2014-09-23, js: development
+# Created: 2016-01-27, js
+# Version: 2016-01-27, js: creation
+#          2016-01-30, js: development
 #
 ##########################################################################################
 
@@ -449,7 +449,7 @@ function configure_apache_log_rotation () {
   echo -e "PROVISIONING: Adjusting the Apache log rotation script.\n";
 
   sudo -E sed -i 's/rotate 52/rotate 13/g' "/etc/logrotate.d/apache2";
-  sudo -E sed -i 's/create 640 root adm/create 640 root www-readwrite/g' "${APACHE_LOGROTATE_PATH}";
+  sudo -E sed -i 's/create 640 root adm/create 640 root www-readwrite/g' "/etc/logrotate.d/apache2";
 
   # Adjust permissions on log files.
   sudo -E chmod o+rx /var/log/apache2;
