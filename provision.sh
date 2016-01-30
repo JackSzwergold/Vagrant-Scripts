@@ -854,7 +854,7 @@ fi
 # ImageMagick
 ######################################################################################
 
-hash convert 2>/dev/null || {
+function install_imagemagick () {
 
   echo -e "PROVISIONING: Installing ImageMagick from source.\n";
 
@@ -883,7 +883,7 @@ hash convert 2>/dev/null || {
   cd "${BASE_DIR}/${CONFIG_DIR}";
   sudo -E rm -rf ./ImageMagick-*;
 
-}
+} # install_imagemagick
 
 ######################################################################################
 # Scripts.
@@ -915,6 +915,7 @@ function update_locate_db () {
 # Call the functions here.
 ######################################################################################
 
+hash convert 2>/dev/null || { install_imagemagick; }
 install_system_scripts;
 update_locate_db;
 
