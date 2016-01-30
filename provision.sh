@@ -540,9 +540,7 @@ fi
 ######################################################################################
 # phpMyAdmin
 ######################################################################################
-
-# Install phpMyAdmin from source.
-if [ ! -d "/usr/share/phpmyadmin" ]; then
+function install_phpmyadmin () {
 
   echo -e "PROVISIONING: Installing phpMyAdmin related items.\n";
 
@@ -556,7 +554,7 @@ if [ ! -d "/usr/share/phpmyadmin" ]; then
   # Set permissions to root for owner and group.
   sudo -E chown -f root:root -R "/usr/share/phpmyadmin";
 
-fi
+} # install_phpmyadmin
 
 ######################################################################################
 # phpMyAdmin config.
@@ -579,7 +577,7 @@ function configure_phpmyadmin () {
     sudo -E rm -f "${PHPMYADMIN_PLUGIN_PATH}"{PMA_,}ExportPdf.class.php;
   fi
 
-}
+} # configure_phpmyadmin
 
 ######################################################################################
 # phpMyAdmin blowfish secret.
