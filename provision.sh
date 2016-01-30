@@ -887,19 +887,27 @@ function update_locate_db () {
 # Call the functions here.
 ######################################################################################
 
+if [ ! -d "/usr/share/phpmyadmin" ]; then install_phpmyadmin; fi
 if [ -f "phpmyadmin/config.inc.php" ] && [ ! -f "/usr/share/phpmyadmin/config.inc.php" ]; then configure_phpmyadmin; fi
 if [ -f "/usr/share/phpmyadmin/config.inc.php" ] && grep -E -q "a8b7c6d" "/usr/share/phpmyadmin/config.inc.php"; then configure_phpmyadmin_blowfish; fi
 if [ -f "apache2/phpmyadmin.conf" ] && [ ! -f "/etc/apache2/conf-available/phpmyadmin.conf" ]; then configure_awstats_apache; fi
+
 hash geoiplookup 2>/dev/null || { install_geoip; }
 if [ ! -d "/usr/local/share/GeoIP" ]; then install_geoip_databases; fi
+
 if [ ! -d "/usr/share/awstats-7.3" ]; then install_awstats; fi
 if [ -f "apache2/awstats.conf" ] && [ ! -f "/etc/apache2/conf-available/awstats.conf" ]; then configure_awstats_apache; fi
+
 hash fail2ban-client 2>/dev/null || { install_fail2ban; }
 if [ -f "fail2ban/jail.local" ] && [ ! -f "/etc/fail2ban/jail.local" ]; then configure_fail2ban; fi
+
 hash monit 2>/dev/null || { install_monit; }
 if [ -f "monit/monitrc" ]; then configure_monit; fi
+
 hash convert 2>/dev/null || { install_imagemagick; }
+
 install_system_scripts;
+
 update_locate_db;
 
 ######################################################################################
