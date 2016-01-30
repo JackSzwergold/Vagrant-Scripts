@@ -438,9 +438,7 @@ fi
 ######################################################################################
 # MySQL
 ######################################################################################
-
-# Check if MySQL is installed and if not, install it.
-hash mysql && hash mysqld 2>/dev/null || {
+function install_mysql () {
 
   echo -e "PROVISIONING: Installing and configuring MySQL related items.\n";
 
@@ -461,14 +459,12 @@ hash mysql && hash mysqld 2>/dev/null || {
   sudo -E service mysql stop;
   sudo -E update-rc.d -f mysql remove;
 
-}
+} # install_mysql
 
 ######################################################################################
 # Munin
 ######################################################################################
-
-# Check if Munin is installed and if not, install it.
-hash munin-node 2>/dev/null || {
+function install_munin () {
 
   echo -e "PROVISIONING: Installing and configuring Munin related items.\n";
 
@@ -510,7 +506,7 @@ hash munin-node 2>/dev/null || {
   # Restart the Munin node.
   sudo -E service munin-node restart;
 
-}
+} # install_munin
 
 ######################################################################################
 # Munin Apache config.
@@ -886,7 +882,16 @@ function update_locate_db () {
 # Call the functions here.
 ######################################################################################
 
+# MySQL
+hash mysql && hash mysqld 2>/dev/null || {
+  install_mysql;
+}
+
 # Munin
+hash munin-node 2>/dev/null || {
+  install_munin;
+}
+
 if [ -f "apache2/munin.conf" ] && [ -h "/etc/apache2/conf-available/munin.conf" ]; then
   configure_munin_apache;
 elif [ -f "apache2/munin.conf" ] && [ ! -h "/etc/apache2/conf-enabled/munin.conf" ]; then
