@@ -112,16 +112,14 @@ fi
 ##########################################################################################
 # Avahi
 ##########################################################################################
-
-# Check if Avahi is installed and if not, install it.
-hash avahi-daemon 2>/dev/null || {
+function install_avahi () {
 
   echo -e "PROVISIONING: Avahi related stuff.\n";
 
   # Install Avahi.
   sudo -E aptitude install -y --assume-yes -q avahi-daemon avahi-utils;
 
-}
+} # install_avahi
 
 ##########################################################################################
 # Sysstat
@@ -869,6 +867,10 @@ function update_locate_db () {
 ##########################################################################################
 # Call the functions here.
 ##########################################################################################
+
+hash avahi-daemon 2>/dev/null || {
+  install_avahi;
+}
 
 hash sar 2>/dev/null || {
   install_sysstat;
