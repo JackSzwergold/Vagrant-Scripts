@@ -355,68 +355,76 @@ hash apachectl 2>/dev/null || {
 
 sudo -E service apache2 stop;
 
+
+
+
 ######################################################################################
-# Apache: Common Configuration Files
+# Apache configure.
 ######################################################################################
+function configure_apache () {
 
-echo -e "PROVISIONING: Setting Apache and PHP configs.\n";
+  echo -e "PROVISIONING: Setting Apache and PHP configs.\n";
 
-# Copy the Apache config files into place.
-sudo -E cp -f "apache2/apache2.conf" "/etc/apache2/apache2.conf";
-sudo -E cp -f "apache2/envvars" "/etc/apache2/envvars";
-sudo -E cp -f "apache2/mpm_prefork.conf" "/etc/apache2/mods-available/mpm_prefork.conf";
-sudo -E cp -f "apache2/security.conf" "/etc/apache2/conf-available/security.conf";
-sudo -E cp -f "apache2/common.conf" "/etc/apache2/sites-available/common.conf";
-sudo -E cp -f "apache2/000-default.conf" "/etc/apache2/sites-available/000-default.conf";
+  # Copy the Apache config files into place.
+  sudo -E cp -f "apache2/apache2.conf" "/etc/apache2/apache2.conf";
+  sudo -E cp -f "apache2/envvars" "/etc/apache2/envvars";
+  sudo -E cp -f "apache2/mpm_prefork.conf" "/etc/apache2/mods-available/mpm_prefork.conf";
+  sudo -E cp -f "apache2/security.conf" "/etc/apache2/conf-available/security.conf";
+  sudo -E cp -f "apache2/common.conf" "/etc/apache2/sites-available/common.conf";
+  sudo -E cp -f "apache2/000-default.conf" "/etc/apache2/sites-available/000-default.conf";
 
-# Copy and configure the Apache virtual host config file.
-sudo -E cp -f "apache2/vagrant.local.conf" "/etc/apache2/sites-available/${HOST_NAME}.conf";
-sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "/etc/apache2/sites-available/${HOST_NAME}.conf";
-HOST_NAME_ESCAPED=$(echo "${HOST_NAME}" | sed 's/\./\\\\./g');
-sudo -E sed -i "s/vagrant\\\.local/${HOST_NAME_ESCAPED}/" "/etc/apache2/sites-available/${HOST_NAME}.conf";
-sudo -E a2ensite ${HOST_NAME};
+  # Copy and configure the Apache virtual host config file.
+  sudo -E cp -f "apache2/vagrant.local.conf" "/etc/apache2/sites-available/${HOST_NAME}.conf";
+  sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "/etc/apache2/sites-available/${HOST_NAME}.conf";
+  HOST_NAME_ESCAPED=$(echo "${HOST_NAME}" | sed 's/\./\\\\./g');
+  sudo -E sed -i "s/vagrant\\\.local/${HOST_NAME_ESCAPED}/" "/etc/apache2/sites-available/${HOST_NAME}.conf";
+  sudo -E a2ensite ${HOST_NAME};
 
-# Copy the PHP config files into place.
-sudo -E cp -f "php/php.ini" "/etc/php5/apache2/php.ini";
+  # Copy the PHP config files into place.
+  sudo -E cp -f "php/php.ini" "/etc/php5/apache2/php.ini";
 
-# Ditch the default Apache directory and set a new default page.
-if [ -d "/var/www/html" ]; then
+} # configure_apache
+
+######################################################################################
+# Apache web root.
+######################################################################################
+function set_apache_web_root () {
 
   echo -e "PROVISIONING: Adjusting the Apache root directory and default file.\n";
 
   sudo -E rm -rf "/var/www/html";
   sudo -E cp -f "apache2/index.php" "/var/www/index.php";
 
-fi
+} # set_apache_web_root
 
-# Create the web code deployment directories.
-WEB_DOCUMENT_ROOT="/var/www/";
-if [ ! -d "${WEB_DOCUMENT_ROOT}builds" ]; then
+######################################################################################
+# Apache deployment directories.
+######################################################################################
+function set_apache_deployment_directories () {
 
   echo -e "PROVISIONING: Creating the web code deployment directories.\n";
 
-  sudo -E mkdir -p "${WEB_DOCUMENT_ROOT}"{builds,configs,content};
-  sudo -E chown -f -R "${USER_NAME}":www-readwrite "${WEB_DOCUMENT_ROOT}"{builds,configs,content};
-  sudo -E chmod -f -R 775 "${WEB_DOCUMENT_ROOT}"{builds,configs,content};
+  sudo -E mkdir -p "/var/www/"{builds,configs,content};
+  sudo -E chown -f -R "${USER_NAME}":www-readwrite "/var/www/"{builds,configs,content};
+  sudo -E chmod -f -R 775 "/var/www/"{builds,configs,content};
 
-fi
+} # set_apache_deployment_directories
 
 # Create the web server document root directories.
-WEB_DOCUMENT_ROOT="/var/www/";
-if [ ! -d "${WEB_DOCUMENT_ROOT}${HOST_NAME}" ]; then
+if [ ! -d "/var/www/${HOST_NAME}" ]; then
 
   echo -e "PROVISIONING: Creating the web server document root directories.\n";
 
-  sudo -E mkdir -p "${WEB_DOCUMENT_ROOT}${HOST_NAME}/site";
-  sudo -E cp -f "apache2/index.php" "${WEB_DOCUMENT_ROOT}${HOST_NAME}/site/index.php";
-  sudo -E chown -f -R "${USER_NAME}":www-readwrite "${WEB_DOCUMENT_ROOT}${HOST_NAME}";
-  sudo -E chmod -f -R 775 "${WEB_DOCUMENT_ROOT}${HOST_NAME}";
-  sudo -E chmod -f -R 664 "${WEB_DOCUMENT_ROOT}${HOST_NAME}/site/index.php";
+  sudo -E mkdir -p "/var/www/${HOST_NAME}/site";
+  sudo -E cp -f "apache2/index.php" "/var/www/${HOST_NAME}/site/index.php";
+  sudo -E chown -f -R "${USER_NAME}":www-readwrite "/var/www/${HOST_NAME}";
+  sudo -E chmod -f -R 775 "/var/www/${HOST_NAME}";
+  sudo -E chmod -f -R 664 "/var/www/${HOST_NAME}/site/index.php";
 
 fi
 
 ######################################################################################
-# Apache Logs
+# Apache logs.
 ######################################################################################
 
 # Adjust the Apache log rotation script.
@@ -882,6 +890,17 @@ function update_locate_db () {
 # Call the functions here.
 ######################################################################################
 
+# Apache
+configure_apache;
+
+if [ -d "/var/www/html" ]; then
+  set_apache_web_root;
+fi
+
+if [ ! -d "/var/www/builds" ]; then
+  set_apache_deployment_directories;
+fi
+
 # MySQL
 hash mysql && hash mysqld 2>/dev/null || {
   install_mysql;
@@ -902,12 +921,15 @@ fi
 if [ ! -d "/usr/share/phpmyadmin" ]; then
   install_phpmyadmin;
 fi
+
 if [ -f "phpmyadmin/config.inc.php" ] && [ ! -f "/usr/share/phpmyadmin/config.inc.php" ]; then
   configure_phpmyadmin;
 fi
+
 if [ -f "/usr/share/phpmyadmin/config.inc.php" ] && grep -E -q "a8b7c6d" "/usr/share/phpmyadmin/config.inc.php"; then
   configure_phpmyadmin_blowfish;
 fi
+
 if [ -f "apache2/phpmyadmin.conf" ] && [ ! -f "/etc/apache2/conf-available/phpmyadmin.conf" ]; then
   configure_awstats_apache;
 fi
@@ -922,6 +944,7 @@ fi
 if [ ! -d "/usr/share/awstats-7.3" ]; then
   install_awstats;
 fi
+
 if [ -f "apache2/awstats.conf" ] && [ ! -f "/etc/apache2/conf-available/awstats.conf" ]; then
   configure_awstats_apache;
 fi
