@@ -708,9 +708,7 @@ fi
 ######################################################################################
 # AWStats
 ######################################################################################
-
-# Install AWStats from source.
-if [ ! -d "/usr/share/awstats-7.3" ]; then
+function install_awstats () {
 
   echo -e "PROVISIONING: Installing the AWStats related items.\n";
 
@@ -748,12 +746,12 @@ if [ ! -d "/usr/share/awstats-7.3" ]; then
   # Update the data for the '${HOST_NAME}' config.
   sudo -E "/usr/share/awstats-7.3/wwwroot/cgi-bin/awstats.pl" -config="${HOST_NAME}" -update
 
-fi
+} # install_awstats
 
 ######################################################################################
 # AWStats Apache config.
 ######################################################################################
-function configure_apache_awstats () {
+function configure_awstats_apache () {
 
   echo -e "PROVISIONING: Installing the Apache AWStats config.\n";
 
@@ -761,7 +759,7 @@ function configure_apache_awstats () {
   sudo -E a2enconf -q awstats;
   # sudo -E service apache2 restart;
 
-} # configure_apache_awstats
+} # configure_awstats_apache
 
 ######################################################################################
 # Fail2Ban
@@ -900,7 +898,8 @@ function update_locate_db () {
 # Call the functions here.
 ######################################################################################
 
-if [ -f "apache2/awstats.conf" ] && [ ! -f "/etc/apache2/conf-available/awstats.conf" ]; then configure_apache_awstats; fi
+if [ ! -d "/usr/share/awstats-7.3" ]; then install_awstats; fi
+if [ -f "apache2/awstats.conf" ] && [ ! -f "/etc/apache2/conf-available/awstats.conf" ]; then configure_awstats_apache; fi
 hash fail2ban-client 2>/dev/null || { install_fail2ban; }
 if [ -f "fail2ban/jail.local" ] && [ ! -f "/etc/fail2ban/jail.local" ]; then configure_fail2ban; fi
 hash monit 2>/dev/null || { install_monit; }
