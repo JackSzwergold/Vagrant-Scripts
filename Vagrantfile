@@ -35,8 +35,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   ########################################################################################
   vagrant_machines.each do |machine_name, machine_details|
 
+    # Print out the details of the configs.
     puts "Setting config for '#{machine_name}' (host: #{machine_details[:hostname]}, ip: #{machine_details[:ip]})"
 
+    # Define the machine.
     config.vm.define "#{machine_details[:hostname]}", primary: true, autostart: true do |machine|
 
       # VirtualBox specific configuration options.
