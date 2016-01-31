@@ -11,21 +11,27 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   ########################################################################################
   config.vm.define "sandbox", primary: true, autostart: true do |machine|
 
+    # Set some basic variables.
+    vm_name = "Sandbox_UBUNTU_1404"
+    vm_hostname = "sandbox"
+    vm_ip = "192.168.56.10"
+    vm_provision_lamp = "true"
+
     # VirtualBox specific configuration options.
     machine.vm.provider :virtualbox do |vbox|
       vbox.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
       vbox.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
       vbox.customize ["modifyvm", :id, "--memory", 512]
       vbox.customize ["modifyvm", :id, "--cpus", 1]
-      # vbox.customize ["modifyvm", :id, "--name", "Sandbox"]
-      vbox.name = "Sandbox_UBUNTU_1404"
+      # vbox.customize ["modifyvm", :id, "--name", "#{vm_name}"]
+      vbox.name = "#{vm_name}"
     end
 
     # Basic virtual machine configuration options.
     machine.vm.box = "ubuntu/trusty64"
-    machine.vm.hostname = "sandbox"
+    machine.vm.hostname = "#{vm_hostname}"
     machine.vm.box_check_update = false
-    machine.vm.network :private_network, ip: "192.168.56.10"
+    machine.vm.network :private_network, ip: "#{vm_ip}"
     machine.vm.network :forwarded_port, guest: 22, host: 2222, id: "ssh"
     machine.vm.synced_folder ".", "/vagrant", type: "nfs", disabled: true
 
@@ -34,7 +40,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     machine.vm.synced_folder "deployment_configs", "/home/vagrant/deployment_configs", type: "rsync", rsync__exclude: ".DS_Store"
 
     # Set the shell script to provision the server.
-    machine.vm.provision :shell, :path => "provision.sh", :args => "deployment_configs vagrant #{machine.vm.hostname} #{machine.vm.hostname}.local"
+    machine.vm.provision :shell, :path => "provision.sh", :args => "deployment_configs #{config.ssh.username} #{machine.vm.hostname} #{machine.vm.hostname}.local #{vm_provision_lamp}"
 
   end
 
@@ -43,21 +49,27 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   ########################################################################################
   config.vm.define "jabroni", primary: false, autostart: false do |machine|
 
+    # Set some basic variables.
+    vm_name = "Jabroni_UBUNTU_1404"
+    vm_hostname = "jabroni"
+    vm_ip = "192.168.56.20"
+    vm_provision_lamp = "false"
+
     # VirtualBox specific configuration options.
     machine.vm.provider :virtualbox do |vbox|
       vbox.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
       vbox.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
       vbox.customize ["modifyvm", :id, "--memory", 512]
       vbox.customize ["modifyvm", :id, "--cpus", 1]
-      # vbox.customize ["modifyvm", :id, "--name", "Jabroni"]
-      vbox.name = "Jabroni_UBUNTU_1404"
+      # vbox.customize ["modifyvm", :id, "--name", "#{vm_name}"]
+      vbox.name = "#{vm_name}"
     end
 
     # Basic virtual machine configuration options.
     machine.vm.box = "ubuntu/trusty64"
-    machine.vm.hostname = "jabroni"
+    machine.vm.hostname = "#{vm_hostname}"
     machine.vm.box_check_update = false
-    machine.vm.network :private_network, ip: "192.168.56.20"
+    machine.vm.network :private_network, ip: "#{vm_ip}"
     machine.vm.network :forwarded_port, guest: 22, host: 2223, id: "ssh"
     machine.vm.synced_folder ".", "/vagrant", type: "nfs", disabled: true
 
@@ -66,7 +78,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     machine.vm.synced_folder "deployment_configs", "/home/vagrant/deployment_configs", type: "rsync", rsync__exclude: ".DS_Store"
 
     # Set the shell script to provision the server.
-    machine.vm.provision :shell, :path => "provision.sh", :args => "deployment_configs vagrant #{machine.vm.hostname} #{machine.vm.hostname}.local"
+    machine.vm.provision :shell, :path => "provision.sh", :args => "deployment_configs #{config.ssh.username} #{machine.vm.hostname} #{machine.vm.hostname}.local #{vm_provision_lamp}"
 
   end
 
