@@ -22,7 +22,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     "Jabroni_UBUNTU_1404" => {
       :hostname => "jabroni",
       :ip => "192.168.56.20",
-      :lamp => true,
+      :lamp => false,
       :ssh_guest => 22,
       :ssh_host => 2223,
       :memory => 512,
