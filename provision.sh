@@ -596,10 +596,14 @@ function configure_phpmyadmin () {
 ##########################################################################################
 function configure_phpmyadmin_blowfish () {
 
-  echo -e "PROVISIONING: Setting a new phpMyAdmin blowfish secret value.\n";
+  if [ -f "/usr/share/phpmyadmin/config.inc.php" ] && grep -E -q "a8b7c6d" "/usr/share/phpmyadmin/config.inc.php"; then
 
-  BLOWFISH_SECRET=$(openssl rand -base64 30);
-  sudo -E sed -i "s/'a8b7c6d'/'${BLOWFISH_SECRET}'/g" "/usr/share/phpmyadmin/config.inc.php";
+    echo -e "PROVISIONING: Setting a new phpMyAdmin blowfish secret value.\n";
+
+    BLOWFISH_SECRET=$(openssl rand -base64 30);
+    sudo -E sed -i "s/'a8b7c6d'/'${BLOWFISH_SECRET}'/g" "/usr/share/phpmyadmin/config.inc.php";
+
+  fi
 
 } # configure_phpmyadmin_blowfish
 
@@ -942,7 +946,7 @@ elif [ -f "apache2/munin.conf" ] && [ ! -h "/etc/apache2/conf-enabled/munin.conf
 # phpMyAdmin
 if [ ! -d "/usr/share/phpmyadmin" ]; then install_phpmyadmin; fi
 if [ -f "phpmyadmin/config.inc.php" ] && [ ! -f "/usr/share/phpmyadmin/config.inc.php" ]; then configure_phpmyadmin; fi
-if [ -f "/usr/share/phpmyadmin/config.inc.php" ] && grep -E -q "a8b7c6d" "/usr/share/phpmyadmin/config.inc.php"; then configure_phpmyadmin_blowfish; fi
+configure_phpmyadmin_blowfish;
 if [ -f "apache2/phpmyadmin.conf" ] && [ ! -f "/etc/apache2/conf-available/phpmyadmin.conf" ]; then configure_awstats_apache; fi
 
 # GeoIP
