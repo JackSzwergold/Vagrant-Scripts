@@ -14,6 +14,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # VirtualBox specific configuration options.
     sandbox.vm.provider :virtualbox do |vbox|
       vbox.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      vbox.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
       vbox.customize ["modifyvm", :id, "--memory", 512]
       vbox.customize ["modifyvm", :id, "--cpus", 1]
       # vbox.customize ["modifyvm", :id, "--name", "Sandbox"]
@@ -27,7 +28,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     sandbox.vm.box_check_update = false
     sandbox.vm.network "private_network", ip: "192.168.56.10"
     sandbox.vm.network :forwarded_port, guest: 22, host: 2222, id: "ssh"
-    sandbox.vm.synced_folder ".", "/vagrant", disabled: true
+    sandbox.vm.synced_folder ".", "/vagrant", type: "nfs", disabled: true
 
     # Copy over the configuration directory.
     # sandbox.vm.provision :file, source: "config_dir", destination: "config_dir"
@@ -46,6 +47,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     # VirtualBox specific configuration options.
     sandbox.vm.provider :virtualbox do |vbox|
       vbox.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+      vbox.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
       vbox.customize ["modifyvm", :id, "--memory", 512]
       vbox.customize ["modifyvm", :id, "--cpus", 1]
       # vbox.customize ["modifyvm", :id, "--name", "Jabroni"]
@@ -59,7 +61,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     sandbox.vm.box_check_update = false
     sandbox.vm.network "private_network", ip: "192.168.56.20"
     sandbox.vm.network :forwarded_port, guest: 22, host: 2223, id: "ssh"
-    sandbox.vm.synced_folder ".", "/vagrant", disabled: true
+    sandbox.vm.synced_folder ".", "/vagrant", type: "nfs", disabled: true
 
     # Copy over the configuration directory.
     # sandbox.vm.provision :file, source: "config_dir", destination: "config_dir"
