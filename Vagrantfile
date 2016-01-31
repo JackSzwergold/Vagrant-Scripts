@@ -7,79 +7,65 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.ssh.insert_key = "true"
 
   ########################################################################################
-  # Defining 'sandbox'.
+  # Details for the Vagrant machines.
   ########################################################################################
-  config.vm.define "sandbox", primary: true, autostart: true do |machine|
-
-    # Set some basic variables.
-    vm_name = "Sandbox_UBUNTU_1404"
-    vm_hostname = "sandbox"
-    vm_ip = "192.168.56.10"
-    vm_provision_lamp = "true"
-
-    # VirtualBox specific configuration options.
-    machine.vm.provider :virtualbox do |vbox|
-      vbox.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
-      vbox.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
-      vbox.customize ["modifyvm", :id, "--memory", 512]
-      vbox.customize ["modifyvm", :id, "--cpus", 1]
-      # vbox.customize ["modifyvm", :id, "--name", "#{vm_name}"]
-      vbox.name = "#{vm_name}"
-    end
-
-    # Basic virtual machine configuration options.
-    machine.vm.box = "ubuntu/trusty64"
-    machine.vm.hostname = "#{vm_hostname}"
-    machine.vm.box_check_update = false
-    machine.vm.network :private_network, ip: "#{vm_ip}"
-    machine.vm.network :forwarded_port, guest: 22, host: 2222, id: "ssh"
-    machine.vm.synced_folder ".", "/vagrant", type: "nfs", disabled: true
-
-    # Copy over the configuration directory.
-    # machine.vm.provision :file, source: "config_dir", destination: "config_dir"
-    machine.vm.synced_folder "deployment_configs", "/home/vagrant/deployment_configs", type: "rsync", rsync__exclude: ".DS_Store"
-
-    # Set the shell script to provision the server.
-    machine.vm.provision :shell, :path => "provision.sh", :args => "deployment_configs #{config.ssh.username} #{machine.vm.hostname} #{machine.vm.hostname}.local #{vm_provision_lamp}"
-
-  end
+  vagrant_machines = {
+    "Sandbox_UBUNTU_1404" => {
+      :hostname => "sandbox",
+      :ip => "192.168.56.10",
+      :lamp => true,
+      :ssh_guest => 22,
+      :ssh_host => 2222,
+      :memory => 512,
+      :cpus => 1
+    },
+    "Jabroni_UBUNTU_1404" => {
+      :hostname => "jabroni",
+      :ip => "192.168.56.20",
+      :lamp => false,
+      :ssh_guest => 22,
+      :ssh_host => 2223,
+      :memory => 512,
+      :cpus => 1
+    }
+  }
 
   ########################################################################################
-  # Defining 'jabroni'.
+  # Define the machines.
   ########################################################################################
-  config.vm.define "jabroni", primary: false, autostart: false do |machine|
+  vagrant_machines.each do |machine_name, machine_details|
 
-    # Set some basic variables.
-    vm_name = "Jabroni_UBUNTU_1404"
-    vm_hostname = "jabroni"
-    vm_ip = "192.168.56.20"
-    vm_provision_lamp = "false"
+    puts "Setting config for '#{machine_name}' (host: #{machine_details[:hostname]}, ip: #{machine_details[:ip]})"
 
-    # VirtualBox specific configuration options.
-    machine.vm.provider :virtualbox do |vbox|
-      vbox.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
-      vbox.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
-      vbox.customize ["modifyvm", :id, "--memory", 512]
-      vbox.customize ["modifyvm", :id, "--cpus", 1]
-      # vbox.customize ["modifyvm", :id, "--name", "#{vm_name}"]
-      vbox.name = "#{vm_name}"
-    end
+    config.vm.define "#{machine_details[:hostname]}", primary: true, autostart: true do |machine|
 
-    # Basic virtual machine configuration options.
-    machine.vm.box = "ubuntu/trusty64"
-    machine.vm.hostname = "#{vm_hostname}"
-    machine.vm.box_check_update = false
-    machine.vm.network :private_network, ip: "#{vm_ip}"
-    machine.vm.network :forwarded_port, guest: 22, host: 2223, id: "ssh"
-    machine.vm.synced_folder ".", "/vagrant", type: "nfs", disabled: true
+      # VirtualBox specific configuration options.
+      machine.vm.provider :virtualbox do |vbox|
+        vbox.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+        vbox.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
+        vbox.customize ["modifyvm", :id, "--memory", machine_details[:memory]]
+        vbox.customize ["modifyvm", :id, "--cpus", machine_details[:cpus]]
+        # vbox.customize ["modifyvm", :id, "--name", "#{machine_name}"]
+        vbox.name = "#{machine_name}"
+      end
 
-    # Copy over the configuration directory.
-    # machine.vm.provision :file, source: "config_dir", destination: "config_dir"
-    machine.vm.synced_folder "deployment_configs", "/home/vagrant/deployment_configs", type: "rsync", rsync__exclude: ".DS_Store"
+      # Basic virtual machine configuration options.
+      machine.vm.box = "ubuntu/trusty64"
+      machine.vm.hostname = "#{machine_details[:hostname]}"
+      machine.vm.box_check_update = false
+      machine.vm.network :private_network, ip: "#{machine_details[:ip]}"
+      machine.vm.network :forwarded_port, guest: machine_details[:ssh_guest], host: machine_details[:ssh_host], id: "ssh"
+      machine.vm.synced_folder ".", "/vagrant", type: "nfs", disabled: true
 
-    # Set the shell script to provision the server.
-    machine.vm.provision :shell, :path => "provision.sh", :args => "deployment_configs #{config.ssh.username} #{machine.vm.hostname} #{machine.vm.hostname}.local #{vm_provision_lamp}"
+      # Copy over the configuration directory.
+      # machine.vm.provision :file, source: "config_dir", destination: "config_dir"
+      machine.vm.synced_folder "deployment_configs", "/home/vagrant/deployment_configs", type: "rsync", rsync__exclude: ".DS_Store"
 
-  end
+      # Set the shell script to provision the server.
+      machine.vm.provision :shell, :path => "provision.sh", :args => "deployment_configs #{config.ssh.username} #{machine.vm.hostname} #{machine.vm.hostname}.local machine_details[:lamp]"
+
+    end # config.vm.define
+
+  end # machines.each
 
 end
