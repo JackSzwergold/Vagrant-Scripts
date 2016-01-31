@@ -3,7 +3,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Set some basic SSH values; not really needed but here for reference.
   config.ssh.username = "vagrant"
-  config.ssh.password = "vagrant"
+  # config.ssh.password = "vagrant"
   config.ssh.insert_key = "true"
 
   ########################################################################################
