@@ -2,7 +2,9 @@ Vagrant.configure(2) do |config|
 
   config.ssh.username = "vagrant"
 
+  ########################################################################################
   # Defining 'sandbox'.
+  ########################################################################################
   config.vm.define "sandbox", primary: true, autostart: true do |sandbox|
 
     # VirtualBox specific configuration options.
@@ -32,7 +34,9 @@ Vagrant.configure(2) do |config|
 
   end
 
+  ########################################################################################
   # Defining 'jabroni'.
+  ########################################################################################
   config.vm.define "jabroni", primary: false, autostart: false do |sandbox|
 
     # VirtualBox specific configuration options.
@@ -52,6 +56,13 @@ Vagrant.configure(2) do |config|
     sandbox.vm.network "private_network", ip: "192.168.56.20"
     sandbox.vm.network :forwarded_port, guest: 22, host: 2223, id: "ssh"
     sandbox.vm.synced_folder ".", "/vagrant", disabled: true
+
+    # Copy over the configuration directory.
+    # sandbox.vm.provision :file, source: "config_dir", destination: "config_dir"
+    sandbox.vm.synced_folder "deployment_configs", "/home/vagrant/deployment_configs", type: "rsync", rsync__exclude: ".DS_Store"
+
+    # Set the shell script to provision the server.
+    sandbox.vm.provision :shell, :path => "provision.sh", :args => "deployment_configs vagrant jabroni jabroni.local"
 
   end
 
