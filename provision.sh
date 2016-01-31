@@ -49,6 +49,7 @@ echo -e "PROVISIONING: Host name is: '${HOST_NAME}'.\n";
 
 PROVISION_LAMP=false;
 if [ -n "$5" ]; then PROVISION_LAMP="${5}"; fi
+echo -e "PROVISIONING: LAMP provisioning: '${PROVISION_LAMP}'.\n";
 
 cd "${BASE_DIR}"/"${CONFIG_DIR}";
 
