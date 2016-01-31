@@ -911,184 +911,72 @@ function update_locate_db () {
 ##########################################################################################
 
 # sudo -E ntpdate -u ntp.ubuntu.com;
-
 configure_user_and_group;
-
 set_environment;
-
 set_timezone;
-
 configure_sources_list;
-
-hash avahi-daemon 2>/dev/null || {
-  install_avahi;
-}
-
-hash sar 2>/dev/null || {
-  install_sysstat;
-}
-
+hash avahi-daemon 2>/dev/null || { install_avahi; }
+hash sar 2>/dev/null || {  install_sysstat; }
 install_basic_tools;
-
-hash updatedb 2>/dev/null || {
-  install_locate;
-}
-
-hash libtool 2>/dev/null || {
-  install_compiler;
-}
-
-if ! grep -q -s "git-core" /etc/apt/sources.list /etc/apt/sources.list.d/*; then
-  install_git;
-fi
-
-hash postfix 2>/dev/null || {
-  install_postfix;
-}
-
-if [ -f "/etc/login.defs" ] && [ -f "system/login.defs" ]; then
-  configure_login_defs;
-fi
-
-if [ -f "/etc/pam.d/common-session" ] && [ -f "system/common-session" ]; then
-  configure_common_session;
-fi
-
-if [ -f "/etc/ssh/ssh_config" ] && [ -f "ssh/ssh_config" ]; then
-  configure_ssh;
-fi
-
+hash updatedb 2>/dev/null || { install_locate; }
+hash libtool 2>/dev/null || { install_compiler; }
+if ! grep -q -s "git-core" /etc/apt/sources.list /etc/apt/sources.list.d/*; then install_git; fi
+hash postfix 2>/dev/null || { install_postfix; }
+if [ -f "system/login.defs" ] && [ -f "/etc/login.defs" ]; then configure_login_defs; fi
+if [ -f "system/common-session" ] && [ -f "/etc/pam.d/common-session" ]; then configure_common_session; fi
+if [ -f "ssh/ssh_config" ] && [ -f "/etc/ssh/ssh_config" ]; then configure_ssh; fi
 configure_motd;
 
-##########################################################################################
-# IPTables and IPSet
-##########################################################################################
-hash iptables && hash ipset 2>/dev/null || {
-  install_iptables;
-}
+# IPTables
+hash iptables && hash ipset 2>/dev/null || { install_iptables; }
 
-##########################################################################################
 # Apache
-##########################################################################################
-hash apachectl 2>/dev/null || {
-  install_apache;
-}
-
+hash apachectl 2>/dev/null || { install_apache; }
 sudo -E service apache2 stop;
-
 configure_apache;
+if [ -d "/var/www/html" ]; then set_apache_web_root; fi
+if [ ! -d "/var/www/builds" ]; then set_apache_deployment_directories; fi
+if [ ! -d "/var/www/${HOST_NAME}" ]; then set_apache_virtual_host_directories; fi
+if [ -f "/etc/logrotate.d/apache2" ]; then configure_apache_log_rotation; fi
 
-if [ -d "/var/www/html" ]; then
-  set_apache_web_root;
-fi
-
-if [ ! -d "/var/www/builds" ]; then
-  set_apache_deployment_directories;
-fi
-
-if [ ! -d "/var/www/${HOST_NAME}" ]; then
-  set_apache_virtual_host_directories;
-fi
-
-if [ -f "/etc/logrotate.d/apache2" ]; then
-  configure_apache_log_rotation;
-fi
-
-##########################################################################################
 # MySQL
-##########################################################################################
-hash mysql && hash mysqld 2>/dev/null || {
-  install_mysql;
-}
+hash mysql && hash mysqld 2>/dev/null || { install_mysql; }
 
-##########################################################################################
 # Munin
-##########################################################################################
-hash munin-node 2>/dev/null || {
-  install_munin;
-}
+hash munin-node 2>/dev/null || { install_munin; }
+if [ -f "apache2/munin.conf" ] && [ -h "/etc/apache2/conf-available/munin.conf" ]; then configure_munin_apache;
+elif [ -f "apache2/munin.conf" ] && [ ! -h "/etc/apache2/conf-enabled/munin.conf" ]; then enable_munin_apache; fi
 
-if [ -f "apache2/munin.conf" ] && [ -h "/etc/apache2/conf-available/munin.conf" ]; then
-  configure_munin_apache;
-elif [ -f "apache2/munin.conf" ] && [ ! -h "/etc/apache2/conf-enabled/munin.conf" ]; then
-  enable_munin_apache;
-fi
-
-##########################################################################################
 # phpMyAdmin
-##########################################################################################
-if [ ! -d "/usr/share/phpmyadmin" ]; then
-  install_phpmyadmin;
-fi
+if [ ! -d "/usr/share/phpmyadmin" ]; then install_phpmyadmin; fi
+if [ -f "phpmyadmin/config.inc.php" ] && [ ! -f "/usr/share/phpmyadmin/config.inc.php" ]; then configure_phpmyadmin; fi
+if [ -f "/usr/share/phpmyadmin/config.inc.php" ] && grep -E -q "a8b7c6d" "/usr/share/phpmyadmin/config.inc.php"; then configure_phpmyadmin_blowfish; fi
+if [ -f "apache2/phpmyadmin.conf" ] && [ ! -f "/etc/apache2/conf-available/phpmyadmin.conf" ]; then configure_awstats_apache; fi
 
-if [ -f "phpmyadmin/config.inc.php" ] && [ ! -f "/usr/share/phpmyadmin/config.inc.php" ]; then
-  configure_phpmyadmin;
-fi
-
-if [ -f "/usr/share/phpmyadmin/config.inc.php" ] && grep -E -q "a8b7c6d" "/usr/share/phpmyadmin/config.inc.php"; then
-  configure_phpmyadmin_blowfish;
-fi
-
-if [ -f "apache2/phpmyadmin.conf" ] && [ ! -f "/etc/apache2/conf-available/phpmyadmin.conf" ]; then
-  configure_awstats_apache;
-fi
-
-##########################################################################################
 # GeoIP
-##########################################################################################
 hash geoiplookup 2>/dev/null || { install_geoip; }
-if [ ! -d "/usr/local/share/GeoIP" ]; then
-  install_geoip_databases;
-fi
+if [ ! -d "/usr/local/share/GeoIP" ]; then install_geoip_databases; fi
 
 # AWStats
-if [ ! -d "/usr/share/awstats-7.3" ]; then
-  install_awstats;
-fi
+if [ ! -d "/usr/share/awstats-7.3" ]; then install_awstats; fi
+if [ -f "apache2/awstats.conf" ] && [ ! -f "/etc/apache2/conf-available/awstats.conf" ]; then configure_awstats_apache; fi
 
-if [ -f "apache2/awstats.conf" ] && [ ! -f "/etc/apache2/conf-available/awstats.conf" ]; then
-  configure_awstats_apache;
-fi
-
-##########################################################################################
 # Fail2Ban
-##########################################################################################
-hash fail2ban-client 2>/dev/null || {
-  install_fail2ban;
-}
-if [ -f "fail2ban/jail.local" ] && [ ! -f "/etc/fail2ban/jail.local" ]; then
-  configure_fail2ban;
-fi
+hash fail2ban-client 2>/dev/null || { install_fail2ban; }
+if [ -f "fail2ban/jail.local" ] && [ ! -f "/etc/fail2ban/jail.local" ]; then configure_fail2ban; fi
 
-##########################################################################################
 # Monit
-##########################################################################################
-hash monit 2>/dev/null || {
-  install_monit;
-}
-if [ -f "monit/monitrc" ]; then
-  configure_monit;
-fi
+hash monit 2>/dev/null || { install_monit; }
+if [ -f "monit/monitrc" ]; then configure_monit; fi
 
-##########################################################################################
 # ImageMagick
-##########################################################################################
-hash convert 2>/dev/null || {
-  install_imagemagick;
-}
+hash convert 2>/dev/null || { install_imagemagick; }
 
-##########################################################################################
 # Install system scripts.
-##########################################################################################
 install_system_scripts;
 
-##########################################################################################
 # Update the locate database.
-##########################################################################################
 update_locate_db;
 
-##########################################################################################
 # Restart Apache now that we’re done.
-##########################################################################################
-
 sudo -E service apache2 restart;
