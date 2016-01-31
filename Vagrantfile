@@ -34,7 +34,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     machine.vm.synced_folder "deployment_configs", "/home/vagrant/deployment_configs", type: "rsync", rsync__exclude: ".DS_Store"
 
     # Set the shell script to provision the server.
-    machine.vm.provision :shell, :path => "provision.sh", :args => "deployment_configs vagrant sandbox sandbox.local"
+    machine.vm.provision :shell, :path => "provision.sh", :args => "deployment_configs vagrant #{machine.vm.hostname} #{machine.vm.hostname}.local"
 
   end
 
@@ -66,7 +66,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     machine.vm.synced_folder "deployment_configs", "/home/vagrant/deployment_configs", type: "rsync", rsync__exclude: ".DS_Store"
 
     # Set the shell script to provision the server.
-    machine.vm.provision :shell, :path => "provision.sh", :args => "deployment_configs vagrant jabroni jabroni.local"
+    machine.vm.provision :shell, :path => "provision.sh", :args => "deployment_configs vagrant #{machine.vm.hostname} #{machine.vm.hostname}.local"
 
   end
 
