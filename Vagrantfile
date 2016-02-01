@@ -13,9 +13,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     "Sandbox_UBUNTU_1404" => {
       :primary => true,
       :autostart => true,
+      :lamp => true,
       :hostname => "sandbox",
       :ip => "192.168.56.10",
-      :lamp => true,
       :ssh_guest => 22,
       :ssh_host => 2222,
       :memory => 512,
@@ -24,9 +24,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     "Jabroni_UBUNTU_1404" => {
       :primary => false,
       :autostart => false,
+      :lamp => false,
       :hostname => "jabroni",
       :ip => "192.168.56.20",
-      :lamp => false,
       :ssh_guest => 22,
       :ssh_host => 2223,
       :memory => 512,
