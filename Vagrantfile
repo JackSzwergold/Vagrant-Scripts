@@ -11,6 +11,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   ########################################################################################
   vagrant_machines = {
     "Sandbox_UBUNTU_1404" => {
+      :primary => true,
+      :autostart => true,
       :hostname => "sandbox",
       :ip => "192.168.56.10",
       :lamp => true,
@@ -20,6 +22,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       :cpus => 1
     },
     "Jabroni_UBUNTU_1404" => {
+      :primary => false,
+      :autostart => false,
       :hostname => "jabroni",
       :ip => "192.168.56.20",
       :lamp => false,
@@ -39,7 +43,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     puts "Setting config for '#{machine_name}' (host: #{machine_details[:hostname]}, ip: #{machine_details[:ip]})"
 
     # Define the machine.
-    config.vm.define "#{machine_details[:hostname]}", primary: true, autostart: true do |machine|
+    config.vm.define "#{machine_details[:hostname]}", primary: machine_details[:primary], autostart: machine_details[:autostart] do |machine|
 
       # VirtualBox specific configuration options.
       machine.vm.provider :virtualbox do |vbox|
