@@ -30,7 +30,7 @@
 - name: "Jabroni_UBUNTU_1404"
   primary: false
   autostart: false
-  lamp: false
+  lamp: true
   hostname: "jabroni"
   ip: "192.168.56.20"
   ssh_guest: 22

@@ -605,7 +605,7 @@ function configure_phpmyadmin_blowfish () {
     echo -e "PROVISIONING: Setting a new phpMyAdmin blowfish secret value.\n";
 
     BLOWFISH_SECRET=$(openssl rand -base64 30);
-    sudo -E sed -i "s/'a8b7c6d'/'${BLOWFISH_SECRET}'/g" "/usr/share/phpmyadmin/config.inc.php";
+    sudo -E sed -i "s|'a8b7c6d'|'${BLOWFISH_SECRET}'|g" "/usr/share/phpmyadmin/config.inc.php";
 
   fi
 
