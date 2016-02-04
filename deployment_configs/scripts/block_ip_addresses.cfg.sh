@@ -17,7 +17,6 @@ IPSET_BIN="/sbin/ipset"
 
 # Set IP address manually if network interaface address.
 # IP_ADDRESS="123.456.789.0"
-IP_ADDRESS="52.26.227.13"
 
 # Set the sundry variables.
 IPSET_ACTION="REJECT"
@@ -52,3 +51,5 @@ COUNTRY_ARRAY[1]='RU'; # Russian Federation
 COUNTRY_ARRAY[2]='UA'; # Ukraine
 COUNTRY_ARRAY[3]='IN'; # India
 COUNTRY_ARRAY[4]='BR'; # Brazil
+COUNTRY_ARRAY[5]='VN'; # Vietnam
+COUNTRY_ARRAY[6]='KR'; # South Korea
