@@ -53,3 +53,4 @@ COUNTRY_ARRAY[3]='IN'; # India
 COUNTRY_ARRAY[4]='BR'; # Brazil
 COUNTRY_ARRAY[5]='VN'; # Vietnam
 COUNTRY_ARRAY[6]='KR'; # South Korea
+COUNTRY_ARRAY[7]='IR'; # Iran
