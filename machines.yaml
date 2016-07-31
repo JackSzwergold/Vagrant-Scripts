@@ -21,6 +21,7 @@
   primary: true
   autostart: true
   lamp: true
+  basics: true
   geoip: true
   iptables: true
   fail2ban: false
@@ -34,6 +35,7 @@
   primary: false
   autostart: false
   lamp: false
+  basics: false
   geoip: false
   iptables: false
   fail2ban: false

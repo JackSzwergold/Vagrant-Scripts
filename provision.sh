@@ -51,16 +51,20 @@ PROVISION_LAMP=false;
 if [ -n "$5" ]; then PROVISION_LAMP="${5}"; fi
 echo -e "PROVISIONING: LAMP provisioning: '${PROVISION_LAMP}'.\n";
 
+PROVISION_BASICS=false;
+if [ -n "$6" ]; then PROVISION_BASICS="${6}"; fi
+echo -e "PROVISIONING: Basics provisioning: '${PROVISION_BASICS}'.\n";
+
 PROVISION_GEOIP=false;
-if [ -n "$6" ]; then PROVISION_GEOIP="${6}"; fi
+if [ -n "$7" ]; then PROVISION_GEOIP="${7}"; fi
 echo -e "PROVISIONING: GeoIP provisioning: '${PROVISION_GEOIP}'.\n";
 
 PROVISION_IPTABLES=false;
-if [ -n "$7" ]; then PROVISION_IPTABLES="${7}"; fi
+if [ -n "$8" ]; then PROVISION_IPTABLES="${8}"; fi
 echo -e "PROVISIONING: IPTables provisioning: '${PROVISION_IPTABLES}'.\n";
 
 PROVISION_FAIL2BAN=false;
-if [ -n "$8" ]; then PROVISION_FAIL2BAN="${8}"; fi
+if [ -n "$9" ]; then PROVISION_FAIL2BAN="${9}"; fi
 echo -e "PROVISIONING: Fail2Ban provisioning: '${PROVISION_FAIL2BAN}'.\n";
 
 cd "${BASE_DIR}"/"${CONFIG_DIR}";
@@ -306,6 +310,9 @@ function configure_ssh () {
 function configure_motd () {
 
   echo -e "PROVISIONING: Setting the MOTD banner.\n";
+
+  # Install figlet.
+  sudo -E aptitude install -y --assume-yes -q figlet;
 
   # Set the server login banner with figlet.
   # MOTD_PATH="/etc/motd.tail";
@@ -930,14 +937,22 @@ set_timezone;
 configure_sources_list;
 hash avahi-daemon 2>/dev/null || { install_avahi; }
 hash sar 2>/dev/null || {  install_sysstat; }
-install_basic_tools;
 hash updatedb 2>/dev/null || { install_locate; }
-hash libtool 2>/dev/null || { install_compiler; }
-if ! grep -q -s "git-core" /etc/apt/sources.list /etc/apt/sources.list.d/*; then install_git; fi
-hash postfix 2>/dev/null || { install_postfix; }
-if [ -f "system/login.defs" ] && [ -f "/etc/login.defs" ]; then configure_login_defs; fi
-if [ -f "system/common-session" ] && [ -f "/etc/pam.d/common-session" ]; then configure_common_session; fi
-if [ -f "ssh/ssh_config" ] && [ -f "/etc/ssh/ssh_config" ]; then configure_ssh; fi
+
+# Get the basics set.
+if [ "${PROVISION_BASICS}" = true ]; then
+
+  install_basic_tools;
+  hash libtool 2>/dev/null || { install_compiler; }
+  if ! grep -q -s "git-core" /etc/apt/sources.list /etc/apt/sources.list.d/*; then install_git; fi
+  hash postfix 2>/dev/null || { install_postfix; }
+  if [ -f "system/login.defs" ] && [ -f "/etc/login.defs" ]; then configure_login_defs; fi
+  if [ -f "system/common-session" ] && [ -f "/etc/pam.d/common-session" ]; then configure_common_session; fi
+  if [ -f "ssh/ssh_config" ] && [ -f "/etc/ssh/ssh_config" ]; then configure_ssh; fi
+
+fi
+
+# MOTD
 configure_motd;
 
 # GeoIP
