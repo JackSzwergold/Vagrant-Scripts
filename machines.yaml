@@ -21,6 +21,8 @@
   primary: true
   autostart: true
   lamp: true
+  geoip: true
+  iptables: true
   fail2ban: false
   hostname: "sandbox"
   ip: "192.168.56.10"
@@ -32,6 +34,8 @@
   primary: false
   autostart: false
   lamp: false
+  geoip: false
+  iptables: false
   fail2ban: false
   hostname: "jabroni"
   ip: "192.168.56.20"
