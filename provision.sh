@@ -52,7 +52,7 @@ if [ -n "$5" ]; then PROVISION_LAMP="${5}"; fi
 echo -e "PROVISIONING: LAMP provisioning: '${PROVISION_LAMP}'.\n";
 
 PROVISION_FAIL2BAN=false;
-if [ -n "$5" ]; then PROVISION_FAIL2BAN="${5}"; fi
+if [ -n "$6" ]; then PROVISION_FAIL2BAN="${6}"; fi
 echo -e "PROVISIONING: Fail2Ban provisioning: '${PROVISION_FAIL2BAN}'.\n";
 
 cd "${BASE_DIR}"/"${CONFIG_DIR}";
@@ -933,11 +933,19 @@ if [ -f "ssh/ssh_config" ] && [ -f "/etc/ssh/ssh_config" ]; then configure_ssh; 
 configure_motd;
 
 # GeoIP
-hash geoiplookup 2>/dev/null || { install_geoip; }
-if [ ! -d "/usr/local/share/GeoIP" ]; then install_geoip_databases; fi
+if [ "${PROVISION_GEOIP}" = true ]; then
+
+  hash geoiplookup 2>/dev/null || { install_geoip; }
+  if [ ! -d "/usr/local/share/GeoIP" ]; then install_geoip_databases; fi
+
+fi
 
 # IPTables
-hash iptables && hash ipset 2>/dev/null || { install_iptables; }
+if [ "${PROVISION_IPTABLES}" = true ]; then
+
+  hash iptables && hash ipset 2>/dev/null || { install_iptables; }
+
+fi
 
 # Fail2Ban
 if [ "${PROVISION_FAIL2BAN}" = true ]; then
