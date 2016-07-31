@@ -20,8 +20,8 @@
 - name: "Sandbox_UBUNTU_1404"
   primary: true
   autostart: true
-  lamp: true
   basics: true
+  lamp: true
   geoip: true
   iptables: true
   fail2ban: false
@@ -34,8 +34,8 @@
 - name: "Jabroni_UBUNTU_1404"
   primary: false
   autostart: false
+  basics: true
   lamp: false
-  basics: false
   geoip: false
   iptables: false
   fail2ban: false
@@ -43,5 +43,19 @@
   ip: "192.168.56.20"
   ssh_guest: 22
   ssh_host: 2223
+  memory: 512
+  cpus: 1
+- name: "DigitalOcean_UBUNTU_1404"
+  primary: false
+  autostart: false
+  basics: false
+  lamp: false
+  geoip: false
+  iptables: false
+  fail2ban: false
+  hostname: "digitalocean"
+  ip: "192.168.56.30"
+  ssh_guest: 22
+  ssh_host: 2224
   memory: 512
   cpus: 1

@@ -47,13 +47,13 @@ HOST_NAME="vagrant.local";
 if [ -n "$4" ]; then HOST_NAME="${4}"; fi
 echo -e "PROVISIONING: Host name is: '${HOST_NAME}'.\n";
 
-PROVISION_LAMP=false;
-if [ -n "$5" ]; then PROVISION_LAMP="${5}"; fi
-echo -e "PROVISIONING: LAMP provisioning: '${PROVISION_LAMP}'.\n";
-
 PROVISION_BASICS=false;
-if [ -n "$6" ]; then PROVISION_BASICS="${6}"; fi
+if [ -n "$5" ]; then PROVISION_BASICS="${5}"; fi
 echo -e "PROVISIONING: Basics provisioning: '${PROVISION_BASICS}'.\n";
+
+PROVISION_LAMP=false;
+if [ -n "$6" ]; then PROVISION_LAMP="${6}"; fi
+echo -e "PROVISIONING: LAMP provisioning: '${PROVISION_LAMP}'.\n";
 
 PROVISION_GEOIP=false;
 if [ -n "$7" ]; then PROVISION_GEOIP="${7}"; fi
