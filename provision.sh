@@ -51,6 +51,10 @@ PROVISION_LAMP=false;
 if [ -n "$5" ]; then PROVISION_LAMP="${5}"; fi
 echo -e "PROVISIONING: LAMP provisioning: '${PROVISION_LAMP}'.\n";
 
+PROVISION_FAIL2BAN=false;
+if [ -n "$5" ]; then PROVISION_FAIL2BAN="${5}"; fi
+echo -e "PROVISIONING: Fail2Ban provisioning: '${PROVISION_FAIL2BAN}'.\n";
+
 cd "${BASE_DIR}"/"${CONFIG_DIR}";
 
 ##########################################################################################
@@ -936,8 +940,12 @@ if [ ! -d "/usr/local/share/GeoIP" ]; then install_geoip_databases; fi
 hash iptables && hash ipset 2>/dev/null || { install_iptables; }
 
 # Fail2Ban
-hash fail2ban-client 2>/dev/null || { install_fail2ban; }
-if [ -f "fail2ban/jail.local" ] && [ ! -f "/etc/fail2ban/jail.local" ]; then configure_fail2ban; fi
+if [ "${PROVISION_FAIL2BAN}" = true ]; then
+
+  hash fail2ban-client 2>/dev/null || { install_fail2ban; }
+  if [ -f "fail2ban/jail.local" ] && [ ! -f "/etc/fail2ban/jail.local" ]; then configure_fail2ban; fi
+
+fi
 
 # Monit
 hash monit 2>/dev/null || { install_monit; }
