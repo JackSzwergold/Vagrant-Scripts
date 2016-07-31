@@ -45,7 +45,7 @@
   ssh_host: 2223
   memory: 512
   cpus: 1
-- name: "DigitalOcean_UBUNTU_1404"
+- name: "Ocean_UBUNTU_1404"
   primary: false
   autostart: false
   basics: false
@@ -53,7 +53,7 @@
   geoip: false
   iptables: false
   fail2ban: false
-  hostname: "digitalocean"
+  hostname: "ocean"
   ip: "192.168.56.30"
   ssh_guest: 22
   ssh_host: 2224
