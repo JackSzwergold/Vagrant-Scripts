@@ -51,8 +51,16 @@ PROVISION_LAMP=false;
 if [ -n "$5" ]; then PROVISION_LAMP="${5}"; fi
 echo -e "PROVISIONING: LAMP provisioning: '${PROVISION_LAMP}'.\n";
 
+PROVISION_GEOIP=false;
+if [ -n "$6" ]; then PROVISION_GEOIP="${6}"; fi
+echo -e "PROVISIONING: GeoIP provisioning: '${PROVISION_GEOIP}'.\n";
+
+PROVISION_IPTABLES=false;
+if [ -n "$7" ]; then PROVISION_IPTABLES="${7}"; fi
+echo -e "PROVISIONING: IPTables provisioning: '${PROVISION_IPTABLES}'.\n";
+
 PROVISION_FAIL2BAN=false;
-if [ -n "$6" ]; then PROVISION_FAIL2BAN="${6}"; fi
+if [ -n "$8" ]; then PROVISION_FAIL2BAN="${8}"; fi
 echo -e "PROVISIONING: Fail2Ban provisioning: '${PROVISION_FAIL2BAN}'.\n";
 
 cd "${BASE_DIR}"/"${CONFIG_DIR}";
