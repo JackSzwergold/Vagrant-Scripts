@@ -938,6 +938,7 @@ configure_sources_list;
 hash avahi-daemon 2>/dev/null || { install_avahi; }
 hash sar 2>/dev/null || {  install_sysstat; }
 hash updatedb 2>/dev/null || { install_locate; }
+configure_motd;
 
 # Get the basics set.
 if [ "${PROVISION_BASICS}" = true ]; then
@@ -951,9 +952,6 @@ if [ "${PROVISION_BASICS}" = true ]; then
   if [ -f "ssh/ssh_config" ] && [ -f "/etc/ssh/ssh_config" ]; then configure_ssh; fi
 
 fi
-
-# MOTD
-configure_motd;
 
 # GeoIP
 if [ "${PROVISION_GEOIP}" = true ]; then
