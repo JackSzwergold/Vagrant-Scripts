@@ -30,7 +30,7 @@
   ip: "192.168.56.10"
   ssh_guest: 22
   ssh_host: 2222
-  memory: 512
+  memory: 1024
   cpus: 2
 - name: "Jabroni_UBUNTU_1404"
   primary: false
