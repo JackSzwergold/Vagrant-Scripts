@@ -71,7 +71,7 @@ PROVISION_FAIL2BAN=false;
 if [ -n "$9" ]; then PROVISION_FAIL2BAN="${9}"; fi
 echo -e "PROVISIONING: Fail2Ban provisioning: '${PROVISION_FAIL2BAN}'.\n";
 
-cd "${BASE_DIR}"/"${CONFIG_DIR}";
+cd "${BASE_DIR}/${CONFIG_DIR}";
 
 ##########################################################################################
 # Adjusting the Debian frontend setting to non-interactive mode.

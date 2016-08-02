@@ -48,7 +48,7 @@ HOST_NAME="vagrant.local";
 if [ -n "$4" ]; then HOST_NAME="${4}"; fi
 echo -e "PROVISIONING: Host name is: '${HOST_NAME}'.\n";
 
-cd "${BASE_DIR}"/"${CONFIG_DIR}";
+cd "${BASE_DIR}/${CONFIG_DIR}";
 
 ##########################################################################################
 # Optional items.
@@ -335,6 +335,17 @@ function install_mediawiki () {
 
   echo -e "PROVISIONING: Installing and configuring MediaWiki related items.\n";
 
+  # Do this little dance to get things installed.
+  cd "${BASE_DIR}";
+  curl -ss -O -L "https://releases.wikimedia.org/mediawiki/1.27/mediawiki-1.27.0.tar.gz";
+  tar -xf "mediawiki-1.27.0.tar.gz";
+  rm -f "mediawiki-1.27.0.tar.gz";
+  rm -rf "mediawiki-1.27.0";
+  sudo -E mv -f mediawiki-*/* "/var/www/";
+
+  # Set permissions to www-data for owner and group.
+  sudo -E chown -f www-data:www-data -R "/var/www/*";
+
 } # install_mediawiki
 
 ##########################################################################################
@@ -374,6 +385,7 @@ hash mysql 2>/dev/null || { install_mysql; }
 install_lighttpd;
 install_php;
 install_fastcgi;
+install_mediawiki;
 
 # Update the locate database.
 update_locate_db;
