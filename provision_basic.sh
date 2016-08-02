@@ -289,8 +289,11 @@ function install_lighttpd () {
 
   # Install the Lighttpd server.
   sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q lighttpd;
+
+  # Remove the default/placeholder Lighttpd index page.
+  sudo -E rm -f "/var/www/index.lighttpd.html";
   
-  # Set the startup service.
+  # Set the Lighttpd startup service.
   sudo -E update-rc.d -f lighttpd defaults;
 
 } # install_lighttpd
