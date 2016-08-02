@@ -173,6 +173,9 @@ function install_sysstat () {
   # Install Sysstat.
   sudo -E aptitude install -y --assume-yes -q sysstat;
 
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
   # Copy the Sysstat config file in place and restart sysstat.
   if [ -f "sysstat/sysstat" ]; then
     sudo -E cp -f "sysstat/sysstat" "/etc/default/sysstat";
@@ -264,6 +267,9 @@ function install_mysql () {
   # Install the MySQL server and client.
   sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q mysql-server mysql-client;
 
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
   # Secure the MySQL installation.
   if [ -f "mysql/mysql_secure_installation.sql" ]; then
     mysql -sfu root < "mysql/mysql_secure_installation.sql";
@@ -353,6 +359,24 @@ function install_mediawiki () {
   # Set permissions to www-data for owner and group.
   sudo -E chown -f www-data:www-data -R "/var/www/*";
 
+} # install_mediawiki
+
+function install_mediawiki_mysql () {
+
+  echo -e "PROVISIONING: Setting up MediaWiki MySQL database stuff.\n";
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
+  # Setup the MediaWiki MySQL database stuff.
+  if [ -f "mediawiki/mediawiki_dev_setup.sql" ]; then
+    mysql -sfu root -proot < "mediawiki/mediawiki_dev_setup.sql";
+  fi
+
+} # install_mediawiki_mysql
+
+function configure_mediawiki () {
+
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
@@ -363,18 +387,7 @@ function install_mediawiki () {
     sudo -E chmod -f 600 "/var/www/LocalSettings.php";
   fi
 
-} # install_mediawiki
-
-function install_mediawiki_mysql () {
-
-  echo -e "PROVISIONING: Setting up MediaWiki MySQL database stuff.\n";
-
-  # Setup the MediaWiki MySQL database stuff.
-  if [ -f "mediawiki/mediawiki_dev_setup.sql" ]; then
-    mysql -sfu root -proot < "mediawiki/mediawiki_dev_setup.sql";
-  fi
-
-} # install_mediawiki_mysql
+} # configure_mediawiki
 
 ##########################################################################################
 # Update the locate database.
@@ -415,6 +428,7 @@ install_php;
 install_fastcgi;
 install_mediawiki_mysql;
 install_mediawiki;
+configure_mediawiki;
 
 # Update the locate database.
 update_locate_db;
