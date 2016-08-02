@@ -51,6 +51,14 @@ echo -e "PROVISIONING: Host name is: '${HOST_NAME}'.\n";
 cd "${BASE_DIR}"/"${CONFIG_DIR}";
 
 ##########################################################################################
+# Optional items.
+##########################################################################################
+
+PROVISION_MYSQL=false;
+if [ -n "$5" ]; then PROVISION_MYSQL="${5}"; fi
+echo -e "PROVISIONING: MySQL provisioning: '${PROVISION_MYSQL}'.\n";
+
+##########################################################################################
 # Adjusting the Debian frontend setting to non-interactive mode.
 ##########################################################################################
 
@@ -247,6 +255,77 @@ function configure_motd () {
 } # configure_motd
 
 ##########################################################################################
+# MySQL
+##########################################################################################
+function install_mysql () {
+
+  echo -e "PROVISIONING: Installing and configuring MySQL related items.\n";
+
+  # Install the MySQL server and client.
+  sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q mysql-server mysql-client;
+
+  # Secure the MySQL installation.
+  if [ -f "mysql/mysql_secure_installation.sql" ]; then
+    mysql -sfu root < "mysql/mysql_secure_installation.sql";
+  fi
+
+  # Set the MySQL configuration.
+  if [ -f "mysql/my.cnf" ]; then
+    sudo -E cp -f "mysql/my.cnf" "/etc/mysql/my.cnf";
+  fi
+
+  # Run these commands to prevent MySQL from coming up on reboot.
+  sudo -E service mysql stop;
+  sudo -E update-rc.d -f mysql remove;
+
+} # install_mysql
+
+##########################################################################################
+# Lighttpd
+##########################################################################################
+function install_lighttpd () {
+
+  echo -e "PROVISIONING: Installing and configuring Lighttpd related items.\n";
+
+  # Install the Lighttpd server.
+  sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q lighttpd;
+  
+  # Set the startup service.
+  sudo -E update-rc.d -f lighttpd defaults;
+
+} # install_lighttpd
+
+##########################################################################################
+# PHP
+##########################################################################################
+function install_php () {
+
+  echo -e "PROVISIONING: Installing and configuring PHP related items.\n";
+
+  # Install the PHP modules.
+  sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q php5-cgi php5-mysql;
+
+  # Restart Lighttpd.
+  sudo -E service lighttpd restart;
+
+} # install_php
+
+##########################################################################################
+# FastCGI
+##########################################################################################
+function install_fastcgi () {
+
+  echo -e "PROVISIONING: Enabling FastCGI in Lighttpd.\n";
+
+  # Enable FastCGI.
+  sudo -E lighty-enable-mod fastcgi fastcgi-php;
+
+  # Restart Lighttpd.
+  sudo -E service lighttpd restart;
+
+} # install_fastcgi
+
+##########################################################################################
 # Update the locate database.
 ##########################################################################################
 function update_locate_db () {
@@ -277,5 +356,13 @@ hash updatedb 2>/dev/null || { install_locate; }
 configure_motd;
 hash libtool 2>/dev/null || { install_compiler; }
 if ! grep -q -s "git-core" /etc/apt/sources.list /etc/apt/sources.list.d/*; then install_git; fi
+
+# MySQL, Lighttpd, PHP and FastCGI.
+hash mysql 2>/dev/null || { install_mysql; }
+install_lighttpd;
+install_php;
+install_fastcgi;
+
+# Update the locate database.
 update_locate_db;
 
