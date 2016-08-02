@@ -2,9 +2,9 @@
 
 ##########################################################################################
 #
-# Provision (provision.sh) (c) by Jack Szwergold
+# Provision LAMP (provision_lamp.sh) (c) by Jack Szwergold
 #
-# Provision is licensed under a
+# Provision LAMP is licensed under a
 # Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
 #
 # You should have received a copy of the license along with this

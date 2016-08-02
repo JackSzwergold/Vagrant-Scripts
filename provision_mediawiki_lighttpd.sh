@@ -2,9 +2,9 @@
 
 ##########################################################################################
 #
-# Provision (provision.sh) (c) by Jack Szwergold
+# Provision MediaWiki Lighttpd (provision_mediawiki_lighttpd.sh) (c) by Jack Szwergold
 #
-# Provision is licensed under a
+# Provision MediaWiki Lighttpd is licensed under a
 # Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
 #
 # You should have received a copy of the license along with this
@@ -17,6 +17,7 @@
 # Version: 2016-01-27, js: creation
 #          2016-01-30, js: development
 #          2016-08-01, js: setting an extremely basic setup
+#          2016-08-02, js: refining
 #
 ##########################################################################################
 
