@@ -368,7 +368,7 @@ function install_mediawiki_mysql () {
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
-  # Setup the MediaWiki MySQL database stuff.
+  # Setup the initial MediaWiki MySQL database and user.
   if [ -f "mediawiki/mediawiki_dev_setup.sql" ]; then
     mysql -sfu root -proot < "mediawiki/mediawiki_dev_setup.sql";
   fi
@@ -379,6 +379,11 @@ function configure_mediawiki () {
 
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFIG_DIR}";
+
+  # Setup the development MediaWiki MySQL database.
+  if [ -f "mediawiki/mediawiki_dev_db.sql" ]; then
+    mysql -sfu root -proot mediawiki < "mediawiki/mediawiki_dev_db.sql";
+  fi
 
   # Set the sample MediaWiki 'LocalSettings.php' config in place.
   if [ -f "mediawiki/LocalSettings.php" ]; then
