@@ -353,6 +353,9 @@ function install_mediawiki () {
 
   # Set permissions to www-data for owner and group.
   sudo -E chown -f www-data:www-data -R "/var/www/*";
+  
+  # Set permissions to read and write for the owner.
+  sudo chown 600 "/var/www/LocalSettings.php";
 
 } # install_mediawiki
 
