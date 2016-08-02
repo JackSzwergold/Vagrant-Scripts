@@ -19,6 +19,7 @@
 
 - name: "Sandbox_UBUNTU_1404"
   primary: true
+  provision_script: provision.sh
   autostart: true
   basics: true
   lamp: true
@@ -30,9 +31,10 @@
   ssh_guest: 22
   ssh_host: 2222
   memory: 512
-  cpus: 1
+  cpus: 2
 - name: "Jabroni_UBUNTU_1404"
   primary: false
+  provision_script: provision.sh
   autostart: false
   basics: true
   lamp: false
@@ -47,6 +49,7 @@
   cpus: 1
 - name: "Ocean_UBUNTU_1404"
   primary: false
+  provision_script: provision.sh
   autostart: false
   basics: false
   lamp: false
