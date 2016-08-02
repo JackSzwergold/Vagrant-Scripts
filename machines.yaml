@@ -19,7 +19,7 @@
 
 - name: "Sandbox_UBUNTU_1404"
   primary: true
-  provision_script: provision_lamp.sh
+  provision_script: "provision_lamp.sh"
   autostart: true
   basics: true
   lamp: true
@@ -34,7 +34,7 @@
   cpus: 1
 - name: "Jabroni_UBUNTU_1404"
   primary: false
-  provision_script: provision_lamp.sh
+  provision_script: "provision_lamp.sh"
   autostart: false
   basics: true
   lamp: false
@@ -49,7 +49,7 @@
   cpus: 1
 - name: "Ocean_UBUNTU_1404"
   primary: false
-  provision_script: provision_basic.sh
+  provision_script: "provision_mediawiki_lighttpd.sh"
   autostart: false
   hostname: "ocean"
   ip: "192.168.56.30"

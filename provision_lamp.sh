@@ -291,6 +291,9 @@ function configure_common_session () {
 
   echo -e "PROVISIONING: Setting the 'common-session' config file.\n";
 
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
   # Copy the 'login.defs' file in place.
   sudo -E cp -f "system/common-session" "/etc/pam.d/common-session";
 
@@ -302,6 +305,9 @@ function configure_common_session () {
 function configure_ssh () {
 
   echo -e "PROVISIONING: Setting the SSH config file.\n";
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Copy the 'login.defs' file in place.
   sudo -E cp -f "ssh/ssh_config" "/etc/ssh/ssh_config";
@@ -347,6 +353,9 @@ function install_iptables () {
   debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v4 boolean true";
   debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v6 boolean true";
   sudo -E aptitude install -y --assume-yes -q iptables iptables-persistent ipset;
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Load the IPSet stuff if the file exists.
   if [ -f "iptables/ipset.conf" ]; then
@@ -401,6 +410,9 @@ function configure_apache () {
 
   echo -e "PROVISIONING: Setting Apache and PHP configs.\n";
 
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
   # Copy the Apache config files into place.
   sudo -E cp -f "apache2/apache2.conf" "/etc/apache2/apache2.conf";
   sudo -E cp -f "apache2/envvars" "/etc/apache2/envvars";
@@ -428,6 +440,9 @@ function set_apache_web_root () {
 
   echo -e "PROVISIONING: Adjusting the Apache root directory and default file.\n";
 
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
   sudo -E rm -rf "/var/www/html";
   sudo -E cp -f "apache2/index.php" "/var/www/index.php";
 
@@ -452,6 +467,9 @@ function set_apache_deployment_directories () {
 function set_apache_virtual_host_directories () {
 
   echo -e "PROVISIONING: Creating the web server document root directories.\n";
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
 
   sudo -E mkdir -p "/var/www/${HOST_NAME}/site";
   sudo -E cp -f "apache2/index.php" "/var/www/${HOST_NAME}/site/index.php";
@@ -488,6 +506,9 @@ function install_mysql () {
   # Install the MySQL server and client.
   sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q mysql-server mysql-client;
 
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
   # Secure the MySQL installation.
   if [ -f "mysql/mysql_secure_installation.sql" ]; then
     mysql -sfu root < "mysql/mysql_secure_installation.sql";
@@ -513,6 +534,9 @@ function install_munin () {
 
   # Install Munin.
   sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q munin munin-node munin-plugins-extra libwww-perl;
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Install the copied Munin config if it exists.
   MUNIN_CONF_PATH="/etc/munin/munin.conf";
@@ -558,6 +582,9 @@ function configure_munin_apache () {
 
   echo -e "PROVISIONING: Installing the Apache Munin config.\n";
 
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
   sudo -E rm -f "/etc/apache2/conf-available/munin.conf";
   sudo -E cp -f "apache2/munin.conf" "/etc/apache2/conf-available/munin.conf";
   sudo -E a2enconf -q munin;
@@ -585,7 +612,6 @@ function install_phpmyadmin () {
   echo -e "PROVISIONING: Installing phpMyAdmin related items.\n";
 
   # Do this little dance to get things installed.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
   curl -ss -O -L "https://files.phpmyadmin.net/phpMyAdmin/4.0.10.11/phpMyAdmin-4.0.10.11-all-languages.tar.gz";
   tar -xf "phpMyAdmin-4.0.10.11-all-languages.tar.gz";
   rm -f "phpMyAdmin-4.0.10.11-all-languages.tar.gz";
@@ -602,6 +628,9 @@ function install_phpmyadmin () {
 function configure_phpmyadmin () {
 
   echo -e "PROVISIONING: Configuring phpMyAdmin related items.\n";
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Set the phpMyAdmin config file.
   sudo -E cp -f "phpmyadmin/config.inc.php" "/usr/share/phpmyadmin/config.inc.php";
@@ -642,6 +671,9 @@ function configure_awstats_apache () {
 
   echo -e "PROVISIONING: Installing the Apache phpMyAdmin config.\n";
 
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
   sudo -E cp -f "apache2/phpmyadmin.conf" "/etc/apache2/conf-available/phpmyadmin.conf";
   sudo -E a2enconf -q phpmyadmin;
   # sudo -E service apache2 restart;
@@ -659,7 +691,7 @@ function install_geoip () {
   sudo aptitude install -y --assume-yes -q build-essential zlib1g-dev libtool;
 
   # Install GeoIP from source code.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
+  cd "${BASE_DIR}";
   curl -ss -O -L "http://www.maxmind.com/download/geoip/api/c/GeoIP-latest.tar.gz";
   tar -xf "GeoIP-latest.tar.gz";
   rm -f "GeoIP-latest.tar.gz";
@@ -668,7 +700,7 @@ function install_geoip () {
   ./configure;
   make -s;
   sudo -E make --silent install;
-  cd "${BASE_DIR}/${CONFIG_DIR}";
+  cd "${BASE_DIR}";
   sudo -E rm -rf ./GeoIP*;
 
 } # install_geoip
@@ -744,7 +776,7 @@ function install_awstats () {
   echo -e "PROVISIONING: Installing the AWStats related items.\n";
 
   # Do this little dance to get things installed.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
+  cd "${BASE_DIR}";
   curl -ss -O -L "http://prdownloads.sourceforge.net/awstats/awstats-7.3.tar.gz";
   tar -xf "awstats-7.3.tar.gz";
   rm -f "awstats-7.3.tar.gz";
@@ -766,6 +798,9 @@ function install_awstats () {
   # With that done, install all of the GeoIP related CPAN modules like this.
   sudo cpanm --install --force --notest --quiet --skip-installed YAML Geo::IP Geo::IPfree Geo::IP::PurePerl URI::Escape Net::IP Net::DNS Net::XWhois Time::HiRes Time::Local;
 
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
   # Copy over a basic config file.
   sudo -E cp -f "awstats/awstats.vagrant.local.conf" "/usr/share/awstats-7.3/wwwroot/cgi-bin/awstats.${HOST_NAME}.conf";
   sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "/usr/share/awstats-7.3/wwwroot/cgi-bin/awstats.${HOST_NAME}.conf";
@@ -785,6 +820,9 @@ function install_awstats () {
 function configure_awstats_apache () {
 
   echo -e "PROVISIONING: Installing the Apache AWStats config.\n";
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
 
   sudo -E cp -f "apache2/awstats.conf" "/etc/apache2/conf-available/awstats.conf";
   sudo -E a2enconf -q awstats;
@@ -817,6 +855,9 @@ function install_fail2ban () {
 function configure_fail2ban () {
 
   echo -e "PROVISIONING: Installing the Fail2Ban configs.\n";
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
 
   sudo -E cp -f "fail2ban/jail.local" "/etc/fail2ban/jail.local";
   sudo -E cp -f "fail2ban/ddos.conf" "/etc/fail2ban/filter.d/ddos.conf";
@@ -853,6 +894,9 @@ function configure_monit () {
 
   echo -e "PROVISIONING: Installing the Monit configs.\n";
 
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
   sudo -E cp -f "monit/monitrc" "/etc/monit/monitrc";
   sudo -E cp -f "monit/apache2.conf" "/etc/monit/conf.d/apache2.conf";
 
@@ -880,7 +924,7 @@ function install_imagemagick () {
   sudo aptitude build-dep -y --assume-yes -q imagemagick;
 
   # Build ImageMagick from source code.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
+  cd "${BASE_DIR}";
   curl -ss -O -L "http://www.imagemagick.org/download/ImageMagick.tar.gz";
   tar -xf "ImageMagick.tar.gz";
   rm -f "ImageMagick.tar.gz";
@@ -894,7 +938,7 @@ function install_imagemagick () {
   sudo ldconfig "/usr/local/lib";
 
   # Cleanup to get rid of the installer stuff.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
+  cd "${BASE_DIR}";
   sudo -E rm -rf ./ImageMagick-*;
 
 } # install_imagemagick
@@ -947,6 +991,9 @@ configure_motd;
 # Get the basics set.
 if [ "${PROVISION_BASICS}" = true ]; then
 
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
   install_basic_tools;
   hash libtool 2>/dev/null || { install_compiler; }
   if ! grep -q -s "git-core" /etc/apt/sources.list /etc/apt/sources.list.d/*; then install_git; fi
@@ -975,6 +1022,9 @@ fi
 # Fail2Ban
 if [ "${PROVISION_FAIL2BAN}" = true ]; then
 
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
   hash fail2ban-client 2>/dev/null || { install_fail2ban; }
   if [ -f "fail2ban/jail.local" ] && [ ! -f "/etc/fail2ban/jail.local" ]; then configure_fail2ban; fi
 
@@ -985,6 +1035,9 @@ hash monit 2>/dev/null || { install_monit; }
 if [ -f "monit/monitrc" ]; then configure_monit; fi
 
 if [ "${PROVISION_LAMP}" = true ]; then
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Apache
   hash apachectl 2>/dev/null || { install_apache; }
