@@ -329,6 +329,15 @@ function install_fastcgi () {
 } # install_fastcgi
 
 ##########################################################################################
+# MediaWiki
+##########################################################################################
+function install_mediawiki () {
+
+  echo -e "PROVISIONING: Installing and configuring MediaWiki related items.\n";
+
+} # install_mediawiki
+
+##########################################################################################
 # Update the locate database.
 ##########################################################################################
 function update_locate_db () {
