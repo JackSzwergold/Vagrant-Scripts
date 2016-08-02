@@ -291,7 +291,7 @@ function install_lighttpd () {
 
   # Remove the default/placeholder Lighttpd index page.
   sudo -E rm -f "/var/www/index.lighttpd.html";
-  
+
   # Set the Lighttpd startup service.
   sudo -E update-rc.d -f lighttpd defaults;
 
@@ -352,16 +352,15 @@ function install_mediawiki () {
 
   # Set permissions to www-data for owner and group.
   sudo -E chown -f www-data:www-data -R "/var/www/*";
-  
-  # Setup the MediaWiki MySQL database stuff.
-  if [ -f "mediawiki/mediawiki_dev_setup.sql" ]; then
-    mysql -sfu root -proot < "mediawiki/mediawiki_dev_setup.sql";
-  fi
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Set the sample MediaWiki 'LocalSettings.php' config in place.
   if [ -f "mediawiki/LocalSettings.php" ]; then
     sudo -E cp -f "mediawiki/LocalSettings.php" "/var/www/LocalSettings.php";
-    sudo chown 600 "/var/www/LocalSettings.php";
+    sudo -E chown -f www-data:www-data "/var/www/LocalSettings.php";
+    sudo -E chmod -f 600 "/var/www/LocalSettings.php";
   fi
 
 } # install_mediawiki
