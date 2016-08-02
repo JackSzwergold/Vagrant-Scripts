@@ -274,9 +274,8 @@ function install_mysql () {
     sudo -E cp -f "mysql/my.cnf" "/etc/mysql/my.cnf";
   fi
 
-  # Run these commands to prevent MySQL from coming up on reboot.
-  sudo -E service mysql stop;
-  sudo -E update-rc.d -f mysql remove;
+  # Restart MySQL to get the new configuration loaded.
+  sudo -E service mysql restart;
 
 } # install_mysql
 
@@ -354,8 +353,16 @@ function install_mediawiki () {
   # Set permissions to www-data for owner and group.
   sudo -E chown -f www-data:www-data -R "/var/www/*";
   
-  # Set permissions to read and write for the 'LocalSettings.php' file.
-  # sudo chown 600 "/var/www/LocalSettings.php";
+  # Setup the MediaWiki MySQL database stuff.
+  if [ -f "mediawiki/mediawiki_dev_setup.sql" ]; then
+    mysql -sfu root -proot < "mediawiki/mediawiki_dev_setup.sql";
+  fi
+
+  # Set the sample MediaWiki 'LocalSettings.php' config in place.
+  if [ -f "mediawiki/LocalSettings.php" ]; then
+    sudo -E cp -f "mediawiki/LocalSettings.php" "/var/www/LocalSettings.php";
+    sudo chown 600 "/var/www/LocalSettings.php";
+  fi
 
 } # install_mediawiki
 
@@ -364,8 +371,8 @@ function install_mediawiki_mysql () {
   echo -e "PROVISIONING: Setting up MediaWiki MySQL database stuff.\n";
 
   # Setup the MediaWiki MySQL database stuff.
-  if [ -f "mysql/mediawiki_dev_setup.sql" ]; then
-    mysql -sfu root -proot < "mysql/mediawiki_dev_setup.sql";
+  if [ -f "mediawiki/mediawiki_dev_setup.sql" ]; then
+    mysql -sfu root -proot < "mediawiki/mediawiki_dev_setup.sql";
   fi
 
 } # install_mediawiki_mysql
