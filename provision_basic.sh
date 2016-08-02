@@ -359,6 +359,17 @@ function install_mediawiki () {
 
 } # install_mediawiki
 
+function install_mediawiki_mysql () {
+
+  echo -e "PROVISIONING: Setting up MediaWiki MySQL database stuff.\n";
+
+  # Setup the MediaWiki MySQL database stuff.
+  if [ -f "mysql/mediawiki_dev_setup.sql" ]; then
+    mysql -sfu root < "mysql/mediawiki_dev_setup.sql";
+  fi
+
+} # install_mediawiki_mysql
+
 ##########################################################################################
 # Update the locate database.
 ##########################################################################################
