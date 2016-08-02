@@ -365,7 +365,7 @@ function install_mediawiki_mysql () {
 
   # Setup the MediaWiki MySQL database stuff.
   if [ -f "mysql/mediawiki_dev_setup.sql" ]; then
-    mysql -sfu root < "mysql/mediawiki_dev_setup.sql";
+    mysql -sfu root -proot < "mysql/mediawiki_dev_setup.sql";
   fi
 
 } # install_mediawiki_mysql
