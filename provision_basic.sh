@@ -407,6 +407,7 @@ hash mysql 2>/dev/null || { install_mysql; }
 install_lighttpd;
 install_php;
 install_fastcgi;
+install_mediawiki_mysql;
 install_mediawiki;
 
 # Update the locate database.
