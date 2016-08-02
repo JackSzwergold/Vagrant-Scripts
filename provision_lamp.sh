@@ -47,6 +47,10 @@ HOST_NAME="vagrant.local";
 if [ -n "$4" ]; then HOST_NAME="${4}"; fi
 echo -e "PROVISIONING: Host name is: '${HOST_NAME}'.\n";
 
+##########################################################################################
+# Optional items.
+##########################################################################################
+
 PROVISION_BASICS=false;
 if [ -n "$5" ]; then PROVISION_BASICS="${5}"; fi
 echo -e "PROVISIONING: Basics provisioning: '${PROVISION_BASICS}'.\n";
