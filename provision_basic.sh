@@ -54,9 +54,9 @@ cd "${BASE_DIR}"/"${CONFIG_DIR}";
 # Optional items.
 ##########################################################################################
 
-PROVISION_MYSQL=false;
-if [ -n "$5" ]; then PROVISION_MYSQL="${5}"; fi
-echo -e "PROVISIONING: MySQL provisioning: '${PROVISION_MYSQL}'.\n";
+# PROVISION_MYSQL=false;
+# if [ -n "$5" ]; then PROVISION_MYSQL="${5}"; fi
+# echo -e "PROVISIONING: MySQL provisioning: '${PROVISION_MYSQL}'.\n";
 
 ##########################################################################################
 # Adjusting the Debian frontend setting to non-interactive mode.
