@@ -43,11 +43,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   ########################################################################################
   machines.each do |machine_settings|
 
-    # Print out the details of the configs.
-    puts "Setting config for '#{machine_settings["name"]}' (host: #{machine_settings["hostname"]}, ip: #{machine_settings["ip"]})"
-
     # Define the machine.
     config.vm.define "#{machine_settings["hostname"]}", primary: machine_settings["primary"], autostart: machine_settings["autostart"] do |machine|
+
+      # Print out the details of the configs.
+      puts "Setting config for '#{machine_settings["name"]}' (host: #{machine_settings["hostname"]}, ip: #{machine_settings["ip"]})"
 
       # VirtualBox specific configuration options.
       machine.vm.provider :virtualbox do |vbox|
@@ -72,7 +72,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       machine.vm.synced_folder "deployment_configs", "/home/vagrant/deployment_configs", type: "rsync", rsync__exclude: ".DS_Store"
 
       # Set the shell script to provision the server.
-      machine.vm.provision :shell, :path => machine_settings["provision_script"], :args => "deployment_configs #{config.ssh.username} #{machine_settings["hostname"]} #{machine_settings["hostname"]}.local #{machine_settings["basics"]} #{machine_settings["lamp"]} #{machine_settings["geoip"]} #{machine_settings["iptables"]} #{machine_settings["fail2ban"]}"
+      if machine_settings["provision_script"].to_s.strip.length > 0
+        machine.vm.provision :shell, :path => machine_settings["provision_script"], :args => "deployment_configs #{config.ssh.username} #{machine_settings["hostname"]} #{machine_settings["hostname"]}.local #{machine_settings["basics"]} #{machine_settings["lamp"]} #{machine_settings["geoip"]} #{machine_settings["iptables"]} #{machine_settings["fail2ban"]}"
+      end
 
     end # config.vm.define
 
