@@ -338,10 +338,18 @@ function install_mediawiki () {
   # Do this little dance to get things installed.
   cd "${BASE_DIR}";
   curl -ss -O -L "https://releases.wikimedia.org/mediawiki/1.27/mediawiki-1.27.0.tar.gz";
-  tar -xf "mediawiki-1.27.0.tar.gz";
-  rm -f "mediawiki-1.27.0.tar.gz";
-  rm -rf "mediawiki-1.27.0";
-  sudo -E mv -f mediawiki-*/* "/var/www/";
+
+  # Decompress the archive and remove the source archive.
+  if [ -f "mediawiki-1.27.0.tar.gz" ]; then
+    tar -xf "mediawiki-1.27.0.tar.gz";
+    rm -f "mediawiki-1.27.0.tar.gz";
+  fi
+
+  # Move the files from the decompressed directory to the web root and ditch the directory.
+  if [ -d "mediawiki-1.27.0" ]; then
+    sudo -E mv -f mediawiki-1.27.0/* "/var/www/";
+    rm -rf "mediawiki-1.27.0";
+  fi
 
   # Set permissions to www-data for owner and group.
   sudo -E chown -f www-data:www-data -R "/var/www/*";
