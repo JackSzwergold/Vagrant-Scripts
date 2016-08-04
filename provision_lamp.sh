@@ -951,6 +951,7 @@ function install_system_scripts () {
   echo -e "PROVISIONING: Installing configuring various system scripts.\n";
 
   # Copy and configure various system scripts.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
   sudo -E cp -f "scripts/"*.sh "/opt/";
   sudo -E chown -f -R root:root "scripts/"*.sh "/opt/";
   sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "/opt/"*.cfg.sh;
