@@ -267,7 +267,7 @@ function install_mongodb () {
   echo -e "PROVISIONING: Installing MongoDB related items.\n";
   
   # Add the official MongoDB repository and install MongoDB.
-  sudo -E apt-key -q adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
+  sudo -E apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
   echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list
   sudo -E aptitude update -y --assume-yes -q;
   sudo -E aptitude install -y --assume-yes -q mongodb-org=2.6.12 mongodb-org-server=2.6.12 mongodb-org-shell=2.6.12 mongodb-org-mongos=2.6.12 mongodb-org-tools=2.6.12
