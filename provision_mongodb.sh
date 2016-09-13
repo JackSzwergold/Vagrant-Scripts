@@ -324,7 +324,7 @@ if ! grep -q -s "git-core" /etc/apt/sources.list /etc/apt/sources.list.d/*; then
 
 # MySQL, Lighttpd, PHP and FastCGI.
 install_mongodb;
-# configure_mongodb;
+configure_mongodb;
 
 # Update the locate database.
 update_locate_db;
