@@ -285,6 +285,9 @@ function configure_mongodb () {
 
   echo -e "PROVISIONING: Configuring MongoDB related items.\n";
 
+  # Comment out the 'bind_ip' line to enable network connections outside of 'localhost'.
+  sudo -E sed -i 's/bind_ip = 127.0.0.1/#bind_ip = 127.0.0.1/g' "/etc/mongod.conf";
+
  } # configure_mongodb
 
 ##########################################################################################
