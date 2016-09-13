@@ -265,6 +265,10 @@ function configure_motd () {
 function install_mongodb () {
 
   echo -e "PROVISIONING: Installing MongoDB related items.\n";
+  # sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
+  # echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list
+  # sudo aptitude update
+  # sudo aptitude install mongodb-org=2.6.12 mongodb-org-server=2.6.12 mongodb-org-shell=2.6.12 mongodb-org-mongos=2.6.12 mongodb-org-tools=2.6.12
 
  } # install_mediawiki
 
@@ -272,8 +276,12 @@ function configure_mongodb () {
 
   echo -e "PROVISIONING: Configuring MongoDB related items.\n";
 
-  # Go into the config directory.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
+  # Pin the currently installed version of MongoDB to ensure no accidental upgrades happen.
+  # echo "mongodb-org hold" | sudo dpkg --set-selections
+  # echo "mongodb-org-server hold" | sudo dpkg --set-selections
+  # echo "mongodb-org-shell hold" | sudo dpkg --set-selections
+  # echo "mongodb-org-mongos hold" | sudo dpkg --set-selections
+  # echo "mongodb-org-tools hold" | sudo dpkg --set-selections
  
 } # configure_mediawiki
 
