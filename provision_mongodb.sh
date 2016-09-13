@@ -272,12 +272,6 @@ function install_mongodb () {
   sudo -E aptitude update -y --assume-yes -q;
   sudo -E aptitude install -y --assume-yes -q mongodb-org=2.6.12 mongodb-org-server=2.6.12 mongodb-org-shell=2.6.12 mongodb-org-mongos=2.6.12 mongodb-org-tools=2.6.12
 
- } # install_mediawiki
-
-function configure_mongodb () {
-
-  echo -e "PROVISIONING: Configuring MongoDB related items.\n";
-
   # Pin the currently installed version of MongoDB to ensure no accidental upgrades happen.
   echo "mongodb-org hold" | sudo dpkg --set-selections
   echo "mongodb-org-server hold" | sudo dpkg --set-selections
@@ -285,7 +279,13 @@ function configure_mongodb () {
   echo "mongodb-org-mongos hold" | sudo dpkg --set-selections
   echo "mongodb-org-tools hold" | sudo dpkg --set-selections
  
-} # configure_mediawiki
+} # install_mongodb
+
+function configure_mongodb () {
+
+  echo -e "PROVISIONING: Configuring MongoDB related items.\n";
+
+ } # configure_mongodb
 
 ##########################################################################################
 # Update the locate database.
@@ -321,7 +321,7 @@ if ! grep -q -s "git-core" /etc/apt/sources.list /etc/apt/sources.list.d/*; then
 
 # MySQL, Lighttpd, PHP and FastCGI.
 install_mongodb;
-configure_mongodb;
+# configure_mongodb;
 
 # Update the locate database.
 update_locate_db;
