@@ -264,11 +264,13 @@ function configure_motd () {
 ##########################################################################################
 function install_mongodb () {
 
-  echo -e "PROVISIONING: Installing and configuring MongoDB related items.\n";
+  echo -e "PROVISIONING: Installing MongoDB related items.\n";
 
  } # install_mediawiki
 
 function configure_mongodb () {
+
+  echo -e "PROVISIONING: Configuring MongoDB related items.\n";
 
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFIG_DIR}";
