@@ -288,6 +288,9 @@ function configure_mongodb () {
   # Comment out the 'bind_ip' line to enable network connections outside of 'localhost'.
   sudo -E sed -i 's/bind_ip = 127.0.0.1/#bind_ip = 127.0.0.1/g' "/etc/mongod.conf";
 
+  # Restart the Mongo instance to get the new config loaded.
+  sudo -E service mongod restart
+
  } # configure_mongodb
 
 ##########################################################################################
