@@ -49,7 +49,7 @@
   cpus: 1
 - name: "Mongo_UBUNTU_1404"
   primary: false
-  provision_script: "provision_mongodb.sh"
+  provision_script: "provision_mongo.sh"
   autostart: false
   hostname: "mongo"
   ip: "192.168.56.30"
