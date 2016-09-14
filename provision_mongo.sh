@@ -317,8 +317,18 @@ function install_nodejs () {
 
   echo -e "PROVISIONING: Installing NodeJS and NPM related stuff.\n";
 
-  # Purge any already installed version of Git.
-  sudo -E aptitude install -y --assume-yes -q node npm;
+  # Purge any already installed version of NodeJS and NPM.
+  sudo -E aptitude purge -y --assume-yes -q node npm;
+
+  # Now install NodeJS and NPM via PPA.
+  sudo -E aptitude install -y --assume-yes -q python-software-properties;
+  # curl -sL https://deb.nodesource.com/setup_6.x | sudo bash - ;
+  # curl -sL https://deb.nodesource.com/setup_5.x | sudo bash - ;
+  # curl -sL https://deb.nodesource.com/setup_4.x | sudo bash - ;
+  # curl -sL https://deb.nodesource.com/setup_0.12 | sudo bash - ;
+  curl -sL https://deb.nodesource.com/setup_0.10 | sudo bash - ;
+  sudo -E aptitude update -y --assume-yes -q;
+  sudo -E aptitude install -y --assume-yes -q nodejs;
 
 } # install_nodejs
 
