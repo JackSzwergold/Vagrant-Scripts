@@ -311,6 +311,18 @@ function configure_mongodb () {
  } # configure_mongodb
 
 ##########################################################################################
+# NodeJS and NPM
+##########################################################################################
+function install_nodejs () {
+
+  echo -e "PROVISIONING: Installing NodeJS and NPM related stuff.\n";
+
+  # Purge any already installed version of Git.
+  sudo -E aptitude install -y --assume-yes -q node npm;
+
+} # install_nodejs
+
+##########################################################################################
 # Update the locate database.
 ##########################################################################################
 function update_locate_db () {
@@ -343,9 +355,12 @@ install_basic_tools;
 hash libtool 2>/dev/null || { install_compiler; }
 if ! grep -q -s "git-core" /etc/apt/sources.list /etc/apt/sources.list.d/*; then install_git; fi
 
-# MySQL, Lighttpd, PHP and FastCGI.
+# Install configure MongoDB.
 install_mongodb;
 configure_mongodb;
+
+# Install configure NodeJS and NPM.
+install_nodejs;
 
 # Update the locate database.
 update_locate_db;
