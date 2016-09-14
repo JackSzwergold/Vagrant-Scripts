@@ -325,8 +325,8 @@ function install_nodejs () {
   # curl -sL https://deb.nodesource.com/setup_6.x | sudo bash - ;
   # curl -sL https://deb.nodesource.com/setup_5.x | sudo bash - ;
   # curl -sL https://deb.nodesource.com/setup_4.x | sudo bash - ;
-  # curl -sL https://deb.nodesource.com/setup_0.12 | sudo bash - ;
-  curl -sL https://deb.nodesource.com/setup_0.10 | sudo bash - ;
+  # curl -sL https://deb.nodesource.com/setup_0.10 | sudo bash - ;
+  curl -sL https://deb.nodesource.com/setup_0.12 | sudo bash - ;
   sudo -E aptitude update -y --assume-yes -q;
   sudo -E aptitude install -y --assume-yes -q nodejs;
 
