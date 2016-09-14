@@ -187,6 +187,23 @@ function install_sysstat () {
 } # install_sysstat
 
 ##########################################################################################
+# Basic Tools
+##########################################################################################
+function install_basic_tools () {
+
+  echo -e "PROVISIONING: Installing a set of generic tools.\n";
+
+  # Install generic tools.
+  sudo -E aptitude install -y --assume-yes -q \
+    dnsutils traceroute nmap bc htop finger curl whois rsync lsof \
+    iftop figlet lynx mtr-tiny iperf nload zip unzip attr sshpass \
+    dkms mc elinks ntp dos2unix p7zip-full nfs-common \
+    slurm sharutils uuid-runtime chkconfig quota pv trickle apachetop \
+    virtualbox-dkms;
+
+} # install_basic_tools
+
+##########################################################################################
 # Locate
 ##########################################################################################
 function install_locate () {
@@ -322,6 +339,7 @@ hash avahi-daemon 2>/dev/null || { install_avahi; }
 hash sar 2>/dev/null || {  install_sysstat; }
 hash updatedb 2>/dev/null || { install_locate; }
 configure_motd;
+install_basic_tools;
 hash libtool 2>/dev/null || { install_compiler; }
 if ! grep -q -s "git-core" /etc/apt/sources.list /etc/apt/sources.list.d/*; then install_git; fi
 

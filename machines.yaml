@@ -47,23 +47,13 @@
   ssh_host: 2223
   memory: 512
   cpus: 1
-- name: "Ocean_UBUNTU_1404"
-  primary: false
-  provision_script: "provision_mediawiki_lighttpd.sh"
-  autostart: false
-  hostname: "ocean"
-  ip: "192.168.56.30"
-  ssh_guest: 22
-  ssh_host: 2224
-  memory: 512
-  cpus: 1
 - name: "Mongo_UBUNTU_1404"
   primary: false
   provision_script: "provision_mongodb.sh"
   autostart: false
   hostname: "mongo"
-  ip: "192.168.56.50"
+  ip: "192.168.56.30"
   ssh_guest: 22
-  ssh_host: 2225
-  memory: 512
+  ssh_host: 2224
+  memory: 1024
   cpus: 1
