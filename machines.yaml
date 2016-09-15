@@ -47,11 +47,11 @@
   ssh_host: 2223
   memory: 512
   cpus: 1
-- name: "Mongo_DEV_UBUNTU_1404"
+- name: "MongoDEV_UBUNTU_1404"
   primary: false
-  provision_script: "provision_mongo_dev.sh"
+  provision_script: "provision_mongodev.sh"
   autostart: false
-  hostname: "mongo_dev"
+  hostname: "mongodev"
   ip: "192.168.56.30"
   ssh_guest: 22
   ssh_host: 2224
