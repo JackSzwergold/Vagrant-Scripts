@@ -67,9 +67,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       machine.vm.network :forwarded_port, guest: machine_settings["ssh_guest"], host: machine_settings["ssh_host"], id: "ssh"
       machine.vm.synced_folder ".", "/vagrant", type: "nfs", disabled: true
 
-      # Copy over the configuration directory.
+      # Copy over the deployment configs directory.
       # machine.vm.provision :file, source: "config_dir", destination: "config_dir"
       machine.vm.synced_folder "deployment_configs", "/home/vagrant/deployment_configs", type: "rsync", rsync__exclude: ".DS_Store"
+
+      # Copy over the deployment DBs directory.
+      # machine.vm.provision :file, source: "config_dir", destination: "config_dir"
+      machine.vm.synced_folder "deployment_dbs", "/home/vagrant/deployment_dbs", type: "rsync", rsync__exclude: ".DS_Store"
 
       # Set the shell script to provision the server.
       if machine_settings["provision_script"].to_s.strip.length > 0
