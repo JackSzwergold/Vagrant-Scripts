@@ -47,7 +47,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
     config.vm.define "#{machine_settings["hostname"]}", primary: machine_settings["primary"], autostart: machine_settings["autostart"] do |machine|
 
       # Print out the details of the configs.
-      puts "Setting config for '#{machine_settings["name"]}' (host: #{machine_settings["hostname"]}, ip: #{machine_settings["ip"]})"
+      puts "Reading config for '#{machine_settings["name"]}' (host: #{machine_settings["hostname"]}, ip: #{machine_settings["ip"]})"
 
       # VirtualBox specific configuration options.
       machine.vm.provider :virtualbox do |vbox|
