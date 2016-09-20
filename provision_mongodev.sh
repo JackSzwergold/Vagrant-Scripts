@@ -308,6 +308,27 @@ function configure_mongodb () {
   # Restart the Mongo instance to get the new config loaded.
   sudo -E service mongod restart
 
+  # Import any databases that were sent over as the part of the provisioning process.
+  if [ -f 'deployment_dbs' ]; then
+    find 'deployment_dbs' -type f -name '*.bson' |\
+      while read db_backup_path
+      do
+        if [ -f "${db_backup_path}" ]; then
+          db_dirname=$(dirname "${db_backup_path}");
+          # db_basename=$(basename "${db_backup_path}");
+          # db_filename="${db_basename%.*}";
+          # db_extension="${db_basename##*.}";
+          # db_parent_dir=$(basename "${db_dirname}");
+          mongo_db=$(basename "${db_dirname}");
+          # echo 'db.dropDatabase()' | mongo --quiet "${mongo_db}";
+          mongo --quiet "${mongo_db}" --eval "db.dropDatabase()";
+          mongorestore --quiet "${db_backup_path}";
+        else
+          exit 1;
+        fi
+      done
+  fi
+
 } # configure_mongodb
 
 ##########################################################################################
