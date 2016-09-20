@@ -328,6 +328,7 @@ function configure_mongodb () {
           # db_extension="${db_basename##*.}";
           # db_parent_dir=$(basename "${db_dirname}");
           mongo_db=$(basename "${db_dirname}");
+          echo -e "PROVISIONING: Restoring the '${mongo_db}' MongoDB database.\n";
           # echo 'db.dropDatabase()' | mongo --quiet "${mongo_db}";
           mongo --quiet "${mongo_db}" --eval "db.dropDatabase()";
           mongorestore --quiet "${db_backup_path}";
