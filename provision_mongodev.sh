@@ -39,19 +39,19 @@ if [ -n "$1" ]; then CONFIG_DIR="${1}"; fi
 echo -e "PROVISIONING: Config directory is: '${CONFIG_DIR}'.\n";
 
 DB_DIR="deployment_dbs";
-if [ -n "$2" ]; then DB_DIR="${1}"; fi
+if [ -n "$2" ]; then DB_DIR="${2}"; fi
 echo -e "PROVISIONING: DB directory is: '${DB_DIR}'.\n";
 
 USER_NAME="vagrant";
-if [ -n "$3" ]; then USER_NAME="${2}"; fi
+if [ -n "$3" ]; then USER_NAME="${3}"; fi
 echo -e "PROVISIONING: User name is: '${USER_NAME}'.\n";
 
 MACHINE_NAME="vagrant";
-if [ -n "$4" ]; then MACHINE_NAME="${3}"; fi
+if [ -n "$4" ]; then MACHINE_NAME="${4}"; fi
 echo -e "PROVISIONING: Machine name is: '${MACHINE_NAME}'.\n";
 
 HOST_NAME="vagrant.local";
-if [ -n "$5" ]; then HOST_NAME="${4}"; fi
+if [ -n "$5" ]; then HOST_NAME="${5}"; fi
 echo -e "PROVISIONING: Host name is: '${HOST_NAME}'.\n";
 
 # Go into the config directory.
