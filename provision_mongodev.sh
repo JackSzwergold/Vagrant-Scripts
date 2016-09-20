@@ -309,8 +309,8 @@ function configure_mongodb () {
   sudo -E service mongod restart
 
   # Import any databases that were sent over as the part of the provisioning process.
-  if [ -f 'deployment_dbs' ]; then
-    find 'deployment_dbs' -type f -name '*.bson' |\
+  if [ -d "deployment_dbs" ]; then
+    find "deployment_dbs" -type f -name '*.bson' |\
       while read db_backup_path
       do
         if [ -f "${db_backup_path}" ]; then
