@@ -308,7 +308,7 @@ function configure_mongodb () {
   # Restart the Mongo instance to get the new config loaded.
   sudo -E service mongod restart
 
- } # configure_mongodb
+} # configure_mongodb
 
 ##########################################################################################
 # NodeJS and NPM
