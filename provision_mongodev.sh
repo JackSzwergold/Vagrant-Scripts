@@ -306,8 +306,10 @@ function configure_mongodb () {
   sudo -E sed -i 's/bind_ip = 127.0.0.1/#bind_ip = 127.0.0.1/g' "/etc/mongod.conf";
 
   # Restart the Mongo instance to get the new config loaded.
-  sudo -E service mongod restart & RESTART_PID=(`jobs -l | awk '{print $2}'`);
-  wait ${RESTART_PID}
+  sudo -E service mongod restart;
+
+  # Go into the base directory.
+  cd "${BASE_DIR}";
 
   # Import any databases that were sent over as the part of the provisioning process.
   if [ -d "deployment_dbs" ]; then
