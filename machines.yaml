@@ -19,10 +19,10 @@
 
 - name: "Sandbox_UBUNTU_1404"
   primary: true
+  autostart: true
   provision_script: "provision_lamp.sh"
   deployment_configs_path: "deployment_configs"
   deployment_dbs_path: "deployment_dbs"
-  autostart: true
   basics: true
   lamp: true
   geoip: true
@@ -36,10 +36,10 @@
   cpus: 1
 - name: "Jabroni_UBUNTU_1404"
   primary: false
+  autostart: false
   provision_script: "provision_lamp.sh"
   deployment_configs_path: "deployment_configs"
   deployment_dbs_path: "deployment_dbs"
-  autostart: false
   basics: true
   lamp: false
   geoip: false
@@ -53,10 +53,10 @@
   cpus: 1
 - name: "MongoDEV_UBUNTU_1404"
   primary: false
+  autostart: false
   provision_script: "provision_mongodev.sh"
   deployment_configs_path: "deployment_configs"
   deployment_dbs_path: "deployment_dbs"
-  autostart: false
   hostname: "mongodev"
   ip: "192.168.56.30"
   ssh_guest: 22
