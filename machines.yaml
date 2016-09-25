@@ -37,7 +37,7 @@
 - name: "Jabroni_UBUNTU_1404"
   primary: false
   autostart: false
-  provision_script: "provision_lamp.sh"
+  provision_script: "provision_basics.sh"
   deployment_configs_path: "deployment_configs"
   deployment_dbs_path: "deployment_dbs"
   basics: true
