@@ -41,10 +41,6 @@
   deployment_configs_path: "deployment_configs"
   deployment_dbs_path: "deployment_dbs"
   basics: true
-  lamp: false
-  geoip: false
-  iptables: false
-  fail2ban: false
   hostname: "jabroni"
   ip: "192.168.56.20"
   ssh_guest: 22

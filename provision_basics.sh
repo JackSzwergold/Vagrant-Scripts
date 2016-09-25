@@ -2,9 +2,9 @@
 
 ##########################################################################################
 #
-# Provision LAMP (provision_lamp.sh) (c) by Jack Szwergold
+# Provision Basics (provision_basics.sh) (c) by Jack Szwergold
 #
-# Provision LAMP is licensed under a
+# Provision Basics is licensed under a
 # Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
 #
 # You should have received a copy of the license along with this
@@ -16,6 +16,7 @@
 # Created: 2016-01-27, js
 # Version: 2016-01-27, js: creation
 #          2016-01-30, js: development
+#          2016-09-25, js: simplifying things
 #
 ##########################################################################################
 
@@ -58,22 +59,6 @@ echo -e "PROVISIONING: Host name is: '${HOST_NAME}'.\n";
 PROVISION_BASICS=false;
 if [ -n "$6" ]; then PROVISION_BASICS="${6}"; fi
 echo -e "PROVISIONING: Basics provisioning: '${PROVISION_BASICS}'.\n";
-
-PROVISION_LAMP=false;
-if [ -n "$7" ]; then PROVISION_LAMP="${7}"; fi
-echo -e "PROVISIONING: LAMP provisioning: '${PROVISION_LAMP}'.\n";
-
-PROVISION_GEOIP=false;
-if [ -n "$8" ]; then PROVISION_GEOIP="${8}"; fi
-echo -e "PROVISIONING: GeoIP provisioning: '${PROVISION_GEOIP}'.\n";
-
-PROVISION_IPTABLES=false;
-if [ -n "$9" ]; then PROVISION_IPTABLES="${9}"; fi
-echo -e "PROVISIONING: IPTables provisioning: '${PROVISION_IPTABLES}'.\n";
-
-PROVISION_FAIL2BAN=false;
-if [ -n "$10" ]; then PROVISION_FAIL2BAN="${10}"; fi
-echo -e "PROVISIONING: Fail2Ban provisioning: '${PROVISION_FAIL2BAN}'.\n";
 
 # Go into the config directory.
 cd "${BASE_DIR}/${CONFIG_DIR}";
@@ -1010,78 +995,9 @@ if [ "${PROVISION_BASICS}" = true ]; then
 
 fi
 
-# GeoIP
-if [ "${PROVISION_GEOIP}" = true ]; then
-
-  hash geoiplookup 2>/dev/null || { install_geoip; }
-  if [ ! -d "/usr/local/share/GeoIP" ]; then install_geoip_databases; fi
-
-fi
-
-# IPTables
-if [ "${PROVISION_IPTABLES}" = true ]; then
-
-  hash iptables && hash ipset 2>/dev/null || { install_iptables; }
-
-fi
-
-# Fail2Ban
-if [ "${PROVISION_FAIL2BAN}" = true ]; then
-
-  # Go into the config directory.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
-
-  hash fail2ban-client 2>/dev/null || { install_fail2ban; }
-  if [ -f "fail2ban/jail.local" ] && [ ! -f "/etc/fail2ban/jail.local" ]; then configure_fail2ban; fi
-
-fi
-
 # Monit
 hash monit 2>/dev/null || { install_monit; }
 if [ -f "monit/monitrc" ]; then configure_monit; fi
-
-if [ "${PROVISION_LAMP}" = true ]; then
-
-  # Go into the config directory.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
-
-  # Apache
-  hash apachectl 2>/dev/null || { install_apache; }
-  sudo -E service apache2 stop;
-  configure_apache;
-  if [ -d "/var/www/html" ]; then set_apache_web_root; fi
-  if [ ! -d "/var/www/builds" ]; then set_apache_deployment_directories; fi
-  if [ ! -d "/var/www/${HOST_NAME}" ]; then set_apache_virtual_host_directories; fi
-  if [ -f "/etc/logrotate.d/apache2" ]; then configure_apache_log_rotation; fi
-
-  # MySQL
-  hash mysql && hash mysqld 2>/dev/null || { install_mysql; }
-
-  # Munin
-  hash munin-node 2>/dev/null || { install_munin; }
-  if [ -f "apache2/munin.conf" ] && [ -h "/etc/apache2/conf-available/munin.conf" ]; then configure_munin_apache;
-  elif [ -f "apache2/munin.conf" ] && [ ! -h "/etc/apache2/conf-enabled/munin.conf" ]; then enable_munin_apache; fi
-
-  # phpMyAdmin
-  if [ ! -d "/usr/share/phpmyadmin" ]; then install_phpmyadmin; fi
-  if [ -f "phpmyadmin/config.inc.php" ] && [ ! -f "/usr/share/phpmyadmin/config.inc.php" ]; then configure_phpmyadmin; fi
-  configure_phpmyadmin_blowfish;
-  if [ -f "apache2/phpmyadmin.conf" ] && [ ! -f "/etc/apache2/conf-available/phpmyadmin.conf" ]; then configure_awstats_apache; fi
-
-  # AWStats
-  if [ ! -d "/usr/share/awstats-7.3" ]; then install_awstats; fi
-  if [ -f "apache2/awstats.conf" ] && [ ! -f "/etc/apache2/conf-available/awstats.conf" ]; then configure_awstats_apache; fi
-
-  # ImageMagick
-  hash convert 2>/dev/null || { install_imagemagick; }
-
-  # Install system scripts.
-  install_system_scripts;
-
-  # Restart Apache now that we’re done.
-  sudo -E service apache2 restart;
-
-fi
 
 # Update the locate database.
 update_locate_db;
