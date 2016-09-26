@@ -2,9 +2,9 @@
 
 ##########################################################################################
 #
-# Provision MongoDB DEV (provision_mongo_dev.sh) (c) by Jack Szwergold
+# Provision ElasticSearch DEV (provision_elasticsearch.sh) (c) by Jack Szwergold
 #
-# Provision MongoDB DEV is licensed under a
+# Provision ElasticSearch DEV is licensed under a
 # Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
 #
 # You should have received a copy of the license along with this
@@ -287,7 +287,7 @@ function configure_motd () {
 function install_mongodb () {
 
   echo -e "PROVISIONING: Installing MongoDB related items.\n";
-  
+
   # Add the official MongoDB repository and install MongoDB.
   sudo -E apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
   echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list
@@ -300,7 +300,7 @@ function install_mongodb () {
   echo "mongodb-org-shell hold" | sudo dpkg --set-selections
   echo "mongodb-org-mongos hold" | sudo dpkg --set-selections
   echo "mongodb-org-tools hold" | sudo dpkg --set-selections
- 
+
 } # install_mongodb
 
 function configure_mongodb () {
