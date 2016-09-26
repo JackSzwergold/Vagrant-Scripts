@@ -57,5 +57,17 @@
   ip: "192.168.56.30"
   ssh_guest: 22
   ssh_host: 2224
-  memory: 2048
-  cpus: 2
+  memory: 1024
+  cpus: 1
+- name: "ElasticSearchDEV_UBUNTU_1404"
+  primary: false
+  autostart: false
+  provision_script: "provision_elasticsearch.sh"
+  deployment_configs_path: "deployment_configs"
+  deployment_dbs_path: "deployment_dbs"
+  hostname: "elasticsearchdev"
+  ip: "192.168.56.40"
+  ssh_guest: 22
+  ssh_host: 2225
+  memory: 1024
+  cpus: 1
