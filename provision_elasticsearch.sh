@@ -289,10 +289,11 @@ function install_java () {
   echo -e "PROVISIONING: Installing Java.\n";
 
   # Now install Java via PPA.
-  sudo -E aptitude install -y --assume-yes -q python-software-properties;
+  sudo -E aptitude install -y --assume-yes -q python-software-properties debconf-utils;
 
   sudo -E add-apt-repository ppa:webupd8team/java;
   sudo -E aptitude update -y --assume-yes -q;
+  echo "oracle-java7-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections
   sudo -E aptitude install -y --assume-yes -q oracle-java7-installer;
 
   # Now install Java via PPA.
