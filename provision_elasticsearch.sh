@@ -282,30 +282,42 @@ function configure_motd () {
 } # configure_motd
 
 ##########################################################################################
+# Java
+##########################################################################################
+function install_java () {
+
+  echo -e "PROVISIONING: Installing NodeJS and NPM related stuff.\n";
+
+  # Now install NodeJS and NPM via PPA.
+  sudo -E aptitude install -y --assume-yes -q python-software-properties;
+
+  sudo -E add-apt-repository ppa:webupd8team/java;
+  sudo -E aptitude update -y --assume-yes -q;
+  sudo -E aptitude install -y --assume-yes -q oracle-java7-installer;
+
+} # install_java
+
+##########################################################################################
 # MongoDB
 ##########################################################################################
-function install_mongodb () {
+function install_elasticsearch () {
 
-  echo -e "PROVISIONING: Installing MongoDB related items.\n";
+  echo -e "PROVISIONING: Installing ElasticSearch related items.\n";
 
-  # Add the official MongoDB repository and install MongoDB.
-  sudo -E apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
-  echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list
+  # Import the public key used by the package management system:
+  wget -qO - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | sudo apt-key add -
+  echo 'deb http://packages.elasticsearch.org/elasticsearch/1.4/debian stable main' | sudo tee /etc/apt/sources.list.d/elasticsearch.list
   sudo -E aptitude update -y --assume-yes -q;
-  sudo -E aptitude install -y --assume-yes -q mongodb-org=2.6.7 mongodb-org-server=2.6.7 mongodb-org-shell=2.6.7 mongodb-org-mongos=2.6.7 mongodb-org-tools=2.6.7
+  sudo -E aptitude install -y --assume-yes -q elasticsearch
 
-  # Pin the currently installed version of MongoDB to ensure no accidental upgrades happen.
-  echo "mongodb-org hold" | sudo dpkg --set-selections
-  echo "mongodb-org-server hold" | sudo dpkg --set-selections
-  echo "mongodb-org-shell hold" | sudo dpkg --set-selections
-  echo "mongodb-org-mongos hold" | sudo dpkg --set-selections
-  echo "mongodb-org-tools hold" | sudo dpkg --set-selections
+  # Set ElasticSearch to be able to come up on reboot.
+  sudo update-rc.d elasticsearch defaults 95 10
 
-} # install_mongodb
+} # install_elasticsearch
 
-function configure_mongodb () {
+function configure_elasticsearch () {
 
-  echo -e "PROVISIONING: Configuring MongoDB related items.\n";
+  echo -e "PROVISIONING: Configuring ElasticSearch related items.\n";
 
   # Comment out the 'bind_ip' line to enable network connections outside of 'localhost'.
   sudo -E sed -i 's/bind_ip = 127.0.0.1/#bind_ip = 127.0.0.1/g' "/etc/mongod.conf";
@@ -338,29 +350,7 @@ function configure_mongodb () {
       done
   fi
 
-} # configure_mongodb
-
-##########################################################################################
-# NodeJS and NPM
-##########################################################################################
-function install_nodejs () {
-
-  echo -e "PROVISIONING: Installing NodeJS and NPM related stuff.\n";
-
-  # Purge any already installed version of NodeJS and NPM.
-  sudo -E aptitude purge -y --assume-yes -q node npm;
-
-  # Now install NodeJS and NPM via PPA.
-  sudo -E aptitude install -y --assume-yes -q python-software-properties;
-  # curl -sL https://deb.nodesource.com/setup_6.x | sudo bash - ;
-  # curl -sL https://deb.nodesource.com/setup_5.x | sudo bash - ;
-  # curl -sL https://deb.nodesource.com/setup_4.x | sudo bash - ;
-  # curl -sL https://deb.nodesource.com/setup_0.10 | sudo bash - ;
-  curl -sL https://deb.nodesource.com/setup_0.12 | sudo bash - ;
-  sudo -E aptitude update -y --assume-yes -q;
-  sudo -E aptitude install -y --assume-yes -q nodejs;
-
-} # install_nodejs
+} # configure_elasticsearch
 
 ##########################################################################################
 # Update the locate database.
@@ -395,12 +385,12 @@ install_basic_tools;
 hash libtool 2>/dev/null || { install_compiler; }
 if ! grep -q -s "git-core" /etc/apt/sources.list /etc/apt/sources.list.d/*; then install_git; fi
 
-# Install configure MongoDB.
-install_mongodb;
-configure_mongodb;
+# Install configure Java.
+install_java;
 
-# Install configure NodeJS and NPM.
-install_nodejs;
+# Install configure ElasticSearch.
+install_elasticsearch;
+configure_elasticsearch;
 
 # Update the locate database.
 update_locate_db;
