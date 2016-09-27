@@ -317,6 +317,9 @@ function install_elasticsearch () {
   # Set ElasticSearch to be able to come up on reboot.
   sudo update-rc.d elasticsearch defaults 95 10
 
+  # Restart ElasticSearch.
+  sudo -E service elasticsearch restart;
+
 } # install_elasticsearch
 
 ##########################################################################################
