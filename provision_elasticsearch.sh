@@ -286,14 +286,17 @@ function configure_motd () {
 ##########################################################################################
 function install_java () {
 
-  echo -e "PROVISIONING: Installing NodeJS and NPM related stuff.\n";
+  echo -e "PROVISIONING: Installing Java.\n";
 
-  # Now install NodeJS and NPM via PPA.
+  # Now install Java via PPA.
   sudo -E aptitude install -y --assume-yes -q python-software-properties;
 
   sudo -E add-apt-repository ppa:webupd8team/java;
   sudo -E aptitude update -y --assume-yes -q;
   sudo -E aptitude install -y --assume-yes -q oracle-java7-installer;
+
+  # Now install Java via PPA.
+  echo "JAVA_HOME=/usr/lib/jvm/java-7-oracle/jre" >> "/etc/environment";
 
 } # install_java
 
