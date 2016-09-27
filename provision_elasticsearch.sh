@@ -2,9 +2,9 @@
 
 ##########################################################################################
 #
-# Provision ElasticSearch DEV (provision_elasticsearch.sh) (c) by Jack Szwergold
+# Provision ElasticSearch (provision_elasticsearch.sh) (c) by Jack Szwergold
 #
-# Provision ElasticSearch DEV is licensed under a
+# Provision ElasticSearch is licensed under a
 # Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
 #
 # You should have received a copy of the license along with this
@@ -319,43 +319,6 @@ function install_elasticsearch () {
 
 } # install_elasticsearch
 
-function configure_elasticsearch () {
-
-  echo -e "PROVISIONING: Configuring ElasticSearch related items.\n";
-
-  # Comment out the 'bind_ip' line to enable network connections outside of 'localhost'.
-  sudo -E sed -i 's/bind_ip = 127.0.0.1/#bind_ip = 127.0.0.1/g' "/etc/mongod.conf";
-
-  # Restart the Mongo instance to get the new config loaded.
-  sudo -E service mongod restart;
-
-  # Go into the base directory.
-  cd "${BASE_DIR}";
-
-  # Import any databases that were sent over as the part of the provisioning process.
-  if [ -d "${DB_DIR}" ]; then
-    find "${DB_DIR}" -type f -name "*.bson" |\
-      while read db_backup_path
-      do
-        if [ -f "${db_backup_path}" ]; then
-          db_dirname=$(dirname "${db_backup_path}");
-          # db_basename=$(basename "${db_backup_path}");
-          # db_filename="${db_basename%.*}";
-          # db_extension="${db_basename##*.}";
-          # db_parent_dir=$(basename "${db_dirname}");
-          mongo_db=$(basename "${db_dirname}");
-          echo -e "PROVISIONING: Restoring the '${mongo_db}' MongoDB database.\n";
-          # echo 'db.dropDatabase()' | mongo --quiet "${mongo_db}";
-          mongo --quiet "${mongo_db}" --eval "db.dropDatabase()";
-          mongorestore --quiet "${db_backup_path}";
-        else
-          exit 1;
-        fi
-      done
-  fi
-
-} # configure_elasticsearch
-
 ##########################################################################################
 # Update the locate database.
 ##########################################################################################
@@ -394,7 +357,6 @@ install_java;
 
 # Install configure ElasticSearch.
 install_elasticsearch;
-configure_elasticsearch;
 
 # Update the locate database.
 update_locate_db;

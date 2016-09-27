@@ -2,9 +2,9 @@
 
 ##########################################################################################
 #
-# Provision MongoDB DEV (provision_mongodev.sh) (c) by Jack Szwergold
+# Provision MongoDB (provision_mongo.sh) (c) by Jack Szwergold
 #
-# Provision MongoDB DEV is licensed under a
+# Provision MongoDB is licensed under a
 # Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
 #
 # You should have received a copy of the license along with this
@@ -19,6 +19,7 @@
 #          2016-08-01, js: setting an extremely basic setup
 #          2016-08-02, js: refining
 #          2016-09-13, js: refining
+#          2016-09-26, js: refining
 #
 ##########################################################################################
 

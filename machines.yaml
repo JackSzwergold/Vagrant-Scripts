@@ -47,25 +47,25 @@
   ssh_host: 2223
   memory: 512
   cpus: 1
-- name: "MongoDEV_UBUNTU_1404"
+- name: "Mongo_UBUNTU_1404"
   primary: false
   autostart: false
-  provision_script: "provision_mongodev.sh"
+  provision_script: "provision_mongo.sh"
   deployment_configs_path: "deployment_configs"
   deployment_dbs_path: "deployment_dbs"
-  hostname: "mongodev"
+  hostname: "mongo"
   ip: "192.168.56.30"
   ssh_guest: 22
   ssh_host: 2224
   memory: 1024
   cpus: 1
-- name: "ElasticSearchDEV_UBUNTU_1404"
+- name: "ElasticSearch_UBUNTU_1404"
   primary: false
   autostart: false
   provision_script: "provision_elasticsearch.sh"
   deployment_configs_path: "deployment_configs"
   deployment_dbs_path: "deployment_dbs"
-  hostname: "elasticsearchdev"
+  hostname: "elasticsearch"
   ip: "192.168.56.40"
   ssh_guest: 22
   ssh_host: 2225
