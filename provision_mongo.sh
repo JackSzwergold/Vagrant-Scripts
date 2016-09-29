@@ -342,28 +342,6 @@ function configure_mongodb () {
 } # configure_mongodb
 
 ##########################################################################################
-# NodeJS and NPM
-##########################################################################################
-function install_nodejs () {
-
-  echo -e "PROVISIONING: Installing NodeJS and NPM related stuff.\n";
-
-  # Purge any already installed version of NodeJS and NPM.
-  sudo -E aptitude purge -y --assume-yes -q node npm;
-
-  # Now install NodeJS and NPM via PPA.
-  sudo -E aptitude install -y --assume-yes -q python-software-properties;
-  # curl -sL https://deb.nodesource.com/setup_6.x | sudo bash - ;
-  # curl -sL https://deb.nodesource.com/setup_5.x | sudo bash - ;
-  # curl -sL https://deb.nodesource.com/setup_4.x | sudo bash - ;
-  # curl -sL https://deb.nodesource.com/setup_0.10 | sudo bash - ;
-  curl -sL https://deb.nodesource.com/setup_0.12 | sudo bash - ;
-  sudo -E aptitude update -y --assume-yes -q;
-  sudo -E aptitude install -y --assume-yes -q nodejs;
-
-} # install_nodejs
-
-##########################################################################################
 # Update the locate database.
 ##########################################################################################
 function update_locate_db () {
@@ -399,9 +377,6 @@ if ! grep -q -s "git-core" /etc/apt/sources.list /etc/apt/sources.list.d/*; then
 # Install configure MongoDB.
 install_mongodb;
 configure_mongodb;
-
-# Install configure NodeJS and NPM.
-install_nodejs;
 
 # Update the locate database.
 update_locate_db;
