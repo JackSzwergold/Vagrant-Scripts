@@ -71,3 +71,15 @@
   ssh_host: 2225
   memory: 1024
   cpus: 1
+- name: "NodeJS_UBUNTU_1404"
+  primary: false
+  autostart: false
+  provision_script: "provision_nodejs.sh"
+  deployment_configs_path: "deployment_configs"
+  deployment_dbs_path: "deployment_dbs"
+  hostname: "nodejs"
+  ip: "192.168.56.50"
+  ssh_guest: 22
+  ssh_host: 2226
+  memory: 1024
+  cpus: 1
