@@ -310,7 +310,7 @@ function install_elasticsearch () {
 
   # Import the public key used by the package management system:
   wget -qO - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | sudo apt-key add -
-  echo 'deb http://packages.elasticsearch.org/elasticsearch/1.4/debian stable main' | sudo tee /etc/apt/sources.list.d/elasticsearch.list
+  echo 'deb http://packages.elasticsearch.org/elasticsearch/1.7/debian stable main' | sudo tee /etc/apt/sources.list.d/elasticsearch.list
   sudo -E aptitude update -y --assume-yes -q;
   sudo -E aptitude install -y --assume-yes -q elasticsearch
 
