@@ -283,9 +283,9 @@ function configure_motd () {
 } # configure_motd
 
 ##########################################################################################
-# MongoDB
+# MongoDB 3.2
 ##########################################################################################
-function install_mongodb () {
+function install_mongo32 () {
 
   echo -e "PROVISIONING: Installing MongoDB related items.\n";
 
@@ -304,9 +304,9 @@ function install_mongodb () {
   echo "mongodb-org-mongos hold" | sudo dpkg --set-selections
   echo "mongodb-org-tools hold" | sudo dpkg --set-selections
 
-} # install_mongodb
+} # install_mongo32
 
-function configure_mongodb () {
+function configure_mongo () {
 
   echo -e "PROVISIONING: Configuring MongoDB related items.\n";
 
@@ -342,7 +342,7 @@ function configure_mongodb () {
       done
   fi
 
-} # configure_mongodb
+} # configure_mongo
 
 ##########################################################################################
 # Update the locate database.
@@ -378,8 +378,8 @@ hash libtool 2>/dev/null || { install_compiler; }
 if ! grep -q -s "git-core" /etc/apt/sources.list /etc/apt/sources.list.d/*; then install_git; fi
 
 # Install configure MongoDB.
-install_mongodb;
-configure_mongodb;
+install_mongo32;
+configure_mongo;
 
 # Update the locate database.
 update_locate_db;
