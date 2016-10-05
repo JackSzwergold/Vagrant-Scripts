@@ -283,15 +283,73 @@ function configure_motd () {
 } # configure_motd
 
 ##########################################################################################
+# MongoDB 2.6
+##########################################################################################
+function install_mongo26 () {
+
+  echo -e "PROVISIONING: Installing MongoDB related items.\n";
+
+  # Add the official MongoDB repository and install MongoDB.
+  sudo -E apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
+  echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list
+  sudo -E aptitude update -y --assume-yes -q;
+  sudo -E aptitude install -y --assume-yes -q mongodb-org=3.2.10 mongodb-org-server=3.2.10 mongodb-org-shell=3.2.10 mongodb-org-mongos=3.2.10 mongodb-org-tools=3.2.10
+
+  # Pin the currently installed version of MongoDB to ensure no accidental upgrades happen.
+  echo "mongodb-org hold" | sudo dpkg --set-selections
+  echo "mongodb-org-server hold" | sudo dpkg --set-selections
+  echo "mongodb-org-shell hold" | sudo dpkg --set-selections
+  echo "mongodb-org-mongos hold" | sudo dpkg --set-selections
+  echo "mongodb-org-tools hold" | sudo dpkg --set-selections
+
+} # install_mongo26
+
+function configure_mongo26 () {
+
+  echo -e "PROVISIONING: Configuring MongoDB related items.\n";
+
+  # Comment out the 'bind_ip' line to enable network connections outside of 'localhost'.
+  sudo -E sed -i 's/bind_ip = 127.0.0.1/#bind_ip = 127.0.0.1/g' "/etc/mongod.conf";
+
+  # Restart the Mongo instance to get the new config loaded.
+  sudo -E service mongod restart;
+
+  # Go into the base directory.
+  cd "${BASE_DIR}";
+
+  # Import any databases that were sent over as the part of the provisioning process.
+  if [ -d "${DB_DIR}" ]; then
+    find "${DB_DIR}" -type f -name "*.bson" |\
+      while read db_backup_path
+      do
+        if [ -f "${db_backup_path}" ]; then
+          db_dirname=$(dirname "${db_backup_path}");
+          # db_basename=$(basename "${db_backup_path}");
+          # db_filename="${db_basename%.*}";
+          # db_extension="${db_basename##*.}";
+          # db_parent_dir=$(basename "${db_dirname}");
+          mongo_db=$(basename "${db_dirname}");
+          echo -e "PROVISIONING: Restoring the '${mongo_db}' MongoDB database.\n";
+          # echo 'db.dropDatabase()' | mongo --quiet "${mongo_db}";
+          mongo --quiet "${mongo_db}" --eval "db.dropDatabase()";
+          mongorestore --quiet "${db_backup_path}";
+        else
+          exit 1;
+        fi
+      done
+  fi
+
+} # configure_mongo26
+
+##########################################################################################
 # MongoDB 3.2
 ##########################################################################################
+
 function install_mongo32 () {
 
   echo -e "PROVISIONING: Installing MongoDB related items.\n";
 
   # Add the official MongoDB repository and install MongoDB.
-  # sudo -E apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
-  # echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list
   sudo -E apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
   echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list
   sudo -E aptitude update -y --assume-yes -q;
@@ -306,12 +364,11 @@ function install_mongo32 () {
 
 } # install_mongo32
 
-function configure_mongo () {
+function configure_mongo32 () {
 
   echo -e "PROVISIONING: Configuring MongoDB related items.\n";
 
   # Comment out the 'bind_ip' line to enable network connections outside of 'localhost'.
-  # sudo -E sed -i 's/bind_ip = 127.0.0.1/#bind_ip = 127.0.0.1/g' "/etc/mongod.conf";
   sudo -E sed -i 's/bindIp: 127.0.0.1/#bindIp: 127.0.0.1/g' "/etc/mongod.conf";
 
   # Restart the Mongo instance to get the new config loaded.
@@ -342,7 +399,7 @@ function configure_mongo () {
       done
   fi
 
-} # configure_mongo
+} # configure_mongo32
 
 ##########################################################################################
 # Update the locate database.
@@ -379,7 +436,7 @@ if ! grep -q -s "git-core" /etc/apt/sources.list /etc/apt/sources.list.d/*; then
 
 # Install configure MongoDB.
 install_mongo32;
-configure_mongo;
+configure_mongo32;
 
 # Update the locate database.
 update_locate_db;
