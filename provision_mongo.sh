@@ -435,6 +435,8 @@ hash libtool 2>/dev/null || { install_compiler; }
 if ! grep -q -s "git-core" /etc/apt/sources.list /etc/apt/sources.list.d/*; then install_git; fi
 
 # Install configure MongoDB.
+# install_mongo26;
+# configure_mongo26;
 install_mongo32;
 configure_mongo32;
 
