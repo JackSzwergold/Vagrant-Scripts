@@ -372,7 +372,8 @@ function configure_mongo32 () {
   sudo -E sed -i 's/bindIp: 127.0.0.1/#bindIp: 127.0.0.1/g' "/etc/mongod.conf";
 
   # Restart the Mongo instance to get the new config loaded.
-  sudo -E service mongod restart;
+  sudo -E service mongod restart & RESTART_PID=(`jobs -l | awk '{print $2}'`);
+  wait ${RESTART_PID};
 
   # Go into the base directory.
   cd "${BASE_DIR}";
