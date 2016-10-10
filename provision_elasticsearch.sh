@@ -378,6 +378,7 @@ install_java;
 
 # Install configure ElasticSearch.
 install_elasticsearch;
+configure_elasticsearch;
 
 # Update the locate database.
 update_locate_db;
