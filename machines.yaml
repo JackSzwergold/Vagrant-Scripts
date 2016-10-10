@@ -73,6 +73,9 @@
   forward_guest1: 22
   forward_host1: 2225
   forward_id1: "ssh"
+  forward_guest2: 9200
+  forward_host2: 9200
+  forward_id2: "elasticsearch"
   memory: 1024
   cpus: 1
 - name: "NodeJS_UBUNTU_1404"
