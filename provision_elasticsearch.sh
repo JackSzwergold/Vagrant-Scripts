@@ -312,7 +312,7 @@ function install_elasticsearch () {
   wget -qO - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | sudo apt-key add -
   echo 'deb http://packages.elasticsearch.org/elasticsearch/1.7/debian stable main' | sudo tee /etc/apt/sources.list.d/elasticsearch.list
   sudo -E aptitude update -y --assume-yes -q;
-  sudo -E aptitude install -y --assume-yes -q elasticsearch
+  sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q elasticsearch
 
   # Set ElasticSearch to be able to come up on reboot.
   sudo update-rc.d elasticsearch defaults 95 10
