@@ -32,6 +32,7 @@
   ip: "192.168.56.10"
   forward_guest1: 22
   forward_host1: 2222
+  forward_id1: "ssh"
   memory: 512
   cpus: 1
 - name: "Jabroni_UBUNTU_1404"
@@ -45,6 +46,7 @@
   ip: "192.168.56.20"
   forward_guest1: 22
   forward_host1: 2223
+  forward_id1: "ssh"
   memory: 512
   cpus: 1
 - name: "Mongo_UBUNTU_1404"
@@ -57,6 +59,7 @@
   ip: "192.168.56.30"
   forward_guest1: 22
   forward_host1: 2224
+  forward_id1: "ssh"
   memory: 2048
   cpus: 2
 - name: "ElasticSearch_UBUNTU_1404"
@@ -69,6 +72,7 @@
   ip: "192.168.56.40"
   forward_guest1: 22
   forward_host1: 2225
+  forward_id1: "ssh"
   memory: 1024
   cpus: 1
 - name: "NodeJS_UBUNTU_1404"
@@ -81,5 +85,6 @@
   ip: "192.168.56.50"
   forward_guest1: 22
   forward_host1: 2226
+  forward_id1: "ssh"
   memory: 1024
   cpus: 1
