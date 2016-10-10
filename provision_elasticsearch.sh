@@ -302,7 +302,7 @@ function install_java () {
 } # install_java
 
 ##########################################################################################
-# MongoDB
+# Install Elasticsearch
 ##########################################################################################
 function install_elasticsearch () {
 
@@ -321,6 +321,24 @@ function install_elasticsearch () {
   sudo -E service elasticsearch restart;
 
 } # install_elasticsearch
+
+##########################################################################################
+# Configure Elasticsearch
+##########################################################################################
+function configure_elasticsearch () {
+
+  echo -e "PROVISIONING: Configuring ElasticSearch related items.\n";
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
+  # Copy the Elasticsearch config file in place and restart sysstat.
+  if [ -f "elasticsearch/elasticsearch.yml" ]; then
+    sudo -E cp -f "elasticsearch/elasticsearch.yml" "/etc/elasticsearch/elasticsearch.yml";
+    sudo -E service elasticsearch restart;
+  fi
+
+} # configure_elasticsearch
 
 ##########################################################################################
 # Update the locate database.
