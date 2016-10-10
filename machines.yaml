@@ -30,8 +30,8 @@
   fail2ban: false
   hostname: "sandbox"
   ip: "192.168.56.10"
-  ssh_guest: 22
-  ssh_host: 2222
+  forward_guest1: 22
+  forward_host1: 2222
   memory: 512
   cpus: 1
 - name: "Jabroni_UBUNTU_1404"
@@ -43,8 +43,8 @@
   basics: true
   hostname: "jabroni"
   ip: "192.168.56.20"
-  ssh_guest: 22
-  ssh_host: 2223
+  forward_guest1: 22
+  forward_host1: 2223
   memory: 512
   cpus: 1
 - name: "Mongo_UBUNTU_1404"
@@ -55,8 +55,8 @@
   deployment_dbs_path: "deployment_dbs"
   hostname: "mongo"
   ip: "192.168.56.30"
-  ssh_guest: 22
-  ssh_host: 2224
+  forward_guest1: 22
+  forward_host1: 2224
   memory: 2048
   cpus: 2
 - name: "ElasticSearch_UBUNTU_1404"
@@ -67,8 +67,8 @@
   deployment_dbs_path: "deployment_dbs"
   hostname: "elasticsearch"
   ip: "192.168.56.40"
-  ssh_guest: 22
-  ssh_host: 2225
+  forward_guest1: 22
+  forward_host1: 2225
   memory: 1024
   cpus: 1
 - name: "NodeJS_UBUNTU_1404"
@@ -79,7 +79,7 @@
   deployment_dbs_path: "deployment_dbs"
   hostname: "nodejs"
   ip: "192.168.56.50"
-  ssh_guest: 22
-  ssh_host: 2226
+  forward_guest1: 22
+  forward_host1: 2226
   memory: 1024
   cpus: 1
