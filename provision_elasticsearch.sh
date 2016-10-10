@@ -302,7 +302,7 @@ function install_java () {
 } # install_java
 
 ##########################################################################################
-# MongoDB
+# Install Elasticsearch
 ##########################################################################################
 function install_elasticsearch () {
 
@@ -312,7 +312,7 @@ function install_elasticsearch () {
   wget -qO - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | sudo apt-key add -
   echo 'deb http://packages.elasticsearch.org/elasticsearch/1.7/debian stable main' | sudo tee /etc/apt/sources.list.d/elasticsearch.list
   sudo -E aptitude update -y --assume-yes -q;
-  sudo -E aptitude install -y --assume-yes -q elasticsearch
+  sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q elasticsearch
 
   # Set ElasticSearch to be able to come up on reboot.
   sudo update-rc.d elasticsearch defaults 95 10
@@ -321,6 +321,24 @@ function install_elasticsearch () {
   sudo -E service elasticsearch restart;
 
 } # install_elasticsearch
+
+##########################################################################################
+# Configure Elasticsearch
+##########################################################################################
+function configure_elasticsearch () {
+
+  echo -e "PROVISIONING: Configuring ElasticSearch related items.\n";
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
+  # Copy the Elasticsearch config file in place and restart sysstat.
+  if [ -f "elasticsearch/elasticsearch.yml" ]; then
+    sudo -E cp -f "elasticsearch/elasticsearch.yml" "/etc/elasticsearch/elasticsearch.yml";
+    sudo -E service elasticsearch restart;
+  fi
+
+} # configure_elasticsearch
 
 ##########################################################################################
 # Update the locate database.
@@ -360,6 +378,7 @@ install_java;
 
 # Install configure ElasticSearch.
 install_elasticsearch;
+configure_elasticsearch;
 
 # Update the locate database.
 update_locate_db;
