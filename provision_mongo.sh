@@ -293,7 +293,7 @@ function install_mongo26 () {
   sudo -E apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10
   echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list
   sudo -E aptitude update -y --assume-yes -q;
-  sudo -E aptitude install -y --assume-yes -q mongodb-org=3.2.10 mongodb-org-server=3.2.10 mongodb-org-shell=3.2.10 mongodb-org-mongos=3.2.10 mongodb-org-tools=3.2.10
+  sudo -E aptitude install -y --assume-yes -q mongodb-org=2.6.11 mongodb-org-server=2.6.11 mongodb-org-shell=2.6.11 mongodb-org-mongos=2.6.11 mongodb-org-tools=2.6.11
 
   # Pin the currently installed version of MongoDB to ensure no accidental upgrades happen.
   echo "mongodb-org hold" | sudo dpkg --set-selections
