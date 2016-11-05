@@ -60,6 +60,9 @@
   forward_guest1: 22
   forward_host1: 2224
   forward_id1: "ssh"
+  forward_guest2: 27017
+  forward_host2: 27017
+  forward_id2: "mongo"
   memory: 2048
   cpus: 2
 - name: "ElasticSearch_UBUNTU_1404"
