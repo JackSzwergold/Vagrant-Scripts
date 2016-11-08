@@ -235,6 +235,7 @@ function install_postfix () {
   sudo -E yum install -y -q postfix;
   sudo -E yum install -y -q cyrus-sasl;
   sudo -E yum install -y -q cyrus-imapd;
+  sudo -E yum install -y -q mailx
 
 } # install_postfix
 
