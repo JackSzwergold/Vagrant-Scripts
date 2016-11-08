@@ -46,7 +46,7 @@ echo -e "PROVISIONING: User name is: '${USER_NAME}'.\n";
 
 MACHINE_NAME="vagrant";
 if [ -n "$4" ]; then MACHINE_NAME="${4}"; fi
-echo -e "PROVISIONING: Nice name is: '${MACHINE_NAME}'.\n";
+echo -e "PROVISIONING: Machine name is: '${MACHINE_NAME}'.\n";
 
 HOST_NAME="vagrant.local";
 if [ -n "$5" ]; then HOST_NAME="${5}"; fi

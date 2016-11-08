@@ -332,7 +332,8 @@ function configure_motd () {
   # Set the server login banner with figlet.
   # MOTD_PATH="/etc/motd.tail";
   MOTD_PATH="/etc/motd";
-  echo "$(figlet ${MACHINE_NAME^} | head -n -1).local" > "${MOTD_PATH}";
+  # echo "$(figlet ${MACHINE_NAME^} | head -n -1).local" > "${MOTD_PATH}";
+  echo "$(figlet ${MACHINE_NAME} | head -n -1).local" > "${MOTD_PATH}";
   echo "" >> "${MOTD_PATH}";
 
   echo -e "PROVISIONING: Disabling MOTD scripts.\n";
