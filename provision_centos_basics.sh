@@ -44,9 +44,9 @@ USER_NAME="vagrant";
 if [ -n "$3" ]; then USER_NAME="${3}"; fi
 echo -e "PROVISIONING: User name is: '${USER_NAME}'.\n";
 
-NICE_NAME="vagrant";
-if [ -n "$4" ]; then NICE_NAME="${4}"; fi
-echo -e "PROVISIONING: Nice name is: '${NICE_NAME}'.\n";
+MACHINE_NAME="vagrant";
+if [ -n "$4" ]; then MACHINE_NAME="${4}"; fi
+echo -e "PROVISIONING: Nice name is: '${MACHINE_NAME}'.\n";
 
 HOST_NAME="vagrant.local";
 if [ -n "$5" ]; then HOST_NAME="${5}"; fi
@@ -292,21 +292,10 @@ function configure_motd () {
   sudo -E yum install -y -q figlet;
 
   # Set the server login banner with figlet.
-  # MOTD_PATH="/etc/motd.tail";
   MOTD_PATH="/etc/motd";
-  # echo "$(figlet ${NICE_NAME^} | head -n -1).local" > "${NICE_NAME}";
-  echo "$(figlet ${NICE_NAME} | head -n -1).local" > "${NICE_NAME}";
+  # echo "$(figlet ${MACHINE_NAME^} | head -n -1).local" > "${MOTD_PATH}";
+  echo "$(figlet ${MACHINE_NAME} | head -n -1).local" > "${MOTD_PATH}";
   echo "" >> "${MOTD_PATH}";
-
-  # echo -e "PROVISIONING: Disabling MOTD scripts.\n";
-
-  # Disable these MOTD scripts.
-  # sudo -E chmod -f -x "/etc/update-motd.d/50-landscape-sysinfo";
-  # sudo -E chmod -f -x "/etc/update-motd.d/51-cloudguest";
-  # sudo -E chmod -f -x "/etc/update-motd.d/90-updates-available";
-  # sudo -E chmod -f -x "/etc/update-motd.d/91-release-upgrade";
-  # sudo -E chmod -f -x "/etc/update-motd.d/95-hwe-eol";
-  # sudo -E chmod -f -x "/etc/update-motd.d/98-cloudguest";
 
 } # configure_motd
 
