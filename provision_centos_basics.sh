@@ -132,13 +132,10 @@ function install_avahi () {
   # Install Avahi.
   sudo -E yum install -y -q avahi;
 
-  # Install NSS support for mDNS.
-  # curl -ss -O -L "https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm";
-  # sudo rpm -i epel-release-latest-6.noarch.rpm;
-  # sudo rm epel-release-latest-6.noarch.rpm;
+  # Enable EPEL (Extra Packages for Enterprise Linux)
   sudo sed -i 's/enabled=0/enabled=1/g' /etc/yum.repos.d/epel.repo;
 
-  # Now actually instal mDNS.
+  # Install NSS support for mDNS which is required by Avahi.
   sudo -E yum install -y -q nss-mdns;
 
   # Start the system messagebus.
