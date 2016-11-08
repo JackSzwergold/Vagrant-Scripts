@@ -324,6 +324,17 @@ function install_apache () {
   # Enable these core Apache modules.
   # sudo -E a2enmod -q rewrite headers expires include proxy proxy_http cgi;
 
+  # Set Apache to start on reboot.
+  sudo chkconfig --add httpd
+  sudo chkconfig --level 345 httpd on
+
+  # TODO: Stop and disable IPTables. (Note this shouldn’t be here; set a separate function.)
+  sudo service iptables stop
+  sudo chkconfig iptables off
+
+  # Start Apache.
+  sudo service httpd start
+
 } # install_apache
 
 ##########################################################################################
