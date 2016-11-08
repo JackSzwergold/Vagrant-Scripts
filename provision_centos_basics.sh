@@ -113,12 +113,14 @@ function set_environment () {
 ##########################################################################################
 function set_timezone () {
 
+  # Set the timezone variables.
   TIMEZONE="America/New_York";
   TIMEZONE_PATH="/usr/share/zoneinfo";
 
   echo -e "PROVISIONING: Setting timezone data.\n";
 
-  sudo -E ln -f -s "${TIMEZONE_PATH}"/"${TIMEZONE}" /etc/localtime
+  # Set the actual timezone via a symbolic link.
+  sudo -E ln -f -s "${TIMEZONE_PATH}"/"${TIMEZONE}" "/etc/localtime";
 
 } # set_timezone
 
@@ -219,7 +221,7 @@ function install_git () {
   sudo -E yum remove -y -q git;
 
   # Now install Git via WANDisco.
-  sudo -E yum install -y -q http://opensource.wandisco.com/centos/6/git/x86_64/wandisco-git-release-6-1.noarch.rpm
+  sudo -E yum install -y -q "http://opensource.wandisco.com/centos/6/git/x86_64/wandisco-git-release-6-1.noarch.rpm";
   sudo -E yum install -y -q git;
 
 } # install_git
@@ -235,7 +237,7 @@ function install_postfix () {
   sudo -E yum install -y -q postfix;
   sudo -E yum install -y -q cyrus-sasl;
   sudo -E yum install -y -q cyrus-imapd;
-  sudo -E yum install -y -q mailx
+  sudo -E yum install -y -q mailx;
 
 } # install_postfix
 
