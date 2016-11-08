@@ -351,6 +351,9 @@ function install_mysql () {
   sudo chkconfig --add mysqld;
   sudo chkconfig --level 345 mysqld on;
 
+  # Start MySQL.
+  sudo service mysqld start;
+
 } # install_mysql
 
 ##########################################################################################
