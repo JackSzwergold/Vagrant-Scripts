@@ -99,3 +99,22 @@
   forward_id1: "ssh"
   memory: 1024
   cpus: 1
+- name: "Sandbox_CENTOS_86"
+  box: "kaorimatz/centos-6.8-x86_64"
+  primary: false
+  autostart: false
+  # provision_script: "provision_lamp.sh"
+  # deployment_configs_path: "deployment_configs"
+  # deployment_dbs_path: "deployment_dbs"
+  # basics: true
+  # lamp: true
+  # geoip: true
+  # iptables: true
+  # fail2ban: false
+  hostname: "sandbox_centos"
+  ip: "192.168.56.60"
+  forward_guest1: 22
+  forward_host1: 2227
+  forward_id1: "ssh"
+  memory: 512
+  cpus: 1
