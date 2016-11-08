@@ -204,7 +204,7 @@ function install_compiler () {
   echo -e "PROVISIONING: Installing the core compiler tools.\n";
 
   # Install the core compiler and build tools.
-  sudo -E aptitude install -y --assume-yes -q build-essential libtool;
+  sudo -E yum groupinstall -y -q 'Development Tools'
 
 } # install_compiler
 
@@ -963,7 +963,7 @@ if [ "${PROVISION_BASICS}" = true ]; then
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
   install_basic_tools;
-  # hash libtool 2>/dev/null || { install_compiler; }
+  hash libtool 2>/dev/null || { install_compiler; }
   # if ! grep -q -s "git-core" /etc/apt/sources.list /etc/apt/sources.list.d/*; then install_git; fi
   # hash postfix 2>/dev/null || { install_postfix; }
   # if [ -f "system/login.defs" ] && [ -f "/etc/login.defs" ]; then configure_login_defs; fi
