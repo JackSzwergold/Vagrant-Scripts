@@ -204,7 +204,7 @@ function install_compiler () {
   echo -e "PROVISIONING: Installing the core compiler tools.\n";
 
   # Install the core compiler and build tools.
-  sudo -E yum groupinstall -y -q 'Development Tools'
+  sudo -E yum groupinstall -y -q 'Development Tools';
 
 } # install_compiler
 
