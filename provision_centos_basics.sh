@@ -216,13 +216,11 @@ function install_git () {
   echo -e "PROVISIONING: Installing Git and related stuff.\n";
 
   # Purge any already installed version of Git.
-  sudo -E aptitude purge -y --assume-yes -q git git-core subversion git-svn;
+  sudo -E yum remove -y -q git;
 
-  # Now install Git via PPA.
-  sudo -E aptitude install -y --assume-yes -q python-software-properties;
-  sudo -E add-apt-repository -y ppa:git-core/ppa;
-  sudo -E aptitude update -y --assume-yes -q;
-  sudo -E aptitude install -y --assume-yes -q git git-core subversion git-svn;
+  # Now install Git via WANDisco.
+  sudo -E yum install -y -q http://opensource.wandisco.com/centos/6/git/x86_64/wandisco-git-release-6-1.noarch.rpm
+  sudo -E yum install -y -q git;
 
 } # install_git
 
@@ -234,9 +232,9 @@ function install_postfix () {
   echo -e "PROVISIONING: Installing Postfix and related mail stuff.\n";
 
   # Install postfix and general mail stuff.
-  debconf-set-selections <<< "postfix postfix/mailname string ${HOST_NAME}";
-  debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'";
-  sudo -E aptitude install -y --assume-yes -q postfix mailutils;
+  sudo -E yum install -y -q postfix;
+  sudo -E yum install -y -q cyrus-sasl;
+  sudo -E yum install -y -q cyrus-imapd;
 
 } # install_postfix
 
@@ -964,8 +962,8 @@ if [ "${PROVISION_BASICS}" = true ]; then
 
   install_basic_tools;
   hash libtool 2>/dev/null || { install_compiler; }
-  # if ! grep -q -s "git-core" /etc/apt/sources.list /etc/apt/sources.list.d/*; then install_git; fi
-  # hash postfix 2>/dev/null || { install_postfix; }
+  install_git;
+  install_postfix;
   # if [ -f "system/login.defs" ] && [ -f "/etc/login.defs" ]; then configure_login_defs; fi
   # if [ -f "system/common-session" ] && [ -f "/etc/pam.d/common-session" ]; then configure_common_session; fi
   # if [ -f "ssh/ssh_config" ] && [ -f "/etc/ssh/ssh_config" ]; then configure_ssh; fi
