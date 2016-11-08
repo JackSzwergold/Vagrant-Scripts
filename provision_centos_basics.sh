@@ -154,13 +154,13 @@ function install_sysstat () {
   echo -e "PROVISIONING: Sysstat related stuff.\n";
 
   # Install Sysstat.
-  sudo -E aptitude install -y --assume-yes -q sysstat;
+  sudo -E yum install -y -q sysstat;
 
-  # Copy the Sysstat config file in place and restart sysstat.
-  if [ -f "sysstat/sysstat" ]; then
-    sudo -E cp -f "sysstat/sysstat" "/etc/default/sysstat";
-    sudo -E service sysstat restart;
-  fi
+  # Enable Sysstat.
+  # sudo sed -i 's/ENABLED="false"/ENABLED="true"/g' /etc/sysconfig/sysstat;
+
+  # Restart Sysstat.
+  sudo -E service sysstat restart;
 
 } # install_sysstat
 
@@ -172,7 +172,7 @@ function install_basic_tools () {
   echo -e "PROVISIONING: Installing a set of generic tools.\n";
 
   # Install generic tools.
-  sudo -E aptitude install -y --assume-yes -q \
+  sudo -E yum install -y -q \
     dnsutils traceroute nmap bc htop finger curl whois rsync lsof \
     iftop figlet lynx mtr-tiny iperf nload zip unzip attr sshpass \
     dkms mc elinks ntp dos2unix p7zip-full nfs-common \
@@ -189,7 +189,7 @@ function install_locate () {
   echo -e "PROVISIONING: Installing the locate tool and updating the database.\n";
 
   # Install Locate.
-  sudo -E aptitude install -y --assume-yes -q mlocate;
+  sudo -E yum install -y -q mlocate;
 
   # Update Locate.
   sudo -E updatedb;
@@ -290,7 +290,7 @@ function configure_motd () {
   echo -e "PROVISIONING: Setting the MOTD banner.\n";
 
   # Install figlet.
-  sudo -E aptitude install -y --assume-yes -q figlet;
+  sudo -E yum install -y -q figlet;
 
   # Set the server login banner with figlet.
   # MOTD_PATH="/etc/motd.tail";
@@ -301,12 +301,12 @@ function configure_motd () {
   echo -e "PROVISIONING: Disabling MOTD scripts.\n";
 
   # Disable these MOTD scripts.
-  sudo -E chmod -f -x "/etc/update-motd.d/50-landscape-sysinfo";
-  sudo -E chmod -f -x "/etc/update-motd.d/51-cloudguest";
-  sudo -E chmod -f -x "/etc/update-motd.d/90-updates-available";
-  sudo -E chmod -f -x "/etc/update-motd.d/91-release-upgrade";
-  sudo -E chmod -f -x "/etc/update-motd.d/95-hwe-eol";
-  sudo -E chmod -f -x "/etc/update-motd.d/98-cloudguest";
+  # sudo -E chmod -f -x "/etc/update-motd.d/50-landscape-sysinfo";
+  # sudo -E chmod -f -x "/etc/update-motd.d/51-cloudguest";
+  # sudo -E chmod -f -x "/etc/update-motd.d/90-updates-available";
+  # sudo -E chmod -f -x "/etc/update-motd.d/91-release-upgrade";
+  # sudo -E chmod -f -x "/etc/update-motd.d/95-hwe-eol";
+  # sudo -E chmod -f -x "/etc/update-motd.d/98-cloudguest";
 
 } # configure_motd
 
@@ -952,8 +952,8 @@ configure_user_and_group;
 set_environment;
 set_timezone;
 hash avahi-daemon 2>/dev/null || { install_avahi; }
-# hash sar 2>/dev/null || {  install_sysstat; }
-#hash updatedb 2>/dev/null || { install_locate; }
+hash sar 2>/dev/null || {  install_sysstat; }
+hash updatedb 2>/dev/null || { install_locate; }
 # configure_motd;
 
 # Get the basics set.
@@ -963,12 +963,12 @@ if [ "${PROVISION_BASICS}" = true ]; then
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
   install_basic_tools;
-  hash libtool 2>/dev/null || { install_compiler; }
-  if ! grep -q -s "git-core" /etc/apt/sources.list /etc/apt/sources.list.d/*; then install_git; fi
-  hash postfix 2>/dev/null || { install_postfix; }
-  if [ -f "system/login.defs" ] && [ -f "/etc/login.defs" ]; then configure_login_defs; fi
-  if [ -f "system/common-session" ] && [ -f "/etc/pam.d/common-session" ]; then configure_common_session; fi
-  if [ -f "ssh/ssh_config" ] && [ -f "/etc/ssh/ssh_config" ]; then configure_ssh; fi
+  # hash libtool 2>/dev/null || { install_compiler; }
+  # if ! grep -q -s "git-core" /etc/apt/sources.list /etc/apt/sources.list.d/*; then install_git; fi
+  # hash postfix 2>/dev/null || { install_postfix; }
+  # if [ -f "system/login.defs" ] && [ -f "/etc/login.defs" ]; then configure_login_defs; fi
+  # if [ -f "system/common-session" ] && [ -f "/etc/pam.d/common-session" ]; then configure_common_session; fi
+  # if [ -f "ssh/ssh_config" ] && [ -f "/etc/ssh/ssh_config" ]; then configure_ssh; fi
 
 fi
 
