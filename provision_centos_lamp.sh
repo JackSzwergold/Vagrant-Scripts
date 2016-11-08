@@ -325,17 +325,33 @@ function install_apache () {
   # sudo -E a2enmod -q rewrite headers expires include proxy proxy_http cgi;
 
   # Set Apache to start on reboot.
-  sudo chkconfig --add httpd
-  sudo chkconfig --level 345 httpd on
+  sudo chkconfig --add httpd;
+  sudo chkconfig --level 345 httpd on;
 
   # TODO: Stop and disable IPTables. (Note this shouldn’t be here; set a separate function.)
-  sudo service iptables stop
-  sudo chkconfig iptables off
+  sudo service iptables stop;
+  sudo chkconfig iptables off;
 
   # Start Apache.
-  sudo service httpd start
+  sudo service httpd start;
 
 } # install_apache
+
+##########################################################################################
+# MySQL
+##########################################################################################
+function install_mysql () {
+
+  echo -e "PROVISIONING: Installing and configuring MySQL related items.\n";
+
+  # Install the MySQL server and client.
+  sudo -E yum install -y mysql-server;
+
+  # Set Apache to start on reboot.
+  sudo chkconfig --add mysqld;
+  sudo chkconfig --level 345 mysqld on;
+
+} # install_mysql
 
 ##########################################################################################
 # Monit
@@ -442,6 +458,9 @@ fi
 
 # Apache
 hash apachectl 2>/dev/null || { install_apache; }
+
+# MySQL
+hash mysql && hash mysqld 2>/dev/null || { install_mysql; }
 
 # Update the locate database.
 update_locate_db;
