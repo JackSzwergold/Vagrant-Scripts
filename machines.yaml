@@ -21,7 +21,7 @@
   box: "ubuntu/trusty64"
   primary: true
   autostart: false
-  provision_script: "provision_lamp.sh"
+  provision_script: "provision_ubuntu_lamp.sh"
   deployment_configs_path: "deployment_configs"
   deployment_dbs_path: "deployment_dbs"
   basics: true
@@ -40,7 +40,7 @@
   box: "ubuntu/trusty64"
   primary: false
   autostart: false
-  provision_script: "provision_basics.sh"
+  provision_script: "provision_ubuntu_basics.sh"
   deployment_configs_path: "deployment_configs"
   deployment_dbs_path: "deployment_dbs"
   basics: true
@@ -55,7 +55,7 @@
   box: "ubuntu/trusty64"
   primary: false
   autostart: false
-  provision_script: "provision_mongo.sh"
+  provision_script: "provision_ubuntu_mongo.sh"
   deployment_configs_path: "deployment_configs"
   deployment_dbs_path: "deployment_dbs"
   hostname: "mongo"
@@ -72,7 +72,7 @@
   box: "ubuntu/trusty64"
   primary: false
   autostart: false
-  provision_script: "provision_elasticsearch.sh"
+  provision_script: "provision_ubuntu_elasticsearch.sh"
   deployment_configs_path: "deployment_configs"
   deployment_dbs_path: "deployment_dbs"
   hostname: "elasticsearch"
@@ -89,7 +89,7 @@
   box: "ubuntu/trusty64"
   primary: false
   autostart: false
-  provision_script: "provision_nodejs.sh"
+  provision_script: "provision_ubuntu_nodejs.sh"
   deployment_configs_path: "deployment_configs"
   deployment_dbs_path: "deployment_dbs"
   hostname: "nodejs"
@@ -103,7 +103,7 @@
   box: "kaorimatz/centos-6.8-x86_64"
   primary: false
   autostart: false
-  # provision_script: "provision_lamp.sh"
+  # provision_script: "provision_ubuntu_lamp.sh"
   # deployment_configs_path: "deployment_configs"
   # deployment_dbs_path: "deployment_dbs"
   # basics: true
@@ -111,7 +111,7 @@
   # geoip: true
   # iptables: true
   # fail2ban: false
-  hostname: "sandbox_centos"
+  hostname: "sandbox-centos"
   ip: "192.168.56.60"
   forward_guest1: 22
   forward_host1: 2227
