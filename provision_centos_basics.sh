@@ -64,13 +64,6 @@ echo -e "PROVISIONING: Basics provisioning: '${PROVISION_BASICS}'.\n";
 cd "${BASE_DIR}/${CONFIG_DIR}";
 
 ##########################################################################################
-# Adjusting the Debian frontend setting to non-interactive mode.
-##########################################################################################
-
-echo -e "PROVISIONING: Setting the Debian frontend to non-interactive mode.\n"
-export DEBIAN_FRONTEND=noninteractive;
-
-##########################################################################################
 #  _____                 _   _
 # |  ___|   _ _ __   ___| |_(_) ___  _ __  ___
 # | |_ | | | | '_ \ / __| __| |/ _ \| '_ \/ __|
@@ -138,11 +131,10 @@ function install_avahi () {
   echo -e "PROVISIONING: Avahi related stuff.\n";
 
   # Install Avahi.
-  sudo -E aptitude install -y --assume-yes -q avahi;
   sudo -E yum install -y -q avahi;
 
   # Install NSS support for mDNS.
-  curl -O https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm;
+  curl -ss -O -L "https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm";
   sudo rpm -i epel-release-latest-6.noarch.rpm;
   sudo rm epel-release-latest-6.noarch.rpm;
   sudo sed -i 's/enabled=0/enabled=1/g' /etc/yum.repos.d/epel.repo;
