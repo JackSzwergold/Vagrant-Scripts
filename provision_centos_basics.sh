@@ -118,7 +118,6 @@ function set_timezone () {
 
   echo -e "PROVISIONING: Setting timezone data.\n";
 
-  sudo -E echo "${TIMEZONE}" > "${TIMEZONE_PATH}";
   sudo -E ln -f -s "${TIMEZONE_PATH}"/"${TIMEZONE}" /etc/localtime
 
 } # set_timezone
@@ -134,9 +133,9 @@ function install_avahi () {
   sudo -E yum install -y -q avahi;
 
   # Install NSS support for mDNS.
-  curl -ss -O -L "https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm";
-  sudo rpm -i epel-release-latest-6.noarch.rpm;
-  sudo rm epel-release-latest-6.noarch.rpm;
+  # curl -ss -O -L "https://dl.fedoraproject.org/pub/epel/epel-release-latest-6.noarch.rpm";
+  # sudo rpm -i epel-release-latest-6.noarch.rpm;
+  # sudo rm epel-release-latest-6.noarch.rpm;
   sudo sed -i 's/enabled=0/enabled=1/g' /etc/yum.repos.d/epel.repo;
 
   # Now actually instal mDNS.
