@@ -177,7 +177,7 @@ function install_basic_tools () {
     iftop figlet lynx mtr-tiny iperf nload zip unzip attr sshpass \
     dkms mc elinks ntp dos2unix p7zip-full nfs-common \
     slurm sharutils uuid-runtime chkconfig quota pv trickle apachetop \
-    virtualbox-dkms;
+    virtualbox-dkms nano;
 
 } # install_basic_tools
 
@@ -298,7 +298,7 @@ function configure_motd () {
   echo "$(figlet ${MACHINE_NAME^} | head -n -1).local" > "${MOTD_PATH}";
   echo "" >> "${MOTD_PATH}";
 
-  echo -e "PROVISIONING: Disabling MOTD scripts.\n";
+  # echo -e "PROVISIONING: Disabling MOTD scripts.\n";
 
   # Disable these MOTD scripts.
   # sudo -E chmod -f -x "/etc/update-motd.d/50-landscape-sysinfo";
@@ -954,7 +954,7 @@ set_timezone;
 hash avahi-daemon 2>/dev/null || { install_avahi; }
 hash sar 2>/dev/null || {  install_sysstat; }
 hash updatedb 2>/dev/null || { install_locate; }
-# configure_motd;
+configure_motd;
 
 # Get the basics set.
 if [ "${PROVISION_BASICS}" = true ]; then
@@ -977,4 +977,4 @@ fi
 # if [ -f "monit/monitrc" ]; then configure_monit; fi
 
 # Update the locate database.
-# update_locate_db;
+update_locate_db;
