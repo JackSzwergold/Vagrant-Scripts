@@ -290,7 +290,7 @@ function configure_motd () {
   echo -e "PROVISIONING: Setting the MOTD banner.\n";
 
   # Install figlet.
-  sudo -E aptitude install -y --assume-yes -q figlet;
+  sudo -E yum install -y -q figlet;
 
   # Set the server login banner with figlet.
   # MOTD_PATH="/etc/motd.tail";
@@ -301,12 +301,12 @@ function configure_motd () {
   echo -e "PROVISIONING: Disabling MOTD scripts.\n";
 
   # Disable these MOTD scripts.
-  sudo -E chmod -f -x "/etc/update-motd.d/50-landscape-sysinfo";
-  sudo -E chmod -f -x "/etc/update-motd.d/51-cloudguest";
-  sudo -E chmod -f -x "/etc/update-motd.d/90-updates-available";
-  sudo -E chmod -f -x "/etc/update-motd.d/91-release-upgrade";
-  sudo -E chmod -f -x "/etc/update-motd.d/95-hwe-eol";
-  sudo -E chmod -f -x "/etc/update-motd.d/98-cloudguest";
+  # sudo -E chmod -f -x "/etc/update-motd.d/50-landscape-sysinfo";
+  # sudo -E chmod -f -x "/etc/update-motd.d/51-cloudguest";
+  # sudo -E chmod -f -x "/etc/update-motd.d/90-updates-available";
+  # sudo -E chmod -f -x "/etc/update-motd.d/91-release-upgrade";
+  # sudo -E chmod -f -x "/etc/update-motd.d/95-hwe-eol";
+  # sudo -E chmod -f -x "/etc/update-motd.d/98-cloudguest";
 
 } # configure_motd
 
