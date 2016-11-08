@@ -44,9 +44,9 @@ USER_NAME="vagrant";
 if [ -n "$3" ]; then USER_NAME="${3}"; fi
 echo -e "PROVISIONING: User name is: '${USER_NAME}'.\n";
 
-MACHINE_NAME="vagrant";
-if [ -n "$4" ]; then MACHINE_NAME="${4}"; fi
-echo -e "PROVISIONING: Machine name is: '${MACHINE_NAME}'.\n";
+NICE_NAME="vagrant";
+if [ -n "$4" ]; then NICE_NAME="${4}"; fi
+echo -e "PROVISIONING: Nice name is: '${NICE_NAME}'.\n";
 
 HOST_NAME="vagrant.local";
 if [ -n "$5" ]; then HOST_NAME="${5}"; fi
@@ -294,7 +294,8 @@ function configure_motd () {
   # Set the server login banner with figlet.
   # MOTD_PATH="/etc/motd.tail";
   MOTD_PATH="/etc/motd";
-  echo "$(figlet ${MACHINE_NAME^} | head -n -1).local" > "${MOTD_PATH}";
+  # echo "$(figlet ${NICE_NAME^} | head -n -1).local" > "${NICE_NAME}";
+  echo "$(figlet ${NICE_NAME} | head -n -1).local" > "${NICE_NAME}";
   echo "" >> "${MOTD_PATH}";
 
   # echo -e "PROVISIONING: Disabling MOTD scripts.\n";

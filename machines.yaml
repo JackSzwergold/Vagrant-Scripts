@@ -30,6 +30,7 @@
   iptables: true
   fail2ban: false
   hostname: "sandbox"
+  machinename: "Sandbox"
   ip: "192.168.56.10"
   forward_guest1: 22
   forward_host1: 2222
@@ -45,6 +46,7 @@
   deployment_dbs_path: "deployment_dbs"
   basics: true
   hostname: "jabroni"
+  machinename: "Jabroni"
   ip: "192.168.56.20"
   forward_guest1: 22
   forward_host1: 2223
@@ -59,6 +61,7 @@
   deployment_configs_path: "deployment_configs"
   deployment_dbs_path: "deployment_dbs"
   hostname: "mongo"
+  machinename: "Mongo"
   ip: "192.168.56.30"
   forward_guest1: 22
   forward_host1: 2224
@@ -76,6 +79,7 @@
   deployment_configs_path: "deployment_configs"
   deployment_dbs_path: "deployment_dbs"
   hostname: "elasticsearch"
+  machinename: "Elasticsearch"
   ip: "192.168.56.40"
   forward_guest1: 22
   forward_host1: 2225
@@ -108,6 +112,7 @@
   deployment_dbs_path: "deployment_dbs"
   basics: true
   hostname: "sandbox-centos"
+  machinename: "Sandbox-CentOS"
   ip: "192.168.56.60"
   forward_guest1: 22
   forward_host1: 2227
