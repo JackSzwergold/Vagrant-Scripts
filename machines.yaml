@@ -18,6 +18,7 @@
 ##########################################################################################
 
 - name: "Sandbox_UBUNTU_1404"
+  box: "ubuntu/trusty64"
   primary: true
   autostart: false
   provision_script: "provision_lamp.sh"
@@ -36,6 +37,7 @@
   memory: 512
   cpus: 1
 - name: "Jabroni_UBUNTU_1404"
+  box: "ubuntu/trusty64"
   primary: false
   autostart: false
   provision_script: "provision_basics.sh"
@@ -50,6 +52,7 @@
   memory: 512
   cpus: 1
 - name: "Mongo_UBUNTU_1404"
+  box: "ubuntu/trusty64"
   primary: false
   autostart: false
   provision_script: "provision_mongo.sh"
@@ -66,6 +69,7 @@
   memory: 2048
   cpus: 2
 - name: "ElasticSearch_UBUNTU_1404"
+  box: "ubuntu/trusty64"
   primary: false
   autostart: false
   provision_script: "provision_elasticsearch.sh"
@@ -82,6 +86,7 @@
   memory: 1024
   cpus: 1
 - name: "NodeJS_UBUNTU_1404"
+  box: "ubuntu/trusty64"
   primary: false
   autostart: false
   provision_script: "provision_nodejs.sh"

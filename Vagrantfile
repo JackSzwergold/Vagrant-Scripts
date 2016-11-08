@@ -60,7 +60,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       end
 
       # Basic virtual machine configuration options.
-      machine.vm.box = "ubuntu/trusty64"
+      machine.vm.box = "#{machine_settings["box"]}"
       machine.vm.hostname = "#{machine_settings["hostname"]}"
       machine.vm.box_check_update = false
       machine.vm.network :private_network, ip: "#{machine_settings["ip"]}"
