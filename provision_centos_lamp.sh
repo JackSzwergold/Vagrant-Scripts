@@ -351,9 +351,24 @@ function set_apache_web_root () {
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
+  sudo -E chown -f -R "${USER_NAME}":www-readwrite "/var/www/html/";
+  sudo -E chmod -f -R 775 "/var/www/html/";
   sudo -E cp -f "apache2/index.php" "/var/www/html/index.php";
 
 } # set_apache_web_root
+
+##########################################################################################
+# Apache deployment directories.
+##########################################################################################
+function set_apache_deployment_directories () {
+
+  echo -e "PROVISIONING: Creating the web code deployment directories.\n";
+
+  sudo -E mkdir -p "/var/www/"{builds,configs,content};
+  sudo -E chown -f -R "${USER_NAME}":www-readwrite "/var/www/"{builds,configs,content};
+  sudo -E chmod -f -R 775 "/var/www/"{builds,configs,content};
+
+} # set_apache_deployment_directories
 
 ##########################################################################################
 # MySQL
@@ -498,7 +513,7 @@ if [ "${PROVISION_LAMP}" = true ]; then
   sudo -E service httpd stop;
   # configure_apache;
   if [ -d "/var/www/html" ]; then set_apache_web_root; fi
-  # if [ ! -d "/var/www/builds" ]; then set_apache_deployment_directories; fi
+  if [ ! -d "/var/www/builds" ]; then set_apache_deployment_directories; fi
   # if [ ! -d "/var/www/${HOST_NAME}" ]; then set_apache_virtual_host_directories; fi
   # if [ -f "/etc/logrotate.d/apache2" ]; then configure_apache_log_rotation; fi
 
