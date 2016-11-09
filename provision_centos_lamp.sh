@@ -355,6 +355,9 @@ function install_mysql () {
   sudo chkconfig --add mysqld;
   sudo chkconfig --level 345 mysqld on;
 
+  # Start MySQL.
+  sudo service mysqld start;
+
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
@@ -363,8 +366,8 @@ function install_mysql () {
     mysql -sfu root < "mysql/mysql_secure_installation.sql";
   fi
 
-  # Start MySQL.
-  sudo service mysqld start;
+  # Restart MySQL.
+  sudo service mysqld restart;
 
 } # install_mysql
 
