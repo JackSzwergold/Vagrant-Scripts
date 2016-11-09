@@ -342,6 +342,36 @@ function install_apache () {
 } # install_apache
 
 ##########################################################################################
+# Apache configure.
+##########################################################################################
+function configure_apache () {
+
+  echo -e "PROVISIONING: Setting Apache and PHP configs.\n";
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
+  # Copy the Apache config files into place.
+  sudo -E cp -f "apache2/httpd.conf" "/etc/httpd/conf/httpd.conf";
+  #sudo -E cp -f "apache2/envvars" "/etc/apache2/envvars";
+  #sudo -E cp -f "apache2/mpm_prefork.conf" "/etc/apache2/mods-available/mpm_prefork.conf";
+  #sudo -E cp -f "apache2/security.conf" "/etc/apache2/conf-available/security.conf";
+  #sudo -E cp -f "apache2/common.conf" "/etc/apache2/sites-available/common.conf";
+  #sudo -E cp -f "apache2/000-default.conf" "/etc/apache2/sites-available/000-default.conf";
+
+  # Copy and configure the Apache virtual host config file.
+  #sudo -E cp -f "apache2/vagrant.local.conf" "/etc/apache2/sites-available/${HOST_NAME}.conf";
+  #sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "/etc/apache2/sites-available/${HOST_NAME}.conf";
+  #HOST_NAME_ESCAPED=$(echo "${HOST_NAME}" | sed 's/\./\\\\./g');
+  #sudo -E sed -i "s/vagrant\\\.local/${HOST_NAME_ESCAPED}/" "/etc/apache2/sites-available/${HOST_NAME}.conf";
+  #sudo -E a2ensite ${HOST_NAME};
+
+  # Copy the PHP config files into place.
+  sudo -E cp -f "php/php.ini" "/etc/php.ini";
+
+} # configure_apache
+
+##########################################################################################
 # Apache web root.
 ##########################################################################################
 function set_apache_web_root () {
@@ -529,7 +559,7 @@ if [ "${PROVISION_LAMP}" = true ]; then
   # Apache
   hash apachectl 2>/dev/null || { install_apache; }
   sudo -E service httpd stop;
-  # configure_apache;
+  configure_apache;
   if [ -d "/var/www/html" ]; then set_apache_web_root; fi
   if [ ! -d "/var/www/builds" ]; then set_apache_deployment_directories; fi
   if [ ! -d "/var/www/html/${HOST_NAME}" ]; then set_apache_virtual_host_directories; fi
