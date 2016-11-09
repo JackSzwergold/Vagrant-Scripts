@@ -329,11 +329,11 @@ function install_apache () {
   sudo chkconfig --level 345 httpd on;
 
   # TODO: Stop and disable IPTables. (Note this shouldn’t be here; set a separate function.)
-  sudo service iptables stop;
-  sudo chkconfig iptables off;
+  sudo -E service iptables stop;
+  sudo -E chkconfig iptables off;
 
   # Start Apache.
-  sudo service httpd start;
+  sudo -E service httpd start;
 
 } # install_apache
 
@@ -459,14 +459,21 @@ fi
 # hash monit 2>/dev/null || { install_monit; }
 # if [ -f "monit/monitrc" ]; then configure_monit; fi
 
-
 if [ "${PROVISION_LAMP}" = true ]; then
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Apache
   hash apachectl 2>/dev/null || { install_apache; }
+  sudo -E service httpd stop;
+  configure_apache;
 
   # MySQL
   hash mysql && hash mysqld 2>/dev/null || { install_mysql; }
+
+  # Restart Apache now that we’re done.
+  sudo -E service httpd restart;
 
 fi
 
