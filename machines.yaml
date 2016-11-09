@@ -22,7 +22,7 @@
   primary: true
   autostart: false
   provision_script: "provision_ubuntu_lamp.sh"
-  deployment_configs_path: "deployment_configs"
+  deployment_configs_path: "deployment_configs/ubuntu"
   deployment_dbs_path: "deployment_dbs"
   basics: true
   lamp: true
@@ -42,7 +42,7 @@
   primary: false
   autostart: false
   provision_script: "provision_ubuntu_basics.sh"
-  deployment_configs_path: "deployment_configs"
+  deployment_configs_path: "deployment_configs/ubuntu"
   deployment_dbs_path: "deployment_dbs"
   basics: true
   hostname: "jabroni"
@@ -58,7 +58,7 @@
   primary: false
   autostart: false
   provision_script: "provision_ubuntu_mongo.sh"
-  deployment_configs_path: "deployment_configs"
+  deployment_configs_path: "deployment_configs/ubuntu"
   deployment_dbs_path: "deployment_dbs"
   hostname: "mongo"
   machinename: "Mongo"
@@ -76,7 +76,7 @@
   primary: false
   autostart: false
   provision_script: "provision_ubuntu_elasticsearch.sh"
-  deployment_configs_path: "deployment_configs"
+  deployment_configs_path: "deployment_configs/ubuntu"
   deployment_dbs_path: "deployment_dbs"
   hostname: "elasticsearch"
   machinename: "Elasticsearch"
@@ -94,7 +94,7 @@
   primary: false
   autostart: false
   provision_script: "provision_ubuntu_nodejs.sh"
-  deployment_configs_path: "deployment_configs"
+  deployment_configs_path: "deployment_configs/ubuntu"
   deployment_dbs_path: "deployment_dbs"
   hostname: "nodejs"
   ip: "192.168.56.50"
@@ -108,7 +108,7 @@
   primary: false
   autostart: false
   provision_script: "provision_centos_lamp.sh"
-  deployment_configs_path: "deployment_configs"
+  deployment_configs_path: "deployment_configs/centos"
   deployment_dbs_path: "deployment_dbs"
   basics: true
   lamp: true

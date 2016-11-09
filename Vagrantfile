@@ -74,7 +74,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
       # Copy over the deployment configs directory.
       # machine.vm.provision :file, source: "config_dir", destination: "config_dir"
-      machine.vm.synced_folder "deployment_configs", "/home/vagrant/deployment_configs", type: "rsync", rsync__exclude: [ ".DS_Store", ".gitignore", ".gitkeep" ]
+      machine.vm.synced_folder "#{machine_settings["deployment_configs_path"]}", "/home/vagrant/#{machine_settings["deployment_configs_path"]}", type: "rsync", rsync__exclude: [ ".DS_Store", ".gitignore", ".gitkeep" ]
 
       # Copy over the deployment DBs directory.
       # machine.vm.provision :file, source: "config_dir", destination: "config_dir"
