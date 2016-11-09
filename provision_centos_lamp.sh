@@ -353,15 +353,15 @@ function configure_apache () {
 
   # Copy the Apache config files into place.
   sudo -E cp -f "apache2/httpd.conf" "/etc/httpd/conf/httpd.conf";
-  if [ ! -d "/var/www/html/conf/sites-available/" ]; then sudo -E mkdir -f "/var/www/html/conf/sites-available/"; fi
-  sudo -E cp -f "apache2/common.conf" "/var/www/html/conf/sites-available/common.conf";
-  sudo -E cp -f "apache2/000-default.conf" "/var/www/html/conf/sites-available/000-default.conf";
+  if [ ! -d "/etc/httpd/conf/sites-available" ]; then sudo -E mkdir -p "/etc/httpd/conf/sites-available"; fi
+  sudo -E cp -f "apache2/common.conf" "/etc/httpd/conf/sites-available/common.conf";
+  sudo -E cp -f "apache2/000-default.conf" "/etc/httpd/conf/sites-available/000-default.conf";
 
   # Copy and configure the Apache virtual host config file.
-  sudo -E cp -f "apache2/vagrant.local.conf" "/var/www/html/conf/sites-available/${HOST_NAME}.conf";
-  sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "/var/www/html/conf/sites-available/${HOST_NAME}.conf";
+  sudo -E cp -f "apache2/vagrant.local.conf" "/etc/httpd/conf/sites-available/${HOST_NAME}.conf";
+  sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "/etc/httpd/conf/sites-available/${HOST_NAME}.conf";
   HOST_NAME_ESCAPED=$(echo "${HOST_NAME}" | sed 's/\./\\\\./g');
-  sudo -E sed -i "s/vagrant\\\.local/${HOST_NAME_ESCAPED}/" "/var/www/html/conf/sites-available/${HOST_NAME}.conf";
+  sudo -E sed -i "s/vagrant\\\.local/${HOST_NAME_ESCAPED}/" "/etc/httpd/conf/sites-available/${HOST_NAME}.conf";
   #sudo -E a2ensite ${HOST_NAME};
 
   # Copy the PHP config files into place.
