@@ -459,11 +459,16 @@ fi
 # hash monit 2>/dev/null || { install_monit; }
 # if [ -f "monit/monitrc" ]; then configure_monit; fi
 
-# Apache
-hash apachectl 2>/dev/null || { install_apache; }
 
-# MySQL
-hash mysql && hash mysqld 2>/dev/null || { install_mysql; }
+if [ "${PROVISION_LAMP}" = true ]; then
+
+  # Apache
+  hash apachectl 2>/dev/null || { install_apache; }
+
+  # MySQL
+  hash mysql && hash mysqld 2>/dev/null || { install_mysql; }
+
+fi
 
 # Update the locate database.
 update_locate_db;

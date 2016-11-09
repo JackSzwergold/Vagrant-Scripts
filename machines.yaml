@@ -111,6 +111,7 @@
   deployment_configs_path: "deployment_configs"
   deployment_dbs_path: "deployment_dbs"
   basics: true
+  lamp: false
   hostname: "sandbox-centos"
   machinename: "Sandbox-CentOS"
   ip: "192.168.56.60"
