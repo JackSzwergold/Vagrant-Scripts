@@ -342,6 +342,20 @@ function install_apache () {
 } # install_apache
 
 ##########################################################################################
+# Apache web root.
+##########################################################################################
+function set_apache_web_root () {
+
+  echo -e "PROVISIONING: Adjusting the Apache root directory and default file.\n";
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
+  sudo -E cp -f "apache2/index.php" "/var/www/html/index.php";
+
+} # set_apache_web_root
+
+##########################################################################################
 # MySQL
 ##########################################################################################
 function install_mysql () {
@@ -482,7 +496,11 @@ if [ "${PROVISION_LAMP}" = true ]; then
   # Apache
   hash apachectl 2>/dev/null || { install_apache; }
   sudo -E service httpd stop;
-  configure_apache;
+  # configure_apache;
+  if [ -d "/var/www/html" ]; then set_apache_web_root; fi
+  # if [ ! -d "/var/www/builds" ]; then set_apache_deployment_directories; fi
+  # if [ ! -d "/var/www/${HOST_NAME}" ]; then set_apache_virtual_host_directories; fi
+  # if [ -f "/etc/logrotate.d/apache2" ]; then configure_apache_log_rotation; fi
 
   # MySQL
   hash mysql && hash mysqld 2>/dev/null || { install_mysql; }
