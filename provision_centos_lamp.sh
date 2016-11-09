@@ -313,7 +313,7 @@ function install_apache () {
   echo -e "PROVISIONING: Installing Apache and PHP related items.\n"
 
   # Install the base Apache related items.
-  sudo -E yum install -y httpd mod_ssl;
+  sudo -E yum install -y httpd mod_php mod_ssl;
 
   # Install other PHP related related items.
   sudo -E yum install -y \
@@ -336,8 +336,8 @@ function install_apache () {
   sudo -E service iptables stop;
   sudo -E chkconfig iptables off;
 
-  # Start Apache.
-  sudo -E service httpd start;
+  # Restart Apache.
+  sudo -E service httpd restart;
 
 } # install_apache
 
