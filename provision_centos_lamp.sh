@@ -64,7 +64,6 @@ PROVISION_LAMP=true;
 if [ -n "$7" ]; then PROVISION_LAMP="${7}"; fi
 echo -e "PROVISIONING: LAMP provisioning: '${PROVISION_LAMP}'.\n";
 
-
 # Go into the config directory.
 cd "${BASE_DIR}/${CONFIG_DIR}";
 
