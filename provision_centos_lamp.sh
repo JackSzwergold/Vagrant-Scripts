@@ -60,6 +60,11 @@ PROVISION_BASICS=false;
 if [ -n "$6" ]; then PROVISION_BASICS="${6}"; fi
 echo -e "PROVISIONING: Basics provisioning: '${PROVISION_BASICS}'.\n";
 
+PROVISION_LAMP=true;
+if [ -n "$7" ]; then PROVISION_LAMP="${7}"; fi
+echo -e "PROVISIONING: LAMP provisioning: '${PROVISION_LAMP}'.\n";
+
+
 # Go into the config directory.
 cd "${BASE_DIR}/${CONFIG_DIR}";
 
@@ -345,11 +350,19 @@ function install_mysql () {
   echo -e "PROVISIONING: Installing and configuring MySQL related items.\n";
 
   # Install the MySQL server and client.
-  sudo -E yum install -y mysql-server;
+  sudo -E RUNLEVEL=1 yum install -y mysql-server;
 
-  # Set Apache to start on reboot.
+  # Set MySQL to start on reboot.
   sudo chkconfig --add mysqld;
   sudo chkconfig --level 345 mysqld on;
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
+  # Secure the MySQL installation.
+  if [ -f "mysql/mysql_secure_installation.sql" ]; then
+    mysql -sfu root < "mysql/mysql_secure_installation.sql";
+  fi
 
   # Start MySQL.
   sudo service mysqld start;
