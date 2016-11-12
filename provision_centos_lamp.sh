@@ -353,6 +353,7 @@ function configure_apache () {
 
   # Copy the Apache config files into place.
   sudo -E cp -f "apache2/httpd.conf" "/etc/httpd/conf/httpd.conf";
+  sudo -E cp -f "apache2/httpd" "/etc/sysconfig/httpd";
 
   # Copy and configure the Apache virtual host config file.
   sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "/etc/httpd/conf/httpd.conf";
@@ -377,6 +378,7 @@ function set_apache_web_root () {
   sudo -E chown -f -R "${USER_NAME}":www-readwrite "/var/www/html/";
   sudo -E chmod -f -R 775 "/var/www/html/";
   sudo -E cp -f "apache2/index.php" "/var/www/html/index.php";
+  sudo -E chmod -f -R 664 "/var/www/html/index.php";
 
 } # set_apache_web_root
 
@@ -394,6 +396,23 @@ function set_apache_deployment_directories () {
 } # set_apache_deployment_directories
 
 ##########################################################################################
+# Apache log rotation.
+##########################################################################################
+function configure_apache_log_rotation () {
+
+  echo -e "PROVISIONING: Adjusting the Apache log rotation script.\n";
+
+  sudo -E sed -i 's/rotate 52/rotate 13/g' "/etc/logrotate.d/apache2";
+  sudo -E sed -i 's/create 640 root adm/create 640 root www-readwrite/g' "/etc/logrotate.d/apache2";
+
+  # Adjust permissions on log files.
+  sudo -E chmod o+rx /var/log/apache2;
+  sudo -E chgrp www-readwrite /var/log/apache2/*;
+  sudo -E chmod -f 664 /var/log/apache2/*;
+
+} # configure_apache_log_rotation
+
+##########################################################################################
 # Apache virtual host directories.
 ##########################################################################################
 function set_apache_virtual_host_directories () {
@@ -407,7 +426,7 @@ function set_apache_virtual_host_directories () {
   sudo -E cp -f "apache2/index.php" "/var/www/html/${HOST_NAME}/site/index.php";
   sudo -E chown -f -R "${USER_NAME}":www-readwrite "/var/www/html/${HOST_NAME}";
   sudo -E chmod -f -R 775 "/var/www/html/${HOST_NAME}";
-  sudo -E chmod -f -R 664 "/var/www/html/${HOST_NAME}/site/index.php";
+  sudo -E chmod -f 664 "/var/www/html/${HOST_NAME}/site/index.php";
 
 } # set_apache_virtual_host_directories
 
