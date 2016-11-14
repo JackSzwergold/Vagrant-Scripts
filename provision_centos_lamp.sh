@@ -399,6 +399,20 @@ function set_apache_deployment_directories () {
 } # set_apache_deployment_directories
 
 ##########################################################################################
+# Set application configs.
+##########################################################################################
+function set_application_configs () {
+
+  echo -e "PROVISIONING: Setting applictaion configs.\n";
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
+  sudo -E cp -f * "/var/www/configs/";
+
+} # set_application_configs
+
+##########################################################################################
 # Apache log rotation.
 ##########################################################################################
 function configure_apache_log_rotation () {
@@ -611,6 +625,7 @@ if [ "${PROVISION_LAMP}" = true ]; then
   configure_apache;
   if [ -d "/var/www/html" ]; then set_apache_web_root; fi
   if [ ! -d "/var/www/builds" ]; then set_apache_deployment_directories; fi
+  if [ -d "/var/www/configs" ]; then set_application_configs; fi
   if [ ! -d "/var/www/html/${HOST_NAME}" ]; then set_apache_virtual_host_directories; fi
   # if [ -f "/etc/logrotate.d/apache2" ]; then configure_apache_log_rotation; fi
 
