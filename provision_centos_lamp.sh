@@ -491,8 +491,8 @@ function configure_mysql () {
     	  db_dirname=$(dirname "${db_backup_path}");
     	  db_basename=$(basename "${db_backup_path}");
     	  db_filename="${db_basename%.*}";
-    	  db_extension="${db_basename##*.}";
-    	  db_parent_dir=$(basename "${db_dirname}");
+    	  # db_extension="${db_basename##*.}";
+    	  # db_parent_dir=$(basename "${db_dirname}");
     	  mysql_db=$(basename "${db_dirname}");
     	  echo -e "PROVISIONING: Restoring the '${mysql_db}' MySQL database.\n";
     	  db_filename_prefix=${db_filename%-*};
