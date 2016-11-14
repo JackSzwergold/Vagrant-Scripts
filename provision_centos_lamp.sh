@@ -2,9 +2,9 @@
 
 ##########################################################################################
 #
-# Provision CentOS Basics (provision_centos_basics.sh) (c) by Jack Szwergold
+# Provision CentOS LAMP (provision_centos_lamp.sh) (c) by Jack Szwergold
 #
-# Provision CentOS Basics is licensed under a
+# Provision CentOS LAMP is licensed under a
 # Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
 #
 # You should have received a copy of the license along with this
