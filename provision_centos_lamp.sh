@@ -105,10 +105,13 @@ function set_environment () {
   echo 'export VISUAL="nano"'$'\r' >> ~/.bash_profile;
   echo 'export EDITOR="nano"'$'\r' >> ~/.bash_profile;
 
-  #echo -e "PROVISIONING: Importing the crontab.\n";
+  echo -e "PROVISIONING: Importing the crontab.\n";
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Importing the crontab.
-  # sudo -E crontab < "crontab.conf";
+  sudo -E crontab < "crontab.conf";
 
 } # set_environment
 
