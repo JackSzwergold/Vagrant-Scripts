@@ -463,6 +463,33 @@ function install_mysql () {
 
 } # install_mysql
 
+function configure_mysql () {
+
+  # Go into the base directory.
+  cd "${BASE_DIR}";
+
+  # Import any databases that were sent over as the part of the provisioning process.
+  if [ -d "${DB_DIR}" ]; then
+    find "${DB_DIR}" -type f -name "*.sql" |\
+      while read db_backup_path
+      do
+        if [ -f "${db_backup_path}" ]; then
+          db_dirname=$(dirname "${db_backup_path}");
+          # db_basename=$(basename "${db_backup_path}");
+          # db_filename="${db_basename%.*}";
+          # db_extension="${db_basename##*.}";
+          # db_parent_dir=$(basename "${db_dirname}");
+          mysql_db=$(basename "${db_dirname}");
+          echo -e "PROVISIONING: Restoring the '${mysql_db}' MySQL database.\n";
+          mysql -uroot -proot "${mysql_db}";
+        else
+          exit 1;
+        fi
+      done
+  fi
+
+} # configure_mysql
+
 ##########################################################################################
 # Monit
 ##########################################################################################
@@ -582,6 +609,7 @@ if [ "${PROVISION_LAMP}" = true ]; then
 
   # MySQL
   hash mysql && hash mysqld 2>/dev/null || { install_mysql; }
+  configure_mysql;
 
   # Install system scripts.
   install_system_scripts;
