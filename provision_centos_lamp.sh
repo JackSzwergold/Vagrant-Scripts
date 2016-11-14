@@ -470,21 +470,28 @@ function configure_mysql () {
 
   # Import any databases that were sent over as the part of the provisioning process.
   if [ -d "${DB_DIR}" ]; then
-    find "${DB_DIR}" -type f -name "*.sql" |\
+    find "${DB_DIR}" -type f -name "*.sql" | sort |\
       while read db_backup_path
       do
-        if [ -f "${db_backup_path}" ]; then
-          db_dirname=$(dirname "${db_backup_path}");
-          # db_basename=$(basename "${db_backup_path}");
-          # db_filename="${db_basename%.*}";
-          # db_extension="${db_basename##*.}";
-          # db_parent_dir=$(basename "${db_dirname}");
-          mysql_db=$(basename "${db_dirname}");
-          echo -e "PROVISIONING: Restoring the '${mysql_db}' MySQL database.\n";
-          mysql -uroot -proot "${mysql_db}";
+    	if [ -f "${db_backup_path}" ]; then
+    	  db_dirname=$(dirname "${db_backup_path}");
+    	  db_basename=$(basename "${db_backup_path}");
+    	  db_filename="${db_basename%.*}";
+    	  db_extension="${db_basename##*.}";
+    	  db_parent_dir=$(basename "${db_dirname}");
+    	  mysql_db=$(basename "${db_dirname}");
+    	  echo -e "PROVISIONING: Restoring the '${mysql_db}' MySQL database.\n";
+    	  db_filename_prefix=${db_filename%-*};
+    	  # db_filename_suffix=${db_filename#*-};
+    	  if [ "$db_filename_prefix" == "000" ]; then
+          mysql -uroot -proot <${db_backup_path};
         else
-          exit 1;
-        fi
+          mysql -uroot -proot "${mysql_db}" <"${db_backup_path}";
+    	  fi
+    	  #
+    	else
+    	  exit 1;
+    	fi
       done
   fi
 
