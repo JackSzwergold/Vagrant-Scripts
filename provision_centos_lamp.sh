@@ -583,6 +583,9 @@ if [ "${PROVISION_LAMP}" = true ]; then
   # MySQL
   hash mysql && hash mysqld 2>/dev/null || { install_mysql; }
 
+  # Install system scripts.
+  install_system_scripts;
+
   # Restart Apache now that we’re done.
   sudo -E service httpd restart;
 
