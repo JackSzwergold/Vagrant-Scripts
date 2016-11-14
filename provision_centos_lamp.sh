@@ -408,7 +408,7 @@ function set_application_configs () {
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
-  sudo -E cp -f * "/var/www/configs/";
+  sudo -E cp -f "local/"* "/var/www/configs/";
 
 } # set_application_configs
 
