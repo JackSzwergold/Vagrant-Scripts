@@ -120,3 +120,21 @@
   forward_id1: "ssh"
   memory: 512
   cpus: 1
+- name: "Solr_UBUNTU_1404"
+  box: "ubuntu/trusty64"
+  primary: false
+  autostart: false
+  provision_script: "provision_ubuntu_solr.sh"
+  deployment_configs_path: "deployment_configs/ubuntu"
+  deployment_dbs_path: "deployment_dbs"
+  hostname: "solr"
+  machinename: "Solr"
+  ip: "192.168.56.70"
+  forward_guest1: 22
+  forward_host1: 2228
+  forward_id1: "ssh"
+  forward_guest2: 8983
+  forward_host2: 8983
+  forward_id2: "solr"
+  memory: 1024
+  cpus: 1
