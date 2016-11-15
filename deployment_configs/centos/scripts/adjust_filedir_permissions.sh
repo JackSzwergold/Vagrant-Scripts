@@ -84,10 +84,13 @@ if mkdir ${LOCK_DIR} 2>/dev/null; then
       wait ${FILE_PERM_FIX_PID};
 
       ##########################################################################
-      # PHP settings.
+      # Drupal settings.
 
       # Adjust permissions for Drupal settings files.
       find ${FULL_DIRECTORY_PATH} -type f ! -perm ${CHMOD_READ_FILE} -iwholename '*settings.php' -print0 | xargs --no-run-if-empty -0 chmod ${CHMOD_READ_FILE} >/dev/null & FILE_PERM_FIX_PID=(`jobs -l | awk '{print $2}'`);
+      wait ${FILE_PERM_FIX_PID};
+
+      find ${FULL_DIRECTORY_PATH} -type d ! -perm ${CHMOD_DRUPAL_DIR} -iwholename '*sites/default' -print0 | xargs --no-run-if-empty -0 chmod ${CHMOD_DRUPAL_DIR} >/dev/null & FILE_PERM_FIX_PID=(`jobs -l | awk '{print $2}'`);
       wait ${FILE_PERM_FIX_PID};
 
       # Adjust permissions for files in directories named 'bin/'.
