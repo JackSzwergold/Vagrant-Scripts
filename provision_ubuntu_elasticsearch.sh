@@ -294,7 +294,7 @@ function install_java () {
 
   sudo -E add-apt-repository ppa:webupd8team/java;
   sudo -E aptitude update -y --assume-yes -q;
-  echo "oracle-java7-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections
+  echo "oracle-java7-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections;
   sudo -E aptitude install -y --assume-yes -q oracle-java7-installer;
 
   # Now install Java via PPA.
@@ -310,13 +310,13 @@ function install_elasticsearch () {
   echo -e "PROVISIONING: Installing ElasticSearch related items.\n";
 
   # Import the public key used by the package management system:
-  wget -qO - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | sudo apt-key add -
-  echo 'deb http://packages.elasticsearch.org/elasticsearch/1.7/debian stable main' | sudo tee /etc/apt/sources.list.d/elasticsearch.list
+  wget -qO - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | sudo apt-key add -;
+  echo 'deb http://packages.elasticsearch.org/elasticsearch/1.7/debian stable main' | sudo tee /etc/apt/sources.list.d/elasticsearch.list;
   sudo -E aptitude update -y --assume-yes -q;
-  sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q elasticsearch
+  sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q elasticsearch;
 
   # Set ElasticSearch to be able to come up on reboot.
-  sudo update-rc.d elasticsearch defaults 95 10
+  sudo update-rc.d elasticsearch defaults 95 10;
 
   # Restart ElasticSearch.
   sudo -E service elasticsearch restart;

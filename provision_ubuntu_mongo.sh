@@ -354,14 +354,14 @@ function install_mongo32 () {
   sudo -E apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927
   echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list
   sudo -E aptitude update -y --assume-yes -q;
-  sudo -E aptitude install -y --assume-yes -q mongodb-org=3.2.10 mongodb-org-server=3.2.10 mongodb-org-shell=3.2.10 mongodb-org-mongos=3.2.10 mongodb-org-tools=3.2.10
+  sudo -E aptitude install -y --assume-yes -q mongodb-org=3.2.10 mongodb-org-server=3.2.10 mongodb-org-shell=3.2.10 mongodb-org-mongos=3.2.10 mongodb-org-tools=3.2.10;
 
   # Pin the currently installed version of MongoDB to ensure no accidental upgrades happen.
-  echo "mongodb-org hold" | sudo dpkg --set-selections
-  echo "mongodb-org-server hold" | sudo dpkg --set-selections
-  echo "mongodb-org-shell hold" | sudo dpkg --set-selections
-  echo "mongodb-org-mongos hold" | sudo dpkg --set-selections
-  echo "mongodb-org-tools hold" | sudo dpkg --set-selections
+  echo "mongodb-org hold" | sudo dpkg --set-selections;
+  echo "mongodb-org-server hold" | sudo dpkg --set-selections;
+  echo "mongodb-org-shell hold" | sudo dpkg --set-selections;
+  echo "mongodb-org-mongos hold" | sudo dpkg --set-selections;
+  echo "mongodb-org-tools hold" | sudo dpkg --set-selections;
 
 } # install_mongo32
 
