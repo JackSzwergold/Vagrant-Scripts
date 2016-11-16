@@ -310,36 +310,21 @@ function install_solr () {
   echo -e "PROVISIONING: Installing Solr related items.\n";
 
   # Import the public key used by the package management system:
-  wget -qO - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | sudo apt-key add -
-  echo 'deb http://packages.elasticsearch.org/elasticsearch/1.7/debian stable main' | sudo tee /etc/apt/sources.list.d/elasticsearch.list
-  sudo -E aptitude update -y --assume-yes -q;
-  sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q elasticsearch
+  # curl -ss -L -o "solr.tgz" "http://archive.apache.org/dist/lucene/solr/5.5.3/solr-5.5.3.tgz";
+  # curl -ss -L -o "solr.tgz" "http://archive.apache.org/dist/lucene/solr/6.2.1/solr-6.2.1.tgz";
+  # curl -ss -L -o "solr.tgz" "http://archive.apache.org/dist/lucene/solr/6.3.0/solr-6.3.0.tgz";
+  curl -ss -L -o "solr.tgz" "http://archive.apache.org/dist/lucene/solr/5.5.3/solr-5.5.3.tgz";
+  tar -zxf solr-5.5.3.tgz solr-5.5.3/bin/install_solr_service.sh --strip-components=2;
+  sudo -E bash ./install_solr_service.sh solr-5.5.3.tgz;
 
-  # Set Solr to be able to come up on reboot.
-  sudo update-rc.d elasticsearch defaults 95 10
+  # 2016-11-16: Not working. Another idea on how to make the process less dependent on version numbers.
+  # tar -zxf solr.tgz $(tar -tzf solr.tgz | grep install_solr_service) --strip-components=2;
+  # sudo -E bash ./install_solr_service.sh solr.tgz;
 
   # Restart Solr.
-  sudo -E service elasticsearch restart;
+  # sudo -E service solr restart;
 
 } # install_solr
-
-##########################################################################################
-# Configure Elasticsearch
-##########################################################################################
-function configure_solr () {
-
-  echo -e "PROVISIONING: Configuring Solr related items.\n";
-
-  # Go into the config directory.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
-
-  # Copy the Elasticsearch config file in place and restart sysstat.
-  if [ -f "elasticsearch/elasticsearch.yml" ]; then
-    sudo -E cp -f "elasticsearch/elasticsearch.yml" "/etc/elasticsearch/elasticsearch.yml";
-    sudo -E service elasticsearch restart;
-  fi
-
-} # configure_solr
 
 ##########################################################################################
 # Update the locate database.
@@ -378,8 +363,7 @@ if ! grep -q -s "git-core" /etc/apt/sources.list /etc/apt/sources.list.d/*; then
 install_java;
 
 # Install configure Solr.
-# install_solr;
-# configure_solr;
+install_solr;
 
 # Update the locate database.
 update_locate_db;
