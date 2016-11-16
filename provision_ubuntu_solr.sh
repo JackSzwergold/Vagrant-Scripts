@@ -309,15 +309,19 @@ function install_solr () {
 
   echo -e "PROVISIONING: Installing Solr related items.\n";
 
+  # Go into the base directory.
+  cd "${BASE_DIR}";
+
   # Import the public key used by the package management system:
-  # curl -ss -L -o "solr.tgz" "http://archive.apache.org/dist/lucene/solr/5.5.3/solr-5.5.3.tgz";
-  # curl -ss -L -o "solr.tgz" "http://archive.apache.org/dist/lucene/solr/6.2.1/solr-6.2.1.tgz";
-  # curl -ss -L -o "solr.tgz" "http://archive.apache.org/dist/lucene/solr/6.3.0/solr-6.3.0.tgz";
-  curl -ss -L -o "solr.tgz" "http://archive.apache.org/dist/lucene/solr/5.5.3/solr-5.5.3.tgz";
+  # curl -ss -L -O "http://archive.apache.org/dist/lucene/solr/5.5.3/solr-5.5.3.tgz";
+  # curl -ss -L -O "http://archive.apache.org/dist/lucene/solr/6.2.1/solr-6.2.1.tgz";
+  # curl -ss -L -O "http://archive.apache.org/dist/lucene/solr/6.3.0/solr-6.3.0.tgz";
+  curl -ss -L -O "http://archive.apache.org/dist/lucene/solr/5.5.3/solr-5.5.3.tgz";
   tar -zxf solr-5.5.3.tgz solr-5.5.3/bin/install_solr_service.sh --strip-components=2;
   sudo -E bash ./install_solr_service.sh solr-5.5.3.tgz;
 
   # 2016-11-16: Not working. Another idea on how to make the process less dependent on version numbers.
+  # curl -ss -L -o "solr.tgz" "http://archive.apache.org/dist/lucene/solr/5.5.3/solr-5.5.3.tgz";
   # tar -zxf solr.tgz $(tar -tzf solr.tgz | grep install_solr_service) --strip-components=2;
   # sudo -E bash ./install_solr_service.sh solr.tgz;
 
