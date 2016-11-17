@@ -69,8 +69,8 @@
   forward_guest2: 27017
   forward_host2: 27017
   forward_id2: "mongo"
-  memory: 2048
-  cpus: 2
+  memory: 1024
+  cpus: 1
 - name: "ElasticSearch_UBUNTU_1404"
   box: "ubuntu/trusty64"
   primary: false
