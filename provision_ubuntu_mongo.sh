@@ -290,9 +290,14 @@ function install_mongo26 () {
 
   echo -e "PROVISIONING: Installing MongoDB related items.\n";
 
+  # Go into the config directory.
+  cd "${BASE_DIR}";
+
   # Add the official MongoDB repository and install MongoDB.
-  sudo -E apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10;
-  echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee /etc/apt/sources.list.d/mongodb.list;
+  curl -O -L "http://docs.mongodb.org/10gen-gpg-key.asc";
+  sudo apt-key add "10gen-gpg-key.asc" && rm "10gen-gpg-key.asc";
+  # sudo -E apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10;
+  echo 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' | sudo tee "/etc/apt/sources.list.d/mongodb.list";
   sudo -E aptitude update -y --assume-yes -q;
   sudo -E aptitude install -y --assume-yes -q mongodb-org=2.6.12 mongodb-org-server=2.6.12 mongodb-org-shell=2.6.12 mongodb-org-mongos=2.6.12 mongodb-org-tools=2.6.12;
 
@@ -350,9 +355,14 @@ function install_mongo32 () {
 
   echo -e "PROVISIONING: Installing MongoDB related items.\n";
 
+  # Go into the config directory.
+  cd "${BASE_DIR}";
+
   # Add the official MongoDB repository and install MongoDB.
-  sudo -E apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927;
-  echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.2 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.2.list;
+  curl -O -L "http://docs.mongodb.org/10gen-gpg-key.asc";
+  sudo apt-key add "10gen-gpg-key.asc" && rm "10gen-gpg-key.asc";
+  # sudo -E apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927;
+  echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.2 multiverse" | sudo tee "/etc/apt/sources.list.d/mongodb-org-3.2.list";
   sudo -E aptitude update -y --assume-yes -q;
   sudo -E aptitude install -y --assume-yes -q mongodb-org=3.2.10 mongodb-org-server=3.2.10 mongodb-org-shell=3.2.10 mongodb-org-mongos=3.2.10 mongodb-org-tools=3.2.10;
 
