@@ -295,10 +295,9 @@ function install_mongo26 () {
 
   # Add the official MongoDB repository and install MongoDB.
   curl -ss -O -L "http://docs.mongodb.org/10gen-gpg-key.asc";
-  # sleep 3;
   sudo apt-key add "10gen-gpg-key.asc";
   # sudo -E apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10;
-  echo "deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen" | sudo tee '/etc/apt/sources.list.d/mongodb.list';
+  echo "deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen" | sudo tee "/etc/apt/sources.list.d/mongodb.list";
   sudo rm -rf /var/lib/apt/lists/*;
   sudo -E apt-get clean -y --assume-yes -q;
   sudo -E aptitude update -y --assume-yes -q;
@@ -364,7 +363,6 @@ function install_mongo32 () {
 
   # Add the official MongoDB repository and install MongoDB.
   curl -ss -O -L "http://docs.mongodb.org/10gen-gpg-key.asc";
-  # sleep 3;
   sudo apt-key add "10gen-gpg-key.asc";
   # sudo -E apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927;
   echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.2 multiverse" | sudo tee "/etc/apt/sources.list.d/mongodb-org-3.2.list";
