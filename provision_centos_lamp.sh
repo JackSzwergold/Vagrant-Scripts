@@ -563,6 +563,11 @@ function install_system_scripts () {
   sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "/opt/"*.cfg.sh;
   sudo -E chmod -f -R 775 "/opt/"*.sh;
 
+  # Create the MySQL backup directory.
+  sudo -E mkdir -p "/opt/mysql_backup";
+  sudo -E chown root:www-readwrite "/opt/mysql_backup";
+  sudo -E chmod 775 "/opt/mysql_backup";
+
 } # install_system_scripts
 
 ##########################################################################################
