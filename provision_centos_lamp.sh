@@ -559,9 +559,9 @@ function install_system_scripts () {
   # Copy and configure various system scripts.
   cd "${BASE_DIR}/${CONFIG_DIR}";
   sudo -E cp -f "scripts/"*.sh "/opt/";
-  sudo -E chown -f -R root:root "scripts/"*.sh "/opt/";
+  sudo -E chown -f -R root:www-readwrite "scripts/"*.sh "/opt/";
   sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "/opt/"*.cfg.sh;
-  sudo -E chmod -f -R 700 "/opt/"*.sh;
+  sudo -E chmod -f -R 775 "/opt/"*.sh;
 
 } # install_system_scripts
 
