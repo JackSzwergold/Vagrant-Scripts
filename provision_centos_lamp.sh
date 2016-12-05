@@ -322,7 +322,8 @@ function install_apache () {
   sudo -E rpm -Uvh http://mirror.webtatic.com/yum/el6/latest.rpm
 
   # Install other PHP related related items.
-  sudo -E yum install -y php56w \
+  # sudo -E yum install -y php56w php56w-common php56w-opcache \
+  sudo -E yum install -y php56w php56w-common \
     php56w-mysql php56w-pgsql php56w-odbc \
     php56w-xmlrpc php56w-json php56w-xsl php56w-curl \
     php56w-getid3 php56w-imap php56w-ldap php56w-mcrypt \
@@ -367,7 +368,7 @@ function configure_apache () {
   sudo -E sed -i "s/vagrant\\\.local/${HOST_NAME_ESCAPED}/" "/etc/httpd/conf/httpd.conf";
 
   # Copy the PHP config files into place.
-  # sudo -E cp -f "php/php.ini" "/etc/php.ini";
+  sudo -E cp -f "php/php.ini" "/etc/php.ini";
 
 } # configure_apache
 
