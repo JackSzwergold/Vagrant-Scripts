@@ -326,7 +326,7 @@ function install_apache () {
   sudo -E yum install -y php56w php56w-common \
     php56w-mysql php56w-pgsql php56w-odbc \
     php56w-xmlrpc php56w-json php56w-xsl php56w-curl \
-    php56w-getid3 php56w-imap php56w-ldap php56w-mcrypt \
+    php56w-ldap php56w-mcrypt \
     php56w-pspell php56w-gmp php56w-gd php56w-mbstring;
 
   # Enable the PHP mcrypt module.
