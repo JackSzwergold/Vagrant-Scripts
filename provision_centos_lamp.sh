@@ -316,14 +316,17 @@ function install_apache () {
   echo -e "PROVISIONING: Installing Apache and PHP related items.\n"
 
   # Install the base Apache related items.
-  sudo -E yum install -y httpd mod_php mod_ssl;
+  sudo -E yum install -y httpd mod_php56 mod_ssl;
+
+  # Adding the WebTatic repository to get PHP 5.6 installed.
+  sudo -E rpm -Uvh http://mirror.webtatic.com/yum/el6/latest.rpm
 
   # Install other PHP related related items.
-  sudo -E yum install -y \
-		php-mysql php-pgsql php-odbc \
-		php-xmlrpc php-json php-xsl php-curl \
-		php-getid3 php-imap php-ldap php-mcrypt \
-		php-pspell php-gmp php-gd php-mbstring;
+  sudo -E yum install -y php56w \
+    php56w-mysql php56w-pgsql php56w-odbc \
+    php56w-xmlrpc php56w-json php56w-xsl php56w-curl \
+    php56w-getid3 php56w-imap php56w-ldap php56w-mcrypt \
+    php56w-pspell php56w-gmp php56w-gd php56w-mbstring;
 
   # Enable the PHP mcrypt module.
   # sudo -E php5enmod mcrypt;
@@ -364,7 +367,7 @@ function configure_apache () {
   sudo -E sed -i "s/vagrant\\\.local/${HOST_NAME_ESCAPED}/" "/etc/httpd/conf/httpd.conf";
 
   # Copy the PHP config files into place.
-  sudo -E cp -f "php/php.ini" "/etc/php.ini";
+  # sudo -E cp -f "php/php.ini" "/etc/php.ini";
 
 } # configure_apache
 

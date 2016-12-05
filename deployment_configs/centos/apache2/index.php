@@ -7,6 +7,6 @@ echo $_SERVER['SERVER_NAME'];
 # echo $_SERVER['SERVER_ADDR'];
 
 # Test to ensure that the server is creating files with correct permissions.
-touch('zzz_test.txt');
+# touch('zzz_test.txt');
 
 ?>
