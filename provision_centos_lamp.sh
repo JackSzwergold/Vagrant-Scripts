@@ -502,12 +502,14 @@ function configure_mysql () {
     	  # db_extension="${db_basename##*.}";
     	  # db_parent_dir=$(basename "${db_dirname}");
     	  mysql_db=$(basename "${db_dirname}");
-    	  echo -e "PROVISIONING: Restoring the '${mysql_db}' MySQL database.\n";
+        echo -e "PROVISIONING: Restoring the '${mysql_db}' MySQL database.\n";
     	  db_filename_prefix=${db_filename%-*};
     	  # db_filename_suffix=${db_filename#*-};
     	  if [ "$db_filename_prefix" == "000" ]; then
+          echo -e "PROVISIONING: Importing '${db_backup_path}'.\n";
           mysql -uroot -proot <${db_backup_path};
         else
+          echo -e "PROVISIONING: Importing '${db_backup_path}'.\n";
           mysql -uroot -proot "${mysql_db}" <"${db_backup_path}";
     	  fi
     	  #
