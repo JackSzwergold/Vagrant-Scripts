@@ -412,6 +412,10 @@ function set_application_configs () {
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
+  # Create the sandbox config directory.
+  sudo -E mkdir -p "/var/www/configs/sandbox/";
+
+  # Copy the local configs into the sandbox config directory.
   sudo -E cp -f "local/"* "/var/www/configs/sandbox/";
 
 } # set_application_configs
