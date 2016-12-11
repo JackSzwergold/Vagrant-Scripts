@@ -22,6 +22,7 @@
   primary: true
   autostart: false
   provision_script: "provision_ubuntu_lamp.sh"
+  provision_script_regular: null
   deployment_configs_path: "deployment_configs/ubuntu"
   deployment_dbs_path: "deployment_dbs"
   basics: true
@@ -29,7 +30,6 @@
   geoip: true
   iptables: true
   fail2ban: false
-  privileged: true
   hostname: "sandbox"
   machinename: "Sandbox"
   ip: "192.168.56.10"
@@ -43,10 +43,10 @@
   primary: false
   autostart: false
   provision_script: "provision_ubuntu_basics.sh"
+  provision_script_regular: null
   deployment_configs_path: "deployment_configs/ubuntu"
   deployment_dbs_path: "deployment_dbs"
   basics: true
-  privileged: true
   hostname: "jabroni"
   machinename: "Jabroni"
   ip: "192.168.56.20"
@@ -60,9 +60,9 @@
   primary: false
   autostart: false
   provision_script: "provision_ubuntu_mongo.sh"
+  provision_script_regular: null
   deployment_configs_path: "deployment_configs/ubuntu"
   deployment_dbs_path: "deployment_dbs"
-  privileged: true
   hostname: "mongo"
   machinename: "Mongo"
   ip: "192.168.56.30"
@@ -79,9 +79,9 @@
   primary: false
   autostart: false
   provision_script: "provision_ubuntu_elasticsearch.sh"
+  provision_script_regular: null
   deployment_configs_path: "deployment_configs/ubuntu"
   deployment_dbs_path: "deployment_dbs"
-  privileged: true
   hostname: "elasticsearch"
   machinename: "Elasticsearch"
   ip: "192.168.56.40"
@@ -98,9 +98,9 @@
   primary: false
   autostart: false
   provision_script: "provision_ubuntu_nodejs.sh"
+  provision_script_regular: "provision_ubuntu_nodejs_regular.sh"
   deployment_configs_path: "deployment_configs/ubuntu"
   deployment_dbs_path: "deployment_dbs"
-  privileged: true
   hostname: "nodejs"
   machinename: "NodeJS"
   ip: "192.168.56.50"
@@ -114,11 +114,11 @@
   primary: false
   autostart: false
   provision_script: "provision_centos_lamp.sh"
+  provision_script_regular: null
   deployment_configs_path: "deployment_configs/centos"
   deployment_dbs_path: "deployment_dbs"
   basics: true
   lamp: true
-  privileged: true
   hostname: "sandbox-centos"
   machinename: "Sandbox-CentOS"
   ip: "192.168.56.60"
@@ -132,9 +132,9 @@
   primary: false
   autostart: false
   provision_script: "provision_ubuntu_solr.sh"
+  provision_script_regular: null
   deployment_configs_path: "deployment_configs/ubuntu"
   deployment_dbs_path: "deployment_dbs"
-  privileged: true
   hostname: "solr"
   machinename: "Solr"
   ip: "192.168.56.70"

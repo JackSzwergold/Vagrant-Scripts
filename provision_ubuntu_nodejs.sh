@@ -308,29 +308,6 @@ function install_nodejs () {
 
 } # install_nodejs
 
-
-##########################################################################################
-# MeteorJS
-##########################################################################################
-function install_meteorjs () {
-
-  echo -e "PROVISIONING: Installing MeteorJS.\n";
-
-  # Switch to the normal, Vagrant user.
-  sudo su ${USER_NAME};
-
-  # Go into the base directory.
-  cd "${BASE_DIR}";
-
-  # Install MeteorJS.
-  # curl https://install.meteor.com/ | sh >/dev/null 2>&1;
-  curl https://install.meteor.com/ | sh;
-
-  # Exit the normal user shell.
-  # exit;
-
-} # install_meteorjs
-
 ##########################################################################################
 # Update the locate database.
 ##########################################################################################
@@ -366,9 +343,6 @@ if ! grep -q -s "git-core" /etc/apt/sources.list /etc/apt/sources.list.d/*; then
 
 # Install configure NodeJS and NPM.
 hash node 2>/dev/null || { install_nodejs; }
-
-# Install MeteorJS.
-hash meteor 2>/dev/null || { install_meteorjs; }
 
 # Update the locate database.
 update_locate_db;
