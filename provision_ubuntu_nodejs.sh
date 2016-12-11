@@ -305,6 +305,19 @@ function install_nodejs () {
 
 } # install_nodejs
 
+
+##########################################################################################
+# MeteorJS
+##########################################################################################
+function install_meteorjs () {
+
+  echo -e "PROVISIONING: Installing MeteorJS.\n";
+
+  # Install MeteorJS.
+  curl -sL https://install.meteor.com/ | sh
+
+} # install_meteorjs
+
 ##########################################################################################
 # Update the locate database.
 ##########################################################################################
@@ -331,7 +344,7 @@ set_environment;
 set_timezone;
 configure_sources_list;
 hash avahi-daemon 2>/dev/null || { install_avahi; }
-hash sar 2>/dev/null || {  install_sysstat; }
+hash sar 2>/dev/null || { install_sysstat; }
 hash updatedb 2>/dev/null || { install_locate; }
 configure_motd;
 install_basic_tools;
@@ -339,7 +352,10 @@ hash libtool 2>/dev/null || { install_compiler; }
 if ! grep -q -s "git-core" /etc/apt/sources.list /etc/apt/sources.list.d/*; then install_git; fi
 
 # Install configure NodeJS and NPM.
-install_nodejs;
+hash node 2>/dev/null || { install_nodejs; }
+
+# Install MeteorJS.
+hash meteor 2>/dev/null || { install_meteorjs; }
 
 # Update the locate database.
 update_locate_db;
