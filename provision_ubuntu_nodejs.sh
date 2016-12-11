@@ -314,7 +314,7 @@ function install_meteorjs () {
   echo -e "PROVISIONING: Installing MeteorJS.\n";
 
   # Install MeteorJS.
-  curl -sL https://install.meteor.com/ | sh
+  curl -sL https://install.meteor.com/ | sh >/dev/null 2>&1
 
 } # install_meteorjs
 
