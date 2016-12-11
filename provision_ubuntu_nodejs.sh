@@ -290,6 +290,9 @@ function install_nodejs () {
 
   echo -e "PROVISIONING: Installing NodeJS and NPM related stuff.\n";
 
+  # Go into the base directory.
+  cd "${BASE_DIR}";
+
   # Purge any already installed version of NodeJS and NPM.
   sudo -E aptitude purge -y --assume-yes -q node npm;
 
@@ -313,8 +316,11 @@ function install_meteorjs () {
 
   echo -e "PROVISIONING: Installing MeteorJS.\n";
 
+  # Go into the base directory.
+  cd "${BASE_DIR}";
+
   # Install MeteorJS.
-  sudo -E curl https://install.meteor.com/ | sh >/dev/null 2>&1
+  curl https://install.meteor.com/ | sh >/dev/null 2>&1
 
 } # install_meteorjs
 
