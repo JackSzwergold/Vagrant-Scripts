@@ -320,7 +320,7 @@ function install_meteorjs () {
   cd "${BASE_DIR}";
 
   # Install MeteorJS.
-  curl https://install.meteor.com/ | sh >/dev/null 2>&1
+  sudo su ${USER_NAME} curl https://install.meteor.com/ | sh >/dev/null 2>&1
 
 } # install_meteorjs
 
