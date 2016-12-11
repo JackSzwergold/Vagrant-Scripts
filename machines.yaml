@@ -97,6 +97,7 @@
   deployment_configs_path: "deployment_configs/ubuntu"
   deployment_dbs_path: "deployment_dbs"
   hostname: "nodejs"
+  machinename: "NodeJS"
   ip: "192.168.56.50"
   forward_guest1: 22
   forward_host1: 2226
