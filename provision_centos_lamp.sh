@@ -315,11 +315,11 @@ function install_apache () {
 
   echo -e "PROVISIONING: Installing Apache and PHP related items.\n"
 
-  # Install the base Apache related items.
-  sudo -E yum install -y httpd mod_php56 mod_ssl;
-
   # Adding the WebTatic repository to get PHP 5.6 installed.
   sudo -E rpm -Uvh http://mirror.webtatic.com/yum/el6/latest.rpm
+
+  # Install the base Apache related items.
+  sudo -E yum install -y httpd mod_php56 mod_ssl;
 
   # Install other PHP related related items.
   # sudo -E yum install -y php56w php56w-common php56w-opcache \
@@ -647,8 +647,8 @@ if [ "${PROVISION_LAMP}" = true ]; then
   # if [ -f "/etc/logrotate.d/apache2" ]; then configure_apache_log_rotation; fi
 
   # MySQL
-  hash mysql && hash mysqld 2>/dev/null || { install_mysql; }
-  configure_mysql;
+  # hash mysql && hash mysqld 2>/dev/null || { install_mysql; }
+  # configure_mysql;
 
   # Install system scripts.
   install_system_scripts;
