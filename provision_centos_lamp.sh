@@ -656,8 +656,8 @@ if [ "${PROVISION_LAMP}" = true ]; then
   # if [ -f "/etc/logrotate.d/apache2" ]; then configure_apache_log_rotation; fi
 
   # MySQL
-  # hash mysql && hash mysqld 2>/dev/null || { install_mysql; }
-  # configure_mysql;
+  hash mysql && hash mysqld 2>/dev/null || { install_mysql; }
+  configure_mysql;
 
   # Install system scripts.
   install_system_scripts;
