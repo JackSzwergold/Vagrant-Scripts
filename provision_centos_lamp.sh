@@ -316,7 +316,7 @@ function install_apache () {
   echo -e "PROVISIONING: Installing Apache and PHP related items.\n"
 
   # Adding the WebTatic repository to get PHP 5.6 installed.
-  sudo -E rpm -Uvh http://mirror.webtatic.com/yum/el6/latest.rpm
+  sudo -E rpm -Uvh --quiet http://mirror.webtatic.com/yum/el6/latest.rpm 2>/dev/null;
 
   # Install the base Apache related items.
   sudo -E yum install -y httpd mod_php56 mod_ssl;
@@ -462,8 +462,17 @@ function install_mysql () {
 
   echo -e "PROVISIONING: Installing and configuring MySQL related items.\n";
 
+  # Adding the WebTatic repository to get MySQL 5.5 installed.
+  sudo -E rpm -Uvh --quiet http://mirror.webtatic.com/yum/el6/latest.rpm 2>/dev/null;
+
+  # Install the `yum-plugin-replace` to so a clean upgrade of all MySQL libraries can happen.
+  sudo -E RUNLEVEL=1 yum install -y mysql.`uname -i` yum-plugin-replace;
+
+  # Upgrade the MySQL libaries to MySQL 5.5.
+  sudo -E RUNLEVEL=1 yum replace -y mysql-libs --replace-with mysql55w-libs;
+
   # Install the MySQL server and client.
-  sudo -E RUNLEVEL=1 yum install -y mysql-server;
+  sudo -E RUNLEVEL=1 yum install -y mysql55w mysql55w-server;
 
   # Set MySQL to start on reboot.
   sudo chkconfig --add mysqld;
