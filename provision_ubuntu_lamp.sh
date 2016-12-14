@@ -961,10 +961,17 @@ function install_system_scripts () {
 
   # Copy and configure various system scripts.
   cd "${BASE_DIR}/${CONFIG_DIR}";
-  sudo -E cp -f "scripts/"*.sh "/opt/";
-  sudo -E chown -f -R root:root "scripts/"*.sh "/opt/";
-  sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "/opt/"*.cfg.sh;
-  sudo -E chmod -f -R 700 "/opt/"*.sh;
+  sudo -E mkdir -p "/opt/server_scripts";
+  sudo -E chmod 775 "/opt/server_scripts";
+  sudo -E cp -f "scripts/"*.sh "/opt/server_scripts/";
+  sudo -E chown -f -R root:www-readwrite "/opt/server_scripts/"*.sh;
+  sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "/opt/server_scripts/"*.cfg.sh;
+  sudo -E chmod -f -R 775 "/opt/server_scripts/"*.sh;
+
+  # Create the MySQL backup directory.
+  # sudo -E mkdir -p "/opt/mysql_backup";
+  # sudo -E chown root:www-readwrite "/opt/mysql_backup";
+  # sudo -E chmod 775 "/opt/mysql_backup";
 
 } # install_system_scripts
 
