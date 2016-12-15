@@ -111,6 +111,7 @@ function set_environment () {
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Importing the crontab.
+  sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "crontab.conf";
   sudo -E crontab < "crontab.conf";
 
 } # set_environment
