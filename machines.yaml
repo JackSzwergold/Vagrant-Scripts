@@ -125,7 +125,7 @@
   forward_guest1: 22
   forward_host1: 2227
   forward_id1: "ssh"
-  memory: 512
+  memory: 1024
   cpus: 1
 - name: "Solr_UBUNTU_1404"
   box: "ubuntu/trusty64"
