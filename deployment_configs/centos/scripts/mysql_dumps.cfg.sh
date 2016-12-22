@@ -18,5 +18,4 @@ MYSQLDUMP_BINARY='/usr/bin/mysqldump';
 
 DATABASE_DUMP_DIRECTORY='/opt/mysql_backup';
 
-EXPIRATION=1;
-
+EXPIRATION=7;
