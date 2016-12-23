@@ -187,7 +187,7 @@ function install_basic_tools () {
     iftop figlet lynx mtr-tiny iperf nload zip unzip attr sshpass \
     dkms mc elinks ntp dos2unix p7zip-full nfs-common \
     slurm sharutils uuid-runtime chkconfig quota pv trickle apachetop \
-    virtualbox-dkms nano;
+    virtualbox-dkms nano man man-pages;
 
 } # install_basic_tools
 
@@ -242,10 +242,7 @@ function install_postfix () {
   echo -e "PROVISIONING: Installing Postfix and related mail stuff.\n";
 
   # Install postfix and general mail stuff.
-  sudo -E yum install -y -q postfix;
-  sudo -E yum install -y -q cyrus-sasl;
-  sudo -E yum install -y -q cyrus-imapd;
-  sudo -E yum install -y -q mailx;
+  sudo -E yum install -y -q postfix cyrus-sasl cyrus-imapd mailx;
 
 } # install_postfix
 
