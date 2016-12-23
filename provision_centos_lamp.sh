@@ -334,8 +334,8 @@ function install_apache () {
   # sudo -E a2enmod -q rewrite headers expires include proxy proxy_http cgi;
 
   # Set Apache to start on reboot.
-  sudo chkconfig --add httpd;
-  sudo chkconfig --level 345 httpd on;
+  sudo -E chkconfig --add httpd;
+  sudo -E chkconfig --level 345 httpd on;
 
   # TODO: Stop and disable IPTables. (Note this shouldn’t be here; set a separate function.)
   sudo -E service iptables stop;
@@ -461,7 +461,7 @@ function install_mysql () {
   echo -e "PROVISIONING: Installing and configuring MySQL related items.\n";
 
   # Adding the WebTatic repository to get MySQL 5.5 installed.
-  sudo -E rpm -Uvh --quiet http://mirror.webtatic.com/yum/el6/latest.rpm 2>/dev/null;
+  sudo -E rpm -Uvh --quiet "http://mirror.webtatic.com/yum/el6/latest.rpm" 2>/dev/null;
 
   # Install the `yum-plugin-replace` to so a clean upgrade of all MySQL libraries can happen.
   sudo -E RUNLEVEL=1 yum install -y mysql.`uname -i` yum-plugin-replace;
