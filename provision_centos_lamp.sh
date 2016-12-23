@@ -253,6 +253,9 @@ function configure_login_defs () {
 
   echo -e "PROVISIONING: Setting the 'login.defs' config file.\n";
 
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
   # Copy the 'login.defs' file in place.
   sudo -E cp -f "system/login.defs" "/etc/login.defs";
 
