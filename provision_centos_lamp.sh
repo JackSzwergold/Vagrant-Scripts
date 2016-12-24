@@ -385,6 +385,7 @@ function set_apache_web_root () {
 
   sudo -E chown -f -R "${USER_NAME}":www-readwrite "/var/www/html/";
   sudo -E chmod -f -R 775 "/var/www/html/";
+  sudo -E chmod g+s "/var/www/html/";
   sudo -E cp -f "apache2/index.php" "/var/www/html/index.php";
   sudo -E chmod -f -R 664 "/var/www/html/index.php";
 
@@ -400,6 +401,7 @@ function set_apache_deployment_directories () {
   sudo -E mkdir -p "/var/www/"{builds,configs,content};
   sudo -E chown -f -R "${USER_NAME}":www-readwrite "/var/www/"{builds,configs,content};
   sudo -E chmod -f -R 775 "/var/www/"{builds,configs,content};
+  sudo -E chmod g+s "/var/www/"{builds,configs,content};
 
 } # set_apache_deployment_directories
 
