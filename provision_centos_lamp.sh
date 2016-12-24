@@ -454,6 +454,7 @@ function set_apache_virtual_host_directories () {
   sudo -E cp -f "apache2/index.php" "/var/www/html/${HOST_NAME}/site/index.php";
   sudo -E chown -f -R "${USER_NAME}":www-readwrite "/var/www/html/${HOST_NAME}";
   sudo -E chmod -f -R 775 "/var/www/html/${HOST_NAME}";
+  sudo -E chmod g+s "/var/www/html/${HOST_NAME}";
   sudo -E chmod -f 664 "/var/www/html/${HOST_NAME}/site/index.php";
 
 } # set_apache_virtual_host_directories
