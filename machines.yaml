@@ -40,7 +40,7 @@
   geoip: true
   iptables: true
   fail2ban: false
-- name: "Sandbox_CENTOS_86"
+- name: "Sandbox_CENTOS_68"
   box: "kaorimatz/centos-6.8-x86_64"
   primary: false
   autostart: false
