@@ -23,13 +23,6 @@
   autostart: false
   provision_script: "provision_ubuntu_lamp.sh"
   provision_script_regular: null
-  deployment_configs_path: "deployment_configs/ubuntu"
-  deployment_dbs_path: "deployment_dbs"
-  basics: true
-  lamp: true
-  geoip: true
-  iptables: true
-  fail2ban: false
   hostname: "sandbox"
   machinename: "Sandbox"
   ip: "192.168.56.10"
@@ -38,15 +31,19 @@
   forward_id1: "ssh"
   memory: 512
   cpus: 1
+  deployment_configs_path: "deployment_configs/ubuntu"
+  deployment_dbs_path: "deployment_dbs"
+  basics: true
+  lamp: true
+  geoip: true
+  iptables: true
+  fail2ban: false
 - name: "Jabroni_UBUNTU_1404"
   box: "ubuntu/trusty64"
   primary: false
   autostart: false
   provision_script: "provision_ubuntu_basics.sh"
   provision_script_regular: null
-  deployment_configs_path: "deployment_configs/ubuntu"
-  deployment_dbs_path: "deployment_dbs"
-  basics: true
   hostname: "jabroni"
   machinename: "Jabroni"
   ip: "192.168.56.20"
@@ -55,14 +52,15 @@
   forward_id1: "ssh"
   memory: 512
   cpus: 1
+  deployment_configs_path: "deployment_configs/ubuntu"
+  deployment_dbs_path: "deployment_dbs"
+  basics: true
 - name: "Mongo_UBUNTU_1404"
   box: "ubuntu/trusty64"
   primary: false
   autostart: false
   provision_script: "provision_ubuntu_mongo.sh"
   provision_script_regular: null
-  deployment_configs_path: "deployment_configs/ubuntu"
-  deployment_dbs_path: "deployment_dbs"
   hostname: "mongo"
   machinename: "Mongo"
   ip: "192.168.56.30"
@@ -74,14 +72,14 @@
   forward_id2: "mongo"
   memory: 1024
   cpus: 1
+  deployment_configs_path: "deployment_configs/ubuntu"
+  deployment_dbs_path: "deployment_dbs"
 - name: "ElasticSearch_UBUNTU_1404"
   box: "ubuntu/trusty64"
   primary: false
   autostart: false
   provision_script: "provision_ubuntu_elasticsearch.sh"
   provision_script_regular: null
-  deployment_configs_path: "deployment_configs/ubuntu"
-  deployment_dbs_path: "deployment_dbs"
   hostname: "elasticsearch"
   machinename: "Elasticsearch"
   ip: "192.168.56.40"
@@ -93,14 +91,14 @@
   forward_id2: "elasticsearch"
   memory: 1024
   cpus: 1
+  deployment_configs_path: "deployment_configs/ubuntu"
+  deployment_dbs_path: "deployment_dbs"
 - name: "NodeJS_UBUNTU_1404"
   box: "ubuntu/trusty64"
   primary: false
   autostart: false
   provision_script: "provision_ubuntu_nodejs.sh"
   provision_script_regular: "provision_ubuntu_nodejs_regular.sh"
-  deployment_configs_path: "deployment_configs/ubuntu"
-  deployment_dbs_path: "deployment_dbs"
   hostname: "nodejs"
   machinename: "NodeJS"
   ip: "192.168.56.50"
@@ -109,16 +107,14 @@
   forward_id1: "ssh"
   memory: 1024
   cpus: 1
+  deployment_configs_path: "deployment_configs/ubuntu"
+  deployment_dbs_path: "deployment_dbs"
 - name: "Sandbox_CENTOS_86"
   box: "kaorimatz/centos-6.8-x86_64"
   primary: false
   autostart: false
   provision_script: "provision_centos_lamp.sh"
   provision_script_regular: null
-  deployment_configs_path: "deployment_configs/centos"
-  deployment_dbs_path: "deployment_dbs"
-  basics: true
-  lamp: true
   hostname: "sandbox-centos"
   machinename: "Sandbox-CentOS"
   ip: "192.168.56.60"
@@ -127,14 +123,16 @@
   forward_id1: "ssh"
   memory: 1024
   cpus: 1
+  deployment_configs_path: "deployment_configs/centos"
+  deployment_dbs_path: "deployment_dbs"
+  basics: true
+  lamp: true
 - name: "Solr_UBUNTU_1404"
   box: "ubuntu/trusty64"
   primary: false
   autostart: false
   provision_script: "provision_ubuntu_solr.sh"
   provision_script_regular: null
-  deployment_configs_path: "deployment_configs/ubuntu"
-  deployment_dbs_path: "deployment_dbs"
   hostname: "solr"
   machinename: "Solr"
   ip: "192.168.56.70"
@@ -146,3 +144,5 @@
   forward_id2: "solr"
   memory: 1024
   cpus: 1
+  deployment_configs_path: "deployment_configs/ubuntu"
+  deployment_dbs_path: "deployment_dbs"
