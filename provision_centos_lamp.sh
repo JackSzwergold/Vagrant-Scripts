@@ -169,9 +169,6 @@ function install_sysstat () {
   # Install Sysstat.
   sudo -E yum install -y -q sysstat;
 
-  # Enable Sysstat.
-  # sudo sed -i 's/ENABLED="false"/ENABLED="true"/g' /etc/sysconfig/sysstat;
-
   # Restart Sysstat.
   sudo -E service sysstat restart;
 
@@ -306,7 +303,6 @@ function configure_motd () {
 
   # Set the server login banner with figlet.
   MOTD_PATH="/etc/motd";
-  # echo "$(figlet ${MACHINE_NAME^} | head -n -1).local" > "${MOTD_PATH}";
   echo "$(figlet ${MACHINE_NAME} | head -n -1).local" > "${MOTD_PATH}";
   echo "" >> "${MOTD_PATH}";
 
@@ -332,12 +328,6 @@ function install_apache () {
     php56w-xmlrpc php56w-json php56w-xsl php56w-curl \
     php56w-ldap php56w-mcrypt \
     php56w-pspell php56w-gmp php56w-gd php56w-mbstring;
-
-  # Enable the PHP mcrypt module.
-  # sudo -E php5enmod mcrypt;
-
-  # Enable these core Apache modules.
-  # sudo -E a2enmod -q rewrite headers expires include proxy proxy_http cgi;
 
   # Set Apache to start on reboot.
   sudo -E chkconfig --add httpd;
@@ -437,9 +427,9 @@ function configure_apache_log_rotation () {
   sudo -E sed -i 's/create 640 root adm/create 640 root www-readwrite/g' "/etc/logrotate.d/apache2";
 
   # Adjust permissions on log files.
-  sudo -E chmod o+rx /var/log/apache2;
-  sudo -E chgrp www-readwrite /var/log/apache2/*;
-  sudo -E chmod -f 664 /var/log/apache2/*;
+  sudo -E chmod o+rx "/var/log/apache2";
+  sudo -E chgrp www-readwrite "/var/log/apache2/"*;
+  sudo -E chmod -f 664 "/var/log/apache2/"*;
 
 } # configure_apache_log_rotation
 

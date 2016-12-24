@@ -149,9 +149,6 @@ function set_timezone () {
 
     echo -e "PROVISIONING: Setting timezone data.\n";
 
-    # debconf-set-selections <<< "tzdata tzdata/Areas select America"
-    # debconf-set-selections <<< "tzdata tzdata/Zones/America select New_York"
-    # sudo -E dpkg-reconfigure tzdata
     sudo -E echo "${TIMEZONE}" > "${TIMEZONE_PATH}";
     sudo -E dpkg-reconfigure -f noninteractive tzdata;
 
@@ -339,9 +336,7 @@ function configure_motd () {
   sudo -E aptitude install -y --assume-yes -q figlet;
 
   # Set the server login banner with figlet.
-  # MOTD_PATH="/etc/motd.tail";
   MOTD_PATH="/etc/motd";
-  # echo "$(figlet ${MACHINE_NAME^} | head -n -1).local" > "${MOTD_PATH}";
   echo "$(figlet ${MACHINE_NAME} | head -n -1).local" > "${MOTD_PATH}";
   echo "" >> "${MOTD_PATH}";
 
@@ -510,9 +505,9 @@ function configure_apache_log_rotation () {
   sudo -E sed -i 's/create 640 root adm/create 640 root www-readwrite/g' "/etc/logrotate.d/apache2";
 
   # Adjust permissions on log files.
-  sudo -E chmod o+rx /var/log/apache2;
-  sudo -E chgrp www-readwrite /var/log/apache2/*;
-  sudo -E chmod 644 /var/log/apache2/*;
+  sudo -E chmod o+rx "/var/log/apache2";
+  sudo -E chgrp www-readwrite "/var/log/apache2/"*;
+  sudo -E chmod 644 "/var/log/apache2/"*;
 
 } # configure_apache_log_rotation
 
