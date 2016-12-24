@@ -14,6 +14,7 @@
 # Created: 2016-01-27, js
 # Version: 2016-01-27, js: creation
 #          2016-02-01, js: development
+#          2016-12-24, js: development
 #
 ##########################################################################################
 
@@ -39,6 +40,24 @@
   geoip: true
   iptables: true
   fail2ban: false
+- name: "Sandbox_CENTOS_86"
+  box: "kaorimatz/centos-6.8-x86_64"
+  primary: false
+  autostart: false
+  provision_script: "provision_centos_lamp.sh"
+  provision_script_regular: null
+  hostname: "sandbox-centos"
+  machinename: "Sandbox-CentOS"
+  ip: "192.168.56.20"
+  forward_guest1: 22
+  forward_host1: 2223
+  forward_id1: "ssh"
+  memory: 1024
+  cpus: 1
+  deployment_configs_path: "deployment_configs/centos"
+  deployment_dbs_path: "deployment_dbs"
+  basics: true
+  lamp: true
 - name: "Jabroni_UBUNTU_1404"
   box: "ubuntu/trusty64"
   primary: false
@@ -47,9 +66,9 @@
   provision_script_regular: null
   hostname: "jabroni"
   machinename: "Jabroni"
-  ip: "192.168.56.20"
+  ip: "192.168.56.30"
   forward_guest1: 22
-  forward_host1: 2223
+  forward_host1: 2224
   forward_id1: "ssh"
   memory: 512
   cpus: 1
@@ -64,9 +83,9 @@
   provision_script_regular: null
   hostname: "mongo"
   machinename: "Mongo"
-  ip: "192.168.56.30"
+  ip: "192.168.56.40"
   forward_guest1: 22
-  forward_host1: 2224
+  forward_host1: 2225
   forward_id1: "ssh"
   forward_guest2: 27017
   forward_host2: 27017
@@ -83,9 +102,9 @@
   provision_script_regular: null
   hostname: "elasticsearch"
   machinename: "Elasticsearch"
-  ip: "192.168.56.40"
+  ip: "192.168.56.50"
   forward_guest1: 22
-  forward_host1: 2225
+  forward_host1: 2226
   forward_id1: "ssh"
   forward_guest2: 9200
   forward_host2: 9200
@@ -102,32 +121,14 @@
   provision_script_regular: "provision_ubuntu_nodejs_regular.sh"
   hostname: "nodejs"
   machinename: "NodeJS"
-  ip: "192.168.56.50"
-  forward_guest1: 22
-  forward_host1: 2226
-  forward_id1: "ssh"
-  memory: 1024
-  cpus: 1
-  deployment_configs_path: "deployment_configs/ubuntu"
-  deployment_dbs_path: "deployment_dbs"
-- name: "Sandbox_CENTOS_86"
-  box: "kaorimatz/centos-6.8-x86_64"
-  primary: false
-  autostart: false
-  provision_script: "provision_centos_lamp.sh"
-  provision_script_regular: null
-  hostname: "sandbox-centos"
-  machinename: "Sandbox-CentOS"
   ip: "192.168.56.60"
   forward_guest1: 22
   forward_host1: 2227
   forward_id1: "ssh"
   memory: 1024
   cpus: 1
-  deployment_configs_path: "deployment_configs/centos"
+  deployment_configs_path: "deployment_configs/ubuntu"
   deployment_dbs_path: "deployment_dbs"
-  basics: true
-  lamp: true
 - name: "Solr_UBUNTU_1404"
   box: "ubuntu/trusty64"
   primary: false
