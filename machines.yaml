@@ -35,6 +35,7 @@
   deployment_dbs_path: "deployment_dbs"
   basics: true
   lamp: true
+  imagemagick: false
   geoip: true
   iptables: true
   fail2ban: false

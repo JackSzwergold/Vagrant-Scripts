@@ -63,16 +63,20 @@ PROVISION_LAMP=false;
 if [ -n "$7" ]; then PROVISION_LAMP="${7}"; fi
 echo -e "PROVISIONING: LAMP provisioning: '${PROVISION_LAMP}'.\n";
 
+PROVISION_IMAGEMAGICK=false;
+if [ -n "$8" ]; then PROVISION_IMAGEMAGICK="${8}"; fi
+echo -e "PROVISIONING: ImageMagick provisioning: '${PROVISION_IMAGEMAGICK}'.\n";
+
 PROVISION_GEOIP=false;
-if [ -n "$8" ]; then PROVISION_GEOIP="${8}"; fi
+if [ -n "$9" ]; then PROVISION_GEOIP="${9}"; fi
 echo -e "PROVISIONING: GeoIP provisioning: '${PROVISION_GEOIP}'.\n";
 
 PROVISION_IPTABLES=false;
-if [ -n "$9" ]; then PROVISION_IPTABLES="${9}"; fi
+if [ -n "$10" ]; then PROVISION_IPTABLES="${10}"; fi
 echo -e "PROVISIONING: IPTables provisioning: '${PROVISION_IPTABLES}'.\n";
 
 PROVISION_FAIL2BAN=false;
-if [ -n "$10" ]; then PROVISION_FAIL2BAN="${10}"; fi
+if [ -n "$11" ]; then PROVISION_FAIL2BAN="${11}"; fi
 echo -e "PROVISIONING: Fail2Ban provisioning: '${PROVISION_FAIL2BAN}'.\n";
 
 ##########################################################################################
@@ -1059,6 +1063,11 @@ fi
 hash monit 2>/dev/null || { install_monit; }
 if [ -f "monit/monitrc" ]; then configure_monit; fi
 
+# ImageMagick
+if [ "${PROVISION_IMAGEMAGICK}" = true ]; then
+  hash convert 2>/dev/null || { install_imagemagick; }
+fi
+
 if [ "${PROVISION_LAMP}" = true ]; then
 
   # Go into the config directory.
@@ -1090,9 +1099,6 @@ if [ "${PROVISION_LAMP}" = true ]; then
   # AWStats
   if [ ! -d "/usr/share/awstats-7.3" ]; then install_awstats; fi
   if [ -f "apache2/awstats.conf" ] && [ ! -f "/etc/apache2/conf-available/awstats.conf" ]; then configure_awstats_apache; fi
-
-  # ImageMagick
-  hash convert 2>/dev/null || { install_imagemagick; }
 
   # Install system scripts.
   install_system_scripts;
