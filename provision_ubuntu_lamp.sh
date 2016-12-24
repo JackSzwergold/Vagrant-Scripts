@@ -455,8 +455,11 @@ function set_apache_web_root () {
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
-  sudo -E rm -rf "/var/www/html";
-  sudo -E cp -f "apache2/index.php" "/var/www/index.php";
+  sudo -E chown -f -R "${USER_NAME}":www-readwrite "/var/www/html/";
+  sudo -E chmod -f -R 775 "/var/www/html/";
+  sudo -E chmod g+s "/var/www/html/";
+  sudo -E cp -f "apache2/index.php" "/var/www/html/index.php";
+  sudo -E chmod -f -R 664 "/var/www/html/index.php";
 
 } # set_apache_web_root
 
@@ -484,12 +487,12 @@ function set_apache_virtual_host_directories () {
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
-  sudo -E mkdir -p "/var/www/${HOST_NAME}/site";
-  sudo -E cp -f "apache2/index.php" "/var/www/${HOST_NAME}/site/index.php";
-  sudo -E chown -f -R "${USER_NAME}":www-readwrite "/var/www/${HOST_NAME}";
-  sudo -E chmod -f -R 775 "/var/www/${HOST_NAME}";
-  sudo -E chmod g+s "/var/www/${HOST_NAME}";
-  sudo -E chmod -f -R 664 "/var/www/${HOST_NAME}/site/index.php";
+  sudo -E mkdir -p "/var/www/html/${HOST_NAME}/site";
+  sudo -E cp -f "apache2/index.php" "/var/www/html/${HOST_NAME}/site/index.php";
+  sudo -E chown -f -R "${USER_NAME}":www-readwrite "/var/www/html/${HOST_NAME}";
+  sudo -E chmod -f -R 775 "/var/www/html/${HOST_NAME}";
+  sudo -E chmod g+s "/var/www/html/${HOST_NAME}";
+  sudo -E chmod -f -R 664 "/var/www/html/${HOST_NAME}/site/index.php";
 
 } # set_apache_virtual_host_directories
 
@@ -1069,7 +1072,7 @@ if [ "${PROVISION_LAMP}" = true ]; then
   configure_apache;
   if [ -d "/var/www/html" ]; then set_apache_web_root; fi
   if [ ! -d "/var/www/builds" ]; then set_apache_deployment_directories; fi
-  if [ ! -d "/var/www/${HOST_NAME}" ]; then set_apache_virtual_host_directories; fi
+  if [ ! -d "/var/www/html/${HOST_NAME}" ]; then set_apache_virtual_host_directories; fi
   if [ -f "/etc/logrotate.d/apache2" ]; then configure_apache_log_rotation; fi
 
   # MySQL
@@ -1083,7 +1086,7 @@ if [ "${PROVISION_LAMP}" = true ]; then
   # phpMyAdmin
   if [ ! -d "/usr/share/phpmyadmin" ]; then install_phpmyadmin; fi
   if [ -f "phpmyadmin/config.inc.php" ] && [ ! -f "/usr/share/phpmyadmin/config.inc.php" ]; then configure_phpmyadmin; fi
-  configure_phpmyadmin_blowfish;
+  if [ -f "/usr/share/phpmyadmin/config.inc.php" ]; then configure_phpmyadmin_blowfish; fi
   if [ -f "apache2/phpmyadmin.conf" ] && [ ! -f "/etc/apache2/conf-available/phpmyadmin.conf" ]; then configure_awstats_apache; fi
 
   # AWStats
