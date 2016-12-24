@@ -968,6 +968,7 @@ function install_system_scripts () {
   cd "${BASE_DIR}/${CONFIG_DIR}";
   sudo -E mkdir -p "/opt/server_scripts";
   sudo -E chmod 775 "/opt/server_scripts";
+  sudo -E chmod g+s "/opt/server_scripts";
   sudo -E cp -f "scripts/"*.sh "/opt/server_scripts/";
   sudo -E chown -f -R root:www-readwrite "/opt/server_scripts/"*.sh;
   sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "/opt/server_scripts/"*.cfg.sh;
@@ -977,6 +978,7 @@ function install_system_scripts () {
   # sudo -E mkdir -p "/opt/mysql_backup";
   # sudo -E chown root:www-readwrite "/opt/mysql_backup";
   # sudo -E chmod 775 "/opt/mysql_backup";
+  # sudo -E chmod g+s "/opt/mysql_backup";
 
 } # install_system_scripts
 
