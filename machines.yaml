@@ -75,6 +75,22 @@
   deployment_configs_path: "deployment_configs/ubuntu"
   deployment_dbs_path: "deployment_dbs"
   basics: true
+- name: "NodeJS_UBUNTU_1404"
+  box: "ubuntu/trusty64"
+  primary: false
+  autostart: false
+  provision_script: "provision_ubuntu_nodejs.sh"
+  provision_script_regular: "provision_ubuntu_nodejs_regular.sh"
+  hostname: "nodejs"
+  machinename: "NodeJS"
+  ip: "192.168.56.40"
+  forward_guest1: 22
+  forward_host1: 2225
+  forward_id1: "ssh"
+  memory: 1024
+  cpus: 1
+  deployment_configs_path: "deployment_configs/ubuntu"
+  deployment_dbs_path: "deployment_dbs"
 - name: "Mongo_UBUNTU_1404"
   box: "ubuntu/trusty64"
   primary: false
@@ -83,9 +99,9 @@
   provision_script_regular: null
   hostname: "mongo"
   machinename: "Mongo"
-  ip: "192.168.56.40"
+  ip: "192.168.56.50"
   forward_guest1: 22
-  forward_host1: 2225
+  forward_host1: 2226
   forward_id1: "ssh"
   forward_guest2: 27017
   forward_host2: 27017
@@ -102,29 +118,13 @@
   provision_script_regular: null
   hostname: "elasticsearch"
   machinename: "Elasticsearch"
-  ip: "192.168.56.50"
-  forward_guest1: 22
-  forward_host1: 2226
-  forward_id1: "ssh"
-  forward_guest2: 9200
-  forward_host2: 9200
-  forward_id2: "elasticsearch"
-  memory: 1024
-  cpus: 1
-  deployment_configs_path: "deployment_configs/ubuntu"
-  deployment_dbs_path: "deployment_dbs"
-- name: "NodeJS_UBUNTU_1404"
-  box: "ubuntu/trusty64"
-  primary: false
-  autostart: false
-  provision_script: "provision_ubuntu_nodejs.sh"
-  provision_script_regular: "provision_ubuntu_nodejs_regular.sh"
-  hostname: "nodejs"
-  machinename: "NodeJS"
   ip: "192.168.56.60"
   forward_guest1: 22
   forward_host1: 2227
   forward_id1: "ssh"
+  forward_guest2: 9200
+  forward_host2: 9200
+  forward_id2: "elasticsearch"
   memory: 1024
   cpus: 1
   deployment_configs_path: "deployment_configs/ubuntu"
