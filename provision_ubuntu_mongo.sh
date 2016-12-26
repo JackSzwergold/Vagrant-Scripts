@@ -167,7 +167,7 @@ function install_avahi () {
   echo -e "PROVISIONING: Avahi related stuff.\n";
 
   # Install Avahi.
-  sudo -E aptitude install -y --assume-yes -q avahi-daemon avahi-utils;
+  sudo -E aptitude install -y -q avahi-daemon avahi-utils;
 
 } # install_avahi
 
@@ -179,7 +179,7 @@ function install_sysstat () {
   echo -e "PROVISIONING: Sysstat related stuff.\n";
 
   # Install Sysstat.
-  sudo -E aptitude install -y --assume-yes -q sysstat;
+  sudo -E aptitude install -y -q sysstat;
 
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFIG_DIR}";
@@ -200,7 +200,7 @@ function install_basic_tools () {
   echo -e "PROVISIONING: Installing a set of generic tools.\n";
 
   # Install generic tools.
-  sudo -E aptitude install -y --assume-yes -q \
+  sudo -E aptitude install -y -q \
     dnsutils traceroute nmap bc htop finger curl whois rsync lsof \
     iftop figlet lynx mtr-tiny iperf nload zip unzip attr sshpass \
     dkms mc elinks ntp dos2unix p7zip-full nfs-common \
@@ -217,7 +217,7 @@ function install_locate () {
   echo -e "PROVISIONING: Installing the locate tool and updating the database.\n";
 
   # Install Locate.
-  sudo -E aptitude install -y --assume-yes -q mlocate;
+  sudo -E aptitude install -y -q mlocate;
 
   # Update Locate.
   sudo -E updatedb;
@@ -232,7 +232,7 @@ function install_compiler () {
   echo -e "PROVISIONING: Installing the core compiler tools.\n";
 
   # Install the core compiler and build tools.
-  sudo -E aptitude install -y --assume-yes -q build-essential libtool;
+  sudo -E aptitude install -y -q build-essential libtool;
 
 } # install_compiler
 
@@ -244,13 +244,13 @@ function install_git () {
   echo -e "PROVISIONING: Installing Git and related stuff.\n";
 
   # Purge any already installed version of Git.
-  sudo -E aptitude purge -y --assume-yes -q git git-core subversion git-svn;
+  sudo -E aptitude purge -y -q git git-core subversion git-svn;
 
   # Now install Git via PPA.
-  sudo -E aptitude install -y --assume-yes -q python-software-properties;
+  sudo -E aptitude install -y -q python-software-properties;
   sudo -E add-apt-repository -y ppa:git-core/ppa;
-  sudo -E aptitude update -y --assume-yes -q;
-  sudo -E aptitude install -y --assume-yes -q git git-core subversion git-svn;
+  sudo -E aptitude update -y -q;
+  sudo -E aptitude install -y -q git git-core subversion git-svn;
 
 } # install_git
 
@@ -262,7 +262,7 @@ function configure_motd () {
   echo -e "PROVISIONING: Setting the MOTD banner.\n";
 
   # Install figlet.
-  sudo -E aptitude install -y --assume-yes -q figlet;
+  sudo -E aptitude install -y -q figlet;
 
   # Set the server login banner with figlet.
   # MOTD_PATH="/etc/motd.tail";
@@ -303,9 +303,9 @@ function install_mongo26 () {
   # sudo rm -rf "/var/lib/apt/lists/"*;
   sudo rm -rf "/var/lib/apt/lists/partial/";
   sudo apt-get update -o Acquire::CompressionTypes::Order::=gz;
-  sudo -E apt-get clean -y --assume-yes -q;
-  sudo -E aptitude update -y --assume-yes -q;
-  sudo -E aptitude install -y --assume-yes -q mongodb-org=2.6.12 mongodb-org-server=2.6.12 mongodb-org-shell=2.6.12 mongodb-org-mongos=2.6.12 mongodb-org-tools=2.6.12;
+  sudo -E apt-get clean -y -q;
+  sudo -E aptitude update -y -q;
+  sudo -E aptitude install -y -q mongodb-org=2.6.12 mongodb-org-server=2.6.12 mongodb-org-shell=2.6.12 mongodb-org-mongos=2.6.12 mongodb-org-tools=2.6.12;
 
   # Pin the currently installed version of MongoDB to ensure no accidental upgrades happen.
   echo "mongodb-org hold" | sudo dpkg --set-selections;
@@ -374,9 +374,9 @@ function install_mongo32 () {
   # sudo rm -rf "/var/lib/apt/lists/"*;
   sudo rm -rf "/var/lib/apt/lists/partial/";
   sudo apt-get update -o Acquire::CompressionTypes::Order::=gz;
-  sudo -E apt-get clean -y --assume-yes -q;
-  sudo -E aptitude update -y --assume-yes -q;
-  sudo -E aptitude install -y --assume-yes -q mongodb-org=3.2.10 mongodb-org-server=3.2.10 mongodb-org-shell=3.2.10 mongodb-org-mongos=3.2.10 mongodb-org-tools=3.2.10;
+  sudo -E apt-get clean -y -q;
+  sudo -E aptitude update -y -q;
+  sudo -E aptitude install -y -q mongodb-org=3.2.10 mongodb-org-server=3.2.10 mongodb-org-shell=3.2.10 mongodb-org-mongos=3.2.10 mongodb-org-tools=3.2.10;
 
   # Pin the currently installed version of MongoDB to ensure no accidental upgrades happen.
   echo "mongodb-org hold" | sudo dpkg --set-selections;
