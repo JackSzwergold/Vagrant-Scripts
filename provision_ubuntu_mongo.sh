@@ -294,11 +294,15 @@ function install_mongo26 () {
   cd "${BASE_DIR}";
 
   # Add the official MongoDB repository and install MongoDB.
-  curl -ss -O -L "http://docs.mongodb.org/10gen-gpg-key.asc";
+  curl -ss -O -L "http://docs.mongodb.org/10gen-gpg-key.asc" & CURL_PID=(`jobs -l | awk '{print $2}'`);
+  wait ${CURL_PID};
   sudo apt-key add "10gen-gpg-key.asc";
   # sudo -E apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10;
-  echo "deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen" | sudo tee "/etc/apt/sources.list.d/mongodb.list";
-  sudo rm -rf "/var/lib/apt/lists/"*;
+  echo "deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen" | sudo tee "/etc/apt/sources.list.d/mongodb.list" & ADD_REPO_PID=(`jobs -l | awk '{print $2}'`);
+  wait ${ADD_REPO_PID};
+  # sudo rm -rf "/var/lib/apt/lists/"*;
+  sudo rm -rf "/var/lib/apt/lists/partial/";
+  sudo apt-get update -o Acquire::CompressionTypes::Order::=gz;
   sudo -E apt-get clean -y --assume-yes -q;
   sudo -E aptitude update -y --assume-yes -q;
   sudo -E aptitude install -y --assume-yes -q mongodb-org=2.6.12 mongodb-org-server=2.6.12 mongodb-org-shell=2.6.12 mongodb-org-mongos=2.6.12 mongodb-org-tools=2.6.12;
@@ -361,11 +365,15 @@ function install_mongo32 () {
   cd "${BASE_DIR}";
 
   # Add the official MongoDB repository and install MongoDB.
-  curl -ss -O -L "http://docs.mongodb.org/10gen-gpg-key.asc";
+  curl -ss -O -L "http://docs.mongodb.org/10gen-gpg-key.asc" & CURL_PID=(`jobs -l | awk '{print $2}'`);
+  wait ${CURL_PID};
   sudo apt-key add "10gen-gpg-key.asc";
   # sudo -E apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927;
-  echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.2 multiverse" | sudo tee "/etc/apt/sources.list.d/mongodb-org-3.2.list";
-  sudo rm -rf "/var/lib/apt/lists/"*;
+  echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.2 multiverse" | sudo tee "/etc/apt/sources.list.d/mongodb-org-3.2.list" | sudo tee "/etc/apt/sources.list.d/mongodb.list" & ADD_REPO_PID=(`jobs -l | awk '{print $2}'`);
+  wait ${ADD_REPO_PID};
+  # sudo rm -rf "/var/lib/apt/lists/"*;
+  sudo rm -rf "/var/lib/apt/lists/partial/";
+  sudo apt-get update -o Acquire::CompressionTypes::Order::=gz;
   sudo -E apt-get clean -y --assume-yes -q;
   sudo -E aptitude update -y --assume-yes -q;
   sudo -E aptitude install -y --assume-yes -q mongodb-org=3.2.10 mongodb-org-server=3.2.10 mongodb-org-shell=3.2.10 mongodb-org-mongos=3.2.10 mongodb-org-tools=3.2.10;
@@ -451,9 +459,9 @@ hash libtool 2>/dev/null || { install_compiler; }
 if ! grep -q -s "git-core" /etc/apt/sources.list /etc/apt/sources.list.d/*; then install_git; fi
 
 # Install configure MongoDB.
-install_mongo26;
+hash mongo && hash mongod 2>/dev/null || { install_mongo26; }
 configure_mongo26;
-# install_mongo32;
+# hash mongo && hash mongod 2>/dev/null || { install_mongo32; }
 # configure_mongo32;
 
 # Update the locate database.
