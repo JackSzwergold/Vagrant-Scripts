@@ -22,7 +22,7 @@
   box: "ubuntu/trusty64"
   primary: true
   autostart: false
-  provision_script: "provision_ubuntu_lamp.sh"
+  provision_script: "provision_lamp_ubuntu.sh"
   provision_script_regular: null
   hostname: "sandbox"
   machinename: "Sandbox"
@@ -44,7 +44,7 @@
   box: "kaorimatz/centos-6.8-x86_64"
   primary: false
   autostart: false
-  provision_script: "provision_centos_lamp.sh"
+  provision_script: "provision_lamp_centos.sh"
   provision_script_regular: null
   hostname: "sandbox-centos"
   machinename: "Sandbox-CentOS"
@@ -62,7 +62,7 @@
   box: "ubuntu/trusty64"
   primary: false
   autostart: false
-  provision_script: "provision_ubuntu_basics.sh"
+  provision_script: "provision_basics_ubuntu.sh"
   provision_script_regular: null
   hostname: "jabroni"
   machinename: "Jabroni"
@@ -79,8 +79,8 @@
   box: "ubuntu/trusty64"
   primary: false
   autostart: false
-  provision_script: "provision_ubuntu_nodejs.sh"
-  provision_script_regular: "provision_ubuntu_nodejs_regular.sh"
+  provision_script: "provision_nodejs_ubuntu.sh"
+  provision_script_regular: "provision_nodejs_regular_ubuntu.sh"
   hostname: "nodejs"
   machinename: "NodeJS"
   ip: "192.168.56.40"
@@ -95,7 +95,7 @@
   box: "ubuntu/trusty64"
   primary: false
   autostart: false
-  provision_script: "provision_ubuntu_mongo.sh"
+  provision_script: "provision_mongo_ubuntu.sh"
   provision_script_regular: null
   hostname: "mongo"
   machinename: "Mongo"
@@ -114,7 +114,7 @@
   box: "ubuntu/trusty64"
   primary: false
   autostart: false
-  provision_script: "provision_ubuntu_elasticsearch.sh"
+  provision_script: "provision_elasticsearch_ubuntu.sh"
   provision_script_regular: null
   hostname: "elasticsearch"
   machinename: "Elasticsearch"
@@ -133,7 +133,7 @@
   box: "ubuntu/trusty64"
   primary: false
   autostart: false
-  provision_script: "provision_ubuntu_solr.sh"
+  provision_script: "provision_solr_ubuntu.sh"
   provision_script_regular: null
   hostname: "solr"
   machinename: "Solr"
