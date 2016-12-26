@@ -360,7 +360,6 @@ function install_mongo32 () {
   # Go into the config directory.
   cd "${BASE_DIR}";
 
-
   # Add the official MongoDB repository and install MongoDB.
   curl -ss -O -L "http://docs.mongodb.org/10gen-gpg-key.asc";
   sudo apt-key add "10gen-gpg-key.asc";
