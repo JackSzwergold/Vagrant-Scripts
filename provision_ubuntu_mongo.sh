@@ -131,11 +131,8 @@ function set_timezone () {
 
     echo -e "PROVISIONING: Setting timezone data.\n";
 
-    # debconf-set-selections <<< "tzdata tzdata/Areas select America"
-    # debconf-set-selections <<< "tzdata tzdata/Zones/America select New_York"
-    # sudo -E dpkg-reconfigure tzdata
     sudo -E echo "${TIMEZONE}" > "${TIMEZONE_PATH}";
-    sudo -E dpkg-reconfigure -f noninteractive tzdata;
+    sudo -E dpkg-reconfigure -f noninteractive tzdata 2>/dev/null;
 
   fi
 
