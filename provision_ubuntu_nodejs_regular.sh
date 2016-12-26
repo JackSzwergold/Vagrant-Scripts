@@ -55,16 +55,11 @@ HOST_NAME="vagrant.local";
 if [ -n "$5" ]; then HOST_NAME="${5}"; fi
 echo -e "PROVISIONING: Host name is: '${HOST_NAME}'.\n";
 
+##########################################################################################
 # Go into the config directory.
+##########################################################################################
+
 cd "${BASE_DIR}/${CONFIG_DIR}";
-
-##########################################################################################
-# Optional items.
-##########################################################################################
-
-# PROVISION_MYSQL=false;
-# if [ -n "$5" ]; then PROVISION_MYSQL="${5}"; fi
-# echo -e "PROVISIONING: MySQL provisioning: '${PROVISION_MYSQL}'.\n";
 
 ##########################################################################################
 # Adjusting the Debian frontend setting to non-interactive mode.
@@ -93,7 +88,6 @@ function install_meteorjs () {
   cd "${BASE_DIR}";
 
   # Install MeteorJS.
-  # curl -sL https://install.meteor.com/ | sh;
   curl -sL https://install.meteor.com/ | sh >/dev/null 2>&1;
 
 } # install_meteorjs

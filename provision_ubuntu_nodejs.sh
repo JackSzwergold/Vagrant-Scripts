@@ -55,16 +55,11 @@ HOST_NAME="vagrant.local";
 if [ -n "$5" ]; then HOST_NAME="${5}"; fi
 echo -e "PROVISIONING: Host name is: '${HOST_NAME}'.\n";
 
+##########################################################################################
 # Go into the config directory.
+##########################################################################################
+
 cd "${BASE_DIR}/${CONFIG_DIR}";
-
-##########################################################################################
-# Optional items.
-##########################################################################################
-
-# PROVISION_MYSQL=false;
-# if [ -n "$5" ]; then PROVISION_MYSQL="${5}"; fi
-# echo -e "PROVISIONING: MySQL provisioning: '${PROVISION_MYSQL}'.\n";
 
 ##########################################################################################
 # Adjusting the Debian frontend setting to non-interactive mode.
@@ -131,11 +126,8 @@ function set_timezone () {
 
     echo -e "PROVISIONING: Setting timezone data.\n";
 
-    # debconf-set-selections <<< "tzdata tzdata/Areas select America"
-    # debconf-set-selections <<< "tzdata tzdata/Zones/America select New_York"
-    # sudo -E dpkg-reconfigure tzdata
     sudo -E echo "${TIMEZONE}" > "${TIMEZONE_PATH}";
-    sudo -E dpkg-reconfigure -f noninteractive tzdata;
+    sudo -E dpkg-reconfigure -f noninteractive tzdata 2>/dev/null;
 
   fi
 
@@ -167,7 +159,7 @@ function install_avahi () {
   echo -e "PROVISIONING: Avahi related stuff.\n";
 
   # Install Avahi.
-  sudo -E aptitude install -y --assume-yes -q avahi-daemon avahi-utils;
+  sudo -E aptitude install -y -q avahi-daemon avahi-utils;
 
 } # install_avahi
 
@@ -179,7 +171,7 @@ function install_sysstat () {
   echo -e "PROVISIONING: Sysstat related stuff.\n";
 
   # Install Sysstat.
-  sudo -E aptitude install -y --assume-yes -q sysstat;
+  sudo -E aptitude install -y -q sysstat;
 
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFIG_DIR}";
@@ -200,7 +192,7 @@ function install_basic_tools () {
   echo -e "PROVISIONING: Installing a set of generic tools.\n";
 
   # Install generic tools.
-  sudo -E aptitude install -y --assume-yes -q \
+  sudo -E aptitude install -y -q \
     dnsutils traceroute nmap bc htop finger curl whois rsync lsof \
     iftop figlet lynx mtr-tiny iperf nload zip unzip attr sshpass \
     dkms mc elinks ntp dos2unix p7zip-full nfs-common \
@@ -217,7 +209,7 @@ function install_locate () {
   echo -e "PROVISIONING: Installing the locate tool and updating the database.\n";
 
   # Install Locate.
-  sudo -E aptitude install -y --assume-yes -q mlocate;
+  sudo -E aptitude install -y -q mlocate;
 
   # Update Locate.
   sudo -E updatedb;
@@ -232,7 +224,7 @@ function install_compiler () {
   echo -e "PROVISIONING: Installing the core compiler tools.\n";
 
   # Install the core compiler and build tools.
-  sudo -E aptitude install -y --assume-yes -q build-essential libtool;
+  sudo -E aptitude install -y -q build-essential libtool;
 
 } # install_compiler
 
@@ -244,13 +236,13 @@ function install_git () {
   echo -e "PROVISIONING: Installing Git and related stuff.\n";
 
   # Purge any already installed version of Git.
-  sudo -E aptitude purge -y --assume-yes -q git git-core subversion git-svn;
+  sudo -E aptitude purge -y -q git git-core subversion git-svn;
 
   # Now install Git via PPA.
-  sudo -E aptitude install -y --assume-yes -q python-software-properties;
+  sudo -E aptitude install -y -q python-software-properties;
   sudo -E add-apt-repository -y ppa:git-core/ppa;
-  sudo -E aptitude update -y --assume-yes -q;
-  sudo -E aptitude install -y --assume-yes -q git git-core subversion git-svn;
+  sudo -E aptitude update -y -q;
+  sudo -E aptitude install -y -q git git-core subversion git-svn;
 
 } # install_git
 
@@ -262,12 +254,10 @@ function configure_motd () {
   echo -e "PROVISIONING: Setting the MOTD banner.\n";
 
   # Install figlet.
-  sudo -E aptitude install -y --assume-yes -q figlet;
+  sudo -E aptitude install -y -q figlet;
 
   # Set the server login banner with figlet.
-  # MOTD_PATH="/etc/motd.tail";
   MOTD_PATH="/etc/motd";
-  # echo "$(figlet ${MACHINE_NAME^} | head -n -1).local" > "${MOTD_PATH}";
   echo "$(figlet ${MACHINE_NAME} | head -n -1).local" > "${MOTD_PATH}";
   echo "" >> "${MOTD_PATH}";
 
@@ -294,17 +284,17 @@ function install_nodejs () {
   cd "${BASE_DIR}";
 
   # Purge any already installed version of NodeJS and NPM.
-  sudo -E aptitude purge -y --assume-yes -q node npm;
+  sudo -E aptitude purge -y -q node npm;
 
   # Now install NodeJS and NPM via PPA.
-  sudo -E aptitude install -y --assume-yes -q python-software-properties;
+  sudo -E aptitude install -y -q python-software-properties;
   # curl -sL https://deb.nodesource.com/setup_6.x | sudo bash - ;
   # curl -sL https://deb.nodesource.com/setup_5.x | sudo bash - ;
   # curl -sL https://deb.nodesource.com/setup_4.x | sudo bash - ;
   # curl -sL https://deb.nodesource.com/setup_0.10 | sudo bash - ;
   curl -sL https://deb.nodesource.com/setup_4.x | sudo bash - ;
-  sudo -E aptitude update -y --assume-yes -q;
-  sudo -E aptitude install -y --assume-yes -q nodejs;
+  sudo -E aptitude update -y -q;
+  sudo -E aptitude install -y -q nodejs;
 
 } # install_nodejs
 
@@ -339,7 +329,7 @@ hash updatedb 2>/dev/null || { install_locate; }
 configure_motd;
 install_basic_tools;
 hash libtool 2>/dev/null || { install_compiler; }
-if ! grep -q -s "git-core" /etc/apt/sources.list /etc/apt/sources.list.d/*; then install_git; fi
+if ! grep -q -s "git-core" "/etc/apt/sources.list" "/etc/apt/sources.list.d/"*; then install_git; fi
 
 # Install configure NodeJS and NPM.
 hash node 2>/dev/null || { install_nodejs; }

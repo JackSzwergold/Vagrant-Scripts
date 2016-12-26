@@ -55,16 +55,11 @@ HOST_NAME="vagrant.local";
 if [ -n "$5" ]; then HOST_NAME="${5}"; fi
 echo -e "PROVISIONING: Host name is: '${HOST_NAME}'.\n";
 
+##########################################################################################
 # Go into the config directory.
+##########################################################################################
+
 cd "${BASE_DIR}/${CONFIG_DIR}";
-
-##########################################################################################
-# Optional items.
-##########################################################################################
-
-# PROVISION_MYSQL=false;
-# if [ -n "$5" ]; then PROVISION_MYSQL="${5}"; fi
-# echo -e "PROVISIONING: MySQL provisioning: '${PROVISION_MYSQL}'.\n";
 
 ##########################################################################################
 # Adjusting the Debian frontend setting to non-interactive mode.
@@ -262,9 +257,7 @@ function configure_motd () {
   sudo -E aptitude install -y -q figlet;
 
   # Set the server login banner with figlet.
-  # MOTD_PATH="/etc/motd.tail";
   MOTD_PATH="/etc/motd";
-  # echo "$(figlet ${MACHINE_NAME^} | head -n -1).local" > "${MOTD_PATH}";
   echo "$(figlet ${MACHINE_NAME} | head -n -1).local" > "${MOTD_PATH}";
   echo "" >> "${MOTD_PATH}";
 
@@ -453,7 +446,7 @@ hash updatedb 2>/dev/null || { install_locate; }
 configure_motd;
 install_basic_tools;
 hash libtool 2>/dev/null || { install_compiler; }
-if ! grep -q -s "git-core" /etc/apt/sources.list /etc/apt/sources.list.d/*; then install_git; fi
+if ! grep -q -s "git-core" "/etc/apt/sources.list" "/etc/apt/sources.list.d/"*; then install_git; fi
 
 # Install configure MongoDB.
 hash mongo && hash mongod 2>/dev/null || { install_mongo26; }

@@ -155,7 +155,7 @@ function set_timezone () {
     echo -e "PROVISIONING: Setting timezone data.\n";
 
     sudo -E echo "${TIMEZONE}" > "${TIMEZONE_PATH}";
-    sudo -E dpkg-reconfigure -f noninteractive tzdata;
+    sudo -E dpkg-reconfigure -f noninteractive tzdata 2>/dev/null;
 
   fi
 
@@ -187,7 +187,7 @@ function install_avahi () {
   echo -e "PROVISIONING: Avahi related stuff.\n";
 
   # Install Avahi.
-  sudo -E aptitude install -y --assume-yes -q avahi-daemon avahi-utils;
+  sudo -E aptitude install -y -q avahi-daemon avahi-utils;
 
 } # install_avahi
 
@@ -199,7 +199,7 @@ function install_sysstat () {
   echo -e "PROVISIONING: Sysstat related stuff.\n";
 
   # Install Sysstat.
-  sudo -E aptitude install -y --assume-yes -q sysstat;
+  sudo -E aptitude install -y -q sysstat;
 
   # Copy the Sysstat config file in place and restart sysstat.
   if [ -f "sysstat/sysstat" ]; then
@@ -217,7 +217,7 @@ function install_basic_tools () {
   echo -e "PROVISIONING: Installing a set of generic tools.\n";
 
   # Install generic tools.
-  sudo -E aptitude install -y --assume-yes -q \
+  sudo -E aptitude install -y -q \
     dnsutils traceroute nmap bc htop finger curl whois rsync lsof \
     iftop figlet lynx mtr-tiny iperf nload zip unzip attr sshpass \
     dkms mc elinks ntp dos2unix p7zip-full nfs-common \
@@ -234,7 +234,7 @@ function install_locate () {
   echo -e "PROVISIONING: Installing the locate tool and updating the database.\n";
 
   # Install Locate.
-  sudo -E aptitude install -y --assume-yes -q mlocate;
+  sudo -E aptitude install -y -q mlocate;
 
   # Update Locate.
   sudo -E updatedb;
@@ -249,7 +249,7 @@ function install_compiler () {
   echo -e "PROVISIONING: Installing the core compiler tools.\n";
 
   # Install the core compiler and build tools.
-  sudo -E aptitude install -y --assume-yes -q build-essential libtool;
+  sudo -E aptitude install -y -q build-essential libtool;
 
 } # install_compiler
 
@@ -261,13 +261,13 @@ function install_git () {
   echo -e "PROVISIONING: Installing Git and related stuff.\n";
 
   # Purge any already installed version of Git.
-  sudo -E aptitude purge -y --assume-yes -q git git-core subversion git-svn;
+  sudo -E aptitude purge -y -q git git-core subversion git-svn;
 
   # Now install Git via PPA.
-  sudo -E aptitude install -y --assume-yes -q python-software-properties;
+  sudo -E aptitude install -y -q python-software-properties;
   sudo -E add-apt-repository -y ppa:git-core/ppa;
-  sudo -E aptitude update -y --assume-yes -q;
-  sudo -E aptitude install -y --assume-yes -q git git-core subversion git-svn;
+  sudo -E aptitude update -y -q;
+  sudo -E aptitude install -y -q git git-core subversion git-svn;
 
 } # install_git
 
@@ -281,7 +281,7 @@ function install_postfix () {
   # Install postfix and general mail stuff.
   debconf-set-selections <<< "postfix postfix/mailname string ${HOST_NAME}";
   debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'";
-  sudo -E aptitude install -y --assume-yes -q postfix mailutils;
+  sudo -E aptitude install -y -q postfix mailutils;
 
 } # install_postfix
 
@@ -338,7 +338,7 @@ function configure_motd () {
   echo -e "PROVISIONING: Setting the MOTD banner.\n";
 
   # Install figlet.
-  sudo -E aptitude install -y --assume-yes -q figlet;
+  sudo -E aptitude install -y -q figlet;
 
   # Set the server login banner with figlet.
   MOTD_PATH="/etc/motd";
@@ -367,7 +367,7 @@ function install_iptables () {
   # Install IPTables and IPSet stuff.
   debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v4 boolean true";
   debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v6 boolean true";
-  sudo -E aptitude install -y --assume-yes -q iptables iptables-persistent ipset;
+  sudo -E aptitude install -y -q iptables iptables-persistent ipset;
 
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFIG_DIR}";
@@ -399,12 +399,12 @@ function install_apache () {
   echo -e "PROVISIONING: Installing Apache and PHP related items.\n"
 
   # Install the base Apache related items.
-  sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q \
+  sudo -E RUNLEVEL=1 aptitude install -y -q \
     apache2 apache2-dev php5 \
     libapache2-mod-php5 php-pear;
 
   # Install other PHP related related items.
-  sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q \
+  sudo -E RUNLEVEL=1 aptitude install -y -q \
     php5-mysql php5-pgsql php5-odbc php5-sybase php5-sqlite \
     php5-xmlrpc php5-json php5-xsl php5-curl php5-geoip \
     php-getid3 php5-imap php5-ldap php5-mcrypt \
@@ -524,7 +524,7 @@ function install_mysql () {
   echo -e "PROVISIONING: Installing and configuring MySQL related items.\n";
 
   # Install the MySQL server and client.
-  sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q mysql-server mysql-client;
+  sudo -E RUNLEVEL=1 aptitude install -y -q mysql-server mysql-client;
 
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFIG_DIR}";
@@ -553,7 +553,7 @@ function install_munin () {
   echo -e "PROVISIONING: Installing and configuring Munin related items.\n";
 
   # Install Munin.
-  sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q munin munin-node munin-plugins-extra libwww-perl;
+  sudo -E RUNLEVEL=1 aptitude install -y -q munin munin-node munin-plugins-extra libwww-perl;
 
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFIG_DIR}";
@@ -708,7 +708,7 @@ function install_geoip () {
   echo -e "PROVISIONING: Installing the GeoIP binary.\n";
 
   # Install the core compiler and build options.
-  sudo aptitude install -y --assume-yes -q build-essential zlib1g-dev libtool;
+  sudo aptitude install -y -q build-essential zlib1g-dev libtool;
 
   # Install GeoIP from source code.
   cd "${BASE_DIR}";
@@ -812,7 +812,7 @@ function install_awstats () {
 
   # Now install CPANminus like this.
   hash cpanminus 2>/dev/null || {
-    sudo -E aptitude install -y --assume-yes -q cpanminus;
+    sudo -E aptitude install -y -q cpanminus;
   }
 
   # With that done, install all of the GeoIP related CPAN modules like this.
@@ -858,8 +858,8 @@ function install_fail2ban () {
   echo -e "PROVISIONING: Fail2Ban related stuff.\n";
 
   # Install Fail2Ban.
-  sudo -E aptitude purge -y --assume-yes -q fail2ban;
-  sudo -E aptitude install -y --assume-yes -q gamin libgamin0 python-central python-gamin python-support;
+  sudo -E aptitude purge -y -q fail2ban;
+  sudo -E aptitude install -y -q gamin libgamin0 python-central python-gamin python-support;
   curl -ss -O -L "http://old-releases.ubuntu.com/ubuntu/pool/universe/f/fail2ban/fail2ban_0.8.13-1_all.deb";
   sudo -E RUNLEVEL=1 dpkg --force-all -i "fail2ban_0.8.13-1_all.deb";
 
@@ -899,7 +899,7 @@ function install_monit () {
   echo -e "PROVISIONING: Monit related stuff.\n";
 
   # Install Monit.
-  sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q monit;
+  sudo -E RUNLEVEL=1 aptitude install -y -q monit;
 
   # Run these commands to prevent Monit from coming up on reboot.
   sudo -E service monit stop;
@@ -937,11 +937,11 @@ function install_imagemagick () {
   echo -e "PROVISIONING: Installing ImageMagick from source.\n";
 
   # Install and build the dependencies for ImageMagick.
-  sudo -E aptitude install -y --assume-yes -q \
+  sudo -E aptitude install -y -q \
     build-essential checkinstall \
     libx11-dev libxext-dev zlib1g-dev libpng12-dev \
     libjpeg-dev libfreetype6-dev libxml2-dev;
-  sudo aptitude build-dep -y --assume-yes -q imagemagick;
+  sudo aptitude build-dep -y -q imagemagick;
 
   # Build ImageMagick from source code.
   cd "${BASE_DIR}";
@@ -1026,7 +1026,7 @@ if [ "${PROVISION_BASICS}" = true ]; then
 
   install_basic_tools;
   hash libtool 2>/dev/null || { install_compiler; }
-  if ! grep -q -s "git-core" /etc/apt/sources.list /etc/apt/sources.list.d/*; then install_git; fi
+  if ! grep -q -s "git-core" "/etc/apt/sources.list" "/etc/apt/sources.list.d/"*; then install_git; fi
   hash postfix 2>/dev/null || { install_postfix; }
   if [ -f "system/login.defs" ] && [ -f "/etc/login.defs" ]; then configure_login_defs; fi
   if [ -f "system/common-session" ] && [ -f "/etc/pam.d/common-session" ]; then configure_common_session; fi
