@@ -299,6 +299,21 @@ function install_nodejs () {
 } # install_nodejs
 
 ##########################################################################################
+# Apache deployment directories.
+##########################################################################################
+function set_application_deployment_directories () {
+
+  echo -e "PROVISIONING: Creating the web code deployment directories.\n";
+
+  sudo -E mkdir -p "/opt/web_app/"{app,builds,config,tmp};
+  sudo -E chown -f -R "${USER_NAME}":www-readwrite "/opt/web_app";
+  sudo -E chmod -f -R 775 "/opt/web_app";
+  sudo -E chmod g+s "/opt/web_app";
+  sudo -E chmod g+s "/opt/web_app/"{app,builds,config,tmp};
+
+} # set_application_deployment_directories
+
+##########################################################################################
 # Update the locate database.
 ##########################################################################################
 function update_locate_db () {
@@ -333,6 +348,9 @@ if ! grep -q -s "git-core" "/etc/apt/sources.list" "/etc/apt/sources.list.d/"*; 
 
 # Install configure NodeJS and NPM.
 hash node 2>/dev/null || { install_nodejs; }
+
+# Setup the NodeJS application deployment environment.
+if [ ! -d "/opt/web_app" ]; then set_application_deployment_directories; fi
 
 # Update the locate database.
 update_locate_db;
