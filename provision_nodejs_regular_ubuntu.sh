@@ -88,6 +88,7 @@ function install_meteorjs () {
   cd "${BASE_DIR}";
 
   # Install MeteorJS.
+  # curl -sL https://install.meteor.com/?release=1.3.5.1 | sh >/dev/null 2>&1;
   curl -sL https://install.meteor.com/ | sh >/dev/null 2>&1;
 
 } # install_meteorjs
