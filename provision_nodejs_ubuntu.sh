@@ -305,11 +305,11 @@ function set_application_deployment_directories () {
 
   echo -e "PROVISIONING: Creating the web code deployment directories.\n";
 
-  sudo -E mkdir -p "/opt/webapp/"{app,config,deployed_code,tmp};
+  sudo -E mkdir -p "/opt/webapp/"{builds,config,deployed_code};
   sudo -E chown -f -R "${USER_NAME}":www-readwrite "/opt/webapp";
   sudo -E chmod -f -R 775 "/opt/webapp";
   sudo -E chmod g+s "/opt/webapp";
-  sudo -E chmod g+s "/opt/webapp/"{app,config,deployed_code,tmp};
+  sudo -E chmod g+s "/opt/webapp/"{builds,config,deployed_code};
 
 } # set_application_deployment_directories
 
