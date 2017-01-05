@@ -305,11 +305,11 @@ function set_application_deployment_directories () {
 
   echo -e "PROVISIONING: Creating the web code deployment directories.\n";
 
-  sudo -E mkdir -p "/opt/webapp/"{builds,configs,deployed_code};
-  sudo -E chown -f -R "${USER_NAME}":www-readwrite "/opt/webapp";
-  sudo -E chmod -f -R 775 "/opt/webapp";
-  sudo -E chmod g+s "/opt/webapp";
-  sudo -E chmod g+s "/opt/webapp/"{builds,configs,deployed_code};
+  sudo -E mkdir -p "/opt/webapps/"{builds,configs,deployed_code};
+  sudo -E chown -f -R "${USER_NAME}":www-readwrite "/opt/webapps";
+  sudo -E chmod -f -R 775 "/opt/webapps";
+  sudo -E chmod g+s "/opt/webapps";
+  sudo -E chmod g+s "/opt/webapps/"{builds,configs,deployed_code};
 
 } # set_application_deployment_directories
 
@@ -350,7 +350,7 @@ if ! grep -q -s "git-core" "/etc/apt/sources.list" "/etc/apt/sources.list.d/"*; 
 hash node 2>/dev/null || { install_nodejs; }
 
 # Setup the NodeJS application deployment environment.
-if [ ! -d "/opt/webapp" ]; then set_application_deployment_directories; fi
+if [ ! -d "/opt/webapps" ]; then set_application_deployment_directories; fi
 
 # Update the locate database.
 update_locate_db;
