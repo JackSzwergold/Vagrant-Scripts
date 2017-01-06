@@ -274,6 +274,44 @@ function configure_motd () {
 } # configure_motd
 
 ##########################################################################################
+# Monit
+##########################################################################################
+function install_monit () {
+
+  echo -e "PROVISIONING: Monit related stuff.\n";
+
+  # Install Monit.
+  sudo -E RUNLEVEL=1 aptitude install -y -q monit;
+
+  # Run these commands to prevent Monit from coming up on reboot.
+  sudo -E service monit stop;
+  sudo -E update-rc.d -f monit remove;
+
+} # install_monit
+
+##########################################################################################
+# Monit config.
+##########################################################################################
+function configure_monit () {
+
+  echo -e "PROVISIONING: Installing the Monit configs.\n";
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
+  sudo -E cp -f "monit/monitrc" "/etc/monit/monitrc";
+  sudo -E cp -f "monit/node_app.conf" "/etc/monit/conf.d/node_app.conf";
+
+  # Restart Monit.
+  sudo -E service monit restart;
+
+  # Run these commands to prevent Monit from coming up on reboot.
+  sudo -E service monit stop;
+  sudo -E update-rc.d -f monit remove;
+
+} # configure_monit
+
+##########################################################################################
 # NodeJS and NPM
 ##########################################################################################
 function install_nodejs () {
@@ -355,6 +393,10 @@ hash node 2>/dev/null || { install_nodejs; }
 
 # Setup the NodeJS application deployment environment.
 if [ ! -d "/opt/webapps" ]; then set_application_deployment_directories; fi
+
+# Monit
+# hash monit 2>/dev/null || { install_monit; }
+# if [ -f "monit/monitrc" ]; then configure_monit; fi
 
 # Update the locate database.
 update_locate_db;
