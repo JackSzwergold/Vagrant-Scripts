@@ -396,7 +396,7 @@ if [ ! -d "/opt/webapps" ]; then set_application_deployment_directories; fi
 
 # Monit
 hash monit 2>/dev/null || { install_monit; }
-if [ -f "monit/monitrc" ]; then configure_monit; fi
+if [ -f "${BASE_DIR}/${CONFIG_DIR}/monit/monitrc" ]; then configure_monit; fi
 
 # Update the locate database.
 update_locate_db;
