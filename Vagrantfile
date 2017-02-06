@@ -35,8 +35,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Set some basic SSH values; not really needed but here for reference.
   config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
-  config.ssh.username = "#{machine_settings["username"]}"
-  # config.ssh.password = "#{machine_settings["password"]}"
   config.ssh.insert_key = true
 
   ########################################################################################
@@ -46,6 +44,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
     # Define the machine.
     config.vm.define "#{machine_settings["hostname"]}", primary: machine_settings["primary"], autostart: machine_settings["autostart"] do |machine|
+
+      # Set the username and password.
+      config.ssh.username = "#{machine_settings["username"]}"
+      config.ssh.password = "#{machine_settings["password"]}"
 
       # Print out the details of the configs.
       puts "Reading config for '#{machine_settings["name"]}' (host: #{machine_settings["hostname"]}, ip: #{machine_settings["ip"]})"
