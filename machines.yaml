@@ -56,7 +56,7 @@
   cpus: 1
   deployment_configs_path: "deployment_configs/ubuntu"
   deployment_dbs_path: "deployment_dbs"
-  basics: true
+  basics: false
   lamp: false
   imagemagick: false
   geoip: false
