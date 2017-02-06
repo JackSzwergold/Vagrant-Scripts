@@ -35,8 +35,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Set some basic SSH values; not really needed but here for reference.
   config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
-  config.ssh.username = "vagrant"
-  # config.ssh.password = "vagrant"
+  config.ssh.username = "#{machine_settings["username"]}"
+  # config.ssh.password = "#{machine_settings["password"]}"
   config.ssh.insert_key = true
 
   ########################################################################################

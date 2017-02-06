@@ -24,6 +24,7 @@
   autostart: false
   provision_script: "provision_lamp_ubuntu.sh"
   provision_script_regular: null
+  username: "vagrant"
   hostname: "sandbox"
   machinename: "Sandbox"
   ip: "192.168.56.10"
@@ -46,6 +47,7 @@
   autostart: false
   # provision_script: "provision_lamp_ubuntu.sh"
   provision_script_regular: null
+  username: "ubuntu"
   hostname: "sandbox-1604"
   machinename: "Sandbox-1604"
   ip: "192.168.56.20"
@@ -68,6 +70,7 @@
   autostart: false
   provision_script: "provision_lamp_centos.sh"
   provision_script_regular: null
+  username: "vagrant"
   hostname: "sandbox-centos"
   machinename: "Sandbox-CentOS"
   ip: "192.168.56.30"
@@ -86,6 +89,7 @@
   autostart: false
   provision_script: "provision_basics_ubuntu.sh"
   provision_script_regular: null
+  username: "vagrant"
   hostname: "jabroni"
   machinename: "Jabroni"
   ip: "192.168.56.40"
@@ -103,6 +107,7 @@
   autostart: false
   provision_script: "provision_nodejs_ubuntu.sh"
   provision_script_regular: "provision_nodejs_regular_ubuntu.sh"
+  username: "vagrant"
   hostname: "nodejs"
   machinename: "NodeJS"
   ip: "192.168.56.50"
@@ -119,6 +124,7 @@
   autostart: false
   provision_script: "provision_mongo_ubuntu.sh"
   provision_script_regular: null
+  username: "vagrant"
   hostname: "mongo"
   machinename: "Mongo"
   ip: "192.168.56.60"
@@ -138,6 +144,7 @@
   autostart: false
   provision_script: "provision_elasticsearch_ubuntu.sh"
   provision_script_regular: null
+  username: "vagrant"
   hostname: "elasticsearch"
   machinename: "Elasticsearch"
   ip: "192.168.56.70"
@@ -157,6 +164,7 @@
   autostart: false
   provision_script: "provision_solr_ubuntu.sh"
   provision_script_regular: null
+  username: "vagrant"
   hostname: "solr"
   machinename: "Solr"
   ip: "192.168.56.80"
