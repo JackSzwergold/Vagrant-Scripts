@@ -1022,9 +1022,9 @@ set_environment;
 set_timezone;
 configure_sources_list;
 hash avahi-daemon 2>/dev/null || { install_avahi; }
-# hash sar 2>/dev/null || {  install_sysstat; }
-# hash updatedb 2>/dev/null || { install_locate; }
-# configure_motd;
+hash sar 2>/dev/null || {  install_sysstat; }
+hash updatedb 2>/dev/null || { install_locate; }
+configure_motd;
 
 # Get the basics set.
 if [ "${PROVISION_BASICS}" = true ]; then
@@ -1118,4 +1118,4 @@ if [ "${PROVISION_LAMP}" = true ]; then
 fi
 
 # Update the locate database.
-# update_locate_db;
+update_locate_db;
