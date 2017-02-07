@@ -86,12 +86,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
       # Set the shell script to provision the server.
       if machine_settings["provision_script"].to_s.strip.length > 0
-        machine.vm.provision :shell, :privileged => true, :path => machine_settings["provision_script"], :args => "#{machine_settings['deployment_configs_path']} #{machine_settings['deployment_dbs_path']} #{config.ssh.username} #{machine_settings['machinename']} #{machine_settings['hostname']}.local #{machine_settings['basics']} #{machine_settings['lamp']} #{machine_settings['imagemagick']} #{machine_settings['geoip']} #{machine_settings['iptables']} #{machine_settings['fail2ban']}"
+        machine.vm.provision :shell, :privileged => true, :path => machine_settings["provision_script"], :args => "#{machine_settings['deployment_configs_path']} #{machine_settings['deployment_dbs_path']} #{machine_settings['username']} #{machine_settings['password']} #{machine_settings['machinename']} #{machine_settings['hostname']}.local #{machine_settings['basics']} #{machine_settings['lamp']} #{machine_settings['imagemagick']} #{machine_settings['geoip']} #{machine_settings['iptables']} #{machine_settings['fail2ban']}"
       end
 
       # Set the shell script to provision items for teh regular user.
       if machine_settings["provision_script_regular"].to_s.strip.length > 0
-        machine.vm.provision :shell, :privileged => false, :path => machine_settings["provision_script_regular"], :args => "#{machine_settings['deployment_configs_path']} #{machine_settings['deployment_dbs_path']} #{config.ssh.username} #{machine_settings['machinename']} #{machine_settings['hostname']}.local #{machine_settings['basics']} #{machine_settings['lamp']} #{machine_settings['imagemagick']} #{machine_settings['geoip']} #{machine_settings['iptables']} #{machine_settings['fail2ban']}"
+        machine.vm.provision :shell, :privileged => false, :path => machine_settings["provision_script_regular"], :args => "#{machine_settings['deployment_configs_path']} #{machine_settings['deployment_dbs_path']} #{machine_settings['username']} #{machine_settings['password']} #{machine_settings['machinename']} #{machine_settings['hostname']}.local #{machine_settings['basics']} #{machine_settings['lamp']} #{machine_settings['imagemagick']} #{machine_settings['geoip']} #{machine_settings['iptables']} #{machine_settings['fail2ban']}"
       end
 
     end # config.vm.define

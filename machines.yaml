@@ -25,7 +25,7 @@
   provision_script: "provision_lamp_ubuntu.sh"
   provision_script_regular: null
   username: "vagrant"
-  # password: "vagrant"
+  password: "vagrant"
   hostname: "sandbox"
   machinename: "Sandbox"
   ip: "192.168.56.10"
@@ -49,7 +49,7 @@
   provision_script: "provision_lamp_ubuntu_1604.sh"
   provision_script_regular: null
   username: "ubuntu"
-  # password: "ubuntu"
+  password: "ubuntu"
   hostname: "sandbox-1604"
   machinename: "Sandbox-1604"
   ip: "192.168.56.20"
@@ -73,7 +73,7 @@
   provision_script: "provision_lamp_centos.sh"
   provision_script_regular: null
   username: "vagrant"
-  # password: "vagrant"
+  password: "vagrant"
   hostname: "sandbox-centos"
   machinename: "Sandbox-CentOS"
   ip: "192.168.56.30"
@@ -93,7 +93,7 @@
   provision_script: "provision_basics_ubuntu.sh"
   provision_script_regular: null
   username: "vagrant"
-  # password: "vagrant"
+  password: "vagrant"
   hostname: "jabroni"
   machinename: "Jabroni"
   ip: "192.168.56.40"
@@ -112,7 +112,7 @@
   provision_script: "provision_nodejs_ubuntu.sh"
   provision_script_regular: "provision_nodejs_regular_ubuntu.sh"
   username: "vagrant"
-  # password: "vagrant"
+  password: "vagrant"
   hostname: "nodejs"
   machinename: "NodeJS"
   ip: "192.168.56.50"
@@ -130,7 +130,7 @@
   provision_script: "provision_mongo_ubuntu.sh"
   provision_script_regular: null
   username: "vagrant"
-  # password: "vagrant"
+  password: "vagrant"
   hostname: "mongo"
   machinename: "Mongo"
   ip: "192.168.56.60"
@@ -151,7 +151,7 @@
   provision_script: "provision_elasticsearch_ubuntu.sh"
   provision_script_regular: null
   username: "vagrant"
-  # password: "vagrant"
+  password: "vagrant"
   hostname: "elasticsearch"
   machinename: "Elasticsearch"
   ip: "192.168.56.70"
@@ -172,7 +172,7 @@
   provision_script: "provision_solr_ubuntu.sh"
   provision_script_regular: null
   username: "vagrant"
-  # password: "vagrant"
+  password: "vagrant"
   hostname: "solr"
   machinename: "Solr"
   ip: "192.168.56.80"

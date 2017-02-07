@@ -47,12 +47,16 @@ USER_NAME="vagrant";
 if [ -n "$3" ]; then USER_NAME="${3}"; fi
 echo -e "PROVISIONING: User name is: '${USER_NAME}'.\n";
 
+PASSWORD="vagrant";
+if [ -n "$4" ]; then PASSWORD="${4}"; fi
+echo -e "PROVISIONING: User password is: '${PASSWORD}'.\n";
+
 MACHINE_NAME="vagrant";
-if [ -n "$4" ]; then MACHINE_NAME="${4}"; fi
+if [ -n "$5" ]; then MACHINE_NAME="${5}"; fi
 echo -e "PROVISIONING: Machine name is: '${MACHINE_NAME}'.\n";
 
 HOST_NAME="vagrant.local";
-if [ -n "$5" ]; then HOST_NAME="${5}"; fi
+if [ -n "$6" ]; then HOST_NAME="${6}"; fi
 echo -e "PROVISIONING: Host name is: '${HOST_NAME}'.\n";
 
 ##########################################################################################

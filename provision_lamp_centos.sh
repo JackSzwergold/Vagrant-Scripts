@@ -45,12 +45,16 @@ USER_NAME="vagrant";
 if [ -n "$3" ]; then USER_NAME="${3}"; fi
 echo -e "PROVISIONING: User name is: '${USER_NAME}'.\n";
 
+PASSWORD="vagrant";
+if [ -n "$4" ]; then PASSWORD="${4}"; fi
+echo -e "PROVISIONING: User password is: '${PASSWORD}'.\n";
+
 MACHINE_NAME="vagrant";
-if [ -n "$4" ]; then MACHINE_NAME="${4}"; fi
+if [ -n "$5" ]; then MACHINE_NAME="${5}"; fi
 echo -e "PROVISIONING: Machine name is: '${MACHINE_NAME}'.\n";
 
 HOST_NAME="vagrant.local";
-if [ -n "$5" ]; then HOST_NAME="${5}"; fi
+if [ -n "$6" ]; then HOST_NAME="${6}"; fi
 echo -e "PROVISIONING: Host name is: '${HOST_NAME}'.\n";
 
 ##########################################################################################
@@ -58,11 +62,11 @@ echo -e "PROVISIONING: Host name is: '${HOST_NAME}'.\n";
 ##########################################################################################
 
 PROVISION_BASICS=false;
-if [ -n "$6" ]; then PROVISION_BASICS="${6}"; fi
+if [ -n "$7" ]; then PROVISION_BASICS="${7}"; fi
 echo -e "PROVISIONING: Basics provisioning: '${PROVISION_BASICS}'.\n";
 
 PROVISION_LAMP=false;
-if [ -n "$7" ]; then PROVISION_LAMP="${7}"; fi
+if [ -n "$8" ]; then PROVISION_LAMP="${8}"; fi
 echo -e "PROVISIONING: LAMP provisioning: '${PROVISION_LAMP}'.\n";
 
 ##########################################################################################
