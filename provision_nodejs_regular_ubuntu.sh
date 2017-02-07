@@ -2,9 +2,9 @@
 
 ##########################################################################################
 #
-# Provision Ubuntu NodeJS Regular (provision_ubuntu_nodejs_regular.sh) (c) by Jack Szwergold
+# Provision NodeJS Regular Ubuntu (provision_nodejs_regular_ubuntu.sh) (c) by Jack Szwergold
 #
-# Provision Ubuntu NodeJS Regular is licensed under a
+# Provision NodeJS Regular Ubuntu is licensed under a
 # Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
 #
 # You should have received a copy of the license along with this

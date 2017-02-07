@@ -2,9 +2,9 @@
 
 ##########################################################################################
 #
-# Provision Ubuntu Solr (provision_ubuntu_solr.sh) (c) by Jack Szwergold
+# Provision Solr Ubuntu (provision_solr_ubuntu.sh) (c) by Jack Szwergold
 #
-# Provision Ubuntu Solr is licensed under a
+# Provision Solr Ubuntu is licensed under a
 # Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
 #
 # You should have received a copy of the license along with this

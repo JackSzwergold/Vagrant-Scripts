@@ -2,9 +2,9 @@
 
 ##########################################################################################
 #
-# Provision Ubuntu Basics (provision_ubuntu_basics.sh) (c) by Jack Szwergold
+# Provision Basics Ubuntu (provision_basics_ubuntu.sh) (c) by Jack Szwergold
 #
-# Provision Ubuntu Basics is licensed under a
+# Provision Basics Ubuntu is licensed under a
 # Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
 #
 # You should have received a copy of the license along with this

@@ -2,9 +2,9 @@
 
 ##########################################################################################
 #
-# Provision Ubuntu NodeJS (provision_ubuntu_nodejs.sh) (c) by Jack Szwergold
+# Provision NodeJS Ubuntu (provision_nodejs_ubuntu_1604.sh) (c) by Jack Szwergold
 #
-# Provision Ubuntu NodeJS is licensed under a
+# Provision NodeJS Ubuntu is licensed under a
 # Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
 #
 # You should have received a copy of the license along with this
@@ -358,7 +358,7 @@ function install_nodejs () {
 } # install_nodejs
 
 ##########################################################################################
-# Apache deployment directories.
+# Deployment directories.
 ##########################################################################################
 function set_application_deployment_directories () {
 

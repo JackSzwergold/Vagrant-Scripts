@@ -2,9 +2,9 @@
 
 ##########################################################################################
 #
-# Provision Ubuntu ElasticSearch (provision_ubuntu_elasticsearch.sh) (c) by Jack Szwergold
+# Provision ElasticSearch Ubuntu (provision_elasticsearch_ubuntu.sh) (c) by Jack Szwergold
 #
-# Provision Ubuntu ElasticSearch is licensed under a
+# Provision ElasticSearch Ubuntu is licensed under a
 # Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
 #
 # You should have received a copy of the license along with this
