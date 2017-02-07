@@ -1061,8 +1061,8 @@ if [ "${PROVISION_FAIL2BAN}" = true ]; then
 fi
 
 # Monit
-hash monit 2>/dev/null || { install_monit; }
-if [ -f "monit/monitrc" ]; then configure_monit; fi
+# hash monit 2>/dev/null || { install_monit; }
+# if [ -f "monit/monitrc" ]; then configure_monit; fi
 
 # ImageMagick
 if [ "${PROVISION_IMAGEMAGICK}" = true ]; then
