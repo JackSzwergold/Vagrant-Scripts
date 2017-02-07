@@ -64,8 +64,8 @@
   lamp: false
   imagemagick: false
   geoip: true
-  iptables: false
-  fail2ban: false
+  iptables: true
+  fail2ban: true
 - name: "Sandbox_CENTOS_68"
   box: "kaorimatz/centos-6.8-x86_64"
   primary: false

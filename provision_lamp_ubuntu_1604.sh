@@ -286,8 +286,8 @@ function install_postfix () {
   echo -e "PROVISIONING: Installing Postfix and related mail stuff.\n";
 
   # Install postfix and general mail stuff.
-  debconf-set-selections <<< "postfix postfix/mailname string ${HOST_NAME}";
-  debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'";
+  sudo -E debconf-set-selections <<< "postfix postfix/mailname string ${HOST_NAME}";
+  sudo -E debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'";
   sudo -E aptitude install -y -q postfix mailutils;
 
 } # install_postfix
@@ -372,8 +372,8 @@ function install_iptables () {
   echo -e "PROVISIONING: IPTables and IPSet stuff.\n";
 
   # Install IPTables and IPSet stuff.
-  debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v4 boolean true";
-  debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v6 boolean true";
+  sudo -E debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v4 boolean true";
+  sudo -E debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v6 boolean true";
   sudo -E aptitude install -y -q iptables iptables-persistent ipset;
 
   # Go into the config directory.
@@ -865,10 +865,10 @@ function install_fail2ban () {
   echo -e "PROVISIONING: Fail2Ban related stuff.\n";
 
   # Install Fail2Ban.
-  sudo -E aptitude purge -y -q fail2ban;
-  sudo -E aptitude install -y -q gamin libgamin0 python-central python-gamin python-support;
-  curl -ss -O -L "http://old-releases.ubuntu.com/ubuntu/pool/universe/f/fail2ban/fail2ban_0.8.13-1_all.deb";
-  sudo -E RUNLEVEL=1 dpkg --force-all -i "fail2ban_0.8.13-1_all.deb";
+  sudo -E aptitude install -y -q fail2ban;
+  # sudo -E aptitude install -y -q gamin libgamin0 python-central python-gamin python-support;
+  # curl -ss -O -L "http://old-releases.ubuntu.com/ubuntu/pool/universe/f/fail2ban/fail2ban_0.8.13-1_all.deb";
+  # sudo -E RUNLEVEL=1 dpkg --force-all -i "fail2ban_0.8.13-1_all.deb";
 
   # Run these commands to prevent Fail2Ban from coming up on reboot.
   sudo -E service fail2ban stop;
@@ -1069,8 +1069,8 @@ if [ "${PROVISION_FAIL2BAN}" = true ]; then
 fi
 
 # Monit
-# hash monit 2>/dev/null || { install_monit; }
-# if [ -f "monit/monitrc" ]; then configure_monit; fi
+hash monit 2>/dev/null || { install_monit; }
+if [ -f "monit/monitrc" ]; then configure_monit; fi
 
 # ImageMagick
 if [ "${PROVISION_IMAGEMAGICK}" = true ]; then
