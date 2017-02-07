@@ -161,16 +161,10 @@ function set_environment () {
 function set_timezone () {
 
   TIMEZONE="America/New_York";
-  # TIMEZONE_PATH="/etc/timezone";
-  if [ "${TIMEZONE}" != $(cat "${TIMEZONE_PATH}") ]; then
 
-    echo -e "PROVISIONING: Setting timezone data.\n";
+  echo -e "PROVISIONING: Setting timezone data.\n";
 
-    #sudo -E echo "${TIMEZONE}" > "${TIMEZONE_PATH}";
-    # sudo -E dpkg-reconfigure -f noninteractive tzdata 2>/dev/null;
-    sudo  -E timedatectl set-timezone "${TIMEZONE}";
-
-  fi
+  sudo -E timedatectl set-timezone "${TIMEZONE}";
 
 } # set_timezone
 
