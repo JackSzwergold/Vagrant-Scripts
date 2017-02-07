@@ -1020,8 +1020,8 @@ configure_user_and_group;
 install_aptitude;
 set_environment;
 set_timezone;
-# configure_sources_list;
-# hash avahi-daemon 2>/dev/null || { install_avahi; }
+configure_sources_list;
+hash avahi-daemon 2>/dev/null || { install_avahi; }
 # hash sar 2>/dev/null || {  install_sysstat; }
 # hash updatedb 2>/dev/null || { install_locate; }
 # configure_motd;
