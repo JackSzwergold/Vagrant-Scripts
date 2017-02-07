@@ -98,7 +98,7 @@ function configure_user_and_group () {
   sudo -E adduser --quiet "${USER_NAME}" www-readwrite;
 
   # Changing the username/password combination.
-  echo "${USER_NAME}:${PASSWORD}" | sudo -E sudo chpasswd
+  echo "${USER_NAME}:${PASSWORD}" | sudo -E sudo chpasswd;
 
 } # configure_user_and_group
 

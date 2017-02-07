@@ -93,7 +93,10 @@ function configure_user_and_group () {
   sudo -E usermod -g www-readwrite "${USER_NAME}";
 
   # Add the user to the 'www-readwrite' group:
-  sudo -E usermod -a -G www-readwrite "${USER_NAME}" ;
+  sudo -E usermod -a -G www-readwrite "${USER_NAME}";
+
+  # Changing the username/password combination.
+  echo "${USER_NAME}:${PASSWORD}" | sudo -E sudo chpasswd;
 
 } # configure_user_and_group
 

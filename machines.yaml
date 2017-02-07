@@ -123,6 +123,24 @@
   cpus: 1
   deployment_configs_path: "deployment_configs/ubuntu"
   deployment_dbs_path: "deployment_dbs"
+- name: "NodeJS_UBUNTU_1604"
+  box: "ubuntu/xenial64"
+  primary: false
+  autostart: false
+  provision_script: "provision_nodejs_ubuntu_1604.sh"
+  provision_script_regular: "provision_nodejs_regular_ubuntu.sh"
+  username: "vagrant"
+  password: "vagrant"
+  hostname: "nodejs"
+  machinename: "NodeJS"
+  ip: "192.168.56.60"
+  forward_guest1: 22
+  forward_host1: 2227
+  forward_id1: "ssh"
+  memory: 2048
+  cpus: 1
+  deployment_configs_path: "deployment_configs/ubuntu"
+  deployment_dbs_path: "deployment_dbs"
 - name: "Mongo_UBUNTU_1404"
   box: "ubuntu/trusty64"
   primary: false
@@ -133,9 +151,9 @@
   password: "vagrant"
   hostname: "mongo"
   machinename: "Mongo"
-  ip: "192.168.56.60"
+  ip: "192.168.56.70"
   forward_guest1: 22
-  forward_host1: 2227
+  forward_host1: 2228
   forward_id1: "ssh"
   forward_guest2: 27017
   forward_host2: 27017
@@ -154,9 +172,9 @@
   password: "vagrant"
   hostname: "elasticsearch"
   machinename: "Elasticsearch"
-  ip: "192.168.56.70"
+  ip: "192.168.56.80"
   forward_guest1: 22
-  forward_host1: 2228
+  forward_host1: 2229
   forward_id1: "ssh"
   forward_guest2: 9200
   forward_host2: 9200
@@ -177,7 +195,7 @@
   machinename: "Solr"
   ip: "192.168.56.80"
   forward_guest1: 22
-  forward_host1: 2229
+  forward_host1: 2230
   forward_id1: "ssh"
   forward_guest2: 8983
   forward_host2: 8983
