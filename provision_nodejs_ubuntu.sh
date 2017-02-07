@@ -339,8 +339,8 @@ function install_nodejs () {
   sudo -E aptitude install -y -q nodejs;
 
   # Install 'forever' and 'userdown' for Upstart script support.
-  sudo -E npm install -g forever 2>&1 >/dev/null;
-  sudo -E npm install -g userdown 2>&1 >/dev/null;
+  sudo -E npm install -g --no-optional forever 2>&1 >/dev/null;
+  sudo -E npm install -g --no-optional userdown 2>&1 >/dev/null;
 
 } # install_nodejs
 
