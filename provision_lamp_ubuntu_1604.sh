@@ -128,7 +128,7 @@ function install_aptitude () {
   echo -e "PROVISIONING: Install Aptitude.\n";
 
   # Install Aptitude.
-  sudo -E apt install aptitude
+  sudo -E apt install -y -q aptitude;
 
 } # install_aptitude
 
@@ -161,13 +161,14 @@ function set_environment () {
 function set_timezone () {
 
   TIMEZONE="America/New_York";
-  TIMEZONE_PATH="/etc/timezone";
+  # TIMEZONE_PATH="/etc/timezone";
   if [ "${TIMEZONE}" != $(cat "${TIMEZONE_PATH}") ]; then
 
     echo -e "PROVISIONING: Setting timezone data.\n";
 
-    sudo -E echo "${TIMEZONE}" > "${TIMEZONE_PATH}";
-    sudo -E dpkg-reconfigure -f noninteractive tzdata 2>/dev/null;
+    #sudo -E echo "${TIMEZONE}" > "${TIMEZONE_PATH}";
+    # sudo -E dpkg-reconfigure -f noninteractive tzdata 2>/dev/null;
+    sudo  -E timedatectl set-timezone "${TIMEZONE}";
 
   fi
 
@@ -1023,8 +1024,8 @@ function update_locate_db () {
 # sudo -E ntpdate -u ntp.ubuntu.com;
 configure_user_and_group;
 install_aptitude;
-# set_environment;
-# set_timezone;
+set_environment;
+set_timezone;
 # configure_sources_list;
 # hash avahi-daemon 2>/dev/null || { install_avahi; }
 # hash sar 2>/dev/null || {  install_sysstat; }
