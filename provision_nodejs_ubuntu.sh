@@ -97,7 +97,22 @@ function configure_user_and_group () {
   # Add the user to the 'www-readwrite' group:
   sudo -E adduser --quiet "${USER_NAME}" www-readwrite;
 
+  # Changing the username/password combination.
+  echo "${USER_NAME}:${PASSWORD}" | sudo -E sudo chpasswd
+
 } # configure_user_and_group
+
+##########################################################################################
+# Aptitude
+##########################################################################################
+function install_aptitude () {
+
+  echo -e "PROVISIONING: Install Aptitude.\n";
+
+  # Install Aptitude.
+  sudo -E apt install -y -q aptitude;
+
+} # install_aptitude
 
 ##########################################################################################
 # Environment
@@ -114,6 +129,9 @@ function set_environment () {
 
   echo -e "PROVISIONING: Importing the crontab.\n";
 
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
   # Importing the crontab.
   sudo -E crontab < "crontab.conf";
 
@@ -125,15 +143,10 @@ function set_environment () {
 function set_timezone () {
 
   TIMEZONE="America/New_York";
-  TIMEZONE_PATH="/etc/timezone";
-  if [ "${TIMEZONE}" != $(cat "${TIMEZONE_PATH}") ]; then
 
-    echo -e "PROVISIONING: Setting timezone data.\n";
+  echo -e "PROVISIONING: Setting timezone data.\n";
 
-    sudo -E echo "${TIMEZONE}" > "${TIMEZONE_PATH}";
-    sudo -E dpkg-reconfigure -f noninteractive tzdata 2>/dev/null;
-
-  fi
+  sudo -E timedatectl set-timezone "${TIMEZONE}";
 
 } # set_timezone
 

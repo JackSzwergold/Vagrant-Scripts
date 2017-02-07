@@ -215,6 +215,9 @@ function install_sysstat () {
   # Install Sysstat.
   sudo -E aptitude install -y -q sysstat;
 
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
   # Copy the Sysstat config file in place and restart sysstat.
   if [ -f "sysstat/sysstat" ]; then
     sudo -E cp -f "sysstat/sysstat" "/etc/default/sysstat";
