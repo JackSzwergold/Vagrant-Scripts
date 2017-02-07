@@ -46,7 +46,7 @@
   box: "ubuntu/xenial64"
   primary: false
   autostart: false
-  # provision_script: "provision_lamp_ubuntu.sh"
+  # provision_script: "provision_ubuntu_1604.sh"
   provision_script_regular: null
   username: "ubuntu"
   password: "ubuntu"

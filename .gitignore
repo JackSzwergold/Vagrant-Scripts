@@ -2,3 +2,4 @@
 .vagrant.d/
 .vagrant/
 deployment_configs/*/local/
+*.log
