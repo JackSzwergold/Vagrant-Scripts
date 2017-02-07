@@ -98,7 +98,7 @@ function configure_user_and_group () {
   sudo -E adduser --quiet "${USER_NAME}" www-readwrite;
 
   # Changing the username/password combination.
-  echo "${USER_NAME}:${PASSWORD}" | sudo -E sudo chpasswd;
+  echo "${USER_NAME}:${PASSWORD}" | sudo -E sudo chpasswd
 
 } # configure_user_and_group
 
@@ -394,6 +394,7 @@ function update_locate_db () {
 
 # sudo -E ntpdate -u ntp.ubuntu.com;
 configure_user_and_group;
+install_aptitude;
 set_environment;
 set_timezone;
 configure_sources_list;
