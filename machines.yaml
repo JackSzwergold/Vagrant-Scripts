@@ -60,10 +60,10 @@
   cpus: 1
   deployment_configs_path: "deployment_configs/ubuntu"
   deployment_dbs_path: "deployment_dbs"
-  basics: false
+  basics: true
   lamp: false
   imagemagick: false
-  geoip: false
+  geoip: true
   iptables: false
   fail2ban: false
 - name: "Sandbox_CENTOS_68"

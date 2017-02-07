@@ -1035,7 +1035,7 @@ if [ "${PROVISION_BASICS}" = true ]; then
   install_basic_tools;
   hash libtool 2>/dev/null || { install_compiler; }
   if ! grep -q -s "git-core" "/etc/apt/sources.list" "/etc/apt/sources.list.d/"*; then install_git; fi
-  hash postfix 2>/dev/null || { install_postfix; }
+  # hash postfix 2>/dev/null || { install_postfix; }
   if [ -f "system/login.defs" ] && [ -f "/etc/login.defs" ]; then configure_login_defs; fi
   if [ -f "system/common-session" ] && [ -f "/etc/pam.d/common-session" ]; then configure_common_session; fi
   if [ -f "ssh/ssh_config" ] && [ -f "/etc/ssh/ssh_config" ]; then configure_ssh; fi
