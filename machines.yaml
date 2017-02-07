@@ -193,7 +193,7 @@
   password: "vagrant"
   hostname: "solr"
   machinename: "Solr"
-  ip: "192.168.56.80"
+  ip: "192.168.56.90"
   forward_guest1: 22
   forward_host1: 2230
   forward_id1: "ssh"
