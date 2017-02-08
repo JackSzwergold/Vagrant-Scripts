@@ -394,6 +394,7 @@ function update_locate_db () {
 
 # sudo -E ntpdate -u ntp.ubuntu.com;
 configure_user_and_group;
+install_aptitude;
 set_environment;
 set_timezone;
 configure_sources_list;
