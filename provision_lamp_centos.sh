@@ -372,6 +372,12 @@ function configure_apache () {
   # Copy the PHP config files into place.
   sudo -E cp -f "php/php.ini" "/etc/php.ini";
 
+  # Set the Apache user’s main group to be the 'www-readwrite' group.
+  sudo -E usermod -g www-readwrite apache;
+
+  # Add the Apache user to the 'www-readwrite' group:
+  sudo -E usermod -a -G www-readwrite apache;
+
 } # configure_apache
 
 ##########################################################################################
