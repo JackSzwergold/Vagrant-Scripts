@@ -91,14 +91,14 @@ if mkdir ${LOCK_DIR} 2>/dev/null; then
       wait ${FILE_PERM_FIX_PID};
 
       # Adjust permissions for the Drupal settings file.
-      find ${FULL_DIRECTORY_PATH} -type d ! -perm ${CHMOD_DRUPAL_DIR} -iwholename '*/sites/default' -print0 | xargs --no-run-if-empty -0 chmod ${CHMOD_DRUPAL_DIR} >/dev/null & FILE_PERM_FIX_PID=(`jobs -l | awk '{print $2}'`);
-      wait ${FILE_PERM_FIX_PID};
+      # find ${FULL_DIRECTORY_PATH} -type d ! -perm ${CHMOD_DRUPAL_DIR} -iwholename '*/sites/default' -print0 | xargs --no-run-if-empty -0 chmod ${CHMOD_DRUPAL_DIR} >/dev/null & FILE_PERM_FIX_PID=(`jobs -l | awk '{print $2}'`);
+      # wait ${FILE_PERM_FIX_PID};
 
       # Adjust ownership for specific Drupal directories.
-      find ${FULL_DIRECTORY_PATH} ! -user ${CHGRP_USER} -iwholename '*/sites/default' -print0 | xargs --no-run-if-empty -0 chown ${CHGRP_USER} >/dev/null & USER_FIX_PID=(`jobs -l | awk '{print $2}'`);
-      wait ${USER_FIX_PID};
-      find ${FULL_DIRECTORY_PATH} ! -user ${CHGRP_USER} -iwholename '*/sites/all' -print0 | xargs --no-run-if-empty -0 chown ${CHGRP_USER} >/dev/null & USER_FIX_PID=(`jobs -l | awk '{print $2}'`);
-      wait ${USER_FIX_PID};
+      # find ${FULL_DIRECTORY_PATH} ! -user ${CHGRP_USER} -iwholename '*/sites/default' -print0 | xargs --no-run-if-empty -0 chown ${CHGRP_USER} >/dev/null & USER_FIX_PID=(`jobs -l | awk '{print $2}'`);
+      # wait ${USER_FIX_PID};
+      # find ${FULL_DIRECTORY_PATH} ! -user ${CHGRP_USER} -iwholename '*/sites/all' -print0 | xargs --no-run-if-empty -0 chown ${CHGRP_USER} >/dev/null & USER_FIX_PID=(`jobs -l | awk '{print $2}'`);
+      # wait ${USER_FIX_PID};
 
     fi
 
