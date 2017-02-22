@@ -103,6 +103,18 @@ function configure_user_and_group () {
 } # configure_user_and_group
 
 ##########################################################################################
+# Aptitude
+##########################################################################################
+function install_aptitude () {
+
+  echo -e "PROVISIONING: Install Aptitude.\n";
+
+  # Install Aptitude.
+  sudo -E apt install -y -q aptitude;
+
+} # install_aptitude
+
+##########################################################################################
 # Environment
 ##########################################################################################
 function set_environment () {
@@ -444,6 +456,7 @@ function update_locate_db () {
 
 # sudo -E ntpdate -u ntp.ubuntu.com;
 configure_user_and_group;
+install_aptitude;
 set_environment;
 set_timezone;
 configure_sources_list;
