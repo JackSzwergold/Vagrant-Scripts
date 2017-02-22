@@ -8,7 +8,7 @@
 # Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
 #
 # You should have received a copy of the license along with this
-# work. If not, see <http://creativecommons.org/licenses/by-nc-sa/4.0/>. 
+# work. If not, see <http://creativecommons.org/licenses/by-nc-sa/4.0/>.
 #
 # w: http://www.preworn.com
 # e: me@preworn.com
@@ -49,41 +49,56 @@ if mkdir ${LOCK_DIR} 2>/dev/null; then
   # If the ${LOCK_DIR} doesn't exist, then start working & store the ${PID_FILE}
   echo $$ > ${PID_FILE}
 
-  for DIRECTORY_NAME in "${DIRECTORY_ARRAY[@]}"
+  for DIRECTORY_PATH in "${DIRECTORY_ARRAY[@]}"
   do
 
-    FULL_DIRECTORY_NAME=${DOCUMENT_ROOT}${DIRECTORY_NAME}'/'
+    FULL_DIRECTORY_PATH="${DOCUMENT_ROOT}${DIRECTORY_PATH}/"
 
-    if [ -d ${FULL_DIRECTORY_NAME} ]; then
+    if [ -d ${FULL_DIRECTORY_PATH} ]; then
 
       # Adjust group ownership for all files & directories.
-      find ${FULL_DIRECTORY_NAME} ! -group ${CHGRP_GROUP} -not -iwholename '*.git*' -print0 | xargs --no-run-if-empty -0 chgrp -f ${CHGRP_GROUP} -R ${DOCUMENT_ROOT}${DIRECTORY_NAME}'/' & GROUP_FIX_PID=(`jobs -l | awk '{print $2}'`);
+      find ${FULL_DIRECTORY_PATH} ! -group ${CHGRP_GROUP} -not -iwholename '*.git*' -print0 | xargs --no-run-if-empty -0 chgrp -f ${CHGRP_GROUP} -R ${DOCUMENT_ROOT}${DIRECTORY_PATH}'/' & GROUP_FIX_PID=(`jobs -l | awk '{print $2}'`);
       wait ${GROUP_FIX_PID};
 
       # Adjust permissions for directories.
-      find ${FULL_DIRECTORY_NAME} -type d ! -perm ${CHMOD_DIR} -not -iwholename '*.git*' -print0 | xargs --no-run-if-empty -0 chmod -f ${CHMOD_DIR} >/dev/null & DIR_PERM_FIX_PID=(`jobs -l | awk '{print $2}'`);
+      find ${FULL_DIRECTORY_PATH} -type d ! -perm ${CHMOD_DIR} -not -iwholename '*.git*' -print0 | xargs --no-run-if-empty -0 chmod -f ${CHMOD_DIR} >/dev/null & DIR_PERM_FIX_PID=(`jobs -l | awk '{print $2}'`);
       wait ${DIR_PERM_FIX_PID};
 
       # Adjust permissions for files.
-      find ${FULL_DIRECTORY_NAME} -type f ! -perm ${CHMOD_FILE} -not -iwholename '*.git*' -print0 | xargs --no-run-if-empty -0 chmod -f ${CHMOD_FILE} >/dev/null & FILE_PERM_FIX_PID=(`jobs -l | awk '{print $2}'`);
+      find ${FULL_DIRECTORY_PATH} -type f ! -perm ${CHMOD_FILE} -not -iwholename '*.git*' -print0 | xargs --no-run-if-empty -0 chmod -f ${CHMOD_FILE} >/dev/null & FILE_PERM_FIX_PID=(`jobs -l | awk '{print $2}'`);
       wait ${FILE_PERM_FIX_PID};
 
+      ##########################################################################
+      # Excecutible files.
+
       # Adjust permissions for PERL files.
-      find ${DOCUMENT_ROOT}${DIRECTORY_NAME}'/' -type f ! -perm ${CHMOD_EXEC_FILE} -iwholename '*.pl' -print0 | xargs --no-run-if-empty -0 chmod ${CHMOD_EXEC_FILE} >/dev/null & FILE_PERM_FIX_PID=(`jobs -l | awk '{print $2}'`);
+      find ${FULL_DIRECTORY_PATH} -type f ! -perm ${CHMOD_EXEC_FILE} -iwholename '*.pl' -print0 | xargs --no-run-if-empty -0 chmod ${CHMOD_EXEC_FILE} >/dev/null & FILE_PERM_FIX_PID=(`jobs -l | awk '{print $2}'`);
       wait ${FILE_PERM_FIX_PID};
 
       # Adjust permissions for CGI files.
-      find ${DOCUMENT_ROOT}${DIRECTORY_NAME}'/' -type f ! -perm ${CHMOD_EXEC_FILE} -iwholename '*.cgi' -print0 | xargs --no-run-if-empty -0 chmod ${CHMOD_EXEC_FILE} >/dev/null & FILE_PERM_FIX_PID=(`jobs -l | awk '{print $2}'`);
+      find ${FULL_DIRECTORY_PATH} -type f ! -perm ${CHMOD_EXEC_FILE} -iwholename '*.cgi' -print0 | xargs --no-run-if-empty -0 chmod ${CHMOD_EXEC_FILE} >/dev/null & FILE_PERM_FIX_PID=(`jobs -l | awk '{print $2}'`);
       wait ${FILE_PERM_FIX_PID};
 
       # Adjust permissions for SH (shell script) files.
-      find ${DOCUMENT_ROOT}${DIRECTORY_NAME}'/' -type f ! -perm ${CHMOD_EXEC_FILE} -iwholename '*.sh' -print0 | xargs --no-run-if-empty -0 chmod ${CHMOD_EXEC_FILE} >/dev/null & FILE_PERM_FIX_PID=(`jobs -l | awk '{print $2}'`);
+      find ${FULL_DIRECTORY_PATH} -type f ! -perm ${CHMOD_EXEC_FILE} -iwholename '*.sh' -print0 | xargs --no-run-if-empty -0 chmod ${CHMOD_EXEC_FILE} >/dev/null & FILE_PERM_FIX_PID=(`jobs -l | awk '{print $2}'`);
       wait ${FILE_PERM_FIX_PID};
 
-      # Adjust permissions for files in directories named 'bin/'.
-      # find `find ${DOCUMENT_ROOT}${DIRECTORY_NAME}'/' -type d \( -name "bin" -o -name "cgi-bin" \)` -maxdepth 1 -type f -print0 | xargs --no-run-if-empty -0 ls -la
-      # find `find ${DOCUMENT_ROOT}${DIRECTORY_NAME}'/' -type d \( -name "bin" -o -name "cgi-bin" \)` -maxdepth 1 -type f -print0 | xargs --no-run-if-empty -0 chmod -R ${CHMOD_EXEC_FILE} >/dev/null & FILE_PERM_FIX_PID=(`jobs -l | awk '{print $2}'`);
+      ##########################################################################
+      # Drupal settings.
+
+      # Adjust permissions for Drupal settings files.
+      # find ${FULL_DIRECTORY_PATH} -type f ! -perm ${CHMOD_DRUPAL_SETTINGS} -iwholename '*/settings.php' -print0 | xargs --no-run-if-empty -0 chmod ${CHMOD_DRUPAL_SETTINGS} >/dev/null & FILE_PERM_FIX_PID=(`jobs -l | awk '{print $2}'`);
       # wait ${FILE_PERM_FIX_PID};
+
+      # Adjust permissions for the Drupal settings directory.
+      # find ${FULL_DIRECTORY_PATH} -type d ! -perm ${CHMOD_DRUPAL_DIR} -iwholename '*/sites/default' -print0 | xargs --no-run-if-empty -0 chmod ${CHMOD_DRUPAL_DIR} >/dev/null & FILE_PERM_FIX_PID=(`jobs -l | awk '{print $2}'`);
+      # wait ${FILE_PERM_FIX_PID};
+
+      # Adjust ownership for specific Drupal directories.
+      # find ${FULL_DIRECTORY_PATH} ! -user ${CHGRP_USER} -iwholename '*/sites/default' -print0 | xargs --no-run-if-empty -0 chown ${CHGRP_USER} >/dev/null & USER_FIX_PID=(`jobs -l | awk '{print $2}'`);
+      # wait ${USER_FIX_PID};
+      # find ${FULL_DIRECTORY_PATH} ! -user ${CHGRP_USER} -iwholename '*/sites/all' -print0 | xargs --no-run-if-empty -0 chown ${CHGRP_USER} >/dev/null & USER_FIX_PID=(`jobs -l | awk '{print $2}'`);
+      # wait ${USER_FIX_PID};
 
     fi
 
