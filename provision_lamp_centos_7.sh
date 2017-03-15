@@ -188,10 +188,12 @@ function install_sysstat () {
 function install_basic_tools () {
 
   echo -e "PROVISIONING: Installing a set of generic tools.\n";
-sudo yum install
+
+  # Install basic repo stuff.
+  sudo -E yum install -y -q epel-release deltarpm;
+
   # Install generic tools.
   sudo -E yum install -y -q \
-    epel-release deltarpm \
     dnsutils traceroute nmap bc htop finger curl whois rsync lsof \
     iftop figlet lynx mtr-tiny iperf nload zip unzip attr sshpass \
     dkms mc elinks ntp dos2unix p7zip-full nfs-common \
