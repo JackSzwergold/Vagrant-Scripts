@@ -75,7 +75,7 @@
   username: "vagrant"
   password: "vagrant"
   hostname: "sandbox-centos-68"
-  machinename: "Sandbox-CentOS"
+  machinename: "Sandbox-CentOS-68"
   ip: "192.168.56.30"
   forward_guest1: 22
   forward_host1: 2224
@@ -95,7 +95,7 @@
   username: "vagrant"
   password: "vagrant"
   hostname: "sandbox-centos-7"
-  machinename: "Sandbox-CentOS"
+  machinename: "Sandbox-CentOS-7"
   ip: "192.168.56.40"
   forward_guest1: 22
   forward_host1: 2225
