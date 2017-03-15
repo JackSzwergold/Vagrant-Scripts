@@ -666,6 +666,7 @@ if [ "${PROVISION_BASICS}" = true ]; then
 
 fi
 
+# Set the MOTD banner.
 configure_motd;
 
 # Monit
