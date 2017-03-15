@@ -157,7 +157,7 @@ function install_avahi () {
   sudo sed -i 's/enabled=0/enabled=1/g' /etc/yum.repos.d/epel.repo;
 
   # Install NSS support for mDNS which is required by Avahi.
-  sudo -E yum install -y -q nss-mdns;
+  # sudo -E yum install -y -q nss-mdns;
 
   # Start the system messagebus.
   sudo -E service messagebus restart;
@@ -188,9 +188,10 @@ function install_sysstat () {
 function install_basic_tools () {
 
   echo -e "PROVISIONING: Installing a set of generic tools.\n";
-
+sudo yum install
   # Install generic tools.
   sudo -E yum install -y -q \
+    epel-release deltarpm \
     dnsutils traceroute nmap bc htop finger curl whois rsync lsof \
     iftop figlet lynx mtr-tiny iperf nload zip unzip attr sshpass \
     dkms mc elinks ntp dos2unix p7zip-full nfs-common \
