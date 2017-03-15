@@ -74,7 +74,7 @@
   provision_script_regular: null
   username: "vagrant"
   password: "vagrant"
-  hostname: "sandbox-centos"
+  hostname: "sandbox-centos-68"
   machinename: "Sandbox-CentOS"
   ip: "192.168.56.30"
   forward_guest1: 22
