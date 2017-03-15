@@ -70,7 +70,7 @@
   box: "kaorimatz/centos-6.8-x86_64"
   primary: false
   autostart: false
-  provision_script: "provision_lamp_centos.sh"
+  provision_script: "provision_lamp_centos_68.sh"
   provision_script_regular: null
   username: "vagrant"
   password: "vagrant"
@@ -79,6 +79,26 @@
   ip: "192.168.56.30"
   forward_guest1: 22
   forward_host1: 2224
+  forward_id1: "ssh"
+  memory: 1024
+  cpus: 1
+  deployment_configs_path: "deployment_configs/centos"
+  deployment_dbs_path: "deployment_dbs"
+  basics: true
+  lamp: true
+- name: "Sandbox_CENTOS_7"
+  box: "bento/centos-7.3"
+  primary: false
+  autostart: false
+  provision_script: "provision_lamp_centos_7.sh"
+  provision_script_regular: null
+  username: "vagrant"
+  password: "vagrant"
+  hostname: "sandbox-centos-7"
+  machinename: "Sandbox-CentOS"
+  ip: "192.168.56.40"
+  forward_guest1: 22
+  forward_host1: 2225
   forward_id1: "ssh"
   memory: 1024
   cpus: 1
@@ -96,9 +116,9 @@
   password: "vagrant"
   hostname: "jabroni"
   machinename: "Jabroni"
-  ip: "192.168.56.40"
+  ip: "192.168.56.50"
   forward_guest1: 22
-  forward_host1: 2225
+  forward_host1: 2226
   forward_id1: "ssh"
   memory: 512
   cpus: 1
@@ -115,9 +135,9 @@
   password: "vagrant"
   hostname: "nodejs"
   machinename: "NodeJS"
-  ip: "192.168.56.50"
+  ip: "192.168.56.60"
   forward_guest1: 22
-  forward_host1: 2226
+  forward_host1: 2227
   forward_id1: "ssh"
   memory: 2048
   cpus: 1
@@ -133,9 +153,9 @@
   password: "ubuntu"
   hostname: "nodejs-1604"
   machinename: "NodeJS-1604"
-  ip: "192.168.56.60"
+  ip: "192.168.56.70"
   forward_guest1: 22
-  forward_host1: 2227
+  forward_host1: 2228
   forward_id1: "ssh"
   memory: 2048
   cpus: 1
@@ -151,9 +171,9 @@
   password: "vagrant"
   hostname: "mongo"
   machinename: "Mongo"
-  ip: "192.168.56.70"
+  ip: "192.168.56.80"
   forward_guest1: 22
-  forward_host1: 2228
+  forward_host1: 2229
   forward_id1: "ssh"
   forward_guest2: 27017
   forward_host2: 27017
@@ -172,9 +192,9 @@
   password: "vagrant"
   hostname: "elasticsearch"
   machinename: "Elasticsearch"
-  ip: "192.168.56.80"
+  ip: "192.168.56.90"
   forward_guest1: 22
-  forward_host1: 2229
+  forward_host1: 2230
   forward_id1: "ssh"
   forward_guest2: 9200
   forward_host2: 9200
@@ -193,9 +213,9 @@
   password: "vagrant"
   hostname: "solr"
   machinename: "Solr"
-  ip: "192.168.56.90"
+  ip: "192.168.56.100"
   forward_guest1: 22
-  forward_host1: 2230
+  forward_host1: 2231
   forward_id1: "ssh"
   forward_guest2: 8983
   forward_host2: 8983
