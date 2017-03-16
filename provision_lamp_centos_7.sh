@@ -327,19 +327,13 @@ function install_apache () {
   echo -e "PROVISIONING: Installing Apache and PHP related items.\n"
 
   # Adding the WebTatic repository to get PHP 5.6 installed.
-  # sudo -E rpm -Uvh --quiet "http://mirror.webtatic.com/yum/el6/latest.rpm" 2>/dev/null;
+  sudo -E rpm -Uvh --quiet https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm 2>/dev/null;
+  sudo -E rpm -Uvh --quiet http://rpms.remirepo.net/enterprise/remi-release-7.rpm 2>/dev/null;
 
   # Install the base Apache related items.
-  # sudo -E yum install -y httpd mod_php71w mod_ssl;
   sudo -E yum install -y httpd mod_php mod_ssl;
 
   # Install other PHP related related items.
-  # sudo -E yum install -y php71w php71w-common php71w-opcache \
-  # sudo -E yum install -y php71w php71w-common \
-  #   php71w-mysql php71w-pgsql php71w-odbc \
-  #   php71w-xmlrpc php71w-json php71w-xsl php71w-curl \
-  #   php71w-ldap php71w-mcrypt \
-  #   php71w-pspell php71w-gmp php71w-gd php71w-mbstring;
   sudo -E yum install -y php php-common \
     php-mysql php-pgsql php-odbc \
     ph-xmlrpc php-json php-xsl php-curl \
@@ -350,9 +344,7 @@ function install_apache () {
   # sudo -E chkconfig --add httpd;
   # sudo -E chkconfig --level 345 httpd on;
 
-  # TODO: Stop and disable IPTables. (Note this shouldn’t be here; set a separate function.)
-  # sudo -E service iptables stop;
-  # sudo -E chkconfig iptables off;
+  # TODO: Stop and disable FirewallD (aka: IPTables). (Note this shouldn’t be here; set a separate function.)
   sudo -E systemctl stop firewalld;
   sudo -E systemctl disable firewalld;
 
