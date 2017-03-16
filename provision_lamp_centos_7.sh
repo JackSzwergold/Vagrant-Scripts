@@ -327,7 +327,7 @@ function install_apache () {
   echo -e "PROVISIONING: Installing Apache and PHP related items.\n"
 
   # Adding the WebTatic repository to get PHP 5.6 installed.
-  sudo -E rpm -Uvh --quiet "http://mirror.webtatic.com/yum/el6/latest.rpm" 2>/dev/null;
+  # sudo -E rpm -Uvh --quiet "http://mirror.webtatic.com/yum/el6/latest.rpm" 2>/dev/null;
 
   # Install the base Apache related items.
   # sudo -E yum install -y httpd mod_php71w mod_ssl;
