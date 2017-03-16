@@ -682,24 +682,24 @@ if [ "${PROVISION_LAMP}" = true ]; then
 
   # Apache
   hash apachectl 2>/dev/null || { install_apache; }
-  sudo -E service httpd stop;
-  configure_apache;
-  if [ -d "/var/www/html" ]; then set_apache_web_root; fi
-  if [ ! -d "/var/www/builds" ]; then set_apache_deployment_directories; fi
-  set_deployment_user;
-  if [ -d "/var/www/configs" ]; then set_application_configs; fi
-  if [ ! -d "/var/www/html/${HOST_NAME}" ]; then set_apache_virtual_host_directories; fi
+  # sudo -E service httpd stop;
+  # configure_apache;
+  # if [ -d "/var/www/html" ]; then set_apache_web_root; fi
+  # if [ ! -d "/var/www/builds" ]; then set_apache_deployment_directories; fi
+  # set_deployment_user;
+  # if [ -d "/var/www/configs" ]; then set_application_configs; fi
+  # if [ ! -d "/var/www/html/${HOST_NAME}" ]; then set_apache_virtual_host_directories; fi
   # if [ -f "/etc/logrotate.d/apache2" ]; then configure_apache_log_rotation; fi
 
   # MySQL
-  hash mysql && hash mysqld 2>/dev/null || { install_mysql; }
-  configure_mysql;
+  # hash mysql && hash mysqld 2>/dev/null || { install_mysql; }
+  # configure_mysql;
 
   # Install system scripts.
-  install_system_scripts;
+  # install_system_scripts;
 
   # Restart Apache now that we’re done.
-  sudo -E service httpd restart;
+  # sudo -E service httpd restart;
 
 fi
 
