@@ -330,26 +330,36 @@ function install_apache () {
   sudo -E rpm -Uvh --quiet "http://mirror.webtatic.com/yum/el6/latest.rpm" 2>/dev/null;
 
   # Install the base Apache related items.
-  sudo -E yum install -y httpd mod_php56 mod_ssl;
+  # sudo -E yum install -y httpd mod_php71w mod_ssl;
+  sudo -E yum install -y httpd mod_php mod_ssl;
 
   # Install other PHP related related items.
-  # sudo -E yum install -y php56w php56w-common php56w-opcache \
-  sudo -E yum install -y php56w php56w-common \
-    php56w-mysql php56w-pgsql php56w-odbc \
-    php56w-xmlrpc php56w-json php56w-xsl php56w-curl \
-    php56w-ldap php56w-mcrypt \
-    php56w-pspell php56w-gmp php56w-gd php56w-mbstring;
+  # sudo -E yum install -y php71w php71w-common php71w-opcache \
+  # sudo -E yum install -y php71w php71w-common \
+  #   php71w-mysql php71w-pgsql php71w-odbc \
+  #   php71w-xmlrpc php71w-json php71w-xsl php71w-curl \
+  #   php71w-ldap php71w-mcrypt \
+  #   php71w-pspell php71w-gmp php71w-gd php71w-mbstring;
+  sudo -E yum install -y php php-common \
+    php-mysql php-pgsql php-odbc \
+    ph-xmlrpc php-json php-xsl php-curl \
+    php-ldap php-mcrypt \
+    php-pspell php-gmp php-gd php-mbstring;
 
   # Set Apache to start on reboot.
-  sudo -E chkconfig --add httpd;
-  sudo -E chkconfig --level 345 httpd on;
+  # sudo -E chkconfig --add httpd;
+  # sudo -E chkconfig --level 345 httpd on;
 
   # TODO: Stop and disable IPTables. (Note this shouldn’t be here; set a separate function.)
-  sudo -E service iptables stop;
-  sudo -E chkconfig iptables off;
+  # sudo -E service iptables stop;
+  # sudo -E chkconfig iptables off;
+  sudo -E systemctl stop firewalld;
+  sudo -E systemctl disable firewalld;
 
   # Restart Apache.
-  sudo -E service httpd restart;
+  # sudo -E service httpd restart;
+  sudo service httpd restart;
+  sudo systemctl enable httpd.service;
 
 } # install_apache
 
