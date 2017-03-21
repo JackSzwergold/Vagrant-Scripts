@@ -163,7 +163,7 @@ function install_avahi () {
   sudo -E service messagebus restart;
 
   # Start Avahi daemon.
-  sudo service avahi-daemon start
+  sudo -E service avahi-daemon start;
 
 } # install_avahi
 
