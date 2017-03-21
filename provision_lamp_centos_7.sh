@@ -349,9 +349,10 @@ function install_apache () {
   sudo -E systemctl disable firewalld;
 
   # Restart Apache.
-  # sudo -E service httpd restart;
-  sudo service httpd restart;
-  sudo systemctl enable httpd.service;
+  sudo -E service httpd restart;
+
+  # Set Apache to start on reboot.
+  sudo -E systemctl enable httpd.service;
 
 } # install_apache
 
@@ -494,23 +495,16 @@ function install_mysql () {
   echo -e "PROVISIONING: Installing and configuring MySQL related items.\n";
 
   # Adding the WebTatic repository to get MySQL 5.5 installed.
-  sudo -E rpm -Uvh --quiet "http://mirror.webtatic.com/yum/el6/latest.rpm" 2>/dev/null;
-
-  # Install the `yum-plugin-replace` to so a clean upgrade of all MySQL libraries can happen.
-  sudo -E RUNLEVEL=1 yum install -y mysql.`uname -i` yum-plugin-replace;
-
-  # Upgrade the MySQL libaries to MySQL 5.5.
-  sudo -E RUNLEVEL=1 yum replace -y mysql-libs --replace-with mysql55w-libs;
+  sudo -E rpm -Uvh --quiet "http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm" 2>/dev/null;
 
   # Install the MySQL server and client.
-  sudo -E RUNLEVEL=1 yum install -y mysql55w mysql55w-server;
+  sudo -E RUNLEVEL=1 yum install -y mysql mysql-server;
 
-  # Set MySQL to start on reboot.
-  sudo chkconfig --add mysqld;
-  sudo chkconfig --level 345 mysqld on;
+  # sudo chkconfig --add mysqld;
+  # sudo chkconfig --level 345 mysqld on;
 
   # Start MySQL.
-  sudo service mysqld start;
+  sudo -E service mysqld start;
 
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFIG_DIR}";
@@ -521,7 +515,10 @@ function install_mysql () {
   fi
 
   # Restart MySQL.
-  sudo service mysqld restart;
+  sudo -E service mysqld restart;
+
+  # Set MySQL to start on reboot.
+  sudo -E systemctl enable mysqld.service;
 
 } # install_mysql
 
@@ -692,14 +689,14 @@ if [ "${PROVISION_LAMP}" = true ]; then
   # if [ -f "/etc/logrotate.d/httpd" ]; then configure_apache_log_rotation; fi
 
   # MySQL
-  # hash mysql && hash mysqld 2>/dev/null || { install_mysql; }
-  # configure_mysql;
+  hash mysql && hash mysqld 2>/dev/null || { install_mysql; }
+  configure_mysql;
 
   # Install system scripts.
-  # install_system_scripts;
+  install_system_scripts;
 
   # Restart Apache now that we’re done.
-  # sudo -E service httpd restart;
+  sudo -E service httpd restart;
 
 fi
 
