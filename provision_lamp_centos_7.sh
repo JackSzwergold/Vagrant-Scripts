@@ -457,13 +457,13 @@ function configure_apache_log_rotation () {
 
   echo -e "PROVISIONING: Adjusting the Apache log rotation script.\n";
 
-  sudo -E sed -i 's/rotate 52/rotate 13/g' "/etc/logrotate.d/apache2";
-  sudo -E sed -i 's/create 640 root adm/create 640 root www-readwrite/g' "/etc/logrotate.d/apache2";
+  sudo -E sed -i 's/rotate 52/rotate 13/g' "/etc/logrotate.d/httpd";
+  sudo -E sed -i 's/create 640 root adm/create 640 root www-readwrite/g' "/etc/logrotate.d/httpd";
 
   # Adjust permissions on log files.
-  sudo -E chmod o+rx "/var/log/apache2";
-  sudo -E chgrp www-readwrite "/var/log/apache2/"*;
-  sudo -E chmod -f 664 "/var/log/apache2/"*;
+  sudo -E chmod o+rx "/var/log/httpd";
+  sudo -E chgrp www-readwrite "/var/log/httpd/"*;
+  sudo -E chmod -f 664 "/var/log/httpd/"*;
 
 } # configure_apache_log_rotation
 
@@ -687,9 +687,9 @@ if [ "${PROVISION_LAMP}" = true ]; then
   if [ -d "/var/www/html" ]; then set_apache_web_root; fi
   if [ ! -d "/var/www/builds" ]; then set_apache_deployment_directories; fi
   set_deployment_user;
-  if [ -d "/var/www/configs" ]; then set_application_configs; fi
+  # if [ -d "/var/www/configs" ]; then set_application_configs; fi
   if [ ! -d "/var/www/html/${HOST_NAME}" ]; then set_apache_virtual_host_directories; fi
-  # if [ -f "/etc/logrotate.d/apache2" ]; then configure_apache_log_rotation; fi
+  # if [ -f "/etc/logrotate.d/httpd" ]; then configure_apache_log_rotation; fi
 
   # MySQL
   # hash mysql && hash mysqld 2>/dev/null || { install_mysql; }
