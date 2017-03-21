@@ -194,7 +194,7 @@ function install_basic_tools () {
 
   # Install generic tools.
   sudo -E yum install -y -q \
-    dnsutils traceroute nmap bc htop finger curl whois rsync lsof \
+    bind-utils dnsutils traceroute nmap bc htop finger curl whois rsync lsof \
     iftop figlet lynx mtr-tiny iperf nload zip unzip attr sshpass \
     dkms mc elinks ntp dos2unix p7zip-full nfs-common \
     slurm sharutils uuid-runtime chkconfig quota pv trickle apachetop \
