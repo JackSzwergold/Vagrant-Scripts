@@ -157,7 +157,7 @@ function install_avahi () {
   sudo sed -i 's/enabled=0/enabled=1/g' /etc/yum.repos.d/epel.repo;
 
   # Install NSS support for mDNS which is required by Avahi.
-  # sudo -E yum install -y -q nss-mdns;
+  sudo -E yum install -y -q nss-mdns;
 
   # Start the system messagebus.
   sudo -E service messagebus restart;
