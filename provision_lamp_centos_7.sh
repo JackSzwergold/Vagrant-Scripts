@@ -366,8 +366,8 @@ function configure_apache () {
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Copy the Apache config files into place.
-  sudo -E cp -f "apache2/httpd.conf" "/etc/httpd/conf/httpd.conf";
-  sudo -E cp -f "apache2/httpd" "/etc/sysconfig/httpd";
+  sudo -E cp -f "httpd-centos-7/httpd.conf" "/etc/httpd/conf/httpd.conf";
+  sudo -E cp -f "httpd-centos-7/httpd" "/etc/sysconfig/httpd";
 
   # Copy and configure the Apache virtual host config file.
   sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "/etc/httpd/conf/httpd.conf";
@@ -398,7 +398,7 @@ function set_apache_web_root () {
   sudo -E chown -f -R "${USER_NAME}":www-readwrite "/var/www/html/";
   sudo -E chmod -f -R 775 "/var/www/html/";
   sudo -E chmod g+s "/var/www/html/";
-  sudo -E cp -f "apache2/index.php" "/var/www/html/index.php";
+  sudo -E cp -f "httpd-centos-7/index.php" "/var/www/html/index.php";
   sudo -E chmod -f -R 664 "/var/www/html/index.php";
 
 } # set_apache_web_root
@@ -478,7 +478,7 @@ function set_apache_virtual_host_directories () {
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
   sudo -E mkdir -p "/var/www/html/${HOST_NAME}/site";
-  sudo -E cp -f "apache2/index.php" "/var/www/html/${HOST_NAME}/site/index.php";
+  sudo -E cp -f "httpd-centos-7/index.php" "/var/www/html/${HOST_NAME}/site/index.php";
   sudo -E chown -f -R "${USER_NAME}":www-readwrite "/var/www/html/${HOST_NAME}";
   sudo -E chmod -f -R 775 "/var/www/html/${HOST_NAME}";
   sudo -E chmod g+s "/var/www/html/${HOST_NAME}";
