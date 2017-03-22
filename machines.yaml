@@ -105,7 +105,7 @@
   deployment_configs_path: "deployment_configs/centos"
   deployment_dbs_path: "deployment_dbs"
   basics: true
-  lamp: true
+  lamp: false
 - name: "Jabroni_UBUNTU_1404"
   box: "ubuntu/trusty64"
   primary: false

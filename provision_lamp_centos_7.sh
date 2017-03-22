@@ -327,8 +327,16 @@ function install_apache () {
   echo -e "PROVISIONING: Installing Apache and PHP related items.\n"
 
   # Adding the WebTatic repository to get PHP 5.6 installed.
-  sudo -E rpm -Uvh --quiet https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm 2>/dev/null;
-  sudo -E rpm -Uvh --quiet http://rpms.remirepo.net/enterprise/remi-release-7.rpm 2>/dev/null;
+  sudo -E rpm -Uvh --quiet "https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm" 2>/dev/null;
+  # sudo -E rpm -Uvh --quiet "http://rpms.remirepo.net/enterprise/remi-release-7.rpm" 2>/dev/null;
+  # sudo -E rpm -Uvh --quiet "http://rpms.famillecollet.com/enterprise/remi-release-7.rpm" 2>/dev/null;
+  sudo -E rpm -Uvh --quiet "http://mirror.bebout.net/remi/enterprise/remi-release-7.rpm" 2>/dev/null;
+
+  # Enable the EPEL (Extra Packages for Enterprise Linux) RPM repository.
+  sudo sed -i 's/enabled=0/enabled=1/g' /etc/yum.repos.d/epel.repo;
+
+  # Enable REMI’s RPM repository.
+  sudo sed -i 's/enabled=0/enabled=1/g' /etc/yum.repos.d/remi.repo;
 
   # Install the base Apache related items.
   sudo -E yum install -y httpd mod_php mod_ssl;
