@@ -342,14 +342,14 @@ function install_apache () {
   sudo sed -i 's/enabled=0/enabled=1/g' /etc/yum.repos.d/remi.repo;
 
   # Install the base Apache related items.
-  sudo -E yum install -y httpd mod_php mod_ssl;
+  sudo -E yum install -y httpd php56-mod_php mod_ssl;
 
   # Install other PHP related related items.
-  sudo -E yum install -y php php-common \
-    php-mysql php-pgsql php-odbc \
-    ph-xmlrpc php-json php-xsl php-curl \
-    php-ldap php-mcrypt \
-    php-pspell php-gmp php-gd php-mbstring;
+  sudo -E yum install -y php56-php php56-php-common \
+    php56-php-mysql php56-php-pgsql php56-php-odbc \
+    php56-php-xmlrpc php56-php-json php56-php-xsl php56-php-curl \
+    php56-php-ldap php56-php-mcrypt \
+    php56-php-pspell php56-php-gmp php56-php-gd php56-php-mbstring;
 
   # Set Apache to start on reboot.
   # sudo -E chkconfig --add httpd;
