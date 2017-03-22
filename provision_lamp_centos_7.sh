@@ -454,11 +454,15 @@ function set_application_configs () {
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
-  # Create the sandbox config directory.
-  sudo -E mkdir -p "/var/www/configs/sandbox/";
+  if [ -d "local/" ]; then
 
-  # Copy the local configs into the sandbox config directory.
-  sudo -E cp -f "local/"* "/var/www/configs/sandbox/";
+    # Create the sandbox config directory.
+    sudo -E mkdir -p "/var/www/configs/sandbox/";
+
+    # Copy the local configs into the sandbox config directory.
+    sudo -E cp -f "local/"* "/var/www/configs/sandbox/";
+
+  fi
 
 } # set_application_configs
 
@@ -695,7 +699,7 @@ if [ "${PROVISION_LAMP}" = true ]; then
   if [ -d "/var/www/html" ]; then set_apache_web_root; fi
   if [ ! -d "/var/www/builds" ]; then set_apache_deployment_directories; fi
   set_deployment_user;
-  # if [ -d "/var/www/configs" ]; then set_application_configs; fi
+  if [ -d "/var/www/configs" ]; then set_application_configs; fi
   if [ ! -d "/var/www/html/${HOST_NAME}" ]; then set_apache_virtual_host_directories; fi
   # if [ -f "/etc/logrotate.d/httpd" ]; then configure_apache_log_rotation; fi
 
