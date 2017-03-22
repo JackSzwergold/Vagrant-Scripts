@@ -387,7 +387,8 @@ function configure_apache () {
   sudo -E sed -i "s/vagrant\\\.local/${HOST_NAME_ESCAPED}/" "/etc/httpd/conf/httpd.conf";
 
   # Copy the PHP config files into place.
-  sudo -E cp -f "php/php.ini" "/etc/php.ini";
+  # sudo -E cp -f "php/php.ini" "/etc/php.ini";
+  sudo -E cp -f "php/php.ini" "/opt/remi/php56/root/etc/php.ini";
 
   # Set the Apache user’s main group to be the 'www-readwrite' group.
   sudo -E usermod -g www-readwrite apache;
