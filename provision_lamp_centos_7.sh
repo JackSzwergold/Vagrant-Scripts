@@ -335,6 +335,9 @@ function install_apache () {
   # Enable the EPEL (Extra Packages for Enterprise Linux) RPM repository.
   sudo sed -i 's/enabled=0/enabled=1/g' /etc/yum.repos.d/epel.repo;
 
+  # Change the default REMI repo URL.
+  sudo sed -i 's/rpms.remirepo.net/mirror.bebout.net\/remi/g' /etc/yum.repos.d/remi*.repo;
+
   # Enable REMI’s RPM repository.
   sudo sed -i 's/enabled=0/enabled=1/g' /etc/yum.repos.d/remi.repo;
 
