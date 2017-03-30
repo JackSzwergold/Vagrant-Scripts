@@ -240,6 +240,7 @@ function install_git () {
   sudo -E yum remove -y -q git;
 
   # Now install Git via WANDisco.
+  # sudo -E yum install -y -q "http://opensource.wandisco.com/rhel/7/git/x86_64/wandisco-git-release-7-2.noarch.rpm" 2>/dev/null;
   sudo -E yum install -y -q "http://opensource.wandisco.com/centos/6/git/x86_64/wandisco-git-release-6-1.noarch.rpm" 2>/dev/null;
   sudo -E yum install -y -q git;
 
