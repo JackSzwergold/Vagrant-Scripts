@@ -154,7 +154,7 @@ function install_avahi () {
   sudo -E yum install -y -q avahi;
 
   # Enable EPEL (Extra Packages for Enterprise Linux)
-  sudo sed -i 's/enabled=0/enabled=1/g' "/etc/yum.repos.d/epel.repo";
+  sudo sed -i "s/enabled=0/enabled=1/g" "/etc/yum.repos.d/epel.repo";
 
   # Install NSS support for mDNS which is required by Avahi.
   sudo -E yum install -y -q nss-mdns;
@@ -225,7 +225,7 @@ function install_compiler () {
   echo -e "PROVISIONING: Installing the core compiler tools.\n";
 
   # Install the core compiler and build tools.
-  sudo -E yum groupinstall -y -q 'Development Tools';
+  sudo -E yum groupinstall -y -q "Development Tools";
 
 } # install_compiler
 
@@ -334,13 +334,13 @@ function install_apache () {
   sudo -E rpm -Uvh --quiet "http://mirror.bebout.net/remi/enterprise/remi-release-7.rpm" 2>/dev/null;
 
   # Enable the EPEL (Extra Packages for Enterprise Linux) RPM repository.
-  sudo sed -i 's/enabled=0/enabled=1/g' "/etc/yum.repos.d/epel.repo";
+  sudo sed -i "s/enabled=0/enabled=1/g" "/etc/yum.repos.d/epel.repo";
 
   # Change the default REMI repo URL.
-  sudo sed -i 's/rpms.remirepo.net/mirror.bebout.net\/remi/g' /etc/yum.repos.d/remi*.repo;
+  sudo sed -i "s/rpms.remirepo.net/mirror.bebout.net\/remi/g" "/etc/yum.repos.d/remi"*.repo;
 
   # Enable REMI’s RPM repository.
-  sudo sed -i 's/enabled=0/enabled=1/g' "/etc/yum.repos.d/remi.repo";
+  sudo sed -i "s/enabled=0/enabled=1/g" "/etc/yum.repos.d/remi.repo";
 
   # Install the base Apache related items.
   sudo -E yum install -y httpd php56-mod_php mod_ssl;
@@ -384,7 +384,7 @@ function configure_apache () {
 
   # Copy and configure the Apache virtual host config file.
   sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "/etc/httpd/conf/httpd.conf";
-  HOST_NAME_ESCAPED=$(echo "${HOST_NAME}" | sed 's/\./\\\\./g');
+  HOST_NAME_ESCAPED=$(echo "${HOST_NAME}" | sed "s/\./\\\\./g");
   sudo -E sed -i "s/vagrant\\\.local/${HOST_NAME_ESCAPED}/" "/etc/httpd/conf/httpd.conf";
 
   # Copy the PHP config files into place.
@@ -409,7 +409,7 @@ function set_apache_web_root () {
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
-  sudo -E chown -f -R "${USER_NAME}":www-readwrite "/var/www/html/";
+  sudo -E chown -f -R "${USER_NAME}:www-readwrite" "/var/www/html/";
   sudo -E chmod -f -R 775 "/var/www/html/";
   sudo -E chmod g+s "/var/www/html/";
   sudo -E cp -f "httpd-centos-7/index.php" "/var/www/html/index.php";
@@ -425,7 +425,7 @@ function set_apache_deployment_directories () {
   echo -e "PROVISIONING: Creating the web code deployment directories.\n";
 
   sudo -E mkdir -p "/var/www/"{builds,configs,content};
-  sudo -E chown -f -R "${USER_NAME}":www-readwrite "/var/www/"{builds,configs,content};
+  sudo -E chown -f -R "${USER_NAME}:www-readwrite" "/var/www/"{builds,configs,content};
   sudo -E chmod -f -R 775 "/var/www/"{builds,configs,content};
   sudo -E chmod g+s "/var/www/"{builds,configs,content};
 
@@ -484,8 +484,8 @@ function configure_apache_log_rotation () {
 
   echo -e "PROVISIONING: Adjusting the Apache log rotation script.\n";
 
-  sudo -E sed -i 's/rotate 52/rotate 13/g' "/etc/logrotate.d/httpd";
-  sudo -E sed -i 's/create 640 root adm/create 640 root www-readwrite/g' "/etc/logrotate.d/httpd";
+  sudo -E sed -i "s/rotate 52/rotate 13/g" "/etc/logrotate.d/httpd";
+  sudo -E sed -i "s/create 640 root adm/create 640 root www-readwrite/g" "/etc/logrotate.d/httpd";
 
   # Adjust permissions on log files.
   sudo -E chmod o+rx "/var/log/httpd";
@@ -506,7 +506,7 @@ function set_apache_virtual_host_directories () {
 
   sudo -E mkdir -p "/var/www/html/${HOST_NAME}/site";
   sudo -E cp -f "httpd-centos-7/index.php" "/var/www/html/${HOST_NAME}/site/index.php";
-  sudo -E chown -f -R "${USER_NAME}":www-readwrite "/var/www/html/${HOST_NAME}";
+  sudo -E chown -f -R "${USER_NAME}:www-readwrite" "/var/www/html/${HOST_NAME}";
   sudo -E chmod -f -R 775 "/var/www/html/${HOST_NAME}";
   sudo -E chmod g+s "/var/www/html/${HOST_NAME}";
   sudo -E chmod -f 664 "/var/www/html/${HOST_NAME}/site/index.php";
@@ -641,7 +641,7 @@ function install_system_scripts () {
 
   # Create the MySQL backup directory.
   sudo -E mkdir -p "/opt/mysql_backup";
-  sudo -E chown root:www-readwrite "/opt/mysql_backup";
+  sudo -E chown "root:www-readwrite" "/opt/mysql_backup";
   sudo -E chmod 775 "/opt/mysql_backup";
   sudo -E chmod g+s "/opt/mysql_backup";
 
