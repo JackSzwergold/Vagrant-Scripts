@@ -97,10 +97,10 @@ function configure_user_and_group () {
   # Set the user’s main group to be the 'www-readwrite' group.
   sudo -E usermod -g www-readwrite "${USER_NAME}";
 
-  # Add the user to the 'www-readwrite' group:
+  # Add the user to the 'www-readwrite' group.
   sudo -E usermod -a -G www-readwrite "${USER_NAME}";
 
-  # Changing the username/password combination.
+  # Change the username/password combination.
   echo "${USER_NAME}:${PASSWORD}" | sudo -E sudo chpasswd;
 
 } # configure_user_and_group
@@ -139,7 +139,7 @@ function set_timezone () {
   echo -e "PROVISIONING: Setting timezone data.\n";
 
   # Set the actual timezone via a symbolic link.
-  sudo -E ln -f -s "${TIMEZONE_PATH}"/"${TIMEZONE}" "/etc/localtime";
+  sudo -E ln -f -s "${TIMEZONE_PATH}/${TIMEZONE}" "/etc/localtime";
 
 } # set_timezone
 
@@ -154,7 +154,7 @@ function install_avahi () {
   sudo -E yum install -y -q avahi;
 
   # Enable EPEL (Extra Packages for Enterprise Linux)
-  sudo sed -i 's/enabled=0/enabled=1/g' /etc/yum.repos.d/epel.repo;
+  sudo sed -i 's/enabled=0/enabled=1/g' "/etc/yum.repos.d/epel.repo";
 
   # Install NSS support for mDNS which is required by Avahi.
   sudo -E yum install -y -q nss-mdns;
@@ -334,13 +334,13 @@ function install_apache () {
   sudo -E rpm -Uvh --quiet "http://mirror.bebout.net/remi/enterprise/remi-release-7.rpm" 2>/dev/null;
 
   # Enable the EPEL (Extra Packages for Enterprise Linux) RPM repository.
-  sudo sed -i 's/enabled=0/enabled=1/g' /etc/yum.repos.d/epel.repo;
+  sudo sed -i 's/enabled=0/enabled=1/g' "/etc/yum.repos.d/epel.repo";
 
   # Change the default REMI repo URL.
   sudo sed -i 's/rpms.remirepo.net/mirror.bebout.net\/remi/g' /etc/yum.repos.d/remi*.repo;
 
   # Enable REMI’s RPM repository.
-  sudo sed -i 's/enabled=0/enabled=1/g' /etc/yum.repos.d/remi.repo;
+  sudo sed -i 's/enabled=0/enabled=1/g' "/etc/yum.repos.d/remi.repo";
 
   # Install the base Apache related items.
   sudo -E yum install -y httpd php56-mod_php mod_ssl;
@@ -391,10 +391,10 @@ function configure_apache () {
   # sudo -E cp -f "php/php.ini" "/etc/php.ini";
   sudo -E cp -f "php/php.ini" "/opt/remi/php56/root/etc/php.ini";
 
-  # Set the Apache user’s main group to be the 'www-readwrite' group.
+  # Set the user’s main group to be the 'www-readwrite' group.
   sudo -E usermod -g www-readwrite apache;
 
-  # Add the Apache user to the 'www-readwrite' group:
+  # Add the user to the 'www-readwrite' group.
   sudo -E usermod -a -G www-readwrite apache;
 
 } # configure_apache
@@ -438,10 +438,19 @@ function set_deployment_user () {
 
   echo -e "PROVISIONING: Creating the deployment user.\n";
 
+  # Create the user.
   sudo -E adduser deploy;
+
+  # Create the 'www-readwrite' group.
   sudo -E groupadd -f www-readwrite;
+
+  # Set the user’s main group to be the 'www-readwrite' group.
   sudo -E usermod -g www-readwrite deploy;
+
+  # Add the user to the 'www-readwrite' group.
   sudo -E usermod -a -G www-readwrite deploy;
+
+  # Change the username/password combination.
   echo "deploy:deploy" | sudo -E sudo chpasswd;
 
 } # set_deployment_user
