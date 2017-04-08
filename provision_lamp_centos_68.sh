@@ -97,10 +97,10 @@ function configure_user_and_group () {
   # Set the user’s main group to be the 'www-readwrite' group.
   sudo -E usermod -g www-readwrite "${USER_NAME}";
 
-  # Add the user to the 'www-readwrite' group:
+  # Add the user to the 'www-readwrite' group.
   sudo -E usermod -a -G www-readwrite "${USER_NAME}";
 
-  # Changing the username/password combination.
+  # Change the username/password combination.
   echo "${USER_NAME}:${PASSWORD}" | sudo -E sudo chpasswd;
 
 } # configure_user_and_group
@@ -139,7 +139,7 @@ function set_timezone () {
   echo -e "PROVISIONING: Setting timezone data.\n";
 
   # Set the actual timezone via a symbolic link.
-  sudo -E ln -f -s "${TIMEZONE_PATH}"/"${TIMEZONE}" "/etc/localtime";
+  sudo -E ln -f -s "${TIMEZONE_PATH}/${TIMEZONE}" "/etc/localtime";
 
 } # set_timezone
 
@@ -154,7 +154,7 @@ function install_avahi () {
   sudo -E yum install -y -q avahi;
 
   # Enable EPEL (Extra Packages for Enterprise Linux)
-  sudo sed -i 's/enabled=0/enabled=1/g' /etc/yum.repos.d/epel.repo;
+  sudo sed -i "s/enabled=0/enabled=1/g" "/etc/yum.repos.d/epel.repo";
 
   # Install NSS support for mDNS which is required by Avahi.
   sudo -E yum install -y -q nss-mdns;
@@ -222,7 +222,7 @@ function install_compiler () {
   echo -e "PROVISIONING: Installing the core compiler tools.\n";
 
   # Install the core compiler and build tools.
-  sudo -E yum groupinstall -y -q 'Development Tools';
+  sudo -E yum groupinstall -y -q "Development Tools";
 
 } # install_compiler
 
@@ -348,6 +348,9 @@ function install_apache () {
   # Restart Apache.
   sudo -E service httpd restart;
 
+  # Set Apache to start on reboot.
+  sudo -E systemctl enable httpd.service;
+
 } # install_apache
 
 ##########################################################################################
@@ -366,16 +369,16 @@ function configure_apache () {
 
   # Copy and configure the Apache virtual host config file.
   sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "/etc/httpd/conf/httpd.conf";
-  HOST_NAME_ESCAPED=$(echo "${HOST_NAME}" | sed 's/\./\\\\./g');
+  HOST_NAME_ESCAPED=$(echo "${HOST_NAME}" | sed "s/\./\\\\./g");
   sudo -E sed -i "s/vagrant\\\.local/${HOST_NAME_ESCAPED}/" "/etc/httpd/conf/httpd.conf";
 
   # Copy the PHP config files into place.
   sudo -E cp -f "php/php.ini" "/etc/php.ini";
 
-  # Set the Apache user’s main group to be the 'www-readwrite' group.
+  # Set the user’s main group to be the 'www-readwrite' group.
   sudo -E usermod -g www-readwrite apache;
 
-  # Add the Apache user to the 'www-readwrite' group:
+  # Add the user to the 'www-readwrite' group.
   sudo -E usermod -a -G www-readwrite apache;
 
 } # configure_apache
@@ -390,7 +393,7 @@ function set_apache_web_root () {
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
-  sudo -E chown -f -R "${USER_NAME}":www-readwrite "/var/www/html/";
+  sudo -E chown -f -R "${USER_NAME}:www-readwrite" "/var/www/html/";
   sudo -E chmod -f -R 775 "/var/www/html/";
   sudo -E chmod g+s "/var/www/html/";
   sudo -E cp -f "httpd-centos-68/index.php" "/var/www/html/index.php";
@@ -406,7 +409,7 @@ function set_apache_deployment_directories () {
   echo -e "PROVISIONING: Creating the web code deployment directories.\n";
 
   sudo -E mkdir -p "/var/www/"{builds,configs,content};
-  sudo -E chown -f -R "${USER_NAME}":www-readwrite "/var/www/"{builds,configs,content};
+  sudo -E chown -f -R "${USER_NAME}:www-readwrite" "/var/www/"{builds,configs,content};
   sudo -E chmod -f -R 775 "/var/www/"{builds,configs,content};
   sudo -E chmod g+s "/var/www/"{builds,configs,content};
 
@@ -419,10 +422,19 @@ function set_deployment_user () {
 
   echo -e "PROVISIONING: Creating the deployment user.\n";
 
+  # Create the user.
   sudo -E adduser deploy;
+
+  # Create the 'www-readwrite' group.
   sudo -E groupadd -f www-readwrite;
+
+  # Set the user’s main group to be the 'www-readwrite' group.
   sudo -E usermod -g www-readwrite deploy;
+
+  # Add the user to the 'www-readwrite' group.
   sudo -E usermod -a -G www-readwrite deploy;
+
+  # Change the username/password combination.
   echo "deploy:deploy" | sudo -E sudo chpasswd;
 
 } # set_deployment_user
@@ -456,8 +468,8 @@ function configure_apache_log_rotation () {
 
   echo -e "PROVISIONING: Adjusting the Apache log rotation script.\n";
 
-  sudo -E sed -i 's/rotate 52/rotate 13/g' "/etc/logrotate.d/apache2";
-  sudo -E sed -i 's/create 640 root adm/create 640 root www-readwrite/g' "/etc/logrotate.d/apache2";
+  sudo -E sed -i "s/rotate 52/rotate 13/g" "/etc/logrotate.d/httpd";
+  sudo -E sed -i "s/create 640 root adm/create 640 root www-readwrite/g" "/etc/logrotate.d/httpd";
 
   # Adjust permissions on log files.
   sudo -E chmod o+rx "/var/log/apache2";
@@ -478,7 +490,7 @@ function set_apache_virtual_host_directories () {
 
   sudo -E mkdir -p "/var/www/html/${HOST_NAME}/site";
   sudo -E cp -f "httpd-centos-68/index.php" "/var/www/html/${HOST_NAME}/site/index.php";
-  sudo -E chown -f -R "${USER_NAME}":www-readwrite "/var/www/html/${HOST_NAME}";
+  sudo -E chown -f -R "${USER_NAME}:www-readwrite" "/var/www/html/${HOST_NAME}";
   sudo -E chmod -f -R 775 "/var/www/html/${HOST_NAME}";
   sudo -E chmod g+s "/var/www/html/${HOST_NAME}";
   sudo -E chmod -f 664 "/var/www/html/${HOST_NAME}/site/index.php";
@@ -509,7 +521,7 @@ function install_mysql () {
   sudo chkconfig --level 345 mysqld on;
 
   # Start MySQL.
-  sudo service mysqld start;
+  sudo -E service mysqld start;
 
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFIG_DIR}";
@@ -520,7 +532,10 @@ function install_mysql () {
   fi
 
   # Restart MySQL.
-  sudo service mysqld restart;
+  sudo -E service mysqld restart;
+
+  # Set MySQL to start on reboot.
+  sudo -E systemctl enable mysqld.service;
 
 } # install_mysql
 
@@ -617,7 +632,7 @@ function install_system_scripts () {
 
   # Create the MySQL backup directory.
   sudo -E mkdir -p "/opt/mysql_backup";
-  sudo -E chown root:www-readwrite "/opt/mysql_backup";
+  sudo -E chown "root:www-readwrite" "/opt/mysql_backup";
   sudo -E chmod 775 "/opt/mysql_backup";
   sudo -E chmod g+s "/opt/mysql_backup";
 
