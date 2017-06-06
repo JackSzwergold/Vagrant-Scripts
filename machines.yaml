@@ -80,7 +80,7 @@
   forward_guest1: 22
   forward_host1: 2224
   forward_id1: "ssh"
-  memory: 1024
+  memory: 512
   cpus: 1
   deployment_configs_path: "deployment_configs/centos"
   deployment_dbs_path: "deployment_dbs"
@@ -100,7 +100,7 @@
   forward_guest1: 22
   forward_host1: 2225
   forward_id1: "ssh"
-  memory: 1024
+  memory: 512
   cpus: 1
   deployment_configs_path: "deployment_configs/centos"
   deployment_dbs_path: "deployment_dbs"
