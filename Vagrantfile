@@ -19,7 +19,7 @@
 ##########################################################################################
 
 # Set the minmum required version of Vagrant.
-Vagrant.require_version ">= 1.8.1"
+Vagrant.require_version ">= 1.9.1"
 
 # Set the Vagrant API version.
 VAGRANTFILE_API_VERSION = "2"
