@@ -37,8 +37,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.ssh.shell = "bash -c 'BASH_ENV=/etc/profile exec bash'"
   config.ssh.insert_key = false
   config.ssh.forward_agent = true
-  # $VAGRANT_HOME
-  config.ssh.private_key_path = ["~/.vagrant.d/insecure_private_key", "~/.ssh/id_rsa"]
+  vagrant_home_path = ENV["VAGRANT_HOME"] ||= "~/.vagrant.d"
+  config.ssh.private_key_path = ["#{vagrant_home_path}/insecure_private_key", "~/.ssh/id_rsa"]
   config.vm.provision :shell, privileged: false do |shell_action|
     ssh_public_key = File.readlines("#{Dir.home}/.ssh/id_rsa.pub").first.strip
     shell_action.inline = <<-SHELL
