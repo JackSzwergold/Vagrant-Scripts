@@ -42,8 +42,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.provision :shell, privileged: false do |shell_action|
     ssh_public_key = File.readlines("#{Dir.home}/.ssh/id_rsa.pub").first.strip
     shell_action.inline = <<-SHELL
-       echo #{ssh_public_key} >> /home/$USER/.ssh/authorized_keys
-       sudo bash -c "echo #{ssh_public_key} >> /root/.ssh/authorized_keys"
+      echo #{ssh_public_key} >> /home/$USER/.ssh/authorized_keys
     SHELL
   end
 
