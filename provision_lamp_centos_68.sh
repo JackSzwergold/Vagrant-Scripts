@@ -332,7 +332,7 @@ function install_apache () {
   # Install other PHP related related items.
   # sudo -E yum install -y php56w php56w-common php56w-opcache \
   sudo -E yum install -y php56w php56w-common \
-    php56w-mysqlnd php56w-pgsql php56w-odbc \
+    php56w-mysqlnd php56w-pgsql php56-php-mssql php56w-odbc \
     php56w-xmlrpc php56w-json php56w-xsl php56w-curl \
     php56w-ldap php56w-mcrypt \
     php56w-pspell php56w-gmp php56w-gd php56w-mbstring;

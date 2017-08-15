@@ -350,7 +350,7 @@ function install_apache () {
 
   # Install other PHP related related items.
   sudo -E yum install -y php56-php php56-php-common \
-    php56-php-mysqlnd php56-php-pgsql php56-php-odbc \
+    php56-php-mysqlnd php56-php-pgsql php56-php-mssql php56-php-odbc \
     php56-php-xmlrpc php56-php-json php56-php-xsl php56-php-curl \
     php56-php-ldap php56-php-mcrypt \
     php56-php-pspell php56-php-gmp php56-php-gd php56-php-mbstring;
