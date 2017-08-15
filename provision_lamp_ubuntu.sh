@@ -424,7 +424,7 @@ function install_apache () {
 
   # Install other PHP related related items.
   sudo -E RUNLEVEL=1 aptitude install -y -q \
-    php5-mysql php5-pgsql php5-odbc php5-sybase php5-sqlite \
+    php5-mysql php5-pgsql php5-odbc php5-mssql php5-sybase php5-sqlite \
     php5-xmlrpc php5-json php5-xsl php5-curl php5-geoip \
     php-getid3 php5-imap php5-ldap php5-mcrypt \
     php5-pspell php5-gmp php5-gd;
