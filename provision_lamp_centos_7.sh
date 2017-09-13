@@ -355,6 +355,9 @@ function install_apache () {
     php56-php-ldap php56-php-mcrypt \
     php56-php-pspell php56-php-gmp php56-php-gd php56-php-mbstring;
 
+  # Install PHP Pear and PHP development stuff.
+  sudo -E yum install -y --enablerepo=remi php-pear php-devel
+
   # Set Apache to start on reboot.
   # sudo -E chkconfig --add httpd;
   # sudo -E chkconfig --level 345 httpd on;
