@@ -337,6 +337,12 @@ function install_apache () {
     php56w-ldap php56w-mcrypt \
     php56w-pspell php56w-gmp php56w-gd php56w-mbstring;
 
+  # Install PHP Pear and PHP development stuff.
+  sudo -E yum install -y php56w-pear php56w-devel;
+
+  # Update the Pear/PECL channel stuff.
+  sudo -E pecl channel-update pecl.php.net;
+
   # Set Apache to start on reboot.
   sudo -E chkconfig --add httpd;
   sudo -E chkconfig --level 345 httpd on;
