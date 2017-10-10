@@ -330,33 +330,18 @@ function install_apache () {
 
   echo -e "PROVISIONING: Installing Apache and PHP related items.\n"
 
-  # Adding the WebTatic repository to get PHP 5.6 installed.
-  sudo -E rpm -Uvh --quiet "https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm" 2>/dev/null;
-  # sudo -E rpm -Uvh --quiet "http://rpms.remirepo.net/enterprise/remi-release-7.rpm" 2>/dev/null;
-  # sudo -E rpm -Uvh --quiet "http://rpms.famillecollet.com/enterprise/remi-release-7.rpm" 2>/dev/null;
-  sudo -E rpm -Uvh --quiet "http://mirror.bebout.net/remi/enterprise/remi-release-7.rpm" 2>/dev/null;
-
-  # Enable the EPEL (Extra Packages for Enterprise Linux) RPM repository.
-  sudo sed -i "s/enabled=0/enabled=1/g" "/etc/yum.repos.d/epel.repo";
-
-  # Change the default REMI repo URL.
-  sudo sed -i "s/rpms.remirepo.net/mirror.bebout.net\/remi/g" "/etc/yum.repos.d/remi"*.repo;
-
-  # Enable REMI’s RPM repository.
-  sudo sed -i "s/enabled=0/enabled=1/g" "/etc/yum.repos.d/remi.repo";
-
   # Install the base Apache related items.
-  sudo -E yum install -y httpd php56-mod_php mod_ssl;
+  sudo -E yum install -y httpd mod_ssl;
 
   # Install other PHP related related items.
-  sudo -E yum install -y php56-php php56-php-common \
-    php56-php-mysqlnd php56-php-pgsql php56-php-odbc \
-    php56-php-xmlrpc php56-php-json php56-php-xsl php56-php-curl \
-    php56-php-ldap php56-php-mcrypt \
-    php56-php-pspell php56-php-gmp php56-php-gd php56-php-mbstring;
+  sudo -E yum install -y php php-common \
+    php-mysqlnd php-pgsql php-odbc \
+    php-xmlrpc php-json php-xsl php-curl \
+    php-ldap php-mcrypt \
+    php-pspell php-gmp php-gd php-mbstring;
 
   # Install PHP Pear and PHP development stuff.
-  sudo -E yum install -y --enablerepo=remi php-pear php-devel
+  sudo -E yum install -y php-pear php-devel;
 
   # Set Apache to start on reboot.
   # sudo -E chkconfig --add httpd;
