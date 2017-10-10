@@ -372,11 +372,11 @@ function install_apache () {
 function install_instantclient () {
 
   # Go into the config directory.
-  cd "${BASE_DIR}";
+  cd "${BASE_DIR}/${BINARIES_DIR}";
 
   # Install the RPMs.
-  sudo -E rpm -i deployment_binaries/centos/oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm;
-  sudo -E rpm -i deployment_binaries/centos/oracle-instantclient12.2-devel-12.2.0.1.0-1.x86_64.rpm;
+  sudo -E rpm -i "oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm";
+  sudo -E rpm -i "oracle-instantclient12.2-devel-12.2.0.1.0-1.x86_64.rpm";
 
   # Install the OCI8 module.
   printf "\n" | sudo -E pecl install -f oci8-2.0.12;
