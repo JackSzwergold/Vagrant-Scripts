@@ -66,11 +66,11 @@ echo -e "PROVISIONING: Host name is: '${HOST_NAME}'.\n";
 ##########################################################################################
 
 PROVISION_BASICS=false;
-if [ -n "$7" ]; then PROVISION_BASICS="${7}"; fi
+if [ -n "$8" ]; then PROVISION_BASICS="${8}"; fi
 echo -e "PROVISIONING: Basics provisioning: '${PROVISION_BASICS}'.\n";
 
 PROVISION_LAMP=false;
-if [ -n "$8" ]; then PROVISION_LAMP="${8}"; fi
+if [ -n "$9" ]; then PROVISION_LAMP="${9}"; fi
 echo -e "PROVISIONING: LAMP provisioning: '${PROVISION_LAMP}'.\n";
 
 ##########################################################################################

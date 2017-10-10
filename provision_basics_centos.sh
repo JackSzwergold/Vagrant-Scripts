@@ -65,7 +65,7 @@ echo -e "PROVISIONING: Host name is: '${HOST_NAME}'.\n";
 ##########################################################################################
 
 PROVISION_BASICS=false;
-if [ -n "$7" ]; then PROVISION_BASICS="${7}"; fi
+if [ -n "$8" ]; then PROVISION_BASICS="${8}"; fi
 echo -e "PROVISIONING: Basics provisioning: '${PROVISION_BASICS}'.\n";
 
 ##########################################################################################

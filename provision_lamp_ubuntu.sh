@@ -65,27 +65,27 @@ echo -e "PROVISIONING: Host name is: '${HOST_NAME}'.\n";
 ##########################################################################################
 
 PROVISION_BASICS=false;
-if [ -n "$7" ]; then PROVISION_BASICS="${7}"; fi
+if [ -n "$8" ]; then PROVISION_BASICS="${8}"; fi
 echo -e "PROVISIONING: Basics provisioning: '${PROVISION_BASICS}'.\n";
 
 PROVISION_LAMP=false;
-if [ -n "$8" ]; then PROVISION_LAMP="${8}"; fi
+if [ -n "$9" ]; then PROVISION_LAMP="${9}"; fi
 echo -e "PROVISIONING: LAMP provisioning: '${PROVISION_LAMP}'.\n";
 
 PROVISION_IMAGEMAGICK=false;
-if [ -n "$9" ]; then PROVISION_IMAGEMAGICK="${9}"; fi
+if [ -n "$10" ]; then PROVISION_IMAGEMAGICK="${10}"; fi
 echo -e "PROVISIONING: ImageMagick provisioning: '${PROVISION_IMAGEMAGICK}'.\n";
 
 PROVISION_GEOIP=false;
-if [ -n "$10" ]; then PROVISION_GEOIP="${10}"; fi
+if [ -n "$11" ]; then PROVISION_GEOIP="${11}"; fi
 echo -e "PROVISIONING: GeoIP provisioning: '${PROVISION_GEOIP}'.\n";
 
 PROVISION_IPTABLES=false;
-if [ -n "$11" ]; then PROVISION_IPTABLES="${11}"; fi
+if [ -n "$12" ]; then PROVISION_IPTABLES="${12}"; fi
 echo -e "PROVISIONING: IPTables provisioning: '${PROVISION_IPTABLES}'.\n";
 
 PROVISION_FAIL2BAN=false;
-if [ -n "$12" ]; then PROVISION_FAIL2BAN="${12}"; fi
+if [ -n "$13" ]; then PROVISION_FAIL2BAN="${13}"; fi
 echo -e "PROVISIONING: Fail2Ban provisioning: '${PROVISION_FAIL2BAN}'.\n";
 
 ##########################################################################################
