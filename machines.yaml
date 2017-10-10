@@ -36,6 +36,7 @@
   cpus: 1
   deployment_configs_path: "deployment_configs/ubuntu"
   deployment_dbs_path: "deployment_dbs"
+  deployment_binaries_path: "deployment_binaries/ubuntu"
   basics: true
   lamp: true
   imagemagick: false
@@ -60,6 +61,7 @@
   cpus: 1
   deployment_configs_path: "deployment_configs/ubuntu"
   deployment_dbs_path: "deployment_dbs"
+  deployment_binaries_path: "deployment_binaries/ubuntu"
   basics: true
   lamp: false
   imagemagick: false
@@ -84,6 +86,7 @@
   cpus: 1
   deployment_configs_path: "deployment_configs/centos"
   deployment_dbs_path: "deployment_dbs"
+  deployment_binaries_path: "deployment_binaries/centos"
   basics: true
   lamp: true
 - name: "Sandbox_CENTOS_7"
@@ -104,6 +107,7 @@
   cpus: 1
   deployment_configs_path: "deployment_configs/centos"
   deployment_dbs_path: "deployment_dbs"
+  deployment_binaries_path: "deployment_binaries/centos"
   basics: true
   lamp: true
 - name: "Jabroni_UBUNTU_1404"
@@ -124,6 +128,7 @@
   cpus: 1
   deployment_configs_path: "deployment_configs/ubuntu"
   deployment_dbs_path: "deployment_dbs"
+  deployment_binaries_path: "deployment_binaries/ubuntu"
   basics: true
 - name: "NodeJS_UBUNTU_1404"
   box: "ubuntu/trusty64"
@@ -143,6 +148,7 @@
   cpus: 1
   deployment_configs_path: "deployment_configs/ubuntu"
   deployment_dbs_path: "deployment_dbs"
+  deployment_binaries_path: "deployment_binaries/ubuntu"
 - name: "NodeJS_UBUNTU_1604"
   box: "ubuntu/xenial64"
   primary: false
@@ -161,6 +167,7 @@
   cpus: 1
   deployment_configs_path: "deployment_configs/ubuntu"
   deployment_dbs_path: "deployment_dbs"
+  deployment_binaries_path: "deployment_binaries/ubuntu"
 - name: "Mongo_UBUNTU_1404"
   box: "ubuntu/trusty64"
   primary: false
@@ -182,6 +189,7 @@
   cpus: 1
   deployment_configs_path: "deployment_configs/ubuntu"
   deployment_dbs_path: "deployment_dbs"
+  deployment_binaries_path: "deployment_binaries/ubuntu"
 - name: "ElasticSearch_UBUNTU_1404"
   box: "ubuntu/trusty64"
   primary: false
@@ -203,6 +211,7 @@
   cpus: 1
   deployment_configs_path: "deployment_configs/ubuntu"
   deployment_dbs_path: "deployment_dbs"
+  deployment_binaries_path: "deployment_binaries/ubuntu"
 - name: "Solr_UBUNTU_1404"
   box: "ubuntu/trusty64"
   primary: false
@@ -224,3 +233,4 @@
   cpus: 1
   deployment_configs_path: "deployment_configs/ubuntu"
   deployment_dbs_path: "deployment_dbs"
+  deployment_binaries_path: "deployment_binaries/ubuntu"
