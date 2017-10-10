@@ -343,6 +343,9 @@ function install_apache () {
   # Install PHP Pear and PHP development stuff.
   sudo -E yum install -y php-pear php-devel;
 
+  # Update the Pear/PECL channel stuff.
+  sudo -E pecl channel-update pecl.php.net;
+
   # Set Apache to start on reboot.
   # sudo -E chkconfig --add httpd;
   # sudo -E chkconfig --level 345 httpd on;
