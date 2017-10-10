@@ -364,25 +364,31 @@ function install_apache () {
 } # install_apache
 
 ##########################################################################################
-# Oracle OCI8
+# Oracle OCI8 Instant Client
 ##########################################################################################
 function install_instantclient () {
 
   # Go into the config directory.
   cd "${BASE_DIR}/${BINARIES_DIR}";
 
-  # Install the RPMs.
-  sudo -E rpm -i "oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm";
-  sudo -E rpm -i "oracle-instantclient12.2-devel-12.2.0.1.0-1.x86_64.rpm";
+  if ls oracle-instantclient12.2-* 1> /dev/null 2>&1; then
 
-  # Install the OCI8 module.
-  printf "\n" | sudo -E pecl install -f oci8-2.0.12;
+    echo -e "PROVISIONING: Oracle OCI8 Instant Client.\n"
 
-  # Add the OCI8 extention to the PHP config.
-  sudo -E sh -c "printf '\n[OCI8]\nextension=oci8.so\n' >> /etc/php.ini";
+    # Install the RPMs.
+    sudo -E rpm -i "oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm";
+    sudo -E rpm -i "oracle-instantclient12.2-devel-12.2.0.1.0-1.x86_64.rpm";
 
-  # Restart Apache.
-  sudo -E service httpd restart;
+    # Install the OCI8 module.
+    printf "\n" | sudo -E pecl install -f oci8-2.0.12;
+
+    # Add the OCI8 extention to the PHP config.
+    sudo -E sh -c "printf '\n[OCI8]\nextension=oci8.so\n' >> /etc/php.ini";
+
+    # Restart Apache.
+    sudo -E service httpd restart;
+
+  fi
 
 } # install_instantclient
 
