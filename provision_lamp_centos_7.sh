@@ -382,7 +382,7 @@ function install_instantclient () {
   printf "\n" | sudo -E pecl install -f oci8-2.0.12;
 
   # Add the OCI8 extention to the PHP config.
-  sudo -E sh -c "printf '\n[OCI8]\nextension=oci8.so\n' >> /etc/php.ini"
+  sudo -E sh -c "printf '\n[OCI8]\nextension=oci8.so\n' >> /etc/php.ini";
 
   # Restart Apache.
   sudo -E service httpd restart;
