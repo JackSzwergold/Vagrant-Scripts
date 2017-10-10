@@ -41,20 +41,24 @@ DB_DIR="deployment_dbs";
 if [ -n "$2" ]; then DB_DIR="${2}"; fi
 echo -e "PROVISIONING: DB directory is: '${DB_DIR}'.\n";
 
+BINARIES_DIR="deployment_binaries";
+if [ -n "$3" ]; then BINARIES_DIR="${3}"; fi
+echo -e "PROVISIONING: Binaries directory is: '${BINARIES_DIR}'.\n";
+
 USER_NAME="vagrant";
-if [ -n "$3" ]; then USER_NAME="${3}"; fi
+if [ -n "$4" ]; then USER_NAME="${4}"; fi
 echo -e "PROVISIONING: User name is: '${USER_NAME}'.\n";
 
 PASSWORD="vagrant";
-if [ -n "$4" ]; then PASSWORD="${4}"; fi
+if [ -n "$5" ]; then PASSWORD="${5}"; fi
 echo -e "PROVISIONING: User password is: '${PASSWORD}'.\n";
 
 MACHINE_NAME="vagrant";
-if [ -n "$5" ]; then MACHINE_NAME="${5}"; fi
+if [ -n "$6" ]; then MACHINE_NAME="${6}"; fi
 echo -e "PROVISIONING: Machine name is: '${MACHINE_NAME}'.\n";
 
 HOST_NAME="vagrant.local";
-if [ -n "$6" ]; then HOST_NAME="${6}"; fi
+if [ -n "$7" ]; then HOST_NAME="${7}"; fi
 echo -e "PROVISIONING: Host name is: '${HOST_NAME}'.\n";
 
 ##########################################################################################
@@ -358,6 +362,29 @@ function install_apache () {
   sudo -E systemctl enable httpd.service;
 
 } # install_apache
+
+##########################################################################################
+# Oracle OCI8
+##########################################################################################
+function install_instantclient () {
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${BINARIES_DIR}";
+
+  # Install the RPMs.
+  sudo -E rpm -i "oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm";
+  sudo -E rpm -i "oracle-instantclient12.2-devel-12.2.0.1.0-1.x86_64.rpm";
+
+  # Install the OCI8 module.
+  printf "\n" | sudo -E pecl install -f oci8-2.0.12;
+
+  # Add the OCI8 extention to the PHP config.
+  sudo -E sh -c "printf '\n[OCI8]\nextension=oci8.so\n' >> /etc/php.ini"
+
+  # Restart Apache.
+  sudo -E service httpd restart;
+
+} # install_instantclient
 
 ##########################################################################################
 # Apache configure.
@@ -702,6 +729,7 @@ if [ "${PROVISION_LAMP}" = true ]; then
   hash apachectl 2>/dev/null || { install_apache; }
   sudo -E service httpd stop;
   configure_apache;
+  install_instantclient;
   if [ -d "/var/www/html" ]; then set_apache_web_root; fi
   if [ ! -d "/var/www/builds" ]; then set_apache_deployment_directories; fi
   set_deployment_user;
