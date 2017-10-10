@@ -85,12 +85,13 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       machine.vm.synced_folder ".", "/vagrant", type: "nfs", disabled: true
 
       # Copy over the deployment configs directory.
-      # machine.vm.provision :file, source: "config_dir", destination: "config_dir"
       machine.vm.synced_folder "#{machine_settings["deployment_configs_path"]}", "/home/#{machine_settings["username"]}/#{machine_settings["deployment_configs_path"]}", type: "rsync", rsync__exclude: [ ".DS_Store", ".gitignore", ".gitkeep" ]
 
       # Copy over the deployment DBs directory.
-      # machine.vm.provision :file, source: "config_dir", destination: "config_dir"
       machine.vm.synced_folder "deployment_dbs", "/home/#{machine_settings["username"]}/deployment_dbs", type: "rsync", rsync__exclude: [ ".DS_Store", ".gitignore", ".gitkeep" ]
+
+      # Copy over the deployment DBs directory.
+      machine.vm.synced_folder "deployment_binaries", "/home/#{machine_settings["username"]}/deployment_binaries", type: "rsync", rsync__exclude: [ ".DS_Store", ".gitignore", ".gitkeep" ]
 
       # Set the shell script to provision the server.
       if machine_settings["provision_script"].to_s.strip.length > 0
