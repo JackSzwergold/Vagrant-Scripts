@@ -93,6 +93,7 @@ cd "${BASE_DIR}/${CONFIG_DIR}";
 ##########################################################################################
 function configure_user_and_group () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Adjusting user and group related items.\n";
 
   # Create the 'www-readwrite' group.
@@ -114,16 +115,18 @@ function configure_user_and_group () {
 ##########################################################################################
 function set_environment () {
 
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
+  # Output a provisioning message.
   echo -e "PROVISIONING: Setting the selected editor.\n";
 
   # Set the selected editor to be Nano.
   echo 'export VISUAL="nano"'$'\r' >> ~/.bash_profile;
   echo 'export EDITOR="nano"'$'\r' >> ~/.bash_profile;
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Importing the crontab.\n";
-
-  # Go into the config directory.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Importing the crontab.
   sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "crontab.conf";
@@ -140,6 +143,7 @@ function set_timezone () {
   TIMEZONE="America/New_York";
   TIMEZONE_PATH="/usr/share/zoneinfo";
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Setting timezone data.\n";
 
   # Set the actual timezone via a symbolic link.
@@ -152,6 +156,7 @@ function set_timezone () {
 ##########################################################################################
 function install_avahi () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Avahi related stuff.\n";
 
   # Install Avahi.
@@ -176,6 +181,7 @@ function install_avahi () {
 ##########################################################################################
 function install_sysstat () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Sysstat related stuff.\n";
 
   # Install Sysstat.
@@ -191,6 +197,7 @@ function install_sysstat () {
 ##########################################################################################
 function install_basic_tools () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Installing a set of generic tools.\n";
 
   # Install basic repo stuff.
@@ -211,6 +218,7 @@ function install_basic_tools () {
 ##########################################################################################
 function install_locate () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Installing the locate tool and updating the database.\n";
 
   # Install Locate.
@@ -226,6 +234,7 @@ function install_locate () {
 ##########################################################################################
 function install_compiler () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Installing the core compiler tools.\n";
 
   # Install the core compiler and build tools.
@@ -238,13 +247,13 @@ function install_compiler () {
 ##########################################################################################
 function install_git () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Installing Git and related stuff.\n";
 
   # Purge any already installed version of Git.
   sudo -E yum remove -y -q git;
 
   # Now install Git via WANDisco.
-  # sudo -E yum install -y -q "http://opensource.wandisco.com/rhel/7/git/x86_64/wandisco-git-release-7-2.noarch.rpm" 2>/dev/null;
   sudo -E yum install -y -q "http://opensource.wandisco.com/centos/6/git/x86_64/wandisco-git-release-6-1.noarch.rpm" 2>/dev/null;
   sudo -E yum install -y -q git;
 
@@ -255,6 +264,7 @@ function install_git () {
 ##########################################################################################
 function install_postfix () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Installing Postfix and related mail stuff.\n";
 
   # Install postfix and general mail stuff.
@@ -267,10 +277,11 @@ function install_postfix () {
 ##########################################################################################
 function configure_login_defs () {
 
-  echo -e "PROVISIONING: Setting the 'login.defs' config file.\n";
-
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFIG_DIR}";
+
+  # Output a provisioning message.
+  echo -e "PROVISIONING: Setting the 'login.defs' config file.\n";
 
   # Copy the 'login.defs' file in place.
   sudo -E cp -f "system/login.defs" "/etc/login.defs";
@@ -282,10 +293,11 @@ function configure_login_defs () {
 ##########################################################################################
 function configure_common_session () {
 
-  echo -e "PROVISIONING: Setting the 'common-session' config file.\n";
-
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFIG_DIR}";
+
+  # Output a provisioning message.
+  echo -e "PROVISIONING: Setting the 'common-session' config file.\n";
 
   # Copy the 'login.defs' file in place.
   sudo -E cp -f "system/common-session" "/etc/pam.d/common-session";
@@ -297,10 +309,11 @@ function configure_common_session () {
 ##########################################################################################
 function configure_ssh () {
 
-  echo -e "PROVISIONING: Setting the SSH config file.\n";
-
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFIG_DIR}";
+
+  # Output a provisioning message.
+  echo -e "PROVISIONING: Setting the SSH config file.\n";
 
   # Copy the 'login.defs' file in place.
   sudo -E cp -f "ssh/ssh_config" "/etc/ssh/ssh_config";
@@ -312,6 +325,7 @@ function configure_ssh () {
 ##########################################################################################
 function configure_motd () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Setting the MOTD banner.\n";
 
   # Install basic repo stuff.
@@ -332,6 +346,7 @@ function configure_motd () {
 ##########################################################################################
 function install_apache () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Installing Apache and PHP related items.\n"
 
   # Install the base Apache related items.
@@ -350,10 +365,6 @@ function install_apache () {
   # Update the Pear/PECL channel stuff.
   sudo -E pecl channel-update pecl.php.net;
 
-  # Set Apache to start on reboot.
-  # sudo -E chkconfig --add httpd;
-  # sudo -E chkconfig --level 345 httpd on;
-
   # TODO: Stop and disable FirewallD (aka: IPTables). (Note this shouldn’t be here; set a separate function.)
   sudo -E systemctl stop firewalld;
   sudo -E systemctl disable firewalld;
@@ -361,8 +372,10 @@ function install_apache () {
   # Restart Apache.
   sudo -E service httpd restart;
 
-  # Set Apache to start on reboot.
+  # Set MySQL to start on reboot.
   sudo -E systemctl enable httpd.service;
+  # sudo -E chkconfig --add httpd;
+  # sudo -E chkconfig --level 345 httpd on;
 
 } # install_apache
 
@@ -376,6 +389,7 @@ function install_instantclient () {
 
   if ls oracle-instantclient12.2-* 1> /dev/null 2>&1; then
 
+    # Output a provisioning message.
     echo -e "PROVISIONING: Oracle OCI8 Instant Client.\n"
 
     # Install the RPMs.
@@ -400,10 +414,11 @@ function install_instantclient () {
 ##########################################################################################
 function configure_apache () {
 
-  echo -e "PROVISIONING: Setting Apache and PHP configs.\n";
-
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFIG_DIR}";
+
+  # Output a provisioning message.
+  echo -e "PROVISIONING: Setting Apache and PHP configs.\n";
 
   # Copy the Apache config files into place.
   sudo -E cp -f "httpd-centos-7/httpd.conf" "/etc/httpd/conf/httpd.conf";
@@ -431,11 +446,13 @@ function configure_apache () {
 ##########################################################################################
 function set_apache_web_root () {
 
-  echo -e "PROVISIONING: Adjusting the Apache root directory and default file.\n";
-
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
+  # Output a provisioning message.
+  echo -e "PROVISIONING: Adjusting the Apache root directory and default file.\n";
+
+  # Change ownership and permissions.
   sudo -E chown -f -R "${USER_NAME}:www-readwrite" "/var/www/html/";
   sudo -E chmod -f -R 775 "/var/www/html/";
   sudo -E chmod g+s "/var/www/html/";
@@ -449,8 +466,10 @@ function set_apache_web_root () {
 ##########################################################################################
 function set_apache_deployment_directories () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Creating the web code deployment directories.\n";
 
+  # Set the deployment directories.
   sudo -E mkdir -p "/var/www/"{builds,configs,content};
   sudo -E chown -f -R "${USER_NAME}:www-readwrite" "/var/www/"{builds,configs,content};
   sudo -E chmod -f -R 775 "/var/www/"{builds,configs,content};
@@ -463,6 +482,7 @@ function set_apache_deployment_directories () {
 ##########################################################################################
 function set_deployment_user () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Creating the deployment user.\n";
 
   # Create the user.
@@ -487,10 +507,11 @@ function set_deployment_user () {
 ##########################################################################################
 function set_application_configs () {
 
-  echo -e "PROVISIONING: Setting applictaion configs.\n";
-
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFIG_DIR}";
+
+  # Output a provisioning message.
+  echo -e "PROVISIONING: Setting applictaion configs.\n";
 
   if [ -d "local/" ]; then
 
@@ -509,8 +530,10 @@ function set_application_configs () {
 ##########################################################################################
 function configure_apache_log_rotation () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Adjusting the Apache log rotation script.\n";
 
+  # Adjust log rotation stuff.
   sudo -E sed -i "s/rotate 52/rotate 13/g" "/etc/logrotate.d/httpd";
   sudo -E sed -i "s/create 640 root adm/create 640 root www-readwrite/g" "/etc/logrotate.d/httpd";
 
@@ -526,11 +549,13 @@ function configure_apache_log_rotation () {
 ##########################################################################################
 function set_apache_virtual_host_directories () {
 
-  echo -e "PROVISIONING: Creating the web server document root directories.\n";
-
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
+  # Output a provisioning message.
+  echo -e "PROVISIONING: Creating the web server document root directories.\n";
+
+  # Set up the Apache virtual host directories.
   sudo -E mkdir -p "/var/www/html/${HOST_NAME}/site";
   sudo -E cp -f "httpd-centos-7/index.php" "/var/www/html/${HOST_NAME}/site/index.php";
   sudo -E chown -f -R "${USER_NAME}:www-readwrite" "/var/www/html/${HOST_NAME}";
@@ -545,6 +570,10 @@ function set_apache_virtual_host_directories () {
 ##########################################################################################
 function install_mysql () {
 
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
+  # Output a provisioning message.
   echo -e "PROVISIONING: Installing and configuring MySQL related items.\n";
 
   # Adding the WebTatic repository to get MySQL 5.5 installed.
@@ -553,14 +582,8 @@ function install_mysql () {
   # Install the MySQL server and client.
   sudo -E RUNLEVEL=1 yum install -y mysql mysql-server;
 
-  # sudo chkconfig --add mysqld;
-  # sudo chkconfig --level 345 mysqld on;
-
   # Start MySQL.
   sudo -E service mysqld start;
-
-  # Go into the config directory.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Secure the MySQL installation.
   if [ -f "mysql/mysql_secure_installation.sql" ]; then
@@ -570,8 +593,11 @@ function install_mysql () {
   # Restart MySQL.
   sudo -E service mysqld restart;
 
+
   # Set MySQL to start on reboot.
-  sudo -E systemctl enable mysqld.service;
+  sudo -E systemctl enable mysql.service;
+  # sudo -E chkconfig --add mysql;
+  # sudo -E chkconfig --level 345 mysql on;
 
 } # install_mysql
 
@@ -585,79 +611,43 @@ function configure_mysql () {
     find "${DB_DIR}" -type f -name "*.sql" | sort |\
       while read db_backup_path
       do
-    	if [ -f "${db_backup_path}" ]; then
-    	  db_dirname=$(dirname "${db_backup_path}");
-    	  db_basename=$(basename "${db_backup_path}");
-    	  db_filename="${db_basename%.*}";
-    	  # db_extension="${db_basename##*.}";
-    	  # db_parent_dir=$(basename "${db_dirname}");
-    	  mysql_db=$(basename "${db_dirname}");
-        echo -e "PROVISIONING: Restoring the '${mysql_db}' MySQL database.\n";
-    	  db_filename_prefix=${db_filename%-*};
-    	  # db_filename_suffix=${db_filename#*-};
-    	  if [ "$db_filename_prefix" == "000" ]; then
-          echo -e "PROVISIONING: Importing '${db_backup_path}'.\n";
-          mysql -uroot -proot <${db_backup_path};
-        else
-          echo -e "PROVISIONING: Importing '${db_backup_path}'.\n";
-          mysql -uroot -proot "${mysql_db}" <"${db_backup_path}";
-    	  fi
-    	  #
-    	else
-    	  exit 1;
-    	fi
+      	if [ -f "${db_backup_path}" ]; then
+      	  db_dirname=$(dirname "${db_backup_path}");
+      	  db_basename=$(basename "${db_backup_path}");
+      	  db_filename="${db_basename%.*}";
+      	  mysql_db=$(basename "${db_dirname}");
+          # Output a provisioning message.
+          echo -e "PROVISIONING: Restoring the '${mysql_db}' MySQL database.\n";
+      	  db_filename_prefix=${db_filename%-*};
+      	  if [ "$db_filename_prefix" == "000" ]; then
+            # Output a provisioning message.
+            echo -e "PROVISIONING: Importing '${db_backup_path}'.\n";
+            mysql -uroot -proot <${db_backup_path};
+          else
+            # Output a provisioning message.
+            echo -e "PROVISIONING: Importing '${db_backup_path}'.\n";
+            mysql -uroot -proot "${mysql_db}" <"${db_backup_path}";
+      	  fi
+      	else
+      	  exit 1;
+      	fi
       done
   fi
 
 } # configure_mysql
 
 ##########################################################################################
-# Monit
-##########################################################################################
-function install_monit () {
-
-  echo -e "PROVISIONING: Monit related stuff.\n";
-
-  # Install Monit.
-  sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q monit;
-
-  # Run these commands to prevent Monit from coming up on reboot.
-  sudo -E service monit stop;
-  sudo -E update-rc.d -f monit remove;
-
-} # install_monit
-
-##########################################################################################
-# Monit config.
-##########################################################################################
-function configure_monit () {
-
-  echo -e "PROVISIONING: Installing the Monit configs.\n";
-
-  # Go into the config directory.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
-
-  sudo -E cp -f "monit/monitrc" "/etc/monit/monitrc";
-  sudo -E cp -f "monit/apache2.conf" "/etc/monit/conf.d/apache2.conf";
-
-  # Restart Monit.
-  sudo -E service monit restart;
-
-  # Run these commands to prevent Monit from coming up on reboot.
-  sudo -E service monit stop;
-  sudo -E update-rc.d -f monit remove;
-
-} # configure_monit
-
-##########################################################################################
 # Scripts.
 ##########################################################################################
 function install_system_scripts () {
 
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
+  # Output a provisioning message.
   echo -e "PROVISIONING: Installing configuring various system scripts.\n";
 
   # Copy and configure various system scripts.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
   sudo -E mkdir -p "/opt/server_scripts";
   sudo -E chmod 775 "/opt/server_scripts";
   sudo -E chmod g+s "/opt/server_scripts";
@@ -706,9 +696,6 @@ configure_motd;
 # Get the basics set.
 if [ "${PROVISION_BASICS}" = true ]; then
 
-  # Go into the config directory.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
-
   install_basic_tools;
   hash libtool 2>/dev/null || { install_compiler; }
   install_git;
@@ -719,16 +706,9 @@ if [ "${PROVISION_BASICS}" = true ]; then
 
 fi
 
-# Monit
-# hash monit 2>/dev/null || { install_monit; }
-# if [ -f "monit/monitrc" ]; then configure_monit; fi
-
 if [ "${PROVISION_LAMP}" = true ]; then
 
-  # Go into the config directory.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
-
-  # Apache
+  # Apache related stuff.
   hash apachectl 2>/dev/null || { install_apache; }
   sudo -E service httpd stop;
   configure_apache;
@@ -740,9 +720,10 @@ if [ "${PROVISION_LAMP}" = true ]; then
   if [ ! -d "/var/www/html/${HOST_NAME}" ]; then set_apache_virtual_host_directories; fi
   # if [ -f "/etc/logrotate.d/httpd" ]; then configure_apache_log_rotation; fi
 
-  # MySQL
-  hash mysql && hash mysqld 2>/dev/null || { install_mysql; }
-  configure_mysql;
+  # MySQL related stuff.
+  # hash mysql 2>/dev/null && hash mysqld 2>/dev/null || { install_mysql; }
+  # hash mysql 2>/dev/null && hash mysqld 2>/dev/null || { install_mariadb; }
+  # configure_mysql;
 
   # Install system scripts.
   install_system_scripts;
