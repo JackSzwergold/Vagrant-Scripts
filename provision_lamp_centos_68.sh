@@ -476,7 +476,7 @@ function set_apache_deployment_directories () {
   # Output a provisioning message.
   echo -e "PROVISIONING: Creating the web code deployment directories.\n";
 
-  # Set  the deployment directories.
+  # Set the deployment directories.
   sudo -E mkdir -p "/var/www/"{builds,configs,content};
   sudo -E chown -f -R "${USER_NAME}:www-readwrite" "/var/www/"{builds,configs,content};
   sudo -E chmod -f -R 775 "/var/www/"{builds,configs,content};
@@ -595,10 +595,6 @@ function install_mysql () {
   # Install the MySQL server and client.
   sudo -E RUNLEVEL=1 yum install -y -q mysql55w mysql55w-server;
 
-  # Set MySQL to start on reboot.
-  sudo chkconfig --add mysqld;
-  sudo chkconfig --level 345 mysqld on;
-
   # Start MySQL.
   sudo -E service mysqld start;
 
@@ -673,27 +669,26 @@ function configure_mysql () {
     find "${DB_DIR}" -type f -name "*.sql" | sort |\
       while read db_backup_path
       do
-    	if [ -f "${db_backup_path}" ]; then
-    	  db_dirname=$(dirname "${db_backup_path}");
-    	  db_basename=$(basename "${db_backup_path}");
-    	  db_filename="${db_basename%.*}";
-    	  mysql_db=$(basename "${db_dirname}");
-        # Output a provisioning message.
-        echo -e "PROVISIONING: Restoring the '${mysql_db}' MySQL database.\n";
-    	  db_filename_prefix=${db_filename%-*};
-    	  if [ "$db_filename_prefix" == "000" ]; then
+      	if [ -f "${db_backup_path}" ]; then
+      	  db_dirname=$(dirname "${db_backup_path}");
+      	  db_basename=$(basename "${db_backup_path}");
+      	  db_filename="${db_basename%.*}";
+      	  mysql_db=$(basename "${db_dirname}");
           # Output a provisioning message.
-          echo -e "PROVISIONING: Importing '${db_backup_path}'.\n";
-          mysql -uroot -proot <${db_backup_path};
-        else
-          # Output a provisioning message.
-          echo -e "PROVISIONING: Importing '${db_backup_path}'.\n";
-          mysql -uroot -proot "${mysql_db}" <"${db_backup_path}";
-    	  fi
-    	  #
-    	else
-    	  exit 1;
-    	fi
+          echo -e "PROVISIONING: Restoring the '${mysql_db}' MySQL database.\n";
+      	  db_filename_prefix=${db_filename%-*};
+      	  if [ "$db_filename_prefix" == "000" ]; then
+            # Output a provisioning message.
+            echo -e "PROVISIONING: Importing '${db_backup_path}'.\n";
+            mysql -uroot -proot <${db_backup_path};
+          else
+            # Output a provisioning message.
+            echo -e "PROVISIONING: Importing '${db_backup_path}'.\n";
+            mysql -uroot -proot "${mysql_db}" <"${db_backup_path}";
+      	  fi
+      	else
+      	  exit 1;
+      	fi
       done
   fi
 
