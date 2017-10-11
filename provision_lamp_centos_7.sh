@@ -350,17 +350,17 @@ function install_apache () {
   echo -e "PROVISIONING: Installing Apache and PHP related items.\n"
 
   # Install the base Apache related items.
-  sudo -E yum install -y httpd mod_ssl;
+  sudo -E yum install -y -q httpd mod_ssl;
 
   # Install other PHP related related items.
-  sudo -E yum install -y php php-common \
+  sudo -E yum install -y -q php php-common \
     php-mysqlnd php-pgsql php-odbc \
     php-xmlrpc php-json php-xsl php-curl \
     php-ldap php-mcrypt \
     php-pspell php-gmp php-gd php-mbstring;
 
   # Install PHP Pear and PHP development stuff.
-  sudo -E yum install -y php-pear php-devel;
+  sudo -E yum install -y -q php-pear php-devel;
 
   # Update the Pear/PECL channel stuff.
   sudo -E pecl channel-update pecl.php.net;
@@ -390,11 +390,11 @@ function install_instantclient () {
   if ls oracle-instantclient12.2-* 1> /dev/null 2>&1; then
 
     # Output a provisioning message.
-    echo -e "PROVISIONING: Oracle OCI8 Instant Client.\n"
+    echo -e "PROVISIONING: Oracle OCI8 Instant Client.\n";
 
     # Install the RPMs.
-    sudo -E rpm -i "oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm";
-    sudo -E rpm -i "oracle-instantclient12.2-devel-12.2.0.1.0-1.x86_64.rpm";
+    sudo -E rpm -U "oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm";
+    sudo -E rpm -U "oracle-instantclient12.2-devel-12.2.0.1.0-1.x86_64.rpm";
 
     # Install the OCI8 module.
     printf "\n" | sudo -E pecl install -f oci8-2.0.12;
@@ -580,7 +580,7 @@ function install_mysql () {
   sudo -E rpm -Uvh --quiet "http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm" 2>/dev/null;
 
   # Install the MySQL server and client.
-  sudo -E RUNLEVEL=1 yum install -y mysql mysql-server;
+  sudo -E RUNLEVEL=1 yum install -y -q mysql mysql-server;
 
   # Start MySQL.
   sudo -E service mysqld start;
