@@ -31,34 +31,42 @@
 ##########################################################################################
 
 BASE_DIR=$(pwd);
+# Output a provisioning message.
 echo -e "PROVISIONING: Base directory is: '${BASE_DIR}'.\n";
 
 CONFIG_DIR="deployment_configs";
 if [ -n "$1" ]; then CONFIG_DIR="${1}"; fi
+# Output a provisioning message.
 echo -e "PROVISIONING: Config directory is: '${CONFIG_DIR}'.\n";
 
 DB_DIR="deployment_dbs";
 if [ -n "$2" ]; then DB_DIR="${2}"; fi
+# Output a provisioning message.
 echo -e "PROVISIONING: DB directory is: '${DB_DIR}'.\n";
 
 BINARIES_DIR="deployment_binaries";
 if [ -n "$3" ]; then BINARIES_DIR="${3}"; fi
+# Output a provisioning message.
 echo -e "PROVISIONING: Binaries directory is: '${BINARIES_DIR}'.\n";
 
 USER_NAME="vagrant";
 if [ -n "$4" ]; then USER_NAME="${4}"; fi
+# Output a provisioning message.
 echo -e "PROVISIONING: User name is: '${USER_NAME}'.\n";
 
 PASSWORD="vagrant";
 if [ -n "$5" ]; then PASSWORD="${5}"; fi
+# Output a provisioning message.
 echo -e "PROVISIONING: User password is: '${PASSWORD}'.\n";
 
 MACHINE_NAME="vagrant";
 if [ -n "$6" ]; then MACHINE_NAME="${6}"; fi
+# Output a provisioning message.
 echo -e "PROVISIONING: Machine name is: '${MACHINE_NAME}'.\n";
 
 HOST_NAME="vagrant.local";
 if [ -n "$7" ]; then HOST_NAME="${7}"; fi
+# Output a provisioning message.
 echo -e "PROVISIONING: Host name is: '${HOST_NAME}'.\n";
 
 ##########################################################################################
@@ -67,10 +75,12 @@ echo -e "PROVISIONING: Host name is: '${HOST_NAME}'.\n";
 
 PROVISION_BASICS=false;
 if [ -n "$8" ]; then PROVISION_BASICS="${8}"; fi
+# Output a provisioning message.
 echo -e "PROVISIONING: Basics provisioning: '${PROVISION_BASICS}'.\n";
 
 PROVISION_LAMP=false;
 if [ -n "$9" ]; then PROVISION_LAMP="${9}"; fi
+# Output a provisioning message.
 echo -e "PROVISIONING: LAMP provisioning: '${PROVISION_LAMP}'.\n";
 
 ##########################################################################################
@@ -585,8 +595,8 @@ function install_mysql () {
   sudo -E service mysqld start;
 
   # Secure the MySQL installation.
-  if [ -f "mysql/mysql_secure_installation.sql" ]; then
-    mysql -sfu root < "mysql/mysql_secure_installation.sql";
+  if [ -f "mysql-centos-7/mysql_secure_installation.sql" ]; then
+    mysql -sfu root < "mysql-centos-7/mysql_secure_installation.sql";
   fi
 
   # Restart MySQL.
@@ -599,6 +609,52 @@ function install_mysql () {
 
 } # install_mysql
 
+##########################################################################################
+# MariaDB (MySQL Clone)
+##########################################################################################
+function install_mariadb () {
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
+  # Output a provisioning message.
+  echo -e "PROVISIONING: Installing and configuring MariaDB related items.\n";
+
+  # Setup the MariaDB repository.
+  if [ -f "mysql-centos-7/mariadb55.repo" ]; then
+
+    # Copy the MariaDB repo definition to the Yum repos directory.
+    sudo -E cp -f "mysql-centos-7/mariadb55.repo" "/etc/yum.repos.d/";
+
+    # Clean the Yum repo cache.
+    sudo yum -y -q clean all;
+
+  fi
+
+  # Install the MariaDB MySQL server and client.
+  sudo -E RUNLEVEL=1 yum install -y -q MariaDB-client MariaDB-server;
+
+  # Start MySQL.
+  sudo -E service mysql start;
+
+  # Secure the MySQL installation.
+  if [ -f "mysql-centos-7/mysql_secure_installation.sql" ]; then
+    mysql -sfu root < "mysql-centos-7/mysql_secure_installation.sql";
+  fi
+
+  # Restart MySQL.
+  sudo -E service mysql restart;
+
+  # Set MySQL to start on reboot.
+  # sudo -E systemctl enable mysql.service;
+  sudo -E chkconfig --add mysql;
+  sudo -E chkconfig --level 345 mysql on;
+
+} # install_mariadb
+
+##########################################################################################
+# MySQL configure.
+##########################################################################################
 function configure_mysql () {
 
   # Go into the base directory.
@@ -667,6 +723,7 @@ function install_system_scripts () {
 ##########################################################################################
 function update_locate_db () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Updating the locate database.\n";
 
   sudo -E updatedb;
@@ -720,8 +777,8 @@ if [ "${PROVISION_LAMP}" = true ]; then
 
   # MySQL related stuff.
   # hash mysql 2>/dev/null && hash mysqld 2>/dev/null || { install_mysql; }
-  # hash mysql 2>/dev/null && hash mysqld 2>/dev/null || { install_mariadb; }
-  # configure_mysql;
+  hash mysql 2>/dev/null && hash mysqld 2>/dev/null || { install_mariadb; }
+  configure_mysql;
 
   # Install system scripts.
   install_system_scripts;

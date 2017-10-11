@@ -599,8 +599,8 @@ function install_mysql () {
   sudo -E service mysqld start;
 
   # Secure the MySQL installation.
-  if [ -f "mysql/mysql_secure_installation.sql" ]; then
-    mysql -sfu root < "mysql/mysql_secure_installation.sql";
+  if [ -f "mysql-centos-68/mysql_secure_installation.sql" ]; then
+    mysql -sfu root < "mysql-centos-68/mysql_secure_installation.sql";
   fi
 
   # Restart MySQL.
@@ -625,10 +625,10 @@ function install_mariadb () {
   echo -e "PROVISIONING: Installing and configuring MariaDB related items.\n";
 
   # Setup the MariaDB repository.
-  if [ -f "mysql/mariadb55.repo" ]; then
+  if [ -f "mysql-centos-68/mariadb55.repo" ]; then
 
     # Copy the MariaDB repo definition to the Yum repos directory.
-    sudo -E cp -f "mysql/mariadb55.repo" "/etc/yum.repos.d/";
+    sudo -E cp -f "mysql-centos-68/mariadb55.repo" "/etc/yum.repos.d/";
 
     # Clean the Yum repo cache.
     sudo yum -y -q clean all;
@@ -642,8 +642,8 @@ function install_mariadb () {
   sudo -E service mysql start;
 
   # Secure the MySQL installation.
-  if [ -f "mysql/mysql_secure_installation.sql" ]; then
-    mysql -sfu root < "mysql/mysql_secure_installation.sql";
+  if [ -f "mysql-centos-68/mysql_secure_installation.sql" ]; then
+    mysql -sfu root < "mysql-centos-68/mysql_secure_installation.sql";
   fi
 
   # Restart MySQL.
