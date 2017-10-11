@@ -328,7 +328,7 @@ function install_apache () {
   echo -e "PROVISIONING: Installing Apache and PHP related items.\n"
 
   # Adding the WebTatic repository to get PHP 5.6 installed.
-  sudo -E rpm -Uvh --quiet "http://mirror.webtatic.com/yum/el6/latest.rpm" 2>/dev/null;
+  sudo -E rpm -U "http://mirror.webtatic.com/yum/el6/latest.rpm" 2>/dev/null;
 
   # Install the base Apache related items.
   sudo -E yum install -y httpd mod_php56 mod_ssl;
@@ -376,8 +376,8 @@ function install_instantclient () {
     echo -e "PROVISIONING: Oracle OCI8 Instant Client.\n"
 
     # Install the RPMs.
-    sudo -E rpm -i "oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm";
-    sudo -E rpm -i "oracle-instantclient12.2-devel-12.2.0.1.0-1.x86_64.rpm";
+    sudo -E rpm -U "oracle-instantclient12.2-basic-12.2.0.1.0-1.x86_64.rpm";
+    sudo -E rpm -U "oracle-instantclient12.2-devel-12.2.0.1.0-1.x86_64.rpm";
 
     # Install the OCI8 module.
     printf "\n" | sudo -E pecl install -f oci8-2.0.12;
@@ -548,7 +548,7 @@ function install_mysql () {
   echo -e "PROVISIONING: Installing and configuring MySQL related items.\n";
 
   # Adding the WebTatic repository to get MySQL 5.5 installed.
-  sudo -E rpm -Uvh --quiet "http://mirror.webtatic.com/yum/el6/latest.rpm" 2>/dev/null;
+  sudo -E rpm -U "http://mirror.webtatic.com/yum/el6/latest.rpm" 2>/dev/null;
 
   # Install the `yum-plugin-replace` to so a clean upgrade of all MySQL libraries can happen.
   sudo -E RUNLEVEL=1 yum install -y mysql.`uname -i` yum-plugin-replace;
