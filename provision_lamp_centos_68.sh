@@ -210,6 +210,10 @@ function install_basic_tools () {
   # Output a provisioning message.
   echo -e "PROVISIONING: Installing a set of generic tools.\n";
 
+  # Install basic repo stuff.
+  # sudo -E yum install -y -q epel-release deltarpm;
+  sudo -E yum install -y -q deltarpm;
+
   # Install generic tools.
   sudo -E yum install -y -q \
     bind-utils dnsutils traceroute nmap bc htop finger curl whois rsync lsof \
@@ -334,6 +338,10 @@ function configure_motd () {
 
   # Output a provisioning message.
   echo -e "PROVISIONING: Setting the MOTD banner.\n";
+
+  # Install basic repo stuff.
+  # sudo -E yum install -y -q epel-release deltarpm;
+  sudo -E yum install -y -q deltarpm;
 
   # Install figlet.
   sudo -E yum install -y -q figlet;

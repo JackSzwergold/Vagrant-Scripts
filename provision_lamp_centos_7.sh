@@ -357,7 +357,7 @@ function configure_motd () {
 function install_apache () {
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Installing Apache and PHP related items.\n"
+  echo -e "PROVISIONING: Installing Apache and PHP related items.\n";
 
   # Install the base Apache related items.
   sudo -E yum install -y -q httpd mod_ssl;
@@ -585,8 +585,8 @@ function install_mysql () {
   # Output a provisioning message.
   echo -e "PROVISIONING: Installing and configuring MySQL related items.\n";
 
-  # Adding the WebTatic repository to get MySQL 5.5 installed.
-  sudo -E rpm -Uvh --quiet "http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm" 2>/dev/null;
+  # Adding the official MySQL repository to get MySQL 5.5 installed.
+  sudo -E rpm -U "http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm" 2>/dev/null;
 
   # Install the MySQL server and client.
   sudo -E RUNLEVEL=1 yum install -y -q mysql mysql-server;
