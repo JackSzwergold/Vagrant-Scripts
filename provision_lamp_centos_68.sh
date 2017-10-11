@@ -373,10 +373,6 @@ function install_apache () {
   # Update the Pear/PECL channel stuff.
   sudo -E pecl channel-update pecl.php.net;
 
-  # Set Apache to start on reboot.
-  sudo -E chkconfig --add httpd;
-  sudo -E chkconfig --level 345 httpd on;
-
   # TODO: Stop and disable IPTables. (Note this shouldn’t be here; set a separate function.)
   sudo -E service iptables stop;
   sudo -E chkconfig iptables off;
@@ -384,8 +380,10 @@ function install_apache () {
   # Restart Apache.
   sudo -E service httpd restart;
 
-  # Set Apache to start on reboot.
-  sudo -E systemctl enable httpd.service;
+  # Set MySQL to start on reboot.
+  # sudo -E systemctl enable httpd.service;
+  sudo -E chkconfig --add httpd;
+  sudo -E chkconfig --level 345 httpd on;
 
 } # install_apache
 
@@ -613,9 +611,54 @@ function install_mysql () {
   sudo -E service mysqld restart;
 
   # Set MySQL to start on reboot.
-  sudo -E systemctl enable mysqld.service;
+  # sudo -E systemctl enable mysql.service;
+  sudo -E chkconfig --add mysql;
+  sudo -E chkconfig --level 345 mysql on;
 
 } # install_mysql
+
+##########################################################################################
+# MariaDB (MySQL Clone)
+##########################################################################################
+function install_mariadb () {
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
+  # Output a provisioning message.
+  echo -e "PROVISIONING: Installing and configuring MariaDB related items.\n";
+
+  # Setup the MariaDB repository.
+  if [ -f "mysql/mariadb55.repo" ]; then
+
+    # Copy the MariaDB repo definition to the Yum repos directory.
+    sudo -E cp -f "mysql/mariadb55.repo" "/etc/yum.repos.d/";
+
+    # Clean the Yum repo cache.
+    sudo yum -y -q clean all;
+
+  fi
+
+  # Install the MariaDB MySQL server and client.
+  sudo -E RUNLEVEL=1 yum install -y -q MariaDB-client MariaDB-server;
+
+  # Start MySQL.
+  sudo -E service mysql start;
+
+  # Secure the MySQL installation.
+  if [ -f "mysql/mysql_secure_installation.sql" ]; then
+    mysql -sfu root < "mysql/mysql_secure_installation.sql";
+  fi
+
+  # Restart MySQL.
+  sudo -E service mysql restart;
+
+  # Set MySQL to start on reboot.
+  # sudo -E systemctl enable mysql.service;
+  sudo -E chkconfig --add mysql;
+  sudo -E chkconfig --level 345 mysql on;
+
+} # install_mariadb
 
 ##########################################################################################
 # MySQL configure.
@@ -655,46 +698,6 @@ function configure_mysql () {
   fi
 
 } # configure_mysql
-
-##########################################################################################
-# Monit
-##########################################################################################
-function install_monit () {
-
-  # Output a provisioning message.
-  echo -e "PROVISIONING: Monit related stuff.\n";
-
-  # Install Monit.
-  sudo -E RUNLEVEL=1 aptitude install -y --assume-yes -q monit;
-
-  # Run these commands to prevent Monit from coming up on reboot.
-  sudo -E service monit stop;
-  sudo -E update-rc.d -f monit remove;
-
-} # install_monit
-
-##########################################################################################
-# Monit config.
-##########################################################################################
-function configure_monit () {
-
-  # Go into the config directory.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
-
-  # Output a provisioning message.
-  echo -e "PROVISIONING: Installing the Monit configs.\n";
-
-  sudo -E cp -f "monit/monitrc" "/etc/monit/monitrc";
-  sudo -E cp -f "monit/apache2.conf" "/etc/monit/conf.d/apache2.conf";
-
-  # Restart Monit.
-  sudo -E service monit restart;
-
-  # Run these commands to prevent Monit from coming up on reboot.
-  sudo -E service monit stop;
-  sudo -E update-rc.d -f monit remove;
-
-} # configure_monit
 
 ##########################################################################################
 # Scripts.
@@ -767,10 +770,6 @@ if [ "${PROVISION_BASICS}" = true ]; then
 
 fi
 
-# Monit
-# hash monit 2>/dev/null || { install_monit; }
-# if [ -f "monit/monitrc" ]; then configure_monit; fi
-
 if [ "${PROVISION_LAMP}" = true ]; then
 
   # Apache related stuff.
@@ -786,7 +785,8 @@ if [ "${PROVISION_LAMP}" = true ]; then
   # if [ -f "/etc/logrotate.d/apache2" ]; then configure_apache_log_rotation; fi
 
   # MySQL related stuff.
-  hash mysql && hash mysqld 2>/dev/null || { install_mysql; }
+  # hash mysql 2>/dev/null && hash mysqld 2>/dev/null || { install_mysql; }
+  hash mysql 2>/dev/null && hash mysqld 2>/dev/null || { install_mariadb; }
   configure_mysql;
 
   # Install system scripts.
