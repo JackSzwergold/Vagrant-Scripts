@@ -432,6 +432,7 @@ function set_apache_web_root () {
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
+  # Change ownership and permissions.
   sudo -E chown -f -R "${USER_NAME}:www-readwrite" "/var/www/html/";
   sudo -E chmod -f -R 775 "/var/www/html/";
   sudo -E chmod g+s "/var/www/html/";
@@ -447,6 +448,7 @@ function set_apache_deployment_directories () {
 
   echo -e "PROVISIONING: Creating the web code deployment directories.\n";
 
+  # Set  the deployment directories.
   sudo -E mkdir -p "/var/www/"{builds,configs,content};
   sudo -E chown -f -R "${USER_NAME}:www-readwrite" "/var/www/"{builds,configs,content};
   sudo -E chmod -f -R 775 "/var/www/"{builds,configs,content};
@@ -507,6 +509,7 @@ function configure_apache_log_rotation () {
 
   echo -e "PROVISIONING: Adjusting the Apache log rotation script.\n";
 
+  # Adjust log rotation stuff.
   sudo -E sed -i "s/rotate 52/rotate 13/g" "/etc/logrotate.d/httpd";
   sudo -E sed -i "s/create 640 root adm/create 640 root www-readwrite/g" "/etc/logrotate.d/httpd";
 
@@ -527,6 +530,7 @@ function set_apache_virtual_host_directories () {
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
+  # Set up the Apache virtual host directories.
   sudo -E mkdir -p "/var/www/html/${HOST_NAME}/site";
   sudo -E cp -f "httpd-centos-68/index.php" "/var/www/html/${HOST_NAME}/site/index.php";
   sudo -E chown -f -R "${USER_NAME}:www-readwrite" "/var/www/html/${HOST_NAME}";
@@ -578,6 +582,9 @@ function install_mysql () {
 
 } # install_mysql
 
+##########################################################################################
+# MySQL configure.
+##########################################################################################
 function configure_mysql () {
 
   # Go into the base directory.
@@ -592,12 +599,9 @@ function configure_mysql () {
     	  db_dirname=$(dirname "${db_backup_path}");
     	  db_basename=$(basename "${db_backup_path}");
     	  db_filename="${db_basename%.*}";
-    	  # db_extension="${db_basename##*.}";
-    	  # db_parent_dir=$(basename "${db_dirname}");
     	  mysql_db=$(basename "${db_dirname}");
         echo -e "PROVISIONING: Restoring the '${mysql_db}' MySQL database.\n";
     	  db_filename_prefix=${db_filename%-*};
-    	  # db_filename_suffix=${db_filename#*-};
     	  if [ "$db_filename_prefix" == "000" ]; then
           echo -e "PROVISIONING: Importing '${db_backup_path}'.\n";
           mysql -uroot -proot <${db_backup_path};
