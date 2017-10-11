@@ -155,13 +155,13 @@ function install_avahi () {
   echo -e "PROVISIONING: Avahi related stuff.\n";
 
   # Install Avahi.
-  sudo -E yum install -y -q avahi;
+  sudo -E yum install -y -q -q avahi;
 
   # Enable EPEL (Extra Packages for Enterprise Linux)
   sudo sed -i "s/enabled=0/enabled=1/g" "/etc/yum.repos.d/epel.repo";
 
   # Install NSS support for mDNS which is required by Avahi.
-  sudo -E yum install -y -q nss-mdns;
+  sudo -E yum install -y -q -q nss-mdns;
 
   # Start the system messagebus.
   sudo -E service messagebus restart;
@@ -179,7 +179,7 @@ function install_sysstat () {
   echo -e "PROVISIONING: Sysstat related stuff.\n";
 
   # Install Sysstat.
-  sudo -E yum install -y -q sysstat;
+  sudo -E yum install -y -q -q sysstat;
 
   # Restart Sysstat.
   sudo -E service sysstat restart;
@@ -194,7 +194,7 @@ function install_basic_tools () {
   echo -e "PROVISIONING: Installing a set of generic tools.\n";
 
   # Install generic tools.
-  sudo -E yum install -y -q \
+  sudo -E yum install -y -q -q \
     bind-utils dnsutils traceroute nmap bc htop finger curl whois rsync lsof \
     iftop figlet lynx mtr-tiny iperf nload zip unzip attr sshpass \
     dkms mc elinks ntp dos2unix p7zip-full nfs-common \
@@ -211,7 +211,7 @@ function install_locate () {
   echo -e "PROVISIONING: Installing the locate tool and updating the database.\n";
 
   # Install Locate.
-  sudo -E yum install -y -q mlocate;
+  sudo -E yum install -y -q -q mlocate;
 
   # Update Locate.
   sudo -E updatedb;
@@ -241,8 +241,8 @@ function install_git () {
   sudo -E yum remove -y -q git;
 
   # Now install Git via WANDisco.
-  sudo -E yum install -y -q "http://opensource.wandisco.com/centos/6/git/x86_64/wandisco-git-release-6-1.noarch.rpm" 2>/dev/null;
-  sudo -E yum install -y -q git;
+  sudo -E yum install -y -q -q "http://opensource.wandisco.com/centos/6/git/x86_64/wandisco-git-release-6-1.noarch.rpm" 2>/dev/null;
+  sudo -E yum install -y -q -q git;
 
 } # install_git
 
@@ -254,7 +254,7 @@ function install_postfix () {
   echo -e "PROVISIONING: Installing Postfix and related mail stuff.\n";
 
   # Install postfix and general mail stuff.
-  sudo -E yum install -y -q postfix cyrus-sasl cyrus-imapd mailx;
+  sudo -E yum install -y -q -q postfix cyrus-sasl cyrus-imapd mailx;
 
 } # install_postfix
 
@@ -311,7 +311,7 @@ function configure_motd () {
   echo -e "PROVISIONING: Setting the MOTD banner.\n";
 
   # Install figlet.
-  sudo -E yum install -y -q figlet;
+  sudo -E yum install -y -q -q figlet;
 
   # Set the server login banner with figlet.
   MOTD_PATH="/etc/motd";
@@ -331,18 +331,18 @@ function install_apache () {
   sudo -E rpm -U "http://mirror.webtatic.com/yum/el6/latest.rpm" 2>/dev/null;
 
   # Install the base Apache related items.
-  sudo -E yum install -y httpd mod_php56 mod_ssl;
+  sudo -E yum install -y -q httpd mod_php56 mod_ssl;
 
   # Install other PHP related related items.
-  # sudo -E yum install -y php56w php56w-common php56w-opcache \
-  sudo -E yum install -y php56w php56w-common \
+  # sudo -E yum install -y -q php56w php56w-common php56w-opcache \
+  sudo -E yum install -y -q php56w php56w-common \
     php56w-mysqlnd php56w-pgsql php56-php-mssql php56w-odbc \
     php56w-xmlrpc php56w-json php56w-xsl php56w-curl \
     php56w-ldap php56w-mcrypt \
     php56w-pspell php56w-gmp php56w-gd php56w-mbstring;
 
   # Install PHP Pear and PHP development stuff.
-  sudo -E yum install -y php56w-pear php56w-devel;
+  sudo -E yum install -y -q php56w-pear php56w-devel;
 
   # Update the Pear/PECL channel stuff.
   sudo -E pecl channel-update pecl.php.net;
@@ -551,13 +551,13 @@ function install_mysql () {
   sudo -E rpm -U "http://mirror.webtatic.com/yum/el6/latest.rpm" 2>/dev/null;
 
   # Install the `yum-plugin-replace` to so a clean upgrade of all MySQL libraries can happen.
-  sudo -E RUNLEVEL=1 yum install -y mysql.`uname -i` yum-plugin-replace;
+  sudo -E RUNLEVEL=1 yum install -y -q mysql.`uname -i` yum-plugin-replace;
 
   # Upgrade the MySQL libaries to MySQL 5.5.
   sudo -E RUNLEVEL=1 yum replace -y mysql-libs --replace-with mysql55w-libs;
 
   # Install the MySQL server and client.
-  sudo -E RUNLEVEL=1 yum install -y mysql55w mysql55w-server;
+  sudo -E RUNLEVEL=1 yum install -y -q mysql55w mysql55w-server;
 
   # Set MySQL to start on reboot.
   sudo chkconfig --add mysqld;
