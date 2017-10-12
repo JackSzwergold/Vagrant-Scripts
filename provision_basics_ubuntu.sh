@@ -207,7 +207,7 @@ function install_avahi () {
   echo -e "PROVISIONING: Avahi related stuff.\n";
 
   # Install Avahi.
-  sudo -E aptitude install -y -q avahi-daemon avahi-utils;
+  sudo -E aptitude install -y -q=2 avahi-daemon avahi-utils;
 
 } # install_avahi
 
@@ -220,7 +220,7 @@ function install_sysstat () {
   echo -e "PROVISIONING: Sysstat related stuff.\n";
 
   # Install Sysstat.
-  sudo -E aptitude install -y -q sysstat;
+  sudo -E aptitude install -y -q=2 sysstat;
 
   # Copy the Sysstat config file in place and restart sysstat.
   if [ -f "sysstat/sysstat" ]; then
@@ -239,11 +239,11 @@ function install_basic_tools () {
   echo -e "PROVISIONING: Installing a set of generic tools.\n";
 
   # Install generic tools.
-  sudo -E aptitude install -y -q \
+  sudo -E aptitude install -y -q=2 \
     dnsutils traceroute nmap bc htop finger curl whois rsync lsof \
     iftop figlet lynx mtr-tiny iperf nload zip unzip attr sshpass \
     dkms mc elinks ntp dos2unix p7zip-full nfs-common \
-    slurm sharutils uuid-runtime chkconfig quota pv trickle apachetop \
+    slurm sharutils uuid-runtime quota pv trickle apachetop \
     virtualbox-dkms nano;
 
 } # install_basic_tools
@@ -257,7 +257,7 @@ function install_locate () {
   echo -e "PROVISIONING: Installing the locate tool and updating the database.\n";
 
   # Install Locate.
-  sudo -E aptitude install -y -q mlocate;
+  sudo -E aptitude install -y -q=2 mlocate;
 
   # Update Locate.
   sudo -E updatedb;
@@ -273,7 +273,7 @@ function install_compiler () {
   echo -e "PROVISIONING: Installing the core compiler tools.\n";
 
   # Install the core compiler and build tools.
-  sudo -E aptitude install -y -q build-essential libtool;
+  sudo -E aptitude install -y -q=2 build-essential libtool;
 
 } # install_compiler
 
@@ -289,10 +289,10 @@ function install_git () {
   sudo -E aptitude purge -y -q git git-core subversion git-svn;
 
   # Now install Git via PPA.
-  sudo -E aptitude install -y -q python-software-properties;
+  sudo -E aptitude install -y -q=2 python-software-properties;
   sudo -E add-apt-repository -y ppa:git-core/ppa;
   sudo -E aptitude update -y -q;
-  sudo -E aptitude install -y -q git git-core subversion git-svn;
+  sudo -E aptitude install -y -q=2 git git-core subversion git-svn;
 
 } # install_git
 
@@ -307,7 +307,7 @@ function install_postfix () {
   # Install postfix and general mail stuff.
   debconf-set-selections <<< "postfix postfix/mailname string ${HOST_NAME}";
   debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'";
-  sudo -E aptitude install -y -q postfix mailutils;
+  sudo -E aptitude install -y -q=2 postfix mailutils;
 
 } # install_postfix
 
@@ -365,7 +365,7 @@ function configure_motd () {
   echo -e "PROVISIONING: Setting the MOTD banner.\n";
 
   # Install figlet.
-  sudo -E aptitude install -y -q figlet;
+  sudo -E aptitude install -y -q=2 figlet;
 
   # Set the server login banner with figlet.
   # MOTD_PATH="/etc/motd.tail";
@@ -396,7 +396,7 @@ function install_monit () {
   echo -e "PROVISIONING: Monit related stuff.\n";
 
   # Install Monit.
-  sudo -E RUNLEVEL=1 aptitude install -y -q monit;
+  sudo -E RUNLEVEL=1 aptitude install -y -q=2 monit;
 
   # Run these commands to prevent Monit from coming up on reboot.
   sudo -E service monit stop;
