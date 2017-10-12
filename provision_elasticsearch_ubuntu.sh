@@ -332,8 +332,8 @@ function install_java () {
 
   sudo -E add-apt-repository ppa:webupd8team/java;
   sudo -E aptitude update -y -q=2;
-  echo "oracle-java7-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections;
-  sudo -E aptitude install -y -q=2 oracle-java7-installer;
+  echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections;
+  sudo -E aptitude install -y -q=2 oracle-java8-installer oracle-java8-set-default;
 
   # Now install Java via PPA.
   echo "JAVA_HOME=/usr/lib/jvm/java-7-oracle/jre" >> "/etc/environment";
