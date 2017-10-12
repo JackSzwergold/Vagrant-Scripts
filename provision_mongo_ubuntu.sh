@@ -33,34 +33,42 @@
 ##########################################################################################
 
 BASE_DIR=$(pwd);
+# Output a provisioning message.
 echo -e "PROVISIONING: Base directory is: '${BASE_DIR}'.\n";
 
 CONFIG_DIR="deployment_configs";
 if [ -n "$1" ]; then CONFIG_DIR="${1}"; fi
+# Output a provisioning message.
 echo -e "PROVISIONING: Config directory is: '${CONFIG_DIR}'.\n";
 
 DB_DIR="deployment_dbs";
 if [ -n "$2" ]; then DB_DIR="${2}"; fi
+# Output a provisioning message.
 echo -e "PROVISIONING: DB directory is: '${DB_DIR}'.\n";
 
 BINARIES_DIR="deployment_binaries";
 if [ -n "$3" ]; then BINARIES_DIR="${3}"; fi
+# Output a provisioning message.
 echo -e "PROVISIONING: Binaries directory is: '${BINARIES_DIR}'.\n";
 
 USER_NAME="vagrant";
 if [ -n "$4" ]; then USER_NAME="${4}"; fi
+# Output a provisioning message.
 echo -e "PROVISIONING: User name is: '${USER_NAME}'.\n";
 
 PASSWORD="vagrant";
 if [ -n "$5" ]; then PASSWORD="${5}"; fi
+# Output a provisioning message.
 echo -e "PROVISIONING: User password is: '${PASSWORD}'.\n";
 
 MACHINE_NAME="vagrant";
 if [ -n "$6" ]; then MACHINE_NAME="${6}"; fi
+# Output a provisioning message.
 echo -e "PROVISIONING: Machine name is: '${MACHINE_NAME}'.\n";
 
 HOST_NAME="vagrant.local";
 if [ -n "$7" ]; then HOST_NAME="${7}"; fi
+# Output a provisioning message.
 echo -e "PROVISIONING: Host name is: '${HOST_NAME}'.\n";
 
 ##########################################################################################
@@ -73,6 +81,7 @@ cd "${BASE_DIR}/${CONFIG_DIR}";
 # Adjusting the Debian frontend setting to non-interactive mode.
 ##########################################################################################
 
+# Output a provisioning message.
 echo -e "PROVISIONING: Setting the Debian frontend to non-interactive mode.\n"
 export DEBIAN_FRONTEND=noninteractive;
 
@@ -90,6 +99,7 @@ export DEBIAN_FRONTEND=noninteractive;
 ##########################################################################################
 function configure_user_and_group () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Adjusting user and group related items.\n";
 
   # Create the 'www-readwrite' group.
@@ -111,6 +121,7 @@ function configure_user_and_group () {
 ##########################################################################################
 function install_aptitude () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Install Aptitude.\n";
 
   # Install Aptitude.
@@ -123,6 +134,7 @@ function install_aptitude () {
 ##########################################################################################
 function set_environment () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Setting the selected editor.\n";
 
   # Set the selected editor to be Nano.
@@ -131,6 +143,7 @@ function set_environment () {
     sudo -E chown -f "${USER_NAME}":www-readwrite "${BASE_DIR}/.selected_editor";
   fi
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Importing the crontab.\n";
 
   # Importing the crontab.
@@ -147,6 +160,7 @@ function set_timezone () {
   TIMEZONE_PATH="/etc/timezone";
   if [ "${TIMEZONE}" != $(cat "${TIMEZONE_PATH}") ]; then
 
+    # Output a provisioning message.
     echo -e "PROVISIONING: Setting timezone data.\n";
 
     sudo -E echo "${TIMEZONE}" > "${TIMEZONE_PATH}";
@@ -165,6 +179,7 @@ function configure_sources_list () {
   DEB_URL_PATTERN="^#.*deb.*partner$";
   if [ -f "${SOURCES_LIST}" ] && grep -E -q "${DEB_URL_PATTERN}" "/etc/apt/sources.list"; then
 
+    # Output a provisioning message.
     echo -e "PROVISIONING: Adjusting the sources list.\n";
 
     # Adjust the sources list.
@@ -179,6 +194,7 @@ function configure_sources_list () {
 ##########################################################################################
 function install_avahi () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Avahi related stuff.\n";
 
   # Install Avahi.
@@ -191,13 +207,14 @@ function install_avahi () {
 ##########################################################################################
 function install_sysstat () {
 
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
+  # Output a provisioning message.
   echo -e "PROVISIONING: Sysstat related stuff.\n";
 
   # Install Sysstat.
   sudo -E aptitude install -y -q sysstat;
-
-  # Go into the config directory.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Copy the Sysstat config file in place and restart sysstat.
   if [ -f "sysstat/sysstat" ]; then
@@ -212,6 +229,7 @@ function install_sysstat () {
 ##########################################################################################
 function install_basic_tools () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Installing a set of generic tools.\n";
 
   # Install generic tools.
@@ -229,6 +247,7 @@ function install_basic_tools () {
 ##########################################################################################
 function install_locate () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Installing the locate tool and updating the database.\n";
 
   # Install Locate.
@@ -244,6 +263,7 @@ function install_locate () {
 ##########################################################################################
 function install_compiler () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Installing the core compiler tools.\n";
 
   # Install the core compiler and build tools.
@@ -256,6 +276,7 @@ function install_compiler () {
 ##########################################################################################
 function install_git () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Installing Git and related stuff.\n";
 
   # Purge any already installed version of Git.
@@ -274,6 +295,7 @@ function install_git () {
 ##########################################################################################
 function configure_motd () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Setting the MOTD banner.\n";
 
   # Install figlet.
@@ -284,6 +306,7 @@ function configure_motd () {
   echo "$(figlet ${MACHINE_NAME} | head -n -1).local" > "${MOTD_PATH}";
   echo "" >> "${MOTD_PATH}";
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Disabling MOTD scripts.\n";
 
   # Disable these MOTD scripts.
@@ -301,6 +324,7 @@ function configure_motd () {
 ##########################################################################################
 function install_mongo26 () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Installing MongoDB related items.\n";
 
   # Go into the config directory.
@@ -331,6 +355,7 @@ function install_mongo26 () {
 
 function configure_mongo26 () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Configuring MongoDB related items.\n";
 
   # Comment out the 'bind_ip' line to enable network connections outside of 'localhost'.
@@ -349,13 +374,9 @@ function configure_mongo26 () {
       do
         if [ -f "${db_backup_path}" ]; then
           db_dirname=$(dirname "${db_backup_path}");
-          # db_basename=$(basename "${db_backup_path}");
-          # db_filename="${db_basename%.*}";
-          # db_extension="${db_basename##*.}";
-          # db_parent_dir=$(basename "${db_dirname}");
           mongo_db=$(basename "${db_dirname}");
+          # Output a provisioning message.
           echo -e "PROVISIONING: Restoring the '${mongo_db}' MongoDB database.\n";
-          # echo 'db.dropDatabase()' | mongo --quiet "${mongo_db}";
           mongo --quiet "${mongo_db}" --eval "db.dropDatabase()";
           mongorestore --quiet "${db_backup_path}";
         else
@@ -372,6 +393,7 @@ function configure_mongo26 () {
 
 function install_mongo32 () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Installing MongoDB related items.\n";
 
   # Go into the config directory.
@@ -402,6 +424,7 @@ function install_mongo32 () {
 
 function configure_mongo32 () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Configuring MongoDB related items.\n";
 
   # Comment out the 'bind_ip' line to enable network connections outside of 'localhost'.
@@ -421,13 +444,9 @@ function configure_mongo32 () {
       do
         if [ -f "${db_backup_path}" ]; then
           db_dirname=$(dirname "${db_backup_path}");
-          # db_basename=$(basename "${db_backup_path}");
-          # db_filename="${db_basename%.*}";
-          # db_extension="${db_basename##*.}";
-          # db_parent_dir=$(basename "${db_dirname}");
           mongo_db=$(basename "${db_dirname}");
+          # Output a provisioning message.
           echo -e "PROVISIONING: Restoring the '${mongo_db}' MongoDB database.\n";
-          # echo 'db.dropDatabase()' | mongo --quiet "${mongo_db}";
           mongo --quiet "${mongo_db}" --eval "db.dropDatabase()";
           mongorestore --quiet "${db_backup_path}";
         else
@@ -443,6 +462,7 @@ function configure_mongo32 () {
 ##########################################################################################
 function update_locate_db () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Updating the locate database.\n";
 
   sudo -E updatedb;
@@ -458,7 +478,6 @@ function update_locate_db () {
 #
 ##########################################################################################
 
-# sudo -E ntpdate -u ntp.ubuntu.com;
 configure_user_and_group;
 install_aptitude;
 set_environment;
