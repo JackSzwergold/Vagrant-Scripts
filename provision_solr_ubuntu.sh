@@ -32,35 +32,43 @@
 ##########################################################################################
 
 BASE_DIR=$(pwd);
-echo -e "PROVISIONING: Base directory is: '${BASE_DIR}'.\n";
+# Output a provisioning message.
+echo -e "\033[33;1mPROVISIONING: Base directory is: '${BASE_DIR}'.\033[0m\n";
 
 CONFIG_DIR="deployment_configs";
 if [ -n "$1" ]; then CONFIG_DIR="${1}"; fi
-echo -e "PROVISIONING: Config directory is: '${CONFIG_DIR}'.\n";
+# Output a provisioning message.
+echo -e "\033[33;1mPROVISIONING: Config directory is: '${CONFIG_DIR}'.\033[0m\n";
 
 DB_DIR="deployment_dbs";
 if [ -n "$2" ]; then DB_DIR="${2}"; fi
-echo -e "PROVISIONING: DB directory is: '${DB_DIR}'.\n";
+# Output a provisioning message.
+echo -e "\033[33;1mPROVISIONING: DB directory is: '${DB_DIR}'.\033[0m\n";
 
 BINARIES_DIR="deployment_binaries";
 if [ -n "$3" ]; then BINARIES_DIR="${3}"; fi
-echo -e "PROVISIONING: Binaries directory is: '${BINARIES_DIR}'.\n";
+# Output a provisioning message.
+echo -e "\033[33;1mPROVISIONING: Binaries directory is: '${BINARIES_DIR}'.\033[0m\n";
 
 USER_NAME="vagrant";
 if [ -n "$4" ]; then USER_NAME="${4}"; fi
-echo -e "PROVISIONING: User name is: '${USER_NAME}'.\n";
+# Output a provisioning message.
+echo -e "\033[33;1mPROVISIONING: User name is: '${USER_NAME}'.\033[0m\n";
 
 PASSWORD="vagrant";
 if [ -n "$5" ]; then PASSWORD="${5}"; fi
-echo -e "PROVISIONING: User password is: '${PASSWORD}'.\n";
+# Output a provisioning message.
+echo -e "\033[33;1mPROVISIONING: User password is: '${PASSWORD}'.\033[0m\n";
 
 MACHINE_NAME="vagrant";
 if [ -n "$6" ]; then MACHINE_NAME="${6}"; fi
-echo -e "PROVISIONING: Machine name is: '${MACHINE_NAME}'.\n";
+# Output a provisioning message.
+echo -e "\033[33;1mPROVISIONING: Machine name is: '${MACHINE_NAME}'.\033[0m\n";
 
 HOST_NAME="vagrant.local";
 if [ -n "$7" ]; then HOST_NAME="${7}"; fi
-echo -e "PROVISIONING: Host name is: '${HOST_NAME}'.\n";
+# Output a provisioning message.
+echo -e "\033[33;1mPROVISIONING: Host name is: '${HOST_NAME}'.\033[0m\n";
 
 ##########################################################################################
 # Go into the config directory.
@@ -72,7 +80,8 @@ cd "${BASE_DIR}/${CONFIG_DIR}";
 # Adjusting the Debian frontend setting to non-interactive mode.
 ##########################################################################################
 
-echo -e "PROVISIONING: Setting the Debian frontend to non-interactive mode.\n"
+# Output a provisioning message.
+echo -e "\033[33;1mPROVISIONING: Setting the Debian frontend to non-interactive mode.\033[0m\n";
 export DEBIAN_FRONTEND=noninteractive;
 
 ##########################################################################################
@@ -89,7 +98,8 @@ export DEBIAN_FRONTEND=noninteractive;
 ##########################################################################################
 function configure_user_and_group () {
 
-  echo -e "PROVISIONING: Adjusting user and group related items.\n";
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Adjusting user and group related items.\033[0m\n";
 
   # Create the 'www-readwrite' group.
   sudo -E groupadd -f www-readwrite;
@@ -110,10 +120,11 @@ function configure_user_and_group () {
 ##########################################################################################
 function install_aptitude () {
 
-  echo -e "PROVISIONING: Install Aptitude.\n";
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Install Aptitude.\033[0m\n";
 
   # Install Aptitude.
-  sudo -E apt install -y -q aptitude;
+  sudo -E apt install -y -q=2 aptitude;
 
 } # install_aptitude
 
@@ -122,7 +133,8 @@ function install_aptitude () {
 ##########################################################################################
 function set_environment () {
 
-  echo -e "PROVISIONING: Setting the selected editor.\n";
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Setting the selected editor.\033[0m\n";
 
   # Set the selected editor to be Nano.
   if [ ! -f "${BASE_DIR}/.selected_editor" ]; then
@@ -130,7 +142,7 @@ function set_environment () {
     sudo -E chown -f "${USER_NAME}":www-readwrite "${BASE_DIR}/.selected_editor";
   fi
 
-  echo -e "PROVISIONING: Importing the crontab.\n";
+  echo -e "\033[33;1mPROVISIONING: Importing the crontab.\033[0m\n";
 
   # Importing the crontab.
   sudo -E crontab < "crontab.conf";
@@ -146,7 +158,8 @@ function set_timezone () {
   TIMEZONE_PATH="/etc/timezone";
   if [ "${TIMEZONE}" != $(cat "${TIMEZONE_PATH}") ]; then
 
-    echo -e "PROVISIONING: Setting timezone data.\n";
+    # Output a provisioning message.
+    echo -e "\033[33;1mPROVISIONING: Setting timezone data.\033[0m\n";
 
     sudo -E echo "${TIMEZONE}" > "${TIMEZONE_PATH}";
     sudo -E dpkg-reconfigure -f noninteractive tzdata 2>/dev/null;
@@ -164,7 +177,8 @@ function configure_sources_list () {
   DEB_URL_PATTERN="^#.*deb.*partner$";
   if [ -f "${SOURCES_LIST}" ] && grep -E -q "${DEB_URL_PATTERN}" "/etc/apt/sources.list"; then
 
-    echo -e "PROVISIONING: Adjusting the sources list.\n";
+    # Output a provisioning message.
+    echo -e "\033[33;1mPROVISIONING: Adjusting the sources list.\033[0m\n";
 
     # Adjust the sources list.
     sudo -E sed -i "/${DEB_URL_PATTERN}/s/^# //g" "/etc/apt/sources.list";
@@ -178,10 +192,11 @@ function configure_sources_list () {
 ##########################################################################################
 function install_avahi () {
 
-  echo -e "PROVISIONING: Avahi related stuff.\n";
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Avahi related stuff.\033[0m\n";
 
   # Install Avahi.
-  sudo -E aptitude install -y -q avahi-daemon avahi-utils;
+  sudo -E aptitude install -y -q=2 avahi-daemon avahi-utils;
 
 } # install_avahi
 
@@ -190,13 +205,14 @@ function install_avahi () {
 ##########################################################################################
 function install_sysstat () {
 
-  echo -e "PROVISIONING: Sysstat related stuff.\n";
-
-  # Install Sysstat.
-  sudo -E aptitude install -y -q sysstat;
-
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFIG_DIR}";
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Sysstat related stuff.\033[0m\n";
+
+  # Install Sysstat.
+  sudo -E aptitude install -y -q=2 sysstat;
 
   # Copy the Sysstat config file in place and restart sysstat.
   if [ -f "sysstat/sysstat" ]; then
@@ -211,10 +227,11 @@ function install_sysstat () {
 ##########################################################################################
 function install_basic_tools () {
 
-  echo -e "PROVISIONING: Installing a set of generic tools.\n";
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Installing a set of generic tools.\033[0m\n";
 
   # Install generic tools.
-  sudo -E aptitude install -y -q \
+  sudo -E aptitude install -y -q=2 \
     dnsutils traceroute nmap bc htop finger curl whois rsync lsof \
     iftop figlet lynx mtr-tiny iperf nload zip unzip attr sshpass \
     dkms mc elinks ntp dos2unix p7zip-full nfs-common \
@@ -228,10 +245,11 @@ function install_basic_tools () {
 ##########################################################################################
 function install_locate () {
 
-  echo -e "PROVISIONING: Installing the locate tool and updating the database.\n";
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Installing the locate tool and updating the database.\033[0m\n";
 
   # Install Locate.
-  sudo -E aptitude install -y -q mlocate;
+  sudo -E aptitude install -y -q=2 mlocate;
 
   # Update Locate.
   sudo -E updatedb;
@@ -243,10 +261,11 @@ function install_locate () {
 ##########################################################################################
 function install_compiler () {
 
-  echo -e "PROVISIONING: Installing the core compiler tools.\n";
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Installing the core compiler tools.\033[0m\n";
 
   # Install the core compiler and build tools.
-  sudo -E aptitude install -y -q build-essential libtool;
+  sudo -E aptitude install -y -q=2 build-essential libtool;
 
 } # install_compiler
 
@@ -255,16 +274,17 @@ function install_compiler () {
 ##########################################################################################
 function install_git () {
 
-  echo -e "PROVISIONING: Installing Git and related stuff.\n";
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Installing Git and related stuff.\033[0m\n";
 
   # Purge any already installed version of Git.
   sudo -E aptitude purge -y -q git git-core subversion git-svn;
 
   # Now install Git via PPA.
-  sudo -E aptitude install -y -q python-software-properties;
+  sudo -E aptitude install -y -q=2 python-software-properties;
   sudo -E add-apt-repository -y ppa:git-core/ppa;
-  sudo -E aptitude update -y -q;
-  sudo -E aptitude install -y -q git git-core subversion git-svn;
+  sudo -E aptitude update -y -q=2;
+  sudo -E aptitude install -y -q=2 git git-core subversion git-svn;
 
 } # install_git
 
@@ -273,10 +293,11 @@ function install_git () {
 ##########################################################################################
 function configure_motd () {
 
-  echo -e "PROVISIONING: Setting the MOTD banner.\n";
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Setting the MOTD banner.\033[0m\n";
 
   # Install figlet.
-  sudo -E aptitude install -y -q figlet;
+  sudo -E aptitude install -y -q=2 figlet;
 
   # Set the server login banner with figlet.
   # MOTD_PATH="/etc/motd.tail";
@@ -285,7 +306,8 @@ function configure_motd () {
   echo "$(figlet ${MACHINE_NAME} | head -n -1).local" > "${MOTD_PATH}";
   echo "" >> "${MOTD_PATH}";
 
-  echo -e "PROVISIONING: Disabling MOTD scripts.\n";
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Disabling MOTD scripts.\033[0m\n";
 
   # Disable these MOTD scripts.
   sudo -E chmod -f -x "/etc/update-motd.d/50-landscape-sysinfo";
@@ -302,15 +324,16 @@ function configure_motd () {
 ##########################################################################################
 function install_java () {
 
-  echo -e "PROVISIONING: Installing Java.\n";
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Installing Java.\033[0m\n";
 
   # Now install Java via PPA.
-  sudo -E aptitude install -y -q python-software-properties debconf-utils;
+  sudo -E aptitude install -y -q=2=2 python-software-properties debconf-utils;
 
   sudo -E add-apt-repository ppa:webupd8team/java;
-  sudo -E aptitude update -y -q;
-  echo "oracle-java7-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections
-  sudo -E aptitude install -y -q oracle-java7-installer;
+  sudo -E aptitude update -y -q=2;
+  echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections;
+  sudo -E aptitude install -y -q=2=2 oracle-java8-installer oracle-java8-set-default;
 
   # Now install Java via PPA.
   echo "JAVA_HOME=/usr/lib/jvm/java-7-oracle/jre" >> "/etc/environment";
@@ -322,7 +345,8 @@ function install_java () {
 ##########################################################################################
 function install_solr () {
 
-  echo -e "PROVISIONING: Installing Solr related items.\n";
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Installing Solr related items.\033[0m\n";
 
   # Go into the base directory.
   cd "${BASE_DIR}";
@@ -350,7 +374,8 @@ function install_solr () {
 ##########################################################################################
 function update_locate_db () {
 
-  echo -e "PROVISIONING: Updating the locate database.\n";
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Updating the locate database.\033[0m\n";
 
   sudo -E updatedb;
 
@@ -365,7 +390,6 @@ function update_locate_db () {
 #
 ##########################################################################################
 
-# sudo -E ntpdate -u ntp.ubuntu.com;
 configure_user_and_group;
 install_aptitude;
 set_environment;
