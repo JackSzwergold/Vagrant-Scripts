@@ -31,42 +31,42 @@
 
 BASE_DIR=$(pwd);
 # Output a provisioning message.
-echo -e "PROVISIONING: Base directory is: '${BASE_DIR}'.\n";
+echo -e "\033[37mPROVISIONING: Base directory is: '${BASE_DIR}'.\033[0m\n";
 
 CONFIG_DIR="deployment_configs";
 if [ -n "$1" ]; then CONFIG_DIR="${1}"; fi
 # Output a provisioning message.
-echo -e "PROVISIONING: Config directory is: '${CONFIG_DIR}'.\n";
+echo -e "\033[37mPROVISIONING: Config directory is: '${CONFIG_DIR}'.\033[0m\n";
 
 DB_DIR="deployment_dbs";
 if [ -n "$2" ]; then DB_DIR="${2}"; fi
 # Output a provisioning message.
-echo -e "PROVISIONING: DB directory is: '${DB_DIR}'.\n";
+echo -e "\033[37mPROVISIONING: DB directory is: '${DB_DIR}'.\033[0m\n";
 
 BINARIES_DIR="deployment_binaries";
 if [ -n "$3" ]; then BINARIES_DIR="${3}"; fi
 # Output a provisioning message.
-echo -e "PROVISIONING: Binaries directory is: '${BINARIES_DIR}'.\n";
+echo -e "\033[37mPROVISIONING: Binaries directory is: '${BINARIES_DIR}'.\033[0m\n";
 
 USER_NAME="vagrant";
 if [ -n "$4" ]; then USER_NAME="${4}"; fi
 # Output a provisioning message.
-echo -e "PROVISIONING: User name is: '${USER_NAME}'.\n";
+echo -e "\033[37mPROVISIONING: User name is: '${USER_NAME}'.\033[0m\n";
 
 PASSWORD="vagrant";
 if [ -n "$5" ]; then PASSWORD="${5}"; fi
 # Output a provisioning message.
-echo -e "PROVISIONING: User password is: '${PASSWORD}'.\n";
+echo -e "\033[37mPROVISIONING: User password is: '${PASSWORD}'.\033[0m\n";
 
 MACHINE_NAME="vagrant";
 if [ -n "$6" ]; then MACHINE_NAME="${6}"; fi
 # Output a provisioning message.
-echo -e "PROVISIONING: Machine name is: '${MACHINE_NAME}'.\n";
+echo -e "\033[37mPROVISIONING: Machine name is: '${MACHINE_NAME}'.\033[0m\n";
 
 HOST_NAME="vagrant.local";
 if [ -n "$7" ]; then HOST_NAME="${7}"; fi
 # Output a provisioning message.
-echo -e "PROVISIONING: Host name is: '${HOST_NAME}'.\n";
+echo -e "\033[37mPROVISIONING: Host name is: '${HOST_NAME}'.\033[0m\n";
 
 ##########################################################################################
 # Optional items.
@@ -75,31 +75,31 @@ echo -e "PROVISIONING: Host name is: '${HOST_NAME}'.\n";
 PROVISION_BASICS=false;
 if [ -n "$8" ]; then PROVISION_BASICS="${8}"; fi
 # Output a provisioning message.
-echo -e "PROVISIONING: Basics provisioning: '${PROVISION_BASICS}'.\n";
+echo -e "\033[37mPROVISIONING: Basics provisioning: '${PROVISION_BASICS}'.\033[0m\n";
 
 PROVISION_LAMP=false;
 if [ -n "$9" ]; then PROVISION_LAMP="${9}"; fi
 # Output a provisioning message.
-echo -e "PROVISIONING: LAMP provisioning: '${PROVISION_LAMP}'.\n";
+echo -e "\033[37mPROVISIONING: LAMP provisioning: '${PROVISION_LAMP}'.\033[0m\n";
 
 PROVISION_IMAGEMAGICK=false;
 if [ -n "$10" ]; then PROVISION_IMAGEMAGICK="${10}"; fi
-echo -e "PROVISIONING: ImageMagick provisioning: '${PROVISION_IMAGEMAGICK}'.\n";
+echo -e "\033[37mPROVISIONING: ImageMagick provisioning: '${PROVISION_IMAGEMAGICK}'.\033[0m\n";
 
 PROVISION_GEOIP=false;
 if [ -n "$11" ]; then PROVISION_GEOIP="${11}"; fi
 # Output a provisioning message.
-echo -e "PROVISIONING: GeoIP provisioning: '${PROVISION_GEOIP}'.\n";
+echo -e "\033[37mPROVISIONING: GeoIP provisioning: '${PROVISION_GEOIP}'.\033[0m\n";
 
 PROVISION_IPTABLES=false;
 if [ -n "$12" ]; then PROVISION_IPTABLES="${12}"; fi
 # Output a provisioning message.
-echo -e "PROVISIONING: IPTables provisioning: '${PROVISION_IPTABLES}'.\n";
+echo -e "\033[37mPROVISIONING: IPTables provisioning: '${PROVISION_IPTABLES}'.\033[0m\n";
 
 PROVISION_FAIL2BAN=false;
 if [ -n "$13" ]; then PROVISION_FAIL2BAN="${13}"; fi
 # Output a provisioning message.
-echo -e "PROVISIONING: Fail2Ban provisioning: '${PROVISION_FAIL2BAN}'.\n";
+echo -e "\033[37mPROVISIONING: Fail2Ban provisioning: '${PROVISION_FAIL2BAN}'.\033[0m\n";
 
 ##########################################################################################
 # Go into the config directory.
@@ -112,7 +112,7 @@ cd "${BASE_DIR}/${CONFIG_DIR}";
 ##########################################################################################
 
 # Output a provisioning message.
-echo -e "PROVISIONING: Setting the Debian frontend to non-interactive mode.\n";
+echo -e "\033[37mPROVISIONING: Setting the Debian frontend to non-interactive mode.\033[0m\n";
 export DEBIAN_FRONTEND=noninteractive;
 
 ##########################################################################################
@@ -130,7 +130,7 @@ export DEBIAN_FRONTEND=noninteractive;
 function configure_user_and_group () {
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Adjusting user and group related items.\n";
+  echo -e "\033[37mPROVISIONING: Adjusting user and group related items.\033[0m\n";
 
   # Create the 'www-readwrite' group.
   sudo -E groupadd -f www-readwrite;
@@ -152,7 +152,7 @@ function configure_user_and_group () {
 function install_aptitude () {
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Install Aptitude.\n";
+  echo -e "\033[37mPROVISIONING: Install Aptitude.\033[0m\n";
 
   # Install Aptitude.
   sudo -E apt install -y -q aptitude;
@@ -168,7 +168,7 @@ function set_environment () {
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Setting the selected editor.\n";
+  echo -e "\033[37mPROVISIONING: Setting the selected editor.\033[0m\n";
 
   # Set the selected editor to be Nano.
   if [ ! -f "${BASE_DIR}/.selected_editor" ]; then
@@ -177,7 +177,7 @@ function set_environment () {
   fi
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Importing the crontab.\n";
+  echo -e "\033[37mPROVISIONING: Importing the crontab.\033[0m\n";
 
   # Importing the crontab.
   sudo -E crontab < "crontab.conf";
@@ -193,7 +193,7 @@ function set_timezone () {
   TIMEZONE_PATH="/etc/timezone";
   if [ "${TIMEZONE}" != $(cat "${TIMEZONE_PATH}") ]; then
 
-    echo -e "PROVISIONING: Setting timezone data.\n";
+    echo -e "\033[37mPROVISIONING: Setting timezone data.\033[0m\n";
 
     sudo -E echo "${TIMEZONE}" > "${TIMEZONE_PATH}";
     sudo -E dpkg-reconfigure -f noninteractive tzdata 2>/dev/null;
@@ -212,7 +212,7 @@ function configure_sources_list () {
   if [ -f "${SOURCES_LIST}" ] && grep -E -q "${DEB_URL_PATTERN}" "/etc/apt/sources.list"; then
 
     # Output a provisioning message.
-    echo -e "PROVISIONING: Adjusting the sources list.\n";
+    echo -e "\033[37mPROVISIONING: Adjusting the sources list.\033[0m\n";
 
     # Adjust the sources list.
     sudo -E sed -i "/${DEB_URL_PATTERN}/s/^# //g" "/etc/apt/sources.list";
@@ -227,7 +227,7 @@ function configure_sources_list () {
 function install_avahi () {
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Avahi related stuff.\n";
+  echo -e "\033[37mPROVISIONING: Avahi related stuff.\033[0m\n";
 
   # Install Avahi.
   sudo -E aptitude install -y -q=2 avahi-daemon avahi-utils;
@@ -240,7 +240,7 @@ function install_avahi () {
 function install_sysstat () {
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Sysstat related stuff.\n";
+  echo -e "\033[37mPROVISIONING: Sysstat related stuff.\033[0m\n";
 
   # Install Sysstat.
   sudo -E aptitude install -y -q=2 sysstat;
@@ -259,7 +259,7 @@ function install_sysstat () {
 function install_basic_tools () {
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Installing a set of generic tools.\n";
+  echo -e "\033[37mPROVISIONING: Installing a set of generic tools.\033[0m\n";
 
   # Install generic tools.
   sudo -E aptitude install -y -q=2 \
@@ -277,7 +277,7 @@ function install_basic_tools () {
 function install_locate () {
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Installing the locate tool and updating the database.\n";
+  echo -e "\033[37mPROVISIONING: Installing the locate tool and updating the database.\033[0m\n";
 
   # Install Locate.
   sudo -E aptitude install -y -q=2 mlocate;
@@ -293,7 +293,7 @@ function install_locate () {
 function install_compiler () {
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Installing the core compiler tools.\n";
+  echo -e "\033[37mPROVISIONING: Installing the core compiler tools.\033[0m\n";
 
   # Install the core compiler and build tools.
   sudo -E aptitude install -y -q=2 build-essential libtool;
@@ -306,7 +306,7 @@ function install_compiler () {
 function install_git () {
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Installing Git and related stuff.\n";
+  echo -e "\033[37mPROVISIONING: Installing Git and related stuff.\033[0m\n";
 
   # Purge any already installed version of Git.
   sudo -E aptitude purge -y -q git git-core subversion git-svn;
@@ -325,7 +325,7 @@ function install_git () {
 function install_postfix () {
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Installing Postfix and related mail stuff.\n";
+  echo -e "\033[37mPROVISIONING: Installing Postfix and related mail stuff.\033[0m\n";
 
   # Install postfix and general mail stuff.
   debconf-set-selections <<< "postfix postfix/mailname string ${HOST_NAME}";
@@ -343,7 +343,7 @@ function configure_login_defs () {
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Setting the 'login.defs' config file.\n";
+  echo -e "\033[37mPROVISIONING: Setting the 'login.defs' config file.\033[0m\n";
 
   # Copy the 'login.defs' file in place.
   sudo -E cp -f "system/login.defs" "/etc/login.defs";
@@ -359,7 +359,7 @@ function configure_common_session () {
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Setting the 'common-session' config file.\n";
+  echo -e "\033[37mPROVISIONING: Setting the 'common-session' config file.\033[0m\n";
 
   # Copy the 'login.defs' file in place.
   sudo -E cp -f "system/common-session" "/etc/pam.d/common-session";
@@ -375,7 +375,7 @@ function configure_ssh () {
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Setting the SSH config file.\n";
+  echo -e "\033[37mPROVISIONING: Setting the SSH config file.\033[0m\n";
 
   # Copy the 'login.defs' file in place.
   sudo -E cp -f "ssh/ssh_config" "/etc/ssh/ssh_config";
@@ -388,7 +388,7 @@ function configure_ssh () {
 function configure_motd () {
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Setting the MOTD banner.\n";
+  echo -e "\033[37mPROVISIONING: Setting the MOTD banner.\033[0m\n";
 
   # Install figlet.
   sudo -E aptitude install -y -q=2 figlet;
@@ -398,7 +398,7 @@ function configure_motd () {
   echo "$(figlet ${MACHINE_NAME} | head -n -1).local" > "${MOTD_PATH}";
   echo "" >> "${MOTD_PATH}";
 
-  echo -e "PROVISIONING: Disabling MOTD scripts.\n";
+  echo -e "\033[37mPROVISIONING: Disabling MOTD scripts.\033[0m\n";
 
   # Disable these MOTD scripts.
   sudo -E chmod -f -x "/etc/update-motd.d/50-landscape-sysinfo";
@@ -419,7 +419,7 @@ function install_iptables () {
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: IPTables and IPSet stuff.\n";
+  echo -e "\033[37mPROVISIONING: IPTables and IPSet stuff.\033[0m\n";
 
   # Install IPTables and IPSet stuff.
   debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v4 boolean true";
@@ -451,7 +451,7 @@ function install_iptables () {
 function install_apache () {
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Installing Apache and PHP related items.\n";
+  echo -e "\033[37mPROVISIONING: Installing Apache and PHP related items.\033[0m\n";
 
   # Install the base Apache related items.
   sudo -E RUNLEVEL=1 aptitude install -y -q=2 \
@@ -482,7 +482,7 @@ function configure_apache () {
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Setting Apache and PHP configs.\n";
+  echo -e "\033[37mPROVISIONING: Setting Apache and PHP configs.\033[0m\n";
 
   # Copy the Apache config files into place.
   sudo -E cp -f "apache2/apache2.conf" "/etc/apache2/apache2.conf";
@@ -513,7 +513,7 @@ function set_apache_web_root () {
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Adjusting the Apache root directory and default file.\n";
+  echo -e "\033[37mPROVISIONING: Adjusting the Apache root directory and default file.\033[0m\n";
 
   sudo -E chown -f -R "${USER_NAME}":www-readwrite "/var/www/html/";
   sudo -E chmod -f -R 775 "/var/www/html/";
@@ -529,7 +529,7 @@ function set_apache_web_root () {
 function set_apache_deployment_directories () {
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Creating the web code deployment directories.\n";
+  echo -e "\033[37mPROVISIONING: Creating the web code deployment directories.\033[0m\n";
 
   sudo -E mkdir -p "/var/www/"{builds,configs,content};
   sudo -E chown -f -R "${USER_NAME}":www-readwrite "/var/www/"{builds,configs,content};
@@ -547,7 +547,7 @@ function set_apache_virtual_host_directories () {
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Creating the web server document root directories.\n";
+  echo -e "\033[37mPROVISIONING: Creating the web server document root directories.\033[0m\n";
 
   sudo -E mkdir -p "/var/www/html/${HOST_NAME}/site";
   sudo -E cp -f "apache2/index.php" "/var/www/html/${HOST_NAME}/site/index.php";
@@ -564,7 +564,7 @@ function set_apache_virtual_host_directories () {
 function configure_apache_log_rotation () {
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Adjusting the Apache log rotation script.\n";
+  echo -e "\033[37mPROVISIONING: Adjusting the Apache log rotation script.\033[0m\n";
 
   sudo -E sed -i 's/rotate 52/rotate 13/g' "/etc/logrotate.d/apache2";
   sudo -E sed -i 's/create 640 root adm/create 640 root www-readwrite/g' "/etc/logrotate.d/apache2";
@@ -585,7 +585,7 @@ function install_mysql () {
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Installing and configuring MySQL related items.\n";
+  echo -e "\033[37mPROVISIONING: Installing and configuring MySQL related items.\033[0m\n";
 
   # Install the MySQL server and client.
   sudo -E RUNLEVEL=1 aptitude install -y -q=2 mysql-server mysql-client;
@@ -615,7 +615,7 @@ function install_munin () {
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Installing and configuring Munin related items.\n";
+  echo -e "\033[37mPROVISIONING: Installing and configuring Munin related items.\033[0m\n";
 
   # Install Munin.
   sudo -E RUNLEVEL=1 aptitude install -y -q=2 munin munin-node munin-plugins-extra libwww-perl;
@@ -666,7 +666,7 @@ function configure_munin_apache () {
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Installing the Apache Munin config.\n";
+  echo -e "\033[37mPROVISIONING: Installing the Apache Munin config.\033[0m\n";
 
   sudo -E rm -f "/etc/apache2/conf-available/munin.conf";
   sudo -E cp -f "apache2/munin.conf" "/etc/apache2/conf-available/munin.conf";
@@ -681,7 +681,7 @@ function configure_munin_apache () {
 function enable_munin_apache () {
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Enabling the Apache Munin config.\n";
+  echo -e "\033[37mPROVISIONING: Enabling the Apache Munin config.\033[0m\n";
 
   sudo -E a2enconf -q munin;
   # sudo -E service apache2 restart;
@@ -694,7 +694,7 @@ function enable_munin_apache () {
 function install_phpmyadmin () {
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Installing phpMyAdmin related items.\n";
+  echo -e "\033[37mPROVISIONING: Installing phpMyAdmin related items.\033[0m\n";
 
   # Do this little dance to get things installed.
   curl -ss -O -L "https://files.phpmyadmin.net/phpMyAdmin/4.0.10.11/phpMyAdmin-4.0.10.11-all-languages.tar.gz";
@@ -716,7 +716,7 @@ function configure_phpmyadmin () {
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Configuring phpMyAdmin related items.\n";
+  echo -e "\033[37mPROVISIONING: Configuring phpMyAdmin related items.\033[0m\n";
 
   # Set the phpMyAdmin config file.
   sudo -E cp -f "phpmyadmin/config.inc.php" "/usr/share/phpmyadmin/config.inc.php";
@@ -742,7 +742,7 @@ function configure_phpmyadmin_blowfish () {
   if [ -f "/usr/share/phpmyadmin/config.inc.php" ] && grep -E -q "a8b7c6d" "/usr/share/phpmyadmin/config.inc.php"; then
 
     # Output a provisioning message.
-    echo -e "PROVISIONING: Setting a new phpMyAdmin blowfish secret value.\n";
+    echo -e "\033[37mPROVISIONING: Setting a new phpMyAdmin blowfish secret value.\033[0m\n";
 
     BLOWFISH_SECRET=$(openssl rand -base64 30);
     sudo -E sed -i "s|'a8b7c6d'|'${BLOWFISH_SECRET}'|g" "/usr/share/phpmyadmin/config.inc.php";
@@ -760,7 +760,7 @@ function configure_awstats_apache () {
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Installing the Apache phpMyAdmin config.\n";
+  echo -e "\033[37mPROVISIONING: Installing the Apache phpMyAdmin config.\033[0m\n";
 
   sudo -E cp -f "apache2/phpmyadmin.conf" "/etc/apache2/conf-available/phpmyadmin.conf";
   sudo -E a2enconf -q phpmyadmin;
@@ -774,7 +774,7 @@ function configure_awstats_apache () {
 function install_geoip () {
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Setting up to install the GeoIP binary.\n";
+  echo -e "\033[37mPROVISIONING: Setting up to install the GeoIP binary.\033[0m\n";
 
   # Install the core compiler and build options.
   sudo aptitude install -y -q=2 build-essential libtool zlib1g-dev;
@@ -787,16 +787,16 @@ function install_geoip () {
   cd ./GeoIP*;
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Configuring the GeoIP binary.\n";
+  echo -e "\033[37mPROVISIONING: Configuring the GeoIP binary.\033[0m\n";
   libtoolize -f -q;
   ./configure;
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Making the GeoIP binary.\n";
+  echo -e "\033[37mPROVISIONING: Making the GeoIP binary.\033[0m\n";
   make -s >/dev/null 2>&1;
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Installing the GeoIP binary.\n";
+  echo -e "\033[37mPROVISIONING: Installing the GeoIP binary.\033[0m\n";
   sudo -E make -s install >/dev/null 2>&1;
 
   # Cleanup.
@@ -811,7 +811,7 @@ function install_geoip () {
 function install_geoip_databases () {
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Installing the GeoIP databases.\n";
+  echo -e "\033[37mPROVISIONING: Installing the GeoIP databases.\033[0m\n";
 
   # Get the GeoIP databases.
   if [ ! -f "/tmp/GeoIP.dat.gz" ] && [ ! -f "/usr/local/share/GeoIP/GeoIP.dat" ]; then
@@ -875,7 +875,7 @@ function install_geoip_databases () {
 function install_awstats () {
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Installing the AWStats related items.\n";
+  echo -e "\033[37mPROVISIONING: Installing the AWStats related items.\033[0m\n";
 
   # Do this little dance to get things installed.
   cd "${BASE_DIR}";
@@ -925,7 +925,7 @@ function configure_awstats_apache () {
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Installing the Apache AWStats config.\n";
+  echo -e "\033[37mPROVISIONING: Installing the Apache AWStats config.\033[0m\n";
 
   sudo -E cp -f "apache2/awstats.conf" "/etc/apache2/conf-available/awstats.conf";
   sudo -E a2enconf -q awstats;
@@ -942,7 +942,7 @@ function install_fail2ban () {
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Fail2Ban related stuff.\n";
+  echo -e "\033[37mPROVISIONING: Fail2Ban related stuff.\033[0m\n";
 
   # Install Fail2Ban.
   sudo -E aptitude purge -y -q fail2ban;
@@ -965,7 +965,7 @@ function configure_fail2ban () {
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Installing the Fail2Ban configs.\n";
+  echo -e "\033[37mPROVISIONING: Installing the Fail2Ban configs.\033[0m\n";
 
   sudo -E cp -f "fail2ban/jail.local" "/etc/fail2ban/jail.local";
   sudo -E cp -f "fail2ban/ddos.conf" "/etc/fail2ban/filter.d/ddos.conf";
@@ -985,7 +985,7 @@ function configure_fail2ban () {
 function install_monit () {
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Monit related stuff.\n";
+  echo -e "\033[37mPROVISIONING: Monit related stuff.\033[0m\n";
 
   # Install Monit.
   sudo -E RUNLEVEL=1 aptitude install -y -q=2 monit;
@@ -1005,7 +1005,7 @@ function configure_monit () {
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Installing the Monit configs.\n";
+  echo -e "\033[37mPROVISIONING: Installing the Monit configs.\033[0m\n";
 
   sudo -E cp -f "monit/monitrc" "/etc/monit/monitrc";
   sudo -E cp -f "monit/apache2.conf" "/etc/monit/conf.d/apache2.conf";
@@ -1025,7 +1025,7 @@ function configure_monit () {
 function install_imagemagick () {
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Installing ImageMagick from source.\n";
+  echo -e "\033[37mPROVISIONING: Installing ImageMagick from source.\033[0m\n";
 
   # Install the dependencies for ImageMagick.
   sudo -E aptitude install -y -q=2 \
@@ -1046,7 +1046,7 @@ function install_imagemagick () {
   sudo checkinstall -y;
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Make and install the ImageMagick binary DEB package.\n";
+  echo -e "\033[37mPROVISIONING: Make and install the ImageMagick binary DEB package.\033[0m\n";
   IMAGEMAGICK_DEB=$(ls -1 imagemagick-*.deb);
   sudo -E RUNLEVEL=1 dpkg --force-all -i "${IMAGEMAGICK_DEB}";
   sudo ldconfig "/usr/local/lib";
@@ -1066,7 +1066,7 @@ function install_system_scripts () {
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Installing configuring various system scripts.\n";
+  echo -e "\033[37mPROVISIONING: Installing configuring various system scripts.\033[0m\n";
 
   # Copy and configure various system scripts.
   sudo -E mkdir -p "/opt/server_scripts";
@@ -1091,7 +1091,7 @@ function install_system_scripts () {
 function update_locate_db () {
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Updating the locate database.\n";
+  echo -e "\033[37mPROVISIONING: Updating the locate database.\033[0m\n";
 
   sudo -E updatedb;
 
