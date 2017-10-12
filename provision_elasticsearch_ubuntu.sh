@@ -336,7 +336,7 @@ function install_java () {
   sudo -E aptitude install -y -q=2 oracle-java8-installer oracle-java8-set-default;
 
   # Now install Java via PPA.
-  echo "JAVA_HOME=/usr/lib/jvm/java-7-oracle/jre" >> "/etc/environment";
+  echo "JAVA_HOME=/usr/lib/jvm/java-8-oracle/jre" >> "/etc/environment";
 
 } # install_java
 
