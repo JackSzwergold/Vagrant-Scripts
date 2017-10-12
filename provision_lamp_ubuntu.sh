@@ -84,6 +84,7 @@ echo -e "\033[33;1mPROVISIONING: LAMP provisioning: '${PROVISION_LAMP}'.\033[0m\
 
 PROVISION_IMAGEMAGICK=false;
 if [ -n "$10" ]; then PROVISION_IMAGEMAGICK="${10}"; fi
+# Output a provisioning message.
 echo -e "\033[33;1mPROVISIONING: ImageMagick provisioning: '${PROVISION_IMAGEMAGICK}'.\033[0m\n";
 
 PROVISION_GEOIP=false;
@@ -155,7 +156,7 @@ function install_aptitude () {
   echo -e "\033[33;1mPROVISIONING: Install Aptitude.\033[0m\n";
 
   # Install Aptitude.
-  sudo -E apt install -y -q aptitude;
+  sudo -E apt install -y -q=2 aptitude;
 
 } # install_aptitude
 
@@ -238,6 +239,9 @@ function install_avahi () {
 # Sysstat
 ##########################################################################################
 function install_sysstat () {
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Sysstat related stuff.\033[0m\n";
@@ -398,6 +402,7 @@ function configure_motd () {
   echo "$(figlet ${MACHINE_NAME} | head -n -1).local" > "${MOTD_PATH}";
   echo "" >> "${MOTD_PATH}";
 
+  # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Disabling MOTD scripts.\033[0m\n";
 
   # Disable these MOTD scripts.
@@ -874,6 +879,9 @@ function install_geoip_databases () {
 ##########################################################################################
 function install_awstats () {
 
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Installing the AWStats related items.\033[0m\n";
 
@@ -883,9 +891,6 @@ function install_awstats () {
   tar -xf "awstats-7.3.tar.gz";
   rm -f "awstats-7.3.tar.gz";
   sudo -E mv -f "awstats-7.3" "/usr/share/awstats-7.3";
-
-  # Go into the config directory.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Set an index page for AWStats.
   sudo -E cp -f "awstats/awstatstotals.php" "/usr/share/awstats-7.3/wwwroot/cgi-bin/index.php";
@@ -945,7 +950,7 @@ function install_fail2ban () {
   echo -e "\033[33;1mPROVISIONING: Fail2Ban related stuff.\033[0m\n";
 
   # Install Fail2Ban.
-  sudo -E aptitude purge -y -q fail2ban;
+  sudo -E aptitude purge -y -q=2 fail2ban;
   sudo -E aptitude install -y -q=2 gamin libgamin0 python-central python-gamin python-support;
   curl -ss -O -L "http://old-releases.ubuntu.com/ubuntu/pool/universe/f/fail2ban/fail2ban_0.8.13-1_all.deb";
   sudo -E RUNLEVEL=1 dpkg --force-all -i "fail2ban_0.8.13-1_all.deb";

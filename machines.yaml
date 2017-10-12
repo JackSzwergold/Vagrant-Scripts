@@ -44,13 +44,14 @@
   iptables: true
   fail2ban: false
 - name: "Sandbox_UBUNTU_1604"
-  box: "ubuntu/xenial64"
+  # box: "ubuntu/xenial64"
+  box: "bento/ubuntu-16.04"
   primary: false
   autostart: false
   provision_script: "provision_lamp_ubuntu_1604.sh"
   provision_script_regular: null
-  username: "ubuntu"
-  password: "ubuntu"
+  username: "vagrant"
+  password: "vagrant"
   hostname: "sandbox-1604"
   machinename: "Sandbox-1604"
   ip: "192.168.56.20"
