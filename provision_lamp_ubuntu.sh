@@ -774,21 +774,32 @@ function configure_awstats_apache () {
 function install_geoip () {
 
   # Output a provisioning message.
-  echo -e "PROVISIONING: Installing the GeoIP binary.\n";
+  echo -e "PROVISIONING: Setting up to install the GeoIP binary.\n";
 
   # Install the core compiler and build options.
-  sudo aptitude install -y -q=2 build-essential zlib1g-dev libtool;
+  sudo aptitude install -y -q=2 build-essential libtool zlib1g-dev;
 
-  # Install GeoIP from source code.
+  # Get the GeoIP source code.
   cd "${BASE_DIR}";
   curl -ss -O -L "http://www.maxmind.com/download/geoip/api/c/GeoIP-latest.tar.gz";
   tar -xf "GeoIP-latest.tar.gz";
   rm -f "GeoIP-latest.tar.gz";
   cd ./GeoIP*;
+
+  # Output a provisioning message.
+  echo -e "PROVISIONING: Configuring the GeoIP binary.\n";
   libtoolize -f -q;
   ./configure;
-  make -s;
-  sudo -E make -s install;
+
+  # Output a provisioning message.
+  echo -e "PROVISIONING: Making the GeoIP binary.\n";
+  make -s >/dev/null 2>&1;
+
+  # Output a provisioning message.
+  echo -e "PROVISIONING: Installing the GeoIP binary.\n";
+  sudo -E make -s install >/dev/null 2>&1;
+
+  # Cleanup.
   cd "${BASE_DIR}";
   sudo -E rm -rf ./GeoIP*;
 
@@ -1018,14 +1029,14 @@ function install_imagemagick () {
 
   # Install the dependencies for ImageMagick.
   sudo -E aptitude install -y -q=2 \
-    build-essential checkinstall \
+    build-essential libtool checkinstall \
     libx11-dev libxext-dev zlib1g-dev libpng12-dev \
     libjpeg-dev libfreetype6-dev libxml2-dev;
 
   # Build the dependencies for ImageMagick.
   sudo -E aptitude build-dep -y -q imagemagick;
 
-  # Build ImageMagick from source code.
+  # Get the ImageMagick source code.
   cd "${BASE_DIR}";
   curl -ss -O -L "http://www.imagemagick.org/download/ImageMagick.tar.gz";
   tar -xf "ImageMagick.tar.gz";
@@ -1034,7 +1045,8 @@ function install_imagemagick () {
   ./configure;
   sudo checkinstall -y;
 
-  # Install ImageMagick from the DEB package.
+  # Output a provisioning message.
+  echo -e "PROVISIONING: Make and install the ImageMagick binary DEB package.\n";
   IMAGEMAGICK_DEB=$(ls -1 imagemagick-*.deb);
   sudo -E RUNLEVEL=1 dpkg --force-all -i "${IMAGEMAGICK_DEB}";
   sudo ldconfig "/usr/local/lib";
