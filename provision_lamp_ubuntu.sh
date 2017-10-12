@@ -1141,7 +1141,7 @@ fi
 # IPTables
 if [ "${PROVISION_IPTABLES}" = true ]; then
 
-  hash iptables && hash ipset 2>/dev/null || { install_iptables; }
+  hash iptables 2>/dev/null && hash ipset 2>/dev/null || { install_iptables; }
 
 fi
 
@@ -1175,7 +1175,7 @@ if [ "${PROVISION_LAMP}" = true ]; then
   if [ -f "/etc/logrotate.d/apache2" ]; then configure_apache_log_rotation; fi
 
   # MySQL related stuff.
-  hash mysql && hash mysqld 2>/dev/null || { install_mysql; }
+  hash mysql 2>/dev/null && hash mysqld 2>/dev/null || { install_mysql; }
 
   # Munin related stuff.
   hash munin-node 2>/dev/null || { install_munin; }
