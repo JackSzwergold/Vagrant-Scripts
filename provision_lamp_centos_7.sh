@@ -757,7 +757,6 @@ function update_locate_db () {
 #
 ##########################################################################################
 
-# sudo -E ntpdate -u ntp.ubuntu.com;
 configure_user_and_group;
 set_environment;
 set_timezone;
@@ -779,6 +778,7 @@ if [ "${PROVISION_BASICS}" = true ]; then
 
 fi
 
+# Get the LAMP stuff set.
 if [ "${PROVISION_LAMP}" = true ]; then
 
   # Apache related stuff.

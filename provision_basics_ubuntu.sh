@@ -464,7 +464,6 @@ function update_locate_db () {
 #
 ##########################################################################################
 
-# sudo -E ntpdate -u ntp.ubuntu.com;
 configure_user_and_group;
 install_aptitude;
 set_environment;
@@ -477,9 +476,6 @@ configure_motd;
 
 # Get the basics set.
 if [ "${PROVISION_BASICS}" = true ]; then
-
-  # Go into the config directory.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
 
   install_basic_tools;
   hash libtool 2>/dev/null || { install_compiler; }
