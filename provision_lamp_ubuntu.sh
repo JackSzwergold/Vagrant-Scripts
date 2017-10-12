@@ -330,7 +330,7 @@ function install_postfix () {
   # Install postfix and general mail stuff.
   debconf-set-selections <<< "postfix postfix/mailname string ${HOST_NAME}";
   debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'";
-  sudo -E aptitude install -y -q=2 postfix mailutils;
+  sudo -E aptitude install -y -q=2 postfix mailutils >/dev/null 2>&1;
 
 } # install_postfix
 
