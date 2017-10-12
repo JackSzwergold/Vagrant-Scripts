@@ -30,34 +30,42 @@
 ##########################################################################################
 
 BASE_DIR=$(pwd);
+# Output a provisioning message.
 echo -e "PROVISIONING: Base directory is: '${BASE_DIR}'.\n";
 
 CONFIG_DIR="deployment_configs";
 if [ -n "$1" ]; then CONFIG_DIR="${1}"; fi
+# Output a provisioning message.
 echo -e "PROVISIONING: Config directory is: '${CONFIG_DIR}'.\n";
 
 DB_DIR="deployment_dbs";
 if [ -n "$2" ]; then DB_DIR="${2}"; fi
+# Output a provisioning message.
 echo -e "PROVISIONING: DB directory is: '${DB_DIR}'.\n";
 
 BINARIES_DIR="deployment_binaries";
 if [ -n "$3" ]; then BINARIES_DIR="${3}"; fi
+# Output a provisioning message.
 echo -e "PROVISIONING: Binaries directory is: '${BINARIES_DIR}'.\n";
 
 USER_NAME="vagrant";
 if [ -n "$4" ]; then USER_NAME="${4}"; fi
+# Output a provisioning message.
 echo -e "PROVISIONING: User name is: '${USER_NAME}'.\n";
 
 PASSWORD="vagrant";
 if [ -n "$5" ]; then PASSWORD="${5}"; fi
+# Output a provisioning message.
 echo -e "PROVISIONING: User password is: '${PASSWORD}'.\n";
 
 MACHINE_NAME="vagrant";
 if [ -n "$6" ]; then MACHINE_NAME="${6}"; fi
+# Output a provisioning message.
 echo -e "PROVISIONING: Machine name is: '${MACHINE_NAME}'.\n";
 
 HOST_NAME="vagrant.local";
 if [ -n "$7" ]; then HOST_NAME="${7}"; fi
+# Output a provisioning message.
 echo -e "PROVISIONING: Host name is: '${HOST_NAME}'.\n";
 
 ##########################################################################################
@@ -66,6 +74,7 @@ echo -e "PROVISIONING: Host name is: '${HOST_NAME}'.\n";
 
 PROVISION_BASICS=false;
 if [ -n "$8" ]; then PROVISION_BASICS="${8}"; fi
+# Output a provisioning message.
 echo -e "PROVISIONING: Basics provisioning: '${PROVISION_BASICS}'.\n";
 
 ##########################################################################################
@@ -78,7 +87,8 @@ cd "${BASE_DIR}/${CONFIG_DIR}";
 # Adjusting the Debian frontend setting to non-interactive mode.
 ##########################################################################################
 
-echo -e "PROVISIONING: Setting the Debian frontend to non-interactive mode.\n"
+# Output a provisioning message.
+echo -e "PROVISIONING: Setting the Debian frontend to non-interactive mode.\n";
 export DEBIAN_FRONTEND=noninteractive;
 
 ##########################################################################################
@@ -95,6 +105,7 @@ export DEBIAN_FRONTEND=noninteractive;
 ##########################################################################################
 function configure_user_and_group () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Adjusting user and group related items.\n";
 
   # Create the 'www-readwrite' group.
@@ -116,6 +127,7 @@ function configure_user_and_group () {
 ##########################################################################################
 function install_aptitude () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Install Aptitude.\n";
 
   # Install Aptitude.
@@ -128,6 +140,7 @@ function install_aptitude () {
 ##########################################################################################
 function set_environment () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Setting the selected editor.\n";
 
   # Set the selected editor to be Nano.
@@ -136,6 +149,7 @@ function set_environment () {
     sudo -E chown -f "${USER_NAME}":www-readwrite "${BASE_DIR}/.selected_editor";
   fi
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Importing the crontab.\n";
 
   # Importing the crontab.
@@ -152,6 +166,7 @@ function set_timezone () {
   TIMEZONE_PATH="/etc/timezone";
   if [ "${TIMEZONE}" != $(cat "${TIMEZONE_PATH}") ]; then
 
+    # Output a provisioning message.
     echo -e "PROVISIONING: Setting timezone data.\n";
 
     sudo -E echo "${TIMEZONE}" > "${TIMEZONE_PATH}";
@@ -170,6 +185,7 @@ function configure_sources_list () {
   DEB_URL_PATTERN="^#.*deb.*partner$";
   if [ -f "${SOURCES_LIST}" ] && grep -E -q "${DEB_URL_PATTERN}" "/etc/apt/sources.list"; then
 
+    # Output a provisioning message.
     echo -e "PROVISIONING: Adjusting the sources list.\n";
 
     # Adjust the sources list.
@@ -184,6 +200,7 @@ function configure_sources_list () {
 ##########################################################################################
 function install_avahi () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Avahi related stuff.\n";
 
   # Install Avahi.
@@ -196,6 +213,7 @@ function install_avahi () {
 ##########################################################################################
 function install_sysstat () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Sysstat related stuff.\n";
 
   # Install Sysstat.
@@ -214,6 +232,7 @@ function install_sysstat () {
 ##########################################################################################
 function install_basic_tools () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Installing a set of generic tools.\n";
 
   # Install generic tools.
@@ -231,6 +250,7 @@ function install_basic_tools () {
 ##########################################################################################
 function install_locate () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Installing the locate tool and updating the database.\n";
 
   # Install Locate.
@@ -246,6 +266,7 @@ function install_locate () {
 ##########################################################################################
 function install_compiler () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Installing the core compiler tools.\n";
 
   # Install the core compiler and build tools.
@@ -258,6 +279,7 @@ function install_compiler () {
 ##########################################################################################
 function install_git () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Installing Git and related stuff.\n";
 
   # Purge any already installed version of Git.
@@ -276,6 +298,7 @@ function install_git () {
 ##########################################################################################
 function install_postfix () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Installing Postfix and related mail stuff.\n";
 
   # Install postfix and general mail stuff.
@@ -290,6 +313,7 @@ function install_postfix () {
 ##########################################################################################
 function configure_login_defs () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Setting the 'login.defs' config file.\n";
 
   # Copy the 'login.defs' file in place.
@@ -302,10 +326,11 @@ function configure_login_defs () {
 ##########################################################################################
 function configure_common_session () {
 
-  echo -e "PROVISIONING: Setting the 'common-session' config file.\n";
-
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFIG_DIR}";
+
+  # Output a provisioning message.
+  echo -e "PROVISIONING: Setting the 'common-session' config file.\n";
 
   # Copy the 'login.defs' file in place.
   sudo -E cp -f "system/common-session" "/etc/pam.d/common-session";
@@ -317,10 +342,11 @@ function configure_common_session () {
 ##########################################################################################
 function configure_ssh () {
 
-  echo -e "PROVISIONING: Setting the SSH config file.\n";
-
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFIG_DIR}";
+
+  # Output a provisioning message.
+  echo -e "PROVISIONING: Setting the SSH config file.\n";
 
   # Copy the 'login.defs' file in place.
   sudo -E cp -f "ssh/ssh_config" "/etc/ssh/ssh_config";
@@ -332,6 +358,7 @@ function configure_ssh () {
 ##########################################################################################
 function configure_motd () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Setting the MOTD banner.\n";
 
   # Install figlet.
@@ -344,6 +371,7 @@ function configure_motd () {
   echo "$(figlet ${MACHINE_NAME} | head -n -1).local" > "${MOTD_PATH}";
   echo "" >> "${MOTD_PATH}";
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Disabling MOTD scripts.\n";
 
   # Disable these MOTD scripts.
@@ -361,6 +389,7 @@ function configure_motd () {
 ##########################################################################################
 function install_monit () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Monit related stuff.\n";
 
   # Install Monit.
@@ -377,10 +406,11 @@ function install_monit () {
 ##########################################################################################
 function configure_monit () {
 
-  echo -e "PROVISIONING: Installing the Monit configs.\n";
-
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFIG_DIR}";
+
+  # Output a provisioning message.
+  echo -e "PROVISIONING: Installing the Monit configs.\n";
 
   sudo -E cp -f "monit/monitrc" "/etc/monit/monitrc";
   sudo -E cp -f "monit/apache2.conf" "/etc/monit/conf.d/apache2.conf";
@@ -399,10 +429,13 @@ function configure_monit () {
 ##########################################################################################
 function install_system_scripts () {
 
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
+  # Output a provisioning message.
   echo -e "PROVISIONING: Installing configuring various system scripts.\n";
 
   # Copy and configure various system scripts.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
   sudo -E cp -f "scripts/"*.sh "/opt/";
   sudo -E chown -f -R root:root "scripts/"*.sh "/opt/";
   sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "/opt/"*.cfg.sh;
@@ -415,6 +448,7 @@ function install_system_scripts () {
 ##########################################################################################
 function update_locate_db () {
 
+  # Output a provisioning message.
   echo -e "PROVISIONING: Updating the locate database.\n";
 
   sudo -E updatedb;
