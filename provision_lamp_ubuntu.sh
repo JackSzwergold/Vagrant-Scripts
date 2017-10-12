@@ -230,7 +230,7 @@ function install_avahi () {
   echo -e "PROVISIONING: Avahi related stuff.\n";
 
   # Install Avahi.
-  sudo -E aptitude install -y -q=4 avahi-daemon avahi-utils;
+  sudo -E aptitude install -y -q=2 avahi-daemon avahi-utils;
 
 } # install_avahi
 
@@ -243,7 +243,7 @@ function install_sysstat () {
   echo -e "PROVISIONING: Sysstat related stuff.\n";
 
   # Install Sysstat.
-  sudo -E aptitude install -y -q=4 sysstat;
+  sudo -E aptitude install -y -q=2 sysstat;
 
   # Copy the Sysstat config file in place and restart sysstat.
   if [ -f "sysstat/sysstat" ]; then
@@ -262,11 +262,11 @@ function install_basic_tools () {
   echo -e "PROVISIONING: Installing a set of generic tools.\n";
 
   # Install generic tools.
-  sudo -E aptitude install -y -q=4 \
+  sudo -E aptitude install -y -q=2 \
     dnsutils traceroute nmap bc htop finger curl whois rsync lsof \
     iftop figlet lynx mtr-tiny iperf nload zip unzip attr sshpass \
     dkms mc elinks ntp dos2unix p7zip-full nfs-common \
-    slurm sharutils uuid-runtime chkconfig quota pv trickle apachetop \
+    slurm sharutils uuid-runtime quota pv trickle apachetop \
     virtualbox-dkms;
 
 } # install_basic_tools
@@ -280,7 +280,7 @@ function install_locate () {
   echo -e "PROVISIONING: Installing the locate tool and updating the database.\n";
 
   # Install Locate.
-  sudo -E aptitude install -y -q=4 mlocate;
+  sudo -E aptitude install -y -q=2 mlocate;
 
   # Update Locate.
   sudo -E updatedb;
@@ -296,7 +296,7 @@ function install_compiler () {
   echo -e "PROVISIONING: Installing the core compiler tools.\n";
 
   # Install the core compiler and build tools.
-  sudo -E aptitude install -y -q=4 build-essential libtool;
+  sudo -E aptitude install -y -q=2 build-essential libtool;
 
 } # install_compiler
 
@@ -312,10 +312,10 @@ function install_git () {
   sudo -E aptitude purge -y -q git git-core subversion git-svn;
 
   # Now install Git via PPA.
-  sudo -E aptitude install -y -q=4 python-software-properties;
+  sudo -E aptitude install -y -q=2 python-software-properties;
   sudo -E add-apt-repository -y ppa:git-core/ppa;
-  sudo -E aptitude update -y -q;
-  sudo -E aptitude install -y -q=4 git git-core subversion git-svn;
+  sudo -E aptitude update -y -q=2;
+  sudo -E aptitude install -y -q=2 git git-core subversion git-svn;
 
 } # install_git
 
@@ -330,7 +330,7 @@ function install_postfix () {
   # Install postfix and general mail stuff.
   debconf-set-selections <<< "postfix postfix/mailname string ${HOST_NAME}";
   debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'";
-  sudo -E aptitude install -y -q=4 postfix mailutils;
+  sudo -E aptitude install -y -q=2 postfix mailutils;
 
 } # install_postfix
 
@@ -391,7 +391,7 @@ function configure_motd () {
   echo -e "PROVISIONING: Setting the MOTD banner.\n";
 
   # Install figlet.
-  sudo -E aptitude install -y -q=4 figlet;
+  sudo -E aptitude install -y -q=2 figlet;
 
   # Set the server login banner with figlet.
   MOTD_PATH="/etc/motd";
@@ -424,7 +424,7 @@ function install_iptables () {
   # Install IPTables and IPSet stuff.
   debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v4 boolean true";
   debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v6 boolean true";
-  sudo -E aptitude install -y -q=4 iptables iptables-persistent ipset;
+  sudo -E aptitude install -y -q=2 iptables iptables-persistent ipset;
 
   # Load the IPSet stuff if the file exists.
   if [ -f "iptables/ipset.conf" ]; then
@@ -454,13 +454,13 @@ function install_apache () {
   echo -e "PROVISIONING: Installing Apache and PHP related items.\n";
 
   # Install the base Apache related items.
-  sudo -E RUNLEVEL=1 aptitude install -y -q=4 \
+  sudo -E RUNLEVEL=1 aptitude install -y -q=2 \
     apache2 apache2-dev php5 \
     libapache2-mod-php5 php-pear;
 
   # Install other PHP related related items.
-  sudo -E RUNLEVEL=1 aptitude install -y -q=4 \
-    php5-mysql php5-pgsql php5-odbc php5-mssql php5-sybase php5-sqlite \
+  sudo -E RUNLEVEL=1 aptitude install -y -q=2 \
+    php5-mysql php5-pgsql php5-odbc php5-sybase php5-sqlite \
     php5-xmlrpc php5-json php5-xsl php5-curl php5-geoip \
     php-getid3 php5-imap php5-ldap php5-mcrypt \
     php5-pspell php5-gmp php5-gd;
@@ -588,7 +588,7 @@ function install_mysql () {
   echo -e "PROVISIONING: Installing and configuring MySQL related items.\n";
 
   # Install the MySQL server and client.
-  sudo -E RUNLEVEL=1 aptitude install -y -q=4 mysql-server mysql-client;
+  sudo -E RUNLEVEL=1 aptitude install -y -q=2 mysql-server mysql-client;
 
   # Secure the MySQL installation.
   if [ -f "mysql/mysql_secure_installation.sql" ]; then
@@ -618,7 +618,7 @@ function install_munin () {
   echo -e "PROVISIONING: Installing and configuring Munin related items.\n";
 
   # Install Munin.
-  sudo -E RUNLEVEL=1 aptitude install -y -q=4 munin munin-node munin-plugins-extra libwww-perl;
+  sudo -E RUNLEVEL=1 aptitude install -y -q=2 munin munin-node munin-plugins-extra libwww-perl;
 
   # Install the copied Munin config if it exists.
   MUNIN_CONF_PATH="/etc/munin/munin.conf";
@@ -777,7 +777,7 @@ function install_geoip () {
   echo -e "PROVISIONING: Installing the GeoIP binary.\n";
 
   # Install the core compiler and build options.
-  sudo aptitude install -y -q=4 build-essential zlib1g-dev libtool;
+  sudo aptitude install -y -q=2 build-essential zlib1g-dev libtool;
 
   # Install GeoIP from source code.
   cd "${BASE_DIR}";
@@ -873,6 +873,9 @@ function install_awstats () {
   rm -f "awstats-7.3.tar.gz";
   sudo -E mv -f "awstats-7.3" "/usr/share/awstats-7.3";
 
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
   # Set an index page for AWStats.
   sudo -E cp -f "awstats/awstatstotals.php" "/usr/share/awstats-7.3/wwwroot/cgi-bin/index.php";
   sudo -E chmod a+r "/usr/share/awstats-7.3/wwwroot/cgi-bin/index.php";
@@ -883,14 +886,11 @@ function install_awstats () {
 
   # Now install CPANminus like this.
   hash cpanminus 2>/dev/null || {
-    sudo -E aptitude install -y -q=4 cpanminus;
+    sudo -E aptitude install -y -q=2 cpanminus;
   }
 
   # With that done, install all of the GeoIP related CPAN modules like this.
   sudo cpanm --install --force --notest --quiet --skip-installed YAML Geo::IP Geo::IPfree Geo::IP::PurePerl URI::Escape Net::IP Net::DNS Net::XWhois Time::HiRes Time::Local;
-
-  # Go into the config directory.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Copy over a basic config file.
   sudo -E cp -f "awstats/awstats.vagrant.local.conf" "/usr/share/awstats-7.3/wwwroot/cgi-bin/awstats.${HOST_NAME}.conf";
@@ -935,7 +935,7 @@ function install_fail2ban () {
 
   # Install Fail2Ban.
   sudo -E aptitude purge -y -q fail2ban;
-  sudo -E aptitude install -y -q=4 gamin libgamin0 python-central python-gamin python-support;
+  sudo -E aptitude install -y -q=2 gamin libgamin0 python-central python-gamin python-support;
   curl -ss -O -L "http://old-releases.ubuntu.com/ubuntu/pool/universe/f/fail2ban/fail2ban_0.8.13-1_all.deb";
   sudo -E RUNLEVEL=1 dpkg --force-all -i "fail2ban_0.8.13-1_all.deb";
 
@@ -977,7 +977,7 @@ function install_monit () {
   echo -e "PROVISIONING: Monit related stuff.\n";
 
   # Install Monit.
-  sudo -E RUNLEVEL=1 aptitude install -y -q=4 monit;
+  sudo -E RUNLEVEL=1 aptitude install -y -q=2 monit;
 
   # Run these commands to prevent Monit from coming up on reboot.
   sudo -E service monit stop;
@@ -1017,7 +1017,7 @@ function install_imagemagick () {
   echo -e "PROVISIONING: Installing ImageMagick from source.\n";
 
   # Install the dependencies for ImageMagick.
-  sudo -E aptitude install -y -q=4 \
+  sudo -E aptitude install -y -q=2 \
     build-essential checkinstall \
     libx11-dev libxext-dev zlib1g-dev libpng12-dev \
     libjpeg-dev libfreetype6-dev libxml2-dev;
