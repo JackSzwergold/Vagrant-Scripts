@@ -140,6 +140,9 @@ function install_aptitude () {
 ##########################################################################################
 function set_environment () {
 
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
   # Output a provisioning message.
   echo -e "PROVISIONING: Setting the selected editor.\n";
 
