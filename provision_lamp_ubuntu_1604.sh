@@ -192,6 +192,7 @@ function set_timezone () {
 
   TIMEZONE="America/New_York";
 
+  # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Setting timezone data.\033[0m\n";
 
   sudo -E timedatectl set-timezone "${TIMEZONE}";
@@ -946,9 +947,6 @@ function install_fail2ban () {
 
   # Install Fail2Ban.
   sudo -E aptitude install -y -q=2 fail2ban;
-  # sudo -E aptitude install -y -q=2 gamin libgamin0 python-central python-gamin python-support;
-  # curl -ss -O -L "http://old-releases.ubuntu.com/ubuntu/pool/universe/f/fail2ban/fail2ban_0.8.13-1_all.deb";
-  # sudo -E RUNLEVEL=1 dpkg --force-all -i "fail2ban_0.8.13-1_all.deb";
 
   # Run these commands to prevent Fail2Ban from coming up on reboot.
   sudo -E service fail2ban stop;
@@ -1123,7 +1121,7 @@ if [ "${PROVISION_BASICS}" = true ]; then
   install_basic_tools;
   hash libtool 2>/dev/null || { install_compiler; }
   if ! grep -q -s "git-core" "/etc/apt/sources.list" "/etc/apt/sources.list.d/"*; then install_git; fi
-  # hash postfix 2>/dev/null || { install_postfix; }
+  hash postfix 2>/dev/null || { install_postfix; }
   if [ -f "system/login.defs" ] && [ -f "/etc/login.defs" ]; then configure_login_defs; fi
   if [ -f "system/common-session" ] && [ -f "/etc/pam.d/common-session" ]; then configure_common_session; fi
   if [ -f "ssh/ssh_config" ] && [ -f "/etc/ssh/ssh_config" ]; then configure_ssh; fi

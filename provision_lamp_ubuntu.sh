@@ -191,16 +191,11 @@ function set_environment () {
 function set_timezone () {
 
   TIMEZONE="America/New_York";
-  TIMEZONE_PATH="/etc/timezone";
-  if [ "${TIMEZONE}" != $(cat "${TIMEZONE_PATH}") ]; then
 
-    # Output a provisioning message.
-    echo -e "\033[33;1mPROVISIONING: Setting timezone data.\033[0m\n";
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Setting timezone data.\033[0m\n";
 
-    sudo -E echo "${TIMEZONE}" > "${TIMEZONE_PATH}";
-    sudo -E dpkg-reconfigure -f noninteractive tzdata 2>/dev/null;
-
-  fi
+  sudo -E timedatectl set-timezone "${TIMEZONE}";
 
 } # set_timezone
 
@@ -333,8 +328,8 @@ function install_postfix () {
   echo -e "\033[33;1mPROVISIONING: Installing Postfix and related mail stuff.\033[0m\n";
 
   # Install postfix and general mail stuff.
-  debconf-set-selections <<< "postfix postfix/mailname string ${HOST_NAME}";
-  debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'";
+  sudo -E debconf-set-selections <<< "postfix postfix/mailname string ${HOST_NAME}";
+  sudo -E debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'";
   sudo -E aptitude install -y -q=2 postfix mailutils >/dev/null 2>&1;
 
 } # install_postfix
@@ -428,8 +423,8 @@ function install_iptables () {
   echo -e "\033[33;1mPROVISIONING: IPTables and IPSet stuff.\033[0m\n";
 
   # Install IPTables and IPSet stuff.
-  debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v4 boolean true";
-  debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v6 boolean true";
+  sudo -E debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v4 boolean true";
+  sudo -E debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v6 boolean true";
   sudo -E aptitude install -y -q=2 iptables iptables-persistent ipset;
 
   # Load the IPSet stuff if the file exists.
