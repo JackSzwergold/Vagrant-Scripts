@@ -201,6 +201,13 @@ function set_timezone () {
   # Set the timezone.
   sudo -E timedatectl set-timezone "${TIMEZONE}";
 
+  # Do this stuff to get NTP setup.
+  sudo -E service ntp stop;
+  sudo -E ntpd -gq;
+  sudo service ntp start;
+  # sudo -E update-rc.d -f ntp defaults;
+  # sudo -E update-rc.d -f ntp enable;
+
   # Set the NTP synchronized value to 'true'.
   sudo timedatectl set-ntp true;
 
@@ -1120,7 +1127,6 @@ function update_locate_db () {
 configure_user_and_group;
 install_aptitude;
 set_environment;
-set_timezone;
 configure_sources_list;
 hash sar 2>/dev/null || { install_sysstat; }
 hash updatedb 2>/dev/null || { install_locate; }
@@ -1138,6 +1144,9 @@ if [ "${PROVISION_BASICS}" = true ]; then
   if [ -f "ssh/ssh_config" ] && [ -f "/etc/ssh/ssh_config" ]; then configure_ssh; fi
 
 fi
+
+# Timezone and related stuff.
+set_timezone;
 
 # Avahi
 hash avahi-daemon 2>/dev/null || { install_avahi; }

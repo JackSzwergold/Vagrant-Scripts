@@ -205,8 +205,8 @@ function set_timezone () {
   sudo -E service ntp stop;
   sudo -E ntpd -gq;
   sudo service ntp start;
-  sudo -E update-rc.d -f ntp defaults;
-  sudo -E update-rc.d -f ntp enable;
+  # sudo -E update-rc.d -f ntp defaults;
+  # sudo -E update-rc.d -f ntp enable;
 
   # Set the NTP synchronized value to 'true'.
   sudo timedatectl set-ntp true;
