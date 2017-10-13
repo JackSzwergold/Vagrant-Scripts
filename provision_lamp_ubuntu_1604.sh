@@ -651,7 +651,7 @@ function install_munin () {
   sudo -E ln -fs "/usr/share/munin/plugins/fail2ban" "/etc/munin/plugins/fail2ban";
 
   # Repair Munin permissions.
-  sudo -E munin-check --fix-permissions;
+  sudo -E munin-check --fix-permissions >/dev/null 2>&1;
 
   # Restart the Munin node.
   sudo -E service munin-node restart;
