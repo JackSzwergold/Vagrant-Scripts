@@ -194,6 +194,7 @@ function set_timezone () {
   TIMEZONE_PATH="/etc/timezone";
   if [ "${TIMEZONE}" != $(cat "${TIMEZONE_PATH}") ]; then
 
+    # Output a provisioning message.
     echo -e "\033[33;1mPROVISIONING: Setting timezone data.\033[0m\n";
 
     sudo -E echo "${TIMEZONE}" > "${TIMEZONE_PATH}";
