@@ -198,7 +198,11 @@ function set_timezone () {
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Setting timezone data.\033[0m";
 
+  # Set the timezone.
   sudo -E timedatectl set-timezone "${TIMEZONE}";
+
+  # Set the NTP synchronized value to 'true'.
+  sudo timedatectl set-ntp true;
 
 } # set_timezone
 
@@ -1112,13 +1116,13 @@ function update_locate_db () {
 #
 ##########################################################################################
 
+# Install install stuff.
 configure_user_and_group;
 install_aptitude;
 set_environment;
 set_timezone;
 configure_sources_list;
-hash avahi-daemon 2>/dev/null || { install_avahi; }
-hash sar 2>/dev/null || {  install_sysstat; }
+hash sar 2>/dev/null || { install_sysstat; }
 hash updatedb 2>/dev/null || { install_locate; }
 configure_motd;
 
@@ -1134,6 +1138,9 @@ if [ "${PROVISION_BASICS}" = true ]; then
   if [ -f "ssh/ssh_config" ] && [ -f "/etc/ssh/ssh_config" ]; then configure_ssh; fi
 
 fi
+
+# Avahi
+hash avahi-daemon 2>/dev/null || { install_avahi; }
 
 # GeoIP
 if [ "${PROVISION_GEOIP}" = true ]; then
