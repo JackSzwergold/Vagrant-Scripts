@@ -157,8 +157,8 @@
   autostart: false
   provision_script: "provision_nodejs_ubuntu_1604.sh"
   provision_script_regular: "provision_nodejs_regular_ubuntu.sh"
-  username: "ubuntu"
-  password: "ubuntu"
+  username: "vagrant"
+  password: "vagrant"
   hostname: "nodejs-1604"
   machinename: "NodeJS-1604"
   ip: "192.168.56.70"
