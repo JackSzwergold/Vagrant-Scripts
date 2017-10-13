@@ -34,42 +34,42 @@
 
 BASE_DIR=$(pwd);
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Base directory is: '${BASE_DIR}'.\033[0m\n";
+echo -e "\033[33;1mPROVISIONING: Base directory is: '${BASE_DIR}'.\033[0m";
 
 CONFIG_DIR="deployment_configs";
 if [ -n "$1" ]; then CONFIG_DIR="${1}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Config directory is: '${CONFIG_DIR}'.\033[0m\n";
+echo -e "\033[33;1mPROVISIONING: Config directory is: '${CONFIG_DIR}'.\033[0m";
 
 DB_DIR="deployment_dbs";
 if [ -n "$2" ]; then DB_DIR="${2}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: DB directory is: '${DB_DIR}'.\033[0m\n";
+echo -e "\033[33;1mPROVISIONING: DB directory is: '${DB_DIR}'.\033[0m";
 
 BINARIES_DIR="deployment_binaries";
 if [ -n "$3" ]; then BINARIES_DIR="${3}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Binaries directory is: '${BINARIES_DIR}'.\033[0m\n";
+echo -e "\033[33;1mPROVISIONING: Binaries directory is: '${BINARIES_DIR}'.\033[0m";
 
 USER_NAME="vagrant";
 if [ -n "$4" ]; then USER_NAME="${4}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: User name is: '${USER_NAME}'.\033[0m\n";
+echo -e "\033[33;1mPROVISIONING: User name is: '${USER_NAME}'.\033[0m";
 
 PASSWORD="vagrant";
 if [ -n "$5" ]; then PASSWORD="${5}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: User password is: '${PASSWORD}'.\033[0m\n";
+echo -e "\033[33;1mPROVISIONING: User password is: '${PASSWORD}'.\033[0m";
 
 MACHINE_NAME="vagrant";
 if [ -n "$6" ]; then MACHINE_NAME="${6}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Machine name is: '${MACHINE_NAME}'.\033[0m\n";
+echo -e "\033[33;1mPROVISIONING: Machine name is: '${MACHINE_NAME}'.\033[0m";
 
 HOST_NAME="vagrant.local";
 if [ -n "$7" ]; then HOST_NAME="${7}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Host name is: '${HOST_NAME}'.\033[0m\n";
+echo -e "\033[33;1mPROVISIONING: Host name is: '${HOST_NAME}'.\033[0m";
 
 ##########################################################################################
 # Go into the config directory.
@@ -82,7 +82,7 @@ cd "${BASE_DIR}/${CONFIG_DIR}";
 ##########################################################################################
 
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Setting the Debian frontend to non-interactive mode.\033[0m\n";
+echo -e "\033[33;1mPROVISIONING: Setting the Debian frontend to non-interactive mode.\033[0m";
 export DEBIAN_FRONTEND=noninteractive;
 
 ##########################################################################################
@@ -100,7 +100,7 @@ export DEBIAN_FRONTEND=noninteractive;
 function configure_user_and_group () {
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Adjusting user and group related items.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Adjusting user and group related items.\033[0m";
 
   # Create the 'www-readwrite' group.
   sudo -E groupadd -f www-readwrite;
@@ -122,10 +122,13 @@ function configure_user_and_group () {
 function install_aptitude () {
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Install Aptitude.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Install Aptitude.\033[0m";
 
   # Install Aptitude.
-  sudo -E apt install -y -q=2 aptitude;
+  sudo -E apt-get -y -q install=2 aptitude aptitude-common;
+
+  # Update Aptitude.
+  sudo -E aptitude -y -q=2 update;
 
 } # install_aptitude
 
@@ -135,7 +138,7 @@ function install_aptitude () {
 function set_environment () {
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Setting the selected editor.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Setting the selected editor.\033[0m";
 
   # Set the selected editor to be Nano.
   if [ ! -f "${BASE_DIR}/.selected_editor" ]; then
@@ -144,7 +147,7 @@ function set_environment () {
   fi
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Importing the crontab.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Importing the crontab.\033[0m";
 
   # Importing the crontab.
   sudo -E crontab < "crontab.conf";
@@ -157,16 +160,22 @@ function set_environment () {
 function set_timezone () {
 
   TIMEZONE="America/New_York";
-  TIMEZONE_PATH="/etc/timezone";
-  if [ "${TIMEZONE}" != $(cat "${TIMEZONE_PATH}") ]; then
 
-    # Output a provisioning message.
-    echo -e "\033[33;1mPROVISIONING: Setting timezone data.\033[0m\n";
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Setting timezone data.\033[0m";
 
-    sudo -E echo "${TIMEZONE}" > "${TIMEZONE_PATH}";
-    sudo -E dpkg-reconfigure -f noninteractive tzdata 2>/dev/null;
+  # Set the timezone.
+  sudo -E timedatectl set-timezone "${TIMEZONE}";
 
-  fi
+  # Do this stuff to get NTP setup.
+  sudo -E service ntp stop;
+  sudo -E ntpd -gq;
+  sudo service ntp start;
+  # sudo -E update-rc.d -f ntp defaults;
+  sudo -E update-rc.d -f ntp enable;
+
+  # Set the NTP synchronized value to 'true'.
+  sudo -E timedatectl set-ntp true;
 
 } # set_timezone
 
@@ -180,7 +189,7 @@ function configure_sources_list () {
   if [ -f "${SOURCES_LIST}" ] && grep -E -q "${DEB_URL_PATTERN}" "/etc/apt/sources.list"; then
 
     # Output a provisioning message.
-    echo -e "\033[33;1mPROVISIONING: Adjusting the sources list.\033[0m\n";
+    echo -e "\033[33;1mPROVISIONING: Adjusting the sources list.\033[0m";
 
     # Adjust the sources list.
     sudo -E sed -i "/${DEB_URL_PATTERN}/s/^# //g" "/etc/apt/sources.list";
@@ -195,10 +204,10 @@ function configure_sources_list () {
 function install_avahi () {
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Avahi related stuff.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Avahi related stuff.\033[0m";
 
   # Install Avahi.
-  sudo -E aptitude install -y -q avahi-daemon avahi-utils;
+  sudo -E aptitude -y -q=2 install avahi-daemon avahi-utils;
 
 } # install_avahi
 
@@ -211,10 +220,10 @@ function install_sysstat () {
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Sysstat related stuff.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Sysstat related stuff.\033[0m";
 
   # Install Sysstat.
-  sudo -E aptitude install -y -q sysstat;
+  sudo -E aptitude -y -q=2 install sysstat;
 
   # Copy the Sysstat config file in place and restart sysstat.
   if [ -f "sysstat/sysstat" ]; then
@@ -230,14 +239,14 @@ function install_sysstat () {
 function install_basic_tools () {
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Installing a set of generic tools.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Installing a set of generic tools.\033[0m";
 
   # Install generic tools.
-  sudo -E aptitude install -y -q \
+  sudo -E aptitude -y -q=2 install \
     dnsutils traceroute nmap bc htop finger curl whois rsync lsof \
     iftop figlet lynx mtr-tiny iperf nload zip unzip attr sshpass \
-    dkms mc elinks ntp dos2unix p7zip-full nfs-common \
-    slurm sharutils uuid-runtime chkconfig quota pv trickle apachetop \
+    dkms mc elinks dos2unix p7zip-full nfs-common \
+    slurm sharutils uuid-runtime quota pv trickle ntp \
     virtualbox-dkms;
 
 } # install_basic_tools
@@ -248,10 +257,10 @@ function install_basic_tools () {
 function install_locate () {
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Installing the locate tool and updating the database.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Installing the locate tool and updating the database.\033[0m";
 
   # Install Locate.
-  sudo -E aptitude install -y -q mlocate;
+  sudo -E aptitude -y -q=2 install mlocate;
 
   # Update Locate.
   sudo -E updatedb;
@@ -264,10 +273,10 @@ function install_locate () {
 function install_compiler () {
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Installing the core compiler tools.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Installing the core compiler tools.\033[0m";
 
   # Install the core compiler and build tools.
-  sudo -E aptitude install -y -q build-essential libtool;
+  sudo -E aptitude -y -q=2 install build-essential libtool;
 
 } # install_compiler
 
@@ -277,16 +286,16 @@ function install_compiler () {
 function install_git () {
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Installing Git and related stuff.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Installing Git and related stuff.\033[0m";
 
   # Purge any already installed version of Git.
-  sudo -E aptitude purge -y -q git git-core subversion git-svn;
+  sudo -E aptitude -y -q=2 purge git git-core subversion git-svn;
 
   # Now install Git via PPA.
-  sudo -E aptitude install -y -q python-software-properties;
+  sudo -E aptitude -y -q=2 install python-software-properties;
   sudo -E add-apt-repository -y ppa:git-core/ppa;
-  sudo -E aptitude update -y -q;
-  sudo -E aptitude install -y -q git git-core subversion git-svn;
+  sudo -E aptitude -y -q=2 update;
+  sudo -E aptitude -y -q=2 install git git-core subversion git-svn;
 
 } # install_git
 
@@ -296,10 +305,10 @@ function install_git () {
 function configure_motd () {
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Setting the MOTD banner.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Setting the MOTD banner.\033[0m";
 
   # Install figlet.
-  sudo -E aptitude install -y -q figlet;
+  sudo -E aptitude -y -q=2 install figlet;
 
   # Set the server login banner with figlet.
   MOTD_PATH="/etc/motd";
@@ -307,7 +316,7 @@ function configure_motd () {
   echo "" >> "${MOTD_PATH}";
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Disabling MOTD scripts.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Disabling MOTD scripts.\033[0m";
 
   # Disable these MOTD scripts.
   sudo -E chmod -f -x "/etc/update-motd.d/50-landscape-sysinfo";
@@ -325,7 +334,7 @@ function configure_motd () {
 function install_mongo26 () {
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Installing MongoDB related items.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Installing MongoDB related items.\033[0m";
 
   # Go into the config directory.
   cd "${BASE_DIR}";
@@ -341,8 +350,8 @@ function install_mongo26 () {
   sudo rm -rf "/var/lib/apt/lists/partial/";
   sudo apt-get update -o Acquire::CompressionTypes::Order::=gz;
   sudo -E apt-get clean -y -q;
-  sudo -E aptitude update -y -q;
-  sudo -E aptitude install -y -q mongodb-org=2.6.12 mongodb-org-server=2.6.12 mongodb-org-shell=2.6.12 mongodb-org-mongos=2.6.12 mongodb-org-tools=2.6.12;
+  sudo -E aptitude -y -q=2 update;
+  sudo -E aptitude -y -q=2 install mongodb-org=2.6.12 mongodb-org-server=2.6.12 mongodb-org-shell=2.6.12 mongodb-org-mongos=2.6.12 mongodb-org-tools=2.6.12;
 
   # Pin the currently installed version of MongoDB to ensure no accidental upgrades happen.
   echo "mongodb-org hold" | sudo dpkg --set-selections;
@@ -356,7 +365,7 @@ function install_mongo26 () {
 function configure_mongo26 () {
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Configuring MongoDB related items.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Configuring MongoDB related items.\033[0m";
 
   # Comment out the 'bind_ip' line to enable network connections outside of 'localhost'.
   sudo -E sed -i 's/bind_ip = 127.0.0.1/#bind_ip = 127.0.0.1/g' "/etc/mongod.conf";
@@ -376,7 +385,7 @@ function configure_mongo26 () {
           db_dirname=$(dirname "${db_backup_path}");
           mongo_db=$(basename "${db_dirname}");
           # Output a provisioning message.
-          echo -e "\033[33;1mPROVISIONING: Restoring the '${mongo_db}' MongoDB database.\033[0m\n";
+          echo -e "\033[33;1mPROVISIONING: Restoring the '${mongo_db}' MongoDB database.\033[0m";
           mongo --quiet "${mongo_db}" --eval "db.dropDatabase()";
           mongorestore --quiet "${db_backup_path}";
         else
@@ -394,7 +403,7 @@ function configure_mongo26 () {
 function install_mongo32 () {
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Installing MongoDB related items.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Installing MongoDB related items.\033[0m";
 
   # Go into the config directory.
   cd "${BASE_DIR}";
@@ -410,8 +419,8 @@ function install_mongo32 () {
   sudo rm -rf "/var/lib/apt/lists/partial/";
   sudo apt-get update -o Acquire::CompressionTypes::Order::=gz;
   sudo -E apt-get clean -y -q;
-  sudo -E aptitude update -y -q;
-  sudo -E aptitude install -y -q mongodb-org=3.2.10 mongodb-org-server=3.2.10 mongodb-org-shell=3.2.10 mongodb-org-mongos=3.2.10 mongodb-org-tools=3.2.10;
+  sudo -E aptitude -y -q=2 update;
+  sudo -E aptitude -y -q=2 install mongodb-org=3.2.10 mongodb-org-server=3.2.10 mongodb-org-shell=3.2.10 mongodb-org-mongos=3.2.10 mongodb-org-tools=3.2.10;
 
   # Pin the currently installed version of MongoDB to ensure no accidental upgrades happen.
   echo "mongodb-org hold" | sudo dpkg --set-selections;
@@ -425,7 +434,7 @@ function install_mongo32 () {
 function configure_mongo32 () {
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Configuring MongoDB related items.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Configuring MongoDB related items.\033[0m";
 
   # Comment out the 'bind_ip' line to enable network connections outside of 'localhost'.
   sudo -E sed -i 's/bindIp: 127.0.0.1/#bindIp: 127.0.0.1/g' "/etc/mongod.conf";
@@ -446,7 +455,7 @@ function configure_mongo32 () {
           db_dirname=$(dirname "${db_backup_path}");
           mongo_db=$(basename "${db_dirname}");
           # Output a provisioning message.
-          echo -e "\033[33;1mPROVISIONING: Restoring the '${mongo_db}' MongoDB database.\033[0m\n";
+          echo -e "\033[33;1mPROVISIONING: Restoring the '${mongo_db}' MongoDB database.\033[0m";
           mongo --quiet "${mongo_db}" --eval "db.dropDatabase()";
           mongorestore --quiet "${db_backup_path}";
         else
@@ -463,7 +472,7 @@ function configure_mongo32 () {
 function update_locate_db () {
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Updating the locate database.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Updating the locate database.\033[0m";
 
   sudo -E updatedb;
 
