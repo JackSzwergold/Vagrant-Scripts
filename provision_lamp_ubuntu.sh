@@ -156,7 +156,7 @@ function install_aptitude () {
   echo -e "\033[33;1mPROVISIONING: Install Aptitude.\033[0m";
 
   # Install Aptitude.
-  sudo -E apt-get install -y -q=2 aptitude;
+  sudo -E apt-get install -y -q=2 aptitude aptitude-common;
 
 } # install_aptitude
 
