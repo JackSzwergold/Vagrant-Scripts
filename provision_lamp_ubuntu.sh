@@ -296,7 +296,7 @@ function install_compiler () {
   echo -e "\033[33;1mPROVISIONING: Installing the core compiler tools.\033[0m\n";
 
   # Install the core compiler and build tools.
-  sudo -E aptitude install -y -q=2 build-essential libtool;
+  sudo -E aptitude install -y -q=2 build-essential libtool automake m4;
 
 } # install_compiler
 
@@ -1107,7 +1107,6 @@ function update_locate_db () {
 #
 ##########################################################################################
 
-# sudo -E ntpdate -u ntp.ubuntu.com;
 configure_user_and_group;
 install_aptitude;
 set_environment;
