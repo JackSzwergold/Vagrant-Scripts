@@ -32,42 +32,42 @@
 
 BASE_DIR=$(pwd);
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Base directory is: '${BASE_DIR}'.\033[0m\n";
+echo -e "\033[33;1mPROVISIONING: Base directory is: '${BASE_DIR}'.\033[0m";
 
 CONFIG_DIR="deployment_configs";
 if [ -n "$1" ]; then CONFIG_DIR="${1}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Config directory is: '${CONFIG_DIR}'.\033[0m\n";
+echo -e "\033[33;1mPROVISIONING: Config directory is: '${CONFIG_DIR}'.\033[0m";
 
 DB_DIR="deployment_dbs";
 if [ -n "$2" ]; then DB_DIR="${2}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: DB directory is: '${DB_DIR}'.\033[0m\n";
+echo -e "\033[33;1mPROVISIONING: DB directory is: '${DB_DIR}'.\033[0m";
 
 BINARIES_DIR="deployment_binaries";
 if [ -n "$3" ]; then BINARIES_DIR="${3}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Binaries directory is: '${BINARIES_DIR}'.\033[0m\n";
+echo -e "\033[33;1mPROVISIONING: Binaries directory is: '${BINARIES_DIR}'.\033[0m";
 
 USER_NAME="vagrant";
 if [ -n "$4" ]; then USER_NAME="${4}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: User name is: '${USER_NAME}'.\033[0m\n";
+echo -e "\033[33;1mPROVISIONING: User name is: '${USER_NAME}'.\033[0m";
 
 PASSWORD="vagrant";
 if [ -n "$5" ]; then PASSWORD="${5}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: User password is: '${PASSWORD}'.\033[0m\n";
+echo -e "\033[33;1mPROVISIONING: User password is: '${PASSWORD}'.\033[0m";
 
 MACHINE_NAME="vagrant";
 if [ -n "$6" ]; then MACHINE_NAME="${6}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Machine name is: '${MACHINE_NAME}'.\033[0m\n";
+echo -e "\033[33;1mPROVISIONING: Machine name is: '${MACHINE_NAME}'.\033[0m";
 
 HOST_NAME="vagrant.local";
 if [ -n "$7" ]; then HOST_NAME="${7}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Host name is: '${HOST_NAME}'.\033[0m\n";
+echo -e "\033[33;1mPROVISIONING: Host name is: '${HOST_NAME}'.\033[0m";
 
 ##########################################################################################
 # Optional items.
@@ -76,12 +76,12 @@ echo -e "\033[33;1mPROVISIONING: Host name is: '${HOST_NAME}'.\033[0m\n";
 PROVISION_BASICS=false;
 if [ -n "$8" ]; then PROVISION_BASICS="${8}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Basics provisioning: '${PROVISION_BASICS}'.\033[0m\n";
+echo -e "\033[33;1mPROVISIONING: Basics provisioning: '${PROVISION_BASICS}'.\033[0m";
 
 PROVISION_LAMP=false;
 if [ -n "$9" ]; then PROVISION_LAMP="${9}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: LAMP provisioning: '${PROVISION_LAMP}'.\033[0m\n";
+echo -e "\033[33;1mPROVISIONING: LAMP provisioning: '${PROVISION_LAMP}'.\033[0m";
 
 ##########################################################################################
 # Go into the config directory.
@@ -104,7 +104,7 @@ cd "${BASE_DIR}/${CONFIG_DIR}";
 function configure_user_and_group () {
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Adjusting user and group related items.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Adjusting user and group related items.\033[0m";
 
   # Create the 'www-readwrite' group.
   sudo -E groupadd -f www-readwrite;
@@ -129,14 +129,14 @@ function set_environment () {
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Setting the selected editor.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Setting the selected editor.\033[0m";
 
   # Set the selected editor to be Nano.
   echo 'export VISUAL="nano"'$'\r' >> ~/.bash_profile;
   echo 'export EDITOR="nano"'$'\r' >> ~/.bash_profile;
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Importing the crontab.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Importing the crontab.\033[0m";
 
   # Importing the crontab.
   sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "crontab.conf";
@@ -154,7 +154,7 @@ function set_timezone () {
   TIMEZONE_PATH="/usr/share/zoneinfo";
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Setting timezone data.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Setting timezone data.\033[0m";
 
   # Set the actual timezone via a symbolic link.
   sudo -E ln -f -s "${TIMEZONE_PATH}/${TIMEZONE}" "/etc/localtime";
@@ -167,7 +167,7 @@ function set_timezone () {
 function install_avahi () {
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Avahi related stuff.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Avahi related stuff.\033[0m";
 
   # Install Avahi.
   sudo -E yum install -y -q avahi;
@@ -192,7 +192,7 @@ function install_avahi () {
 function install_sysstat () {
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Sysstat related stuff.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Sysstat related stuff.\033[0m";
 
   # Install Sysstat.
   sudo -E yum install -y -q sysstat;
@@ -208,7 +208,7 @@ function install_sysstat () {
 function install_basic_tools () {
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Installing a set of generic tools.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Installing a set of generic tools.\033[0m";
 
   # Install basic repo stuff.
   # sudo -E yum install -y -q epel-release deltarpm;
@@ -230,7 +230,7 @@ function install_basic_tools () {
 function install_locate () {
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Installing the locate tool and updating the database.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Installing the locate tool and updating the database.\033[0m";
 
   # Install Locate.
   sudo -E yum install -y -q mlocate;
@@ -246,7 +246,7 @@ function install_locate () {
 function install_compiler () {
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Installing the core compiler tools.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Installing the core compiler tools.\033[0m";
 
   # Install the core compiler and build tools.
   sudo -E yum groupinstall -y -q "Development Tools";
@@ -259,7 +259,7 @@ function install_compiler () {
 function install_git () {
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Installing Git and related stuff.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Installing Git and related stuff.\033[0m";
 
   # Purge any already installed version of Git.
   sudo -E yum remove -y -q git;
@@ -276,7 +276,7 @@ function install_git () {
 function install_postfix () {
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Installing Postfix and related mail stuff.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Installing Postfix and related mail stuff.\033[0m";
 
   # Install postfix and general mail stuff.
   sudo -E yum install -y -q postfix cyrus-sasl cyrus-imapd mailx;
@@ -292,7 +292,7 @@ function configure_login_defs () {
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Setting the 'login.defs' config file.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Setting the 'login.defs' config file.\033[0m";
 
   # Copy the 'login.defs' file in place.
   sudo -E cp -f "system/login.defs" "/etc/login.defs";
@@ -308,7 +308,7 @@ function configure_common_session () {
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Setting the 'common-session' config file.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Setting the 'common-session' config file.\033[0m";
 
   # Copy the 'login.defs' file in place.
   sudo -E cp -f "system/common-session" "/etc/pam.d/common-session";
@@ -324,7 +324,7 @@ function configure_ssh () {
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Setting the SSH config file.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Setting the SSH config file.\033[0m";
 
   # Copy the 'login.defs' file in place.
   sudo -E cp -f "ssh/ssh_config" "/etc/ssh/ssh_config";
@@ -337,7 +337,7 @@ function configure_ssh () {
 function configure_motd () {
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Setting the MOTD banner.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Setting the MOTD banner.\033[0m";
 
   # Install basic repo stuff.
   # sudo -E yum install -y -q epel-release deltarpm;
@@ -359,7 +359,7 @@ function configure_motd () {
 function install_apache () {
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Installing Apache and PHP related items.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Installing Apache and PHP related items.\033[0m";
 
   # Adding the WebTatic repository to get PHP 5.6 installed.
   sudo -E rpm -U "http://mirror.webtatic.com/yum/el6/latest.rpm" 2>/dev/null;
@@ -406,7 +406,7 @@ function install_instantclient () {
   if ls oracle-instantclient* 1> /dev/null 2>&1; then
 
     # Output a provisioning message.
-    echo -e "\033[33;1mPROVISIONING: Oracle OCI8 Instant Client.\033[0m\n";
+    echo -e "\033[33;1mPROVISIONING: Oracle OCI8 Instant Client.\033[0m";
 
     # Set the 'EXISTS' value to 'false'.
     EXISTS=false;
@@ -452,7 +452,7 @@ function configure_apache () {
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Setting Apache and PHP configs.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Setting Apache and PHP configs.\033[0m";
 
   # Copy the Apache config files into place.
   sudo -E cp -f "httpd-centos-68/httpd.conf" "/etc/httpd/conf/httpd.conf";
@@ -483,7 +483,7 @@ function set_apache_web_root () {
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Adjusting the Apache root directory and default file.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Adjusting the Apache root directory and default file.\033[0m";
 
   # Change ownership and permissions.
   sudo -E chown -f -R "${USER_NAME}:www-readwrite" "/var/www/html/";
@@ -500,7 +500,7 @@ function set_apache_web_root () {
 function set_apache_deployment_directories () {
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Creating the web code deployment directories.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Creating the web code deployment directories.\033[0m";
 
   # Set the deployment directories.
   sudo -E mkdir -p "/var/www/"{builds,configs,content};
@@ -516,7 +516,7 @@ function set_apache_deployment_directories () {
 function set_deployment_user () {
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Creating the deployment user.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Creating the deployment user.\033[0m";
 
   # Create the user.
   sudo -E adduser deploy;
@@ -544,7 +544,7 @@ function set_application_configs () {
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Setting applictaion configs.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Setting applictaion configs.\033[0m";
 
   if [ -d "local/" ]; then
 
@@ -564,7 +564,7 @@ function set_application_configs () {
 function configure_apache_log_rotation () {
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Adjusting the Apache log rotation script.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Adjusting the Apache log rotation script.\033[0m";
 
   # Adjust log rotation stuff.
   sudo -E sed -i "s/rotate 52/rotate 13/g" "/etc/logrotate.d/httpd";
@@ -586,7 +586,7 @@ function set_apache_virtual_host_directories () {
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Creating the web server document root directories.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Creating the web server document root directories.\033[0m";
 
   # Set up the Apache virtual host directories.
   sudo -E mkdir -p "/var/www/html/${HOST_NAME}/site";
@@ -607,7 +607,7 @@ function install_mysql () {
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Installing and configuring MySQL related items.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Installing and configuring MySQL related items.\033[0m";
 
   # Adding the WebTatic repository to get MySQL 5.5 installed.
   sudo -E rpm -U "http://mirror.webtatic.com/yum/el6/latest.rpm" 2>/dev/null;
@@ -648,7 +648,7 @@ function install_mariadb () {
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Installing and configuring MariaDB related items.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Installing and configuring MariaDB related items.\033[0m";
 
   # Setup the MariaDB repository.
   if [ -f "mysql-centos-68/mariadb55.repo" ]; then
@@ -701,15 +701,15 @@ function configure_mysql () {
       	  db_filename="${db_basename%.*}";
       	  mysql_db=$(basename "${db_dirname}");
           # Output a provisioning message.
-          echo -e "\033[33;1mPROVISIONING: Restoring the '${mysql_db}' MySQL database.\033[0m\n";
+          echo -e "\033[33;1mPROVISIONING: Restoring the '${mysql_db}' MySQL database.\033[0m";
       	  db_filename_prefix=${db_filename%-*};
       	  if [ "$db_filename_prefix" == "000" ]; then
             # Output a provisioning message.
-            echo -e "\033[33;1mPROVISIONING: Importing '${db_backup_path}'.\033[0m\n";
+            echo -e "\033[33;1mPROVISIONING: Importing '${db_backup_path}'.\033[0m";
             mysql -uroot -proot <${db_backup_path};
           else
             # Output a provisioning message.
-            echo -e "\033[33;1mPROVISIONING: Importing '${db_backup_path}'.\033[0m\n";
+            echo -e "\033[33;1mPROVISIONING: Importing '${db_backup_path}'.\033[0m";
             mysql -uroot -proot "${mysql_db}" <"${db_backup_path}";
       	  fi
       	else
@@ -729,7 +729,7 @@ function install_system_scripts () {
   cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Installing configuring various system scripts.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Installing configuring various system scripts.\033[0m";
 
   # Copy and configure various system scripts.
   sudo -E mkdir -p "/opt/server_scripts";
@@ -754,7 +754,7 @@ function install_system_scripts () {
 function update_locate_db () {
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Updating the locate database.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Updating the locate database.\033[0m";
 
   sudo -E updatedb;
 
