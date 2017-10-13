@@ -789,7 +789,7 @@ function install_geoip () {
 
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Configuring the GeoIP binary.\033[0m";
-  autoreconf -f -i;
+  # autoreconf -f -i;
   libtoolize -f -q;
   ./configure;
 
