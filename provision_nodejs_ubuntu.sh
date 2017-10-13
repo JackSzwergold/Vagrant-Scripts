@@ -125,7 +125,7 @@ function install_aptitude () {
   echo -e "\033[33;1mPROVISIONING: Install Aptitude.\033[0m";
 
   # Install Aptitude.
-  sudo -E apt-get install -y -q=2 aptitude aptitude-common;
+  sudo -E apt-get -y -q=2 install aptitude aptitude-common;
 
   # Update Aptitude.
   sudo -E aptitude -y -q=2 update;
@@ -178,7 +178,7 @@ function set_timezone () {
   sudo -E update-rc.d -f ntp enable;
 
   # Set the NTP synchronized value to 'true'.
-  sudo timedatectl set-ntp true;
+  sudo -E timedatectl set-ntp true;
 
 } # set_timezone
 

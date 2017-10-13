@@ -209,7 +209,7 @@ function set_timezone () {
   sudo -E update-rc.d -f ntp enable;
 
   # Set the NTP synchronized value to 'true'.
-  sudo timedatectl set-ntp true;
+  sudo -E timedatectl set-ntp true;
 
 } # set_timezone
 

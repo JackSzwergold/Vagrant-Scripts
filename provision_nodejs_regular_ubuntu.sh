@@ -34,42 +34,42 @@
 
 BASE_DIR=$(pwd);
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Base directory is: '${BASE_DIR}'.\033[0m\n";
+echo -e "\033[33;1mPROVISIONING: Base directory is: '${BASE_DIR}'.\033[0m";
 
 CONFIG_DIR="deployment_configs";
 if [ -n "$1" ]; then CONFIG_DIR="${1}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Config directory is: '${CONFIG_DIR}'.\033[0m\n";
+echo -e "\033[33;1mPROVISIONING: Config directory is: '${CONFIG_DIR}'.\033[0m";
 
 DB_DIR="deployment_dbs";
 if [ -n "$2" ]; then DB_DIR="${2}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: DB directory is: '${DB_DIR}'.\033[0m\n";
+echo -e "\033[33;1mPROVISIONING: DB directory is: '${DB_DIR}'.\033[0m";
 
 BINARIES_DIR="deployment_binaries";
 if [ -n "$3" ]; then BINARIES_DIR="${3}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Binaries directory is: '${BINARIES_DIR}'.\033[0m\n";
+echo -e "\033[33;1mPROVISIONING: Binaries directory is: '${BINARIES_DIR}'.\033[0m";
 
 USER_NAME="vagrant";
 if [ -n "$4" ]; then USER_NAME="${4}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: User name is: '${USER_NAME}'.\033[0m\n";
+echo -e "\033[33;1mPROVISIONING: User name is: '${USER_NAME}'.\033[0m";
 
 PASSWORD="vagrant";
 if [ -n "$5" ]; then PASSWORD="${5}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: User password is: '${PASSWORD}'.\033[0m\n";
+echo -e "\033[33;1mPROVISIONING: User password is: '${PASSWORD}'.\033[0m";
 
 MACHINE_NAME="vagrant";
 if [ -n "$6" ]; then MACHINE_NAME="${6}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Machine name is: '${MACHINE_NAME}'.\033[0m\n";
+echo -e "\033[33;1mPROVISIONING: Machine name is: '${MACHINE_NAME}'.\033[0m";
 
 HOST_NAME="vagrant.local";
 if [ -n "$7" ]; then HOST_NAME="${7}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Host name is: '${HOST_NAME}'.\033[0m\n";
+echo -e "\033[33;1mPROVISIONING: Host name is: '${HOST_NAME}'.\033[0m";
 
 ##########################################################################################
 # Go into the config directory.
@@ -100,7 +100,7 @@ export DEBIAN_FRONTEND=noninteractive;
 function install_meteorjs () {
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Installing MeteorJS.\033[0m\n";
+  echo -e "\033[33;1mPROVISIONING: Installing MeteorJS.\033[0m";
 
   # Go into the base directory.
   cd "${BASE_DIR}";
