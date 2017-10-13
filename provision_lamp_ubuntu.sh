@@ -265,8 +265,8 @@ function install_basic_tools () {
   sudo -E aptitude -y -q=2 install \
     dnsutils traceroute nmap bc htop finger curl whois rsync lsof \
     iftop figlet lynx mtr-tiny iperf nload zip unzip attr sshpass \
-    dkms mc elinks ntp dos2unix p7zip-full nfs-common \
-    slurm sharutils uuid-runtime quota pv trickle apachetop \
+    dkms mc elinks dos2unix p7zip-full nfs-common \
+    slurm sharutils uuid-runtime quota pv trickle apachetop ntp \
     virtualbox-dkms;
 
 } # install_basic_tools
