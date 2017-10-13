@@ -151,7 +151,8 @@
   deployment_dbs_path: "deployment_dbs"
   deployment_binaries_path: "deployment_binaries/ubuntu"
 - name: "NodeJS_UBUNTU_1604"
-  box: "ubuntu/xenial64"
+  # box: "ubuntu/xenial64"
+  box: "bento/ubuntu-16.04"
   primary: false
   autostart: false
   provision_script: "provision_nodejs_ubuntu_1604.sh"
