@@ -778,7 +778,7 @@ function install_geoip () {
   echo -e "\033[33;1mPROVISIONING: Setting up to install the GeoIP binary.\033[0m";
 
   # Install the core compiler and build options.
-  sudo aptitude install -y -q=2install -y -q=2 build-essential libtool zlib1g-dev;
+  sudo aptitude install -y -q=2 build-essential libtool zlib1g-dev;
 
   # Get the GeoIP source code.
   cd "${BASE_DIR}";
@@ -789,7 +789,7 @@ function install_geoip () {
 
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Configuring the GeoIP binary.\033[0m";
-  autoreconf -f -i
+  autoreconf -f -i;
   libtoolize -f -q;
   ./configure;
 
