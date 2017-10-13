@@ -876,9 +876,6 @@ function install_geoip_databases () {
 ##########################################################################################
 function install_awstats () {
 
-  # Go into the config directory.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
-
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Installing the AWStats related items.\033[0m";
 
@@ -888,6 +885,9 @@ function install_awstats () {
   tar -xf "awstats-7.3.tar.gz";
   rm -f "awstats-7.3.tar.gz";
   sudo -E mv -f "awstats-7.3" "/usr/share/awstats-7.3";
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Set an index page for AWStats.
   sudo -E cp -f "awstats/awstatstotals.php" "/usr/share/awstats-7.3/wwwroot/cgi-bin/index.php";
