@@ -261,6 +261,9 @@ function install_basic_tools () {
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Installing a set of generic tools.\033[0m";
 
+  # Update Aptitude.
+  sudo -E aptitude -y -q=2 update;
+
   # Install generic tools.
   sudo -E aptitude -y -q=2 install \
     dnsutils traceroute nmap bc htop finger curl whois rsync lsof \
