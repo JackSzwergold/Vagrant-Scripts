@@ -158,6 +158,9 @@ function install_aptitude () {
   # Install Aptitude.
   sudo -E apt-get install -y -q=2 aptitude aptitude-common;
 
+  # Update Aptitude.
+  sudo -E aptitude -y -q=2 update;
+
 } # install_aptitude
 
 ##########################################################################################
@@ -261,15 +264,12 @@ function install_basic_tools () {
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Installing a set of generic tools.\033[0m";
 
-  # Update Aptitude.
-  sudo -E aptitude -y -q=2 update;
-
   # Install generic tools.
   sudo -E aptitude -y -q=2 install \
     dnsutils traceroute nmap bc htop finger curl whois rsync lsof \
     iftop figlet lynx mtr-tiny iperf nload zip unzip attr sshpass \
     dkms mc elinks dos2unix p7zip-full nfs-common \
-    slurm sharutils uuid-runtime quota pv trickle apachetop ntp \
+    slurm sharutils uuid-runtime quota pv trickle ntp \
     virtualbox-dkms;
 
 } # install_basic_tools
@@ -460,7 +460,8 @@ function install_apache () {
   # Install the base Apache related items.
   sudo -E RUNLEVEL=1 aptitude -y -q=2 install \
     apache2 apache2-dev php5 \
-    libapache2-mod-php5 php-pear;
+    libapache2-mod-php5 php-pear \
+    apachetop;
 
   # Install other PHP related related items.
   sudo -E RUNLEVEL=1 aptitude -y -q=2 install \
