@@ -962,7 +962,7 @@ function install_fail2ban () {
   echo -e "\033[33;1mPROVISIONING: Fail2Ban related stuff.\033[0m";
 
   # Install Fail2Ban.
-  sudo -E aptitude purge -y -q=2 fail2ban;
+  sudo -E aptitude -y -q=2 purge fail2ban;
   sudo -E aptitude -y -q=2 install gamin libgamin0 python-central python-gamin python-support;
   curl -ss -O -L "http://old-releases.ubuntu.com/ubuntu/pool/universe/f/fail2ban/fail2ban_0.8.13-1_all.deb";
   sudo -E RUNLEVEL=1 dpkg --force-all -i "fail2ban_0.8.13-1_all.deb";
