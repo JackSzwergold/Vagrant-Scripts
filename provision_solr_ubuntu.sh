@@ -291,7 +291,7 @@ function install_git () {
   echo -e "\033[33;1mPROVISIONING: Installing Git and related stuff.\033[0m";
 
   # Purge any already installed version of Git.
-  sudo -E aptitude purge -y -q git git-core subversion git-svn;
+  sudo -E aptitude -y -q=2 purge git git-core subversion git-svn;
 
   # Now install Git via PPA.
   sudo -E aptitude -y -q=2 install python-software-properties;

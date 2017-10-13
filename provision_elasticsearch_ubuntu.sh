@@ -136,6 +136,9 @@ function install_aptitude () {
 ##########################################################################################
 function set_environment () {
 
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Setting the selected editor.\033[0m";
 
@@ -275,7 +278,7 @@ function install_compiler () {
   echo -e "\033[33;1mPROVISIONING: Installing the core compiler tools.\033[0m";
 
   # Install the core compiler and build tools.
-  sudo -E aptitude -y -q=2 install build-essential libtool;
+  sudo -E aptitude -y -q=2 install build-essential libtool automake m4;
 
 } # install_compiler
 
@@ -288,7 +291,7 @@ function install_git () {
   echo -e "\033[33;1mPROVISIONING: Installing Git and related stuff.\033[0m";
 
   # Purge any already installed version of Git.
-  sudo -E aptitude purge -y -q git git-core subversion git-svn;
+  sudo -E aptitude -y -q=2 purge git git-core subversion git-svn;
 
   # Now install Git via PPA.
   sudo -E aptitude -y -q=2 install python-software-properties;
@@ -303,6 +306,9 @@ function install_git () {
 ##########################################################################################
 function configure_motd () {
 
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Setting the MOTD banner.\033[0m";
 
@@ -310,9 +316,7 @@ function configure_motd () {
   sudo -E aptitude -y -q=2 install figlet;
 
   # Set the server login banner with figlet.
-  # MOTD_PATH="/etc/motd.tail";
   MOTD_PATH="/etc/motd";
-  # echo "$(figlet ${MACHINE_NAME^} | head -n -1).local" > "${MOTD_PATH}";
   echo "$(figlet ${MACHINE_NAME} | head -n -1).local" > "${MOTD_PATH}";
   echo "" >> "${MOTD_PATH}";
 
@@ -412,18 +416,23 @@ function update_locate_db () {
 #
 ##########################################################################################
 
+# Install install stuff.
 configure_user_and_group;
 install_aptitude;
 set_environment;
-set_timezone;
 configure_sources_list;
-hash avahi-daemon 2>/dev/null || { install_avahi; }
-hash sar 2>/dev/null || {  install_sysstat; }
+hash sar 2>/dev/null || { install_sysstat; }
 hash updatedb 2>/dev/null || { install_locate; }
 configure_motd;
 install_basic_tools;
 hash libtool 2>/dev/null || { install_compiler; }
 if ! grep -q -s "git-core" "/etc/apt/sources.list" "/etc/apt/sources.list.d/"*; then install_git; fi
+
+# Timezone and related stuff.
+set_timezone;
+
+# Avahi
+hash avahi-daemon 2>/dev/null || { install_avahi; }
 
 # Install configure Java.
 install_java;
