@@ -179,7 +179,7 @@
   box: "ubuntu/trusty64"
   primary: false
   autostart: false
-  provision_script: "provision_mongo_ubuntu.sh"
+  provision_script: "provision_mongo.sh"
   provision_script_regular: null
   username: "vagrant"
   password: "vagrant"
