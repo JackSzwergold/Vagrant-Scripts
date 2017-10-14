@@ -64,11 +64,11 @@
   deployment_dbs_path: "deployment_dbs"
   deployment_binaries_path: "deployment_binaries/ubuntu"
   basics: true
-  lamp: false
+  lamp: true
   imagemagick: false
   geoip: true
   iptables: true
-  fail2ban: true
+  fail2ban: false
 - name: "Sandbox (CentOS 6)"
   box: "kaorimatz/centos-6.8-x86_64"
   primary: false

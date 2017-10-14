@@ -470,19 +470,19 @@ function install_apache () {
 
   # Install the base Apache related items.
   sudo -E RUNLEVEL=1 aptitude -y -q=2 install \
-    apache2 apache2-dev php5 \
-    libapache2-mod-php5 php-pear \
+    apache2 apache2-dev php \
+    libapache2-mod-php php-pear \
     apachetop;
 
   # Install other PHP related related items.
   sudo -E RUNLEVEL=1 aptitude -y -q=2 install \
-    php5-mysql php5-pgsql php5-odbc php5-sybase php5-sqlite \
-    php5-xmlrpc php5-json php5-xsl php5-curl php5-geoip \
-    php-getid3 php5-imap php5-ldap php5-mcrypt \
-    php5-pspell php5-gmp php5-gd;
+    php-mysql php-pgsql php-odbc php-sybase php-sqlite \
+    php-xmlrpc php-json php-xsl php-curl php-geoip \
+    php-getid3 php-imap php-ldap php-mcrypt \
+    php-pspell php-gmp php-gd;
 
   # Enable the PHP mcrypt module.
-  sudo -E php5enmod mcrypt;
+  sudo -E phpenmod mcrypt;
 
   # Enable these core Apache modules.
   sudo -E a2enmod -q rewrite headers expires include proxy proxy_http cgi;
@@ -516,7 +516,7 @@ function configure_apache () {
   sudo -E a2ensite ${HOST_NAME};
 
   # Copy the PHP config files into place.
-  sudo -E cp -f "php/php.ini" "/etc/php5/apache2/php.ini";
+  sudo -E cp -f "php/php.ini" "/etc/php/7.0/apache2/php.ini";
 
 } # configure_apache
 
@@ -1193,7 +1193,7 @@ if [ "${PROVISION_LAMP}" = true ]; then
   if [ -f "/etc/logrotate.d/apache2" ]; then configure_apache_log_rotation; fi
 
   # MySQL related stuff.
-  hash mysql 2>/dev/null && hash mysqld 2>/dev/null || { install_mysql; }
+  # hash mysql 2>/dev/null && hash mysqld 2>/dev/null || { install_mysql; }
 
   # Munin related stuff.
   hash munin-node 2>/dev/null || { install_munin; }
