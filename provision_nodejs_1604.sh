@@ -405,6 +405,30 @@ function install_nodejs () {
 } # install_nodejs
 
 ##########################################################################################
+# Nginx
+##########################################################################################
+function install_nginx () {
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Installing Nginx related stuff.\033[0m";
+
+  # Now install NodeJS and NPM via PPA.
+  sudo -E aptitude -y -q=2 install nginx-full;
+
+  # Copy the Sysstat config file in place and restart sysstat.
+  NGINX_CONF_PATH="/etc/nginx/sites-available";
+  if [ -f "nginx/default" ]; then
+    sudo -E cp -f "nginx/default" "${NGINX_CONF_PATH}/default";
+    sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "${NGINX_CONF_PATH}/default";
+    sudo -E service nginx restart;
+  fi
+
+} # install_nginx
+
+##########################################################################################
 # Deployment directories.
 ##########################################################################################
 function set_application_deployment_directories () {
@@ -461,6 +485,9 @@ hash avahi-daemon 2>/dev/null || { install_avahi; }
 
 # Install configure NodeJS and NPM.
 hash node 2>/dev/null || { install_nodejs; }
+
+# Install configure Nginx.
+# hash nginx 2>/dev/null || { install_nginx; }
 
 # Setup the NodeJS application deployment environment.
 if [ ! -d "/opt/webapps" ]; then set_application_deployment_directories; fi
