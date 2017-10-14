@@ -352,8 +352,8 @@ function install_mongo26 () {
   echo "deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen" | sudo tee "/etc/apt/sources.list.d/mongodb.list" & ADD_REPO_PID=(`jobs -l | awk '{print $2}'`);
   wait ${ADD_REPO_PID};
   sudo -E rm -rf "/var/lib/apt/lists/partial/";
-  sudo -E apt-get -y -q=2 update -o Acquire::CompressionTypes::Order::=gz;
-  sudo -E apt-get -y -q=2 clean;
+  sudo -E aptitude -y -q=2 update -o Acquire::CompressionTypes::Order::=gz;
+  sudo -E aptitude -y -q=2 clean;
   sudo -E aptitude -y -q=2 update;
   sudo -E aptitude -y -q=2 install mongodb-org=2.6.12 mongodb-org-server=2.6.12 mongodb-org-shell=2.6.12 mongodb-org-mongos=2.6.12 mongodb-org-tools=2.6.12;
 
@@ -419,8 +419,8 @@ function install_mongo32 () {
   echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.2 multiverse" | sudo tee "/etc/apt/sources.list.d/mongodb-org-3.2.list" | sudo tee "/etc/apt/sources.list.d/mongodb.list" & ADD_REPO_PID=(`jobs -l | awk '{print $2}'`);
   wait ${ADD_REPO_PID};
   sudo -E rm -rf "/var/lib/apt/lists/partial/";
-  sudo -E apt-get -y -q=2 update -o Acquire::CompressionTypes::Order::=gz;
-  sudo -E apt-get -y -q=2 clean;
+  sudo -E aptitude -y -q=2 update -o Acquire::CompressionTypes::Order::=gz;
+  sudo -E aptitude -y -q=2 clean;
   sudo -E aptitude -y -q=2 update;
   sudo -E aptitude -y -q=2 install mongodb-org=3.2.10 mongodb-org-server=3.2.10 mongodb-org-shell=3.2.10 mongodb-org-mongos=3.2.10 mongodb-org-tools=3.2.10;
 
