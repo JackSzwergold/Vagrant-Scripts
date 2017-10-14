@@ -131,7 +131,10 @@ function install_aptitude () {
   echo -e "\033[33;1mPROVISIONING: Install Aptitude.\033[0m";
 
   # Install Aptitude.
-  sudo -E apt install -y -q=2 aptitude;
+  sudo -E apt-get -y -q=2 install aptitude aptitude-common;
+
+  # Update Aptitude.
+  sudo -E aptitude -y -q=2 update;
 
 } # install_aptitude
 
@@ -166,16 +169,22 @@ function set_environment () {
 function set_timezone () {
 
   TIMEZONE="America/New_York";
-  TIMEZONE_PATH="/etc/timezone";
-  if [ "${TIMEZONE}" != $(cat "${TIMEZONE_PATH}") ]; then
 
-    # Output a provisioning message.
-    echo -e "\033[33;1mPROVISIONING: Setting timezone data.\033[0m";
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Setting timezone data.\033[0m";
 
-    sudo -E echo "${TIMEZONE}" > "${TIMEZONE_PATH}";
-    sudo -E dpkg-reconfigure -f noninteractive tzdata 2>/dev/null;
+  # Set the timezone.
+  sudo -E timedatectl set-timezone "${TIMEZONE}";
 
-  fi
+  # Do this stuff to get NTP setup.
+  sudo -E service ntp stop;
+  sudo -E ntpd -gq;
+  sudo service ntp start;
+  # sudo -E update-rc.d -f ntp defaults;
+  sudo -E update-rc.d -f ntp enable;
+
+  # Set the NTP synchronized value to 'true'.
+  sudo -E timedatectl set-ntp true;
 
 } # set_timezone
 
@@ -207,7 +216,7 @@ function install_avahi () {
   echo -e "\033[33;1mPROVISIONING: Avahi related stuff.\033[0m";
 
   # Install Avahi.
-  sudo -E aptitude install -y -q=2 avahi-daemon avahi-utils;
+  sudo -E aptitude -y -q=2 install avahi-daemon avahi-utils;
 
 } # install_avahi
 
@@ -216,11 +225,14 @@ function install_avahi () {
 ##########################################################################################
 function install_sysstat () {
 
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Sysstat related stuff.\033[0m";
 
   # Install Sysstat.
-  sudo -E aptitude install -y -q=2 sysstat;
+  sudo -E aptitude -y -q=2 install sysstat;
 
   # Copy the Sysstat config file in place and restart sysstat.
   if [ -f "sysstat/sysstat" ]; then
@@ -239,12 +251,12 @@ function install_basic_tools () {
   echo -e "\033[33;1mPROVISIONING: Installing a set of generic tools.\033[0m";
 
   # Install generic tools.
-  sudo -E aptitude install -y -q=2 \
+  sudo -E aptitude -y -q=2 install \
     dnsutils traceroute nmap bc htop finger curl whois rsync lsof \
     iftop figlet lynx mtr-tiny iperf nload zip unzip attr sshpass \
-    dkms mc elinks ntp dos2unix p7zip-full nfs-common \
-    slurm sharutils uuid-runtime quota pv trickle apachetop \
-    virtualbox-dkms nano;
+    dkms mc elinks dos2unix p7zip-full nfs-common \
+    slurm sharutils uuid-runtime quota pv trickle ntp \
+    virtualbox-dkms;
 
 } # install_basic_tools
 
@@ -257,7 +269,7 @@ function install_locate () {
   echo -e "\033[33;1mPROVISIONING: Installing the locate tool and updating the database.\033[0m";
 
   # Install Locate.
-  sudo -E aptitude install -y -q=2 mlocate;
+  sudo -E aptitude -y -q=2 install mlocate;
 
   # Update Locate.
   sudo -E updatedb;
@@ -273,7 +285,7 @@ function install_compiler () {
   echo -e "\033[33;1mPROVISIONING: Installing the core compiler tools.\033[0m";
 
   # Install the core compiler and build tools.
-  sudo -E aptitude install -y -q=2 build-essential libtool;
+  sudo -E aptitude -y -q=2 install build-essential libtool automake m4;
 
 } # install_compiler
 
@@ -286,13 +298,13 @@ function install_git () {
   echo -e "\033[33;1mPROVISIONING: Installing Git and related stuff.\033[0m";
 
   # Purge any already installed version of Git.
-  sudo -E aptitude purge -y -q git git-core subversion git-svn;
+  sudo -E aptitude -y -q=2 purge git git-core subversion git-svn;
 
   # Now install Git via PPA.
-  sudo -E aptitude install -y -q=2 python-software-properties;
+  sudo -E aptitude -y -q=2 install python-software-properties;
   sudo -E add-apt-repository -y ppa:git-core/ppa;
-  sudo -E aptitude update -y -q=2;
-  sudo -E aptitude install -y -q=2 git git-core subversion git-svn;
+  sudo -E aptitude -y -q=2 update;
+  sudo -E aptitude -y -q=2 install git git-core subversion git-svn;
 
 } # install_git
 
@@ -305,9 +317,9 @@ function install_postfix () {
   echo -e "\033[33;1mPROVISIONING: Installing Postfix and related mail stuff.\033[0m";
 
   # Install postfix and general mail stuff.
-  debconf-set-selections <<< "postfix postfix/mailname string ${HOST_NAME}";
-  debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'";
-  sudo -E aptitude install -y -q=2 postfix mailutils >/dev/null 2>&1;
+  sudo -E debconf-set-selections <<< "postfix postfix/mailname string ${HOST_NAME}";
+  sudo -E debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'";
+  sudo -E aptitude -y -q=2 install postfix mailutils >/dev/null 2>&1;
 
 } # install_postfix
 
@@ -315,6 +327,9 @@ function install_postfix () {
 # Setting the 'login.defs' config file.
 ##########################################################################################
 function configure_login_defs () {
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
 
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Setting the 'login.defs' config file.\033[0m";
@@ -365,12 +380,10 @@ function configure_motd () {
   echo -e "\033[33;1mPROVISIONING: Setting the MOTD banner.\033[0m";
 
   # Install figlet.
-  sudo -E aptitude install -y -q=2 figlet;
+  sudo -E aptitude -y -q=2 install figlet;
 
   # Set the server login banner with figlet.
-  # MOTD_PATH="/etc/motd.tail";
   MOTD_PATH="/etc/motd";
-  # echo "$(figlet ${MACHINE_NAME^} | head -n -1).local" > "${MOTD_PATH}";
   echo "$(figlet ${MACHINE_NAME} | head -n -1).local" > "${MOTD_PATH}";
   echo "" >> "${MOTD_PATH}";
 
@@ -396,7 +409,7 @@ function install_monit () {
   echo -e "\033[33;1mPROVISIONING: Monit related stuff.\033[0m";
 
   # Install Monit.
-  sudo -E RUNLEVEL=1 aptitude install -y -q=2 monit;
+  sudo -E RUNLEVEL=1 aptitude -y -q=2 install monit;
 
   # Run these commands to prevent Monit from coming up on reboot.
   sudo -E service monit stop;
@@ -467,13 +480,12 @@ function update_locate_db () {
 #
 ##########################################################################################
 
+# Install install stuff.
 configure_user_and_group;
 install_aptitude;
 set_environment;
-set_timezone;
 configure_sources_list;
-hash avahi-daemon 2>/dev/null || { install_avahi; }
-hash sar 2>/dev/null || {  install_sysstat; }
+hash sar 2>/dev/null || { install_sysstat; }
 hash updatedb 2>/dev/null || { install_locate; }
 configure_motd;
 
@@ -489,6 +501,12 @@ if [ "${PROVISION_BASICS}" = true ]; then
   if [ -f "ssh/ssh_config" ] && [ -f "/etc/ssh/ssh_config" ]; then configure_ssh; fi
 
 fi
+
+# Timezone and related stuff.
+set_timezone;
+
+# Avahi
+hash avahi-daemon 2>/dev/null || { install_avahi; }
 
 # Monit
 hash monit 2>/dev/null || { install_monit; }
