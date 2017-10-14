@@ -2,9 +2,9 @@
 
 ##########################################################################################
 #
-# Provision NodeJS Ubuntu (provision_nodejs.sh) (c) by Jack Szwergold
+# Provision NodeJS (provision_nodejs.sh) (c) by Jack Szwergold
 #
-# Provision NodeJS Ubuntu is licensed under a
+# Provision NodeJS is licensed under a
 # Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
 #
 # You should have received a copy of the license along with this
