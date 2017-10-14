@@ -18,7 +18,7 @@
 #
 ##########################################################################################
 
-- name: "Sandbox_UBUNTU_1404"
+- name: "Sandbox_UBUNTU"
   box: "ubuntu/trusty64"
   primary: true
   autostart: false
@@ -111,7 +111,7 @@
   deployment_binaries_path: "deployment_binaries/centos"
   basics: true
   lamp: true
-- name: "Jabroni_UBUNTU_1404"
+- name: "Jabroni_UBUNTU"
   box: "ubuntu/trusty64"
   primary: false
   autostart: false
@@ -136,7 +136,7 @@
   geoip: false
   iptables: false
   fail2ban: false
-- name: "NodeJS_UBUNTU_1404"
+- name: "NodeJS_UBUNTU"
   box: "ubuntu/trusty64"
   primary: false
   autostart: false
@@ -175,7 +175,7 @@
   deployment_configs_path: "deployment_configs/ubuntu"
   deployment_dbs_path: "deployment_dbs"
   deployment_binaries_path: "deployment_binaries/ubuntu"
-- name: "Mongo_UBUNTU_1404"
+- name: "Mongo_UBUNTU"
   box: "ubuntu/trusty64"
   primary: false
   autostart: false
@@ -197,7 +197,7 @@
   deployment_configs_path: "deployment_configs/ubuntu"
   deployment_dbs_path: "deployment_dbs"
   deployment_binaries_path: "deployment_binaries/ubuntu"
-- name: "ElasticSearch_UBUNTU_1404"
+- name: "ElasticSearch_UBUNTU"
   box: "ubuntu/trusty64"
   primary: false
   autostart: false
@@ -219,7 +219,7 @@
   deployment_configs_path: "deployment_configs/ubuntu"
   deployment_dbs_path: "deployment_dbs"
   deployment_binaries_path: "deployment_binaries/ubuntu"
-- name: "Solr_UBUNTU_1404"
+- name: "Solr_UBUNTU"
   box: "ubuntu/trusty64"
   primary: false
   autostart: false
