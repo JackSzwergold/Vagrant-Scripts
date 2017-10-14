@@ -508,10 +508,12 @@ set_timezone;
 hash avahi-daemon 2>/dev/null || { install_avahi; }
 
 # Install configure MongoDB.
-hash mongo 2>/dev/null && hash mongod 2>/dev/null || { install_mongo26; }
-configure_mongo26;
-# hash mongo 2>/dev/null && hash mongod 2>/dev/null || { install_mongo32; }
-# configure_mongo32;
+hash mongo 2>/dev/null && hash mongod 2>/dev/null || {
+  install_mongo26;
+  configure_mongo26;
+  # install_mongo32;
+  # configure_mongo32;
+}
 
 # Update the locate database.
 update_locate_db;
