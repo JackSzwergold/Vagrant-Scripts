@@ -160,7 +160,7 @@
   box: "bento/ubuntu-16.04"
   primary: false
   autostart: false
-  provision_script: "provision_nodejs_1604.sh"
+  provision_script: "provision_nodejs.sh"
   provision_script_regular: "provision_nodejs_regular.sh"
   username: "vagrant"
   password: "vagrant"
