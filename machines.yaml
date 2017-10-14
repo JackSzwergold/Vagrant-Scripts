@@ -18,7 +18,7 @@
 #
 ##########################################################################################
 
-- name: "Sandbox_UBUNTU"
+- name: "Sandbox (Ubuntu)"
   box: "ubuntu/trusty64"
   primary: true
   autostart: false
@@ -43,7 +43,7 @@
   geoip: true
   iptables: true
   fail2ban: false
-- name: "Sandbox_UBUNTU_1604"
+- name: "Sandbox (Ubuntu 16.04)"
   # box: "ubuntu/xenial64"
   box: "bento/ubuntu-16.04"
   primary: false
@@ -69,7 +69,7 @@
   geoip: true
   iptables: true
   fail2ban: true
-- name: "Sandbox_CENTOS_68"
+- name: "Sandbox (CentOS 6)"
   box: "kaorimatz/centos-6.8-x86_64"
   primary: false
   autostart: false
@@ -77,8 +77,8 @@
   provision_script_regular: null
   username: "vagrant"
   password: "vagrant"
-  hostname: "sandbox-centos-68"
-  machinename: "Sandbox-CentOS-68"
+  hostname: "sandbox-centos-6"
+  machinename: "Sandbox-CentOS-6"
   ip: "192.168.56.30"
   forward_guest1: 22
   forward_host1: 2224
@@ -90,7 +90,7 @@
   deployment_binaries_path: "deployment_binaries/centos"
   basics: true
   lamp: true
-- name: "Sandbox_CENTOS_7"
+- name: "Sandbox (CentOS 7)"
   box: "bento/centos-7.3"
   primary: false
   autostart: false
@@ -111,7 +111,7 @@
   deployment_binaries_path: "deployment_binaries/centos"
   basics: true
   lamp: true
-- name: "Jabroni_UBUNTU"
+- name: "Jabroni (Ubuntu)"
   box: "ubuntu/trusty64"
   primary: false
   autostart: false
@@ -136,7 +136,7 @@
   geoip: false
   iptables: false
   fail2ban: false
-- name: "NodeJS_UBUNTU"
+- name: "NodeJS (Ubuntu)"
   box: "ubuntu/trusty64"
   primary: false
   autostart: false
@@ -155,7 +155,7 @@
   deployment_configs_path: "deployment_configs/ubuntu"
   deployment_dbs_path: "deployment_dbs"
   deployment_binaries_path: "deployment_binaries/ubuntu"
-- name: "NodeJS_UBUNTU_1604"
+- name: "NodeJS (Ubuntu 16.04)"
   # box: "ubuntu/xenial64"
   box: "bento/ubuntu-16.04"
   primary: false
@@ -175,7 +175,7 @@
   deployment_configs_path: "deployment_configs/ubuntu"
   deployment_dbs_path: "deployment_dbs"
   deployment_binaries_path: "deployment_binaries/ubuntu"
-- name: "Mongo_UBUNTU"
+- name: "Mongo (Ubuntu)"
   box: "ubuntu/trusty64"
   primary: false
   autostart: false
@@ -197,7 +197,7 @@
   deployment_configs_path: "deployment_configs/ubuntu"
   deployment_dbs_path: "deployment_dbs"
   deployment_binaries_path: "deployment_binaries/ubuntu"
-- name: "ElasticSearch_UBUNTU"
+- name: "ElasticSearch (Ubuntu)"
   box: "ubuntu/trusty64"
   primary: false
   autostart: false
@@ -219,7 +219,7 @@
   deployment_configs_path: "deployment_configs/ubuntu"
   deployment_dbs_path: "deployment_dbs"
   deployment_binaries_path: "deployment_binaries/ubuntu"
-- name: "Solr_UBUNTU"
+- name: "Solr (Ubuntu)"
   box: "ubuntu/trusty64"
   primary: false
   autostart: false
