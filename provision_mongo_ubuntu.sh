@@ -349,13 +349,11 @@ function install_mongo26 () {
   curl -ss -O -L "http://docs.mongodb.org/10gen-gpg-key.asc" & CURL_PID=(`jobs -l | awk '{print $2}'`);
   wait ${CURL_PID};
   sudo apt-key add "10gen-gpg-key.asc";
-  # sudo -E apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 7F0CEB10;
   echo "deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen" | sudo tee "/etc/apt/sources.list.d/mongodb.list" & ADD_REPO_PID=(`jobs -l | awk '{print $2}'`);
   wait ${ADD_REPO_PID};
-  # sudo rm -rf "/var/lib/apt/lists/"*;
-  sudo rm -rf "/var/lib/apt/lists/partial/";
-  sudo apt-get update -o Acquire::CompressionTypes::Order::=gz;
-  sudo -E apt-get clean -y -q;
+  sudo -E rm -rf "/var/lib/apt/lists/partial/";
+  sudo -E apt-get -y -q=2 update -o Acquire::CompressionTypes::Order::=gz;
+  sudo -E apt-get -y -q=2 clean;
   sudo -E aptitude -y -q=2 update;
   sudo -E aptitude -y -q=2 install mongodb-org=2.6.12 mongodb-org-server=2.6.12 mongodb-org-shell=2.6.12 mongodb-org-mongos=2.6.12 mongodb-org-tools=2.6.12;
 
@@ -418,13 +416,11 @@ function install_mongo32 () {
   curl -ss -O -L "http://docs.mongodb.org/10gen-gpg-key.asc" & CURL_PID=(`jobs -l | awk '{print $2}'`);
   wait ${CURL_PID};
   sudo apt-key add "10gen-gpg-key.asc";
-  # sudo -E apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv EA312927;
   echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.2 multiverse" | sudo tee "/etc/apt/sources.list.d/mongodb-org-3.2.list" | sudo tee "/etc/apt/sources.list.d/mongodb.list" & ADD_REPO_PID=(`jobs -l | awk '{print $2}'`);
   wait ${ADD_REPO_PID};
-  # sudo rm -rf "/var/lib/apt/lists/"*;
-  sudo rm -rf "/var/lib/apt/lists/partial/";
-  sudo apt-get update -o Acquire::CompressionTypes::Order::=gz;
-  sudo -E apt-get clean -y -q;
+  sudo -E rm -rf "/var/lib/apt/lists/partial/";
+  sudo -E apt-get -y -q=2 update -o Acquire::CompressionTypes::Order::=gz;
+  sudo -E apt-get -y -q=2 clean;
   sudo -E aptitude -y -q=2 update;
   sudo -E aptitude -y -q=2 install mongodb-org=3.2.10 mongodb-org-server=3.2.10 mongodb-org-shell=3.2.10 mongodb-org-mongos=3.2.10 mongodb-org-tools=3.2.10;
 
@@ -512,9 +508,9 @@ set_timezone;
 hash avahi-daemon 2>/dev/null || { install_avahi; }
 
 # Install configure MongoDB.
-hash mongo && hash mongod 2>/dev/null || { install_mongo26; }
+hash mongo 2>/dev/null && hash mongod 2>/dev/null || { install_mongo26; }
 configure_mongo26;
-# hash mongo && hash mongod 2>/dev/null || { install_mongo32; }
+# hash mongo 2>/dev/null && hash mongod 2>/dev/null || { install_mongo32; }
 # configure_mongo32;
 
 # Update the locate database.
