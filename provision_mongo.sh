@@ -406,40 +406,6 @@ function install_mongo26 () {
 
 } # install_mongo26
 
-function configure_mongo26 () {
-
-  # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Configuring MongoDB related items.\033[0m";
-
-  # Comment out the 'bind_ip' line to enable network connections outside of 'localhost'.
-  sudo -E sed -i 's/bind_ip = 127.0.0.1/#bind_ip = 127.0.0.1/g' "/etc/mongod.conf";
-
-  # Restart the Mongo instance to get the new config loaded.
-  sudo -E service mongod restart;
-
-  # Go into the base directory.
-  cd "${BASE_DIR}";
-
-  # Import any databases that were sent over as the part of the provisioning process.
-  if [ -d "${DB_DIR}" ]; then
-    find "${DB_DIR}" -type f -name "*.bson" |\
-      while read db_backup_path
-      do
-        if [ -f "${db_backup_path}" ]; then
-          db_dirname=$(dirname "${db_backup_path}");
-          mongo_db=$(basename "${db_dirname}");
-          # Output a provisioning message.
-          echo -e "\033[33;1mPROVISIONING: Restoring the '${mongo_db}' MongoDB database.\033[0m";
-          mongo --quiet "${mongo_db}" --eval "db.dropDatabase()";
-          mongorestore --quiet "${db_backup_path}";
-        else
-          exit 1;
-        fi
-      done
-  fi
-
-} # configure_mongo26
-
 ##########################################################################################
 # MongoDB 3.2
 ##########################################################################################
@@ -473,7 +439,7 @@ function install_mongo32 () {
 
 } # install_mongo32
 
-function configure_mongo32 () {
+function configure_mongo () {
 
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Configuring MongoDB related items.\033[0m";
@@ -506,7 +472,7 @@ function configure_mongo32 () {
       done
   fi
 
-} # configure_mongo32
+} # configure_mongo
 
 ##########################################################################################
 # Update the locate database.
@@ -550,9 +516,8 @@ hash avahi-daemon 2>/dev/null || { install_avahi; }
 # Install configure MongoDB.
 hash mongo 2>/dev/null && hash mongod 2>/dev/null || {
   install_mongo26;
-  configure_mongo26;
   # install_mongo32;
-  # configure_mongo32;
+  configure_mongo;
 }
 
 # Monit
