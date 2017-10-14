@@ -2,9 +2,9 @@
 
 ##########################################################################################
 #
-# Provision LAMP Ubuntu 16.04 (provision_lamp_ubuntu_1604.sh) (c) by Jack Szwergold
+# Provision Ubuntu 16.04 (provision_ubuntu_1604.sh) (c) by Jack Szwergold
 #
-# Provision LAMP Ubuntu 16.04 is licensed under a
+# Provision Ubuntu 16.04 is licensed under a
 # Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
 #
 # You should have received a copy of the license along with this
