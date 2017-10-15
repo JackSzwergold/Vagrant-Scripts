@@ -2,9 +2,9 @@
 
 ##########################################################################################
 #
-# Provision LAMP CentOS 6.8 (provision_centos_68.sh) (c) by Jack Szwergold
+# Provision CentOS 6.8 (provision_centos_68.sh) (c) by Jack Szwergold
 #
-# Provision LAMP CentOS 6.8 is licensed under a
+# Provision CentOS 6.8 is licensed under a
 # Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
 #
 # You should have received a copy of the license along with this
@@ -211,7 +211,6 @@ function install_basic_tools () {
   echo -e "\033[33;1mPROVISIONING: Installing a set of generic tools.\033[0m";
 
   # Install basic repo stuff.
-  # sudo -E yum install -y -q epel-release deltarpm;
   sudo -E yum install -y -q deltarpm;
 
   # Install generic tools.
@@ -340,7 +339,6 @@ function configure_motd () {
   echo -e "\033[33;1mPROVISIONING: Setting the MOTD banner.\033[0m";
 
   # Install basic repo stuff.
-  # sudo -E yum install -y -q epel-release deltarpm;
   sudo -E yum install -y -q deltarpm;
 
   # Install figlet.
@@ -790,6 +788,7 @@ if [ "${PROVISION_BASICS}" = true ]; then
 
 fi
 
+# Get the LAMP stuff set.
 if [ "${PROVISION_LAMP}" = true ]; then
 
   # Apache related stuff.
