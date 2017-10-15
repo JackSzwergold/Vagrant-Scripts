@@ -2,7 +2,7 @@
 
 ##########################################################################################
 #
-# Provision LAMP CentOS 7 (provision_lamp_centos_7.sh) (c) by Jack Szwergold
+# Provision LAMP CentOS 7 (provision_centos_7.sh) (c) by Jack Szwergold
 #
 # Provision LAMP CentOS 7 is licensed under a
 # Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
