@@ -406,6 +406,46 @@ function configure_motd () {
 } # configure_motd
 
 ##########################################################################################
+# Monit
+##########################################################################################
+function install_monit () {
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Monit related stuff.\033[0m";
+
+  # Install Monit.
+  sudo -E RUNLEVEL=1 aptitude -y -q=2 install monit;
+
+  # Run these commands to prevent Monit from coming up on reboot.
+  sudo -E service monit stop;
+  sudo -E update-rc.d -f monit remove;
+
+} # install_monit
+
+##########################################################################################
+# Monit config.
+##########################################################################################
+function configure_monit () {
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Installing the Monit configs.\033[0m";
+
+  sudo -E cp -f "monit/monitrc" "/etc/monit/monitrc";
+  sudo -E cp -f "monit/node_app.conf" "/etc/monit/conf.d/node_app.conf";
+
+  # Restart Monit.
+  sudo -E service monit restart;
+
+  # Run these commands to prevent Monit from coming up on reboot.
+  sudo -E service monit stop;
+  sudo -E update-rc.d -f monit remove;
+
+} # configure_monit
+
+##########################################################################################
 # Java
 ##########################################################################################
 function install_java () {
@@ -525,6 +565,10 @@ install_java;
 # Install configure ElasticSearch.
 install_elasticsearch;
 configure_elasticsearch;
+
+# Monit
+# hash monit 2>/dev/null || { install_monit; }
+# if [ -f "${BASE_DIR}/${CONFIG_DIR}/monit/monitrc" ]; then configure_monit; fi
 
 # Update the locate database.
 update_locate_db;
