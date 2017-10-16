@@ -2,9 +2,9 @@
 
 ##########################################################################################
 #
-# Provision Solr Ubuntu (provision_solr_ubuntu.sh) (c) by Jack Szwergold
+# Provision Solr (provision_solr.sh) (c) by Jack Szwergold
 #
-# Provision Solr Ubuntu is licensed under a
+# Provision Solr is licensed under a
 # Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
 #
 # You should have received a copy of the license along with this
@@ -69,6 +69,15 @@ HOST_NAME="vagrant.local";
 if [ -n "$7" ]; then HOST_NAME="${7}"; fi
 # Output a provisioning message.
 echo -e "\033[33;1mPROVISIONING: Host name is: '${HOST_NAME}'.\033[0m";
+
+##########################################################################################
+# Optional items.
+##########################################################################################
+
+PROVISION_BASICS=false;
+if [ -n "$8" ]; then PROVISION_BASICS="${8}"; fi
+# Output a provisioning message.
+echo -e "\033[33;1mPROVISIONING: Basics provisioning: '${PROVISION_BASICS}'.\033[0m";
 
 ##########################################################################################
 # Go into the config directory.
@@ -302,6 +311,69 @@ function install_git () {
 } # install_git
 
 ##########################################################################################
+# Postfix and Mail
+##########################################################################################
+function install_postfix () {
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Installing Postfix and related mail stuff.\033[0m";
+
+  # Install postfix and general mail stuff.
+  sudo -E debconf-set-selections <<< "postfix postfix/mailname string ${HOST_NAME}";
+  sudo -E debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'";
+  sudo -E aptitude -y -q=2 install postfix mailutils >/dev/null 2>&1;
+
+} # install_postfix
+
+##########################################################################################
+# Setting the 'login.defs' config file.
+##########################################################################################
+function configure_login_defs () {
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Setting the 'login.defs' config file.\033[0m";
+
+  # Copy the 'login.defs' file in place.
+  sudo -E cp -f "system/login.defs" "/etc/login.defs";
+
+} # configure_login_defs
+
+##########################################################################################
+# Setting the 'common-session' config file.
+##########################################################################################
+function configure_common_session () {
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Setting the 'common-session' config file.\033[0m";
+
+  # Copy the 'login.defs' file in place.
+  sudo -E cp -f "system/common-session" "/etc/pam.d/common-session";
+
+} # configure_common_session
+
+##########################################################################################
+# SSH configure.
+##########################################################################################
+function configure_ssh () {
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Setting the SSH config file.\033[0m";
+
+  # Copy the 'login.defs' file in place.
+  sudo -E cp -f "ssh/ssh_config" "/etc/ssh/ssh_config";
+
+} # configure_ssh
+
+##########################################################################################
 # MOTD
 ##########################################################################################
 function configure_motd () {
@@ -412,9 +484,19 @@ configure_sources_list;
 hash sar 2>/dev/null || { install_sysstat; }
 hash updatedb 2>/dev/null || { install_locate; }
 configure_motd;
-install_basic_tools;
-hash libtool 2>/dev/null || { install_compiler; }
-if ! grep -q -s "git-core" "/etc/apt/sources.list" "/etc/apt/sources.list.d/"*; then install_git; fi
+
+# Get the basics set.
+if [ "${PROVISION_BASICS}" = true ]; then
+
+  install_basic_tools;
+  hash libtool 2>/dev/null || { install_compiler; }
+  if ! grep -q -s "git-core" "/etc/apt/sources.list" "/etc/apt/sources.list.d/"*; then install_git; fi
+  hash postfix 2>/dev/null || { install_postfix; }
+  # if [ -f "system/login.defs" ] && [ -f "/etc/login.defs" ]; then configure_login_defs; fi
+  # if [ -f "system/common-session" ] && [ -f "/etc/pam.d/common-session" ]; then configure_common_session; fi
+  # if [ -f "ssh/ssh_config" ] && [ -f "/etc/ssh/ssh_config" ]; then configure_ssh; fi
+
+fi
 
 # Timezone and related stuff.
 set_timezone;
