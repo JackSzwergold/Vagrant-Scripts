@@ -516,7 +516,7 @@ function configure_mongo () {
   # Mongo 2.x: Comment out the 'bind_ip' line to enable network connections outside of 'localhost'.
   sudo -E sed -i 's/ \+bind_ip = 127.0.0.1/#bind_ip = 127.0.0.1/g' "/etc/mongod.conf";
 
-  # Mongo 3.x: Comment out the 'bind_ip' line to enable network connections outside of 'localhost'.
+  # Mongo 3.x: Comment out the 'bindIp' line to enable network connections outside of 'localhost'.
   sudo -E sed -i 's/ \+bindIp: 127.0.0.1/  #bindIp: 127.0.0.1/g' "/etc/mongod.conf";
 
   # Restart the Mongo instance to get the new config loaded.
