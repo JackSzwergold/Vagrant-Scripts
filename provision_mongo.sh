@@ -464,9 +464,8 @@ function install_mongo26 () {
   echo "deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen" | sudo tee "/etc/apt/sources.list.d/mongodb.list" & ADD_REPO_PID=(`jobs -l | awk '{print $2}'`);
   wait ${ADD_REPO_PID};
   sudo -E rm -rf "/var/lib/apt/lists/partial/";
-  sudo -E aptitude -y -q=2 update -o Acquire::CompressionTypes::Order::=gz;
-  sudo -E aptitude -y -q=2 clean;
   sudo -E aptitude -y -q=2 update;
+  sudo -E aptitude -y -q=2 clean;
   sudo -E aptitude -y -q=2 install mongodb-org=2.6.12 mongodb-org-server=2.6.12 mongodb-org-shell=2.6.12 mongodb-org-mongos=2.6.12 mongodb-org-tools=2.6.12;
 
   # Pin the currently installed version of MongoDB to ensure no accidental upgrades happen.
@@ -479,9 +478,9 @@ function install_mongo26 () {
 } # install_mongo26
 
 ##########################################################################################
-# MongoDB 3.2
+# MongoDB 3.4
 ##########################################################################################
-function install_mongo32 () {
+function install_mongo34 () {
 
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Installing MongoDB related items.\033[0m";
@@ -490,16 +489,15 @@ function install_mongo32 () {
   cd "${BASE_DIR}";
 
   # Add the official MongoDB repository and install MongoDB.
-  curl -ss -O -L "http://docs.mongodb.org/10gen-gpg-key.asc" & CURL_PID=(`jobs -l | awk '{print $2}'`);
+  curl -ss -O -L "https://www.mongodb.org/static/pgp/server-3.4.asc" & CURL_PID=(`jobs -l | awk '{print $2}'`);
   wait ${CURL_PID};
-  sudo apt-key add "10gen-gpg-key.asc";
-  echo "deb http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.2 multiverse" | sudo tee "/etc/apt/sources.list.d/mongodb-org-3.2.list" | sudo tee "/etc/apt/sources.list.d/mongodb.list" & ADD_REPO_PID=(`jobs -l | awk '{print $2}'`);
+  sudo apt-key add "server-3.4.asc";
+  echo "deb [ arch=amd64 ] http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.4.list & ADD_REPO_PID=(`jobs -l | awk '{print $2}'`);
   wait ${ADD_REPO_PID};
   sudo -E rm -rf "/var/lib/apt/lists/partial/";
-  sudo -E aptitude -y -q=2 update -o Acquire::CompressionTypes::Order::=gz;
-  sudo -E aptitude -y -q=2 clean;
   sudo -E aptitude -y -q=2 update;
-  sudo -E aptitude -y -q=2 install mongodb-org=3.2.10 mongodb-org-server=3.2.10 mongodb-org-shell=3.2.10 mongodb-org-mongos=3.2.10 mongodb-org-tools=3.2.10;
+  sudo -E aptitude -y -q=2 clean;
+  sudo -E aptitude -y -q=2 install mongodb-org=3.4.9 mongodb-org-server=3.4.9 mongodb-org-shell=3.4.9 mongodb-org-mongos=3.4.9 mongodb-org-tools=3.4.9;
 
   # Pin the currently installed version of MongoDB to ensure no accidental upgrades happen.
   echo "mongodb-org hold" | sudo dpkg --set-selections;
@@ -508,7 +506,7 @@ function install_mongo32 () {
   echo "mongodb-org-mongos hold" | sudo dpkg --set-selections;
   echo "mongodb-org-tools hold" | sudo dpkg --set-selections;
 
-} # install_mongo32
+} # install_mongo34
 
 function configure_mongo () {
 
@@ -519,7 +517,7 @@ function configure_mongo () {
   sudo -E sed -i 's/bind_ip: 127.0.0.1/#bind_ip: 127.0.0.1/g' "/etc/mongod.conf";
 
   # Mongo 3.2: Comment out the 'bind_ip' line to enable network connections outside of 'localhost'.
-  sudo -E sed -i 's/bindIP: 127.0.0.1/#bindIP: 127.0.0.1/g' "/etc/mongod.conf";
+  sudo -E sed -i 's/ \+bindIp: 127.0.0.1/  #bindIp: 127.0.0.1/g' "/etc/mongod.conf";
 
   # Restart the Mongo instance to get the new config loaded.
   sudo -E service mongod restart & RESTART_PID=(`jobs -l | awk '{print $2}'`);
@@ -597,10 +595,10 @@ set_timezone;
 # Avahi
 hash avahi-daemon 2>/dev/null || { install_avahi; }
 
-# Install configure MongoDB.
+Install configure MongoDB.
 hash mongo 2>/dev/null && hash mongod 2>/dev/null || {
   install_mongo26;
-  # install_mongo32;
+  # install_mongo34;
   configure_mongo;
 }
 
