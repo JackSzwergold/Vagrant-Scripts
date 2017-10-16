@@ -515,8 +515,11 @@ function configure_mongo () {
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Configuring MongoDB related items.\033[0m";
 
-  # Comment out the 'bind_ip' line to enable network connections outside of 'localhost'.
-  sudo -E sed -i 's/bindIp: 127.0.0.1/#bindIp: 127.0.0.1/g' "/etc/mongod.conf";
+  # Mongo 2.6: Comment out the 'bind_ip' line to enable network connections outside of 'localhost'.
+  sudo -E sed -i 's/bind_ip: 127.0.0.1/#bind_ip: 127.0.0.1/g' "/etc/mongod.conf";
+
+  # Mongo 3.2: Comment out the 'bind_ip' line to enable network connections outside of 'localhost'.
+  sudo -E sed -i 's/bindIP: 127.0.0.1/#bindIP: 127.0.0.1/g' "/etc/mongod.conf";
 
   # Restart the Mongo instance to get the new config loaded.
   sudo -E service mongod restart & RESTART_PID=(`jobs -l | awk '{print $2}'`);
