@@ -155,6 +155,7 @@
   deployment_configs_path: "deployment_configs/ubuntu"
   deployment_dbs_path: "deployment_dbs"
   deployment_binaries_path: "deployment_binaries/ubuntu"
+  basics: true
 - name: "NodeJS (Ubuntu 16.04)"
   # box: "ubuntu/xenial64"
   box: "bento/ubuntu-16.04"
@@ -175,6 +176,7 @@
   deployment_configs_path: "deployment_configs/ubuntu"
   deployment_dbs_path: "deployment_dbs"
   deployment_binaries_path: "deployment_binaries/ubuntu"
+  basics: true
 - name: "Mongo (Ubuntu)"
   box: "ubuntu/trusty64"
   primary: false

@@ -508,6 +508,9 @@ function install_mongo34 () {
 
 } # install_mongo34
 
+##########################################################################################
+# Configure MongoDB
+##########################################################################################
 function configure_mongo () {
 
   # Output a provisioning message.
@@ -595,7 +598,7 @@ set_timezone;
 # Avahi
 hash avahi-daemon 2>/dev/null || { install_avahi; }
 
-Install configure MongoDB.
+# Install and configure MongoDB.
 hash mongo 2>/dev/null && hash mongod 2>/dev/null || {
   install_mongo26;
   # install_mongo34;

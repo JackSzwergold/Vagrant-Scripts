@@ -559,10 +559,10 @@ set_timezone;
 # Avahi
 hash avahi-daemon 2>/dev/null || { install_avahi; }
 
-# Install configure Java.
+# Install and configure Java.
 install_java;
 
-# Install configure ElasticSearch.
+# Install and configure ElasticSearch.
 install_elasticsearch;
 configure_elasticsearch;
 
