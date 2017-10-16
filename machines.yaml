@@ -197,6 +197,7 @@
   deployment_configs_path: "deployment_configs/ubuntu"
   deployment_dbs_path: "deployment_dbs"
   deployment_binaries_path: "deployment_binaries/ubuntu"
+  basics: true
 - name: "ElasticSearch (Ubuntu)"
   box: "ubuntu/trusty64"
   primary: false
