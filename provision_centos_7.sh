@@ -115,7 +115,7 @@ function configure_user_and_group () {
   # Add the user to the 'www-readwrite' group.
   sudo -E usermod -a -G www-readwrite "${USER_NAME}";
 
-  # Change the username/password combination.
+  # Changing the username/password combination.
   echo "${USER_NAME}:${PASSWORD}" | sudo -E sudo chpasswd;
 
 } # configure_user_and_group
@@ -191,6 +191,9 @@ function install_avahi () {
 ##########################################################################################
 function install_sysstat () {
 
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFIG_DIR}";
+
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Sysstat related stuff.\033[0m";
 
@@ -217,8 +220,8 @@ function install_basic_tools () {
   sudo -E yum install -y -q \
     bind-utils dnsutils traceroute nmap bc htop finger curl whois rsync lsof \
     iftop figlet lynx mtr-tiny iperf nload zip unzip attr sshpass \
-    dkms mc elinks ntp dos2unix p7zip-full nfs-common \
-    slurm sharutils uuid-runtime chkconfig quota pv trickle apachetop \
+    dkms mc elinks dos2unix p7zip-full nfs-common \
+    slurm sharutils uuid-runtime chkconfig quota pv trickle ntp \
     virtualbox-dkms nano man man-pages;
 
 } # install_basic_tools
@@ -360,7 +363,7 @@ function install_apache () {
   echo -e "\033[33;1mPROVISIONING: Installing Apache and PHP related items.\033[0m";
 
   # Install the base Apache related items.
-  sudo -E yum install -y -q httpd mod_ssl;
+  sudo -E yum install -y -q httpd mod_ssl apachetop;
 
   # Install other PHP related related items.
   sudo -E yum install -y -q php php-common \
@@ -498,7 +501,7 @@ function set_apache_deployment_directories () {
 
   # Set the deployment directories.
   sudo -E mkdir -p "/var/www/"{builds,configs,content};
-  sudo -E chown -f -R "${USER_NAME}:www-readwrite" "/var/www/"{builds,configs,content};
+  sudo -E chown -f -R "${USER_NAME}":www-readwrite "/var/www/"{builds,configs,content};
   sudo -E chmod -f -R 775 "/var/www/"{builds,configs,content};
   sudo -E chmod g+s "/var/www/"{builds,configs,content};
 
@@ -730,7 +733,7 @@ function install_system_scripts () {
 
   # Create the MySQL backup directory.
   sudo -E mkdir -p "/opt/mysql_backup";
-  sudo -E chown "root:www-readwrite" "/opt/mysql_backup";
+  sudo -E chown root:www-readwrite "/opt/mysql_backup";
   sudo -E chmod 775 "/opt/mysql_backup";
   sudo -E chmod g+s "/opt/mysql_backup";
 
@@ -757,6 +760,7 @@ function update_locate_db () {
 #
 ##########################################################################################
 
+# Install install stuff.
 configure_user_and_group;
 set_environment;
 set_timezone;

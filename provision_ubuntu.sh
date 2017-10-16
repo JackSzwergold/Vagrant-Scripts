@@ -193,6 +193,7 @@ function set_environment () {
 ##########################################################################################
 function set_timezone () {
 
+  # Set the timezone variables.
   TIMEZONE="America/New_York";
 
   # Output a provisioning message.
@@ -547,6 +548,7 @@ function set_apache_deployment_directories () {
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Creating the web code deployment directories.\033[0m";
 
+  # Set the deployment directories.
   sudo -E mkdir -p "/var/www/"{builds,configs,content};
   sudo -E chown -f -R "${USER_NAME}":www-readwrite "/var/www/"{builds,configs,content};
   sudo -E chmod -f -R 775 "/var/www/"{builds,configs,content};
