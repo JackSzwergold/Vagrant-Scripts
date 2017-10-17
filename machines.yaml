@@ -44,7 +44,6 @@
   iptables: true
   fail2ban: false
 - name: "Sandbox (Ubuntu 16.04)"
-  # box: "ubuntu/xenial64"
   box: "bento/ubuntu-16.04"
   primary: false
   autostart: false
@@ -157,7 +156,6 @@
   deploy_dbs: "deploy_dbs"
   basics: true
 - name: "NodeJS (Ubuntu 16.04)"
-  # box: "ubuntu/xenial64"
   box: "bento/ubuntu-16.04"
   primary: false
   autostart: false
