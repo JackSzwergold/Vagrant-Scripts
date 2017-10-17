@@ -1128,6 +1128,60 @@ function install_system_scripts () {
 } # install_system_scripts
 
 ##########################################################################################
+# NodeJS and NPM
+##########################################################################################
+function install_nodejs () {
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Installing NodeJS and NPM related stuff.\033[0m";
+
+  # Go into the base directory.
+  cd "${BASE_DIR}";
+
+  # Purge any already installed version of NodeJS and NPM.
+  sudo -E aptitude -y -q=2 purge node npm;
+
+  # Now install NodeJS and NPM via PPA.
+  sudo -E aptitude -y -q=2 install python-software-properties;
+  # curl -sL https://deb.nodesource.com/setup_6.x | sudo bash - ;
+  # curl -sL https://deb.nodesource.com/setup_5.x | sudo bash - ;
+  # curl -sL https://deb.nodesource.com/setup_4.x | sudo bash - ;
+  # curl -sL https://deb.nodesource.com/setup_0.10 | sudo bash - ;
+  curl -sL https://deb.nodesource.com/setup_4.x | sudo bash - ;
+  sudo -E aptitude -y -q=2 update;
+  sudo -E aptitude -y -q=2 install nodejs;
+
+  # Install 'forever' and 'userdown' for Upstart script support.
+  sudo -E npm install -g --no-optional forever 2>&1 >/dev/null;
+  sudo -E npm install -g --no-optional userdown 2>&1 >/dev/null;
+
+} # install_nodejs
+
+##########################################################################################
+# Nginx
+##########################################################################################
+function install_nginx () {
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFS_DIR}";
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Installing Nginx related stuff.\033[0m";
+
+  # Now install Nginx.
+  sudo -E aptitude -y -q=2 install nginx-full;
+
+  # Copy the Nginx config file in place and restart sysstat.
+  NGINX_CONF_PATH="/etc/nginx/sites-available";
+  if [ -f "nginx/default" ]; then
+    sudo -E cp -f "nginx/default" "${NGINX_CONF_PATH}/default";
+    sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "${NGINX_CONF_PATH}/default";
+    sudo -E service nginx restart;
+  fi
+
+} # install_nginx
+
+##########################################################################################
 # Update the locate database.
 ##########################################################################################
 function update_locate_db () {
