@@ -34,9 +34,9 @@
   forward_id1: "ssh"
   memory: 512
   cpus: 1
-  deploy_bins: "deploy_bins/ubuntu"
-  deploy_confs: "deploy_confs/ubuntu"
-  deploy_dbs: "deploy_dbs"
+  deploy_bins: "deploy_items/bins"
+  deploy_confs: "deploy_items/confs/ubuntu"
+  deploy_dbs: "deploy_items/dbs"
   basics: true
   lamp: true
   imagemagick: false
@@ -59,9 +59,9 @@
   forward_id1: "ssh"
   memory: 512
   cpus: 1
-  deploy_bins: "deploy_bins/ubuntu"
-  deploy_confs: "deploy_confs/ubuntu"
-  deploy_dbs: "deploy_dbs"
+  deploy_bins: "deploy_items/bins"
+  deploy_confs: "deploy_items/confs/ubuntu"
+  deploy_dbs: "deploy_items/dbs"
   basics: true
   lamp: true
   imagemagick: false
@@ -84,9 +84,9 @@
   forward_id1: "ssh"
   memory: 2048
   cpus: 1
-  deploy_bins: "deploy_bins/centos"
-  deploy_confs: "deploy_confs/centos"
-  deploy_dbs: "deploy_dbs"
+  deploy_bins: "deploy_items/bins/centos"
+  deploy_confs: "deploy_items/confs/centos"
+  deploy_dbs: "deploy_items/dbs"
   basics: true
   lamp: true
 - name: "Sandbox (CentOS 7)"
@@ -105,9 +105,9 @@
   forward_id1: "ssh"
   memory: 2048
   cpus: 1
-  deploy_bins: "deploy_bins/centos"
-  deploy_confs: "deploy_confs/centos"
-  deploy_dbs: "deploy_dbs"
+  deploy_bins: "deploy_items/bins/centos"
+  deploy_confs: "deploy_items/confs/centos"
+  deploy_dbs: "deploy_items/dbs"
   basics: true
   lamp: true
 - name: "Jabroni (Ubuntu)"
@@ -126,9 +126,9 @@
   forward_id1: "ssh"
   memory: 512
   cpus: 1
-  deploy_bins: "deploy_bins/ubuntu"
-  deploy_confs: "deploy_confs/ubuntu"
-  deploy_dbs: "deploy_dbs"
+  deploy_bins: "deploy_items/bins"
+  deploy_confs: "deploy_items/confs/ubuntu"
+  deploy_dbs: "deploy_items/dbs"
   basics: true
   lamp: false
   imagemagick: false
@@ -151,9 +151,9 @@
   forward_id1: "ssh"
   memory: 2048
   cpus: 1
-  deploy_bins: "deploy_bins/ubuntu"
-  deploy_confs: "deploy_confs/ubuntu"
-  deploy_dbs: "deploy_dbs"
+  deploy_bins: "deploy_items/bins"
+  deploy_confs: "deploy_items/confs/ubuntu"
+  deploy_dbs: "deploy_items/dbs"
   basics: true
 - name: "NodeJS (Ubuntu 16.04)"
   box: "bento/ubuntu-16.04"
@@ -171,9 +171,9 @@
   forward_id1: "ssh"
   memory: 2048
   cpus: 1
-  deploy_bins: "deploy_bins/ubuntu"
-  deploy_confs: "deploy_confs/ubuntu"
-  deploy_dbs: "deploy_dbs"
+  deploy_bins: "deploy_items/bins"
+  deploy_confs: "deploy_items/confs/ubuntu"
+  deploy_dbs: "deploy_items/dbs"
   basics: true
 - name: "Mongo (Ubuntu)"
   box: "ubuntu/trusty64"
@@ -194,9 +194,9 @@
   forward_id2: "mongo"
   memory: 1024
   cpus: 1
-  deploy_confs: "deploy_confs/ubuntu"
-  deploy_dbs: "deploy_dbs"
-  deploy_bins: "deploy_bins/ubuntu"
+  deploy_confs: "deploy_items/confs/ubuntu"
+  deploy_dbs: "deploy_items/dbs"
+  deploy_bins: "deploy_items/bins"
   basics: true
 - name: "ElasticSearch (Ubuntu)"
   box: "ubuntu/trusty64"
@@ -217,9 +217,9 @@
   forward_id2: "elasticsearch"
   memory: 1024
   cpus: 1
-  deploy_bins: "deploy_bins/ubuntu"
-  deploy_confs: "deploy_confs/ubuntu"
-  deploy_dbs: "deploy_dbs"
+  deploy_bins: "deploy_items/bins"
+  deploy_confs: "deploy_items/confs/ubuntu"
+  deploy_dbs: "deploy_items/dbs"
   basics: true
 - name: "Solr (Ubuntu)"
   box: "ubuntu/trusty64"
@@ -240,7 +240,7 @@
   forward_id2: "solr"
   memory: 1024
   cpus: 1
-  deploy_bins: "deploy_bins/ubuntu"
-  deploy_confs: "deploy_confs/ubuntu"
-  deploy_dbs: "deploy_dbs"
+  deploy_bins: "deploy_items/bins"
+  deploy_confs: "deploy_items/confs/ubuntu"
+  deploy_dbs: "deploy_items/dbs"
   basics: true

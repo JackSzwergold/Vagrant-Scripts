@@ -36,17 +36,17 @@ BASE_DIR=$(pwd);
 # Output a provisioning message.
 echo -e "\033[33;1mPROVISIONING: Base directory is: '${BASE_DIR}'.\033[0m";
 
-BINS_DIR="deploy_bins";
+BINS_DIR="deploy_items/bins";
 if [ -n "$1" ]; then BINS_DIR="${1}"; fi
 # Output a provisioning message.
 echo -e "\033[33;1mPROVISIONING: Binaries directory is: '${BINS_DIR}'.\033[0m";
 
-CONFS_DIR="deploy_confs";
+CONFS_DIR="deploy_items/confs";
 if [ -n "$2" ]; then CONFS_DIR="${2}"; fi
 # Output a provisioning message.
 echo -e "\033[33;1mPROVISIONING: Config directory is: '${CONFS_DIR}'.\033[0m";
 
-DBS_DIR="deploy_dbs";
+DBS_DIR="deploy_items/dbs";
 if [ -n "$3" ]; then DBS_DIR="${3}"; fi
 # Output a provisioning message.
 echo -e "\033[33;1mPROVISIONING: DB directory is: '${DBS_DIR}'.\033[0m";
