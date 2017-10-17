@@ -51,10 +51,10 @@ if [ -n "$3" ]; then DBS_DIR="${3}"; fi
 # Output a provisioning message.
 echo -e "\033[33;1mPROVISIONING: DB directory is: '${DBS_DIR}'.\033[0m";
 
-USER_NAME="vagrant";
-if [ -n "$4" ]; then USER_NAME="${4}"; fi
+USERNAME="vagrant";
+if [ -n "$4" ]; then USERNAME="${4}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: User name is: '${USER_NAME}'.\033[0m";
+echo -e "\033[33;1mPROVISIONING: User name is: '${USERNAME}'.\033[0m";
 
 PASSWORD="vagrant";
 if [ -n "$5" ]; then PASSWORD="${5}"; fi
@@ -75,10 +75,10 @@ echo -e "\033[33;1mPROVISIONING: Host name is: '${HOST_NAME}'.\033[0m";
 # Optional items.
 ##########################################################################################
 
-PROVISION_BASICS=false;
-if [ -n "$8" ]; then PROVISION_BASICS="${8}"; fi
+PROV_BASICS=false;
+if [ -n "$8" ]; then PROV_BASICS="${8}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Basics provisioning: '${PROVISION_BASICS}'.\033[0m";
+echo -e "\033[33;1mPROVISIONING: Basics provisioning: '${PROV_BASICS}'.\033[0m";
 
 ##########################################################################################
 # Go into the config directory.
@@ -115,13 +115,13 @@ function configure_user_and_group () {
   sudo -E groupadd -f www-readwrite;
 
   # Set the user’s main group to be the 'www-readwrite' group.
-  sudo -E usermod -g www-readwrite "${USER_NAME}";
+  sudo -E usermod -g www-readwrite "${USERNAME}";
 
   # Add the user to the 'www-readwrite' group:
-  sudo -E adduser --quiet "${USER_NAME}" www-readwrite;
+  sudo -E adduser --quiet "${USERNAME}" www-readwrite;
 
   # Changing the username/password combination.
-  echo "${USER_NAME}:${PASSWORD}" | sudo -E sudo chpasswd;
+  echo "${USERNAME}:${PASSWORD}" | sudo -E sudo chpasswd;
 
 } # configure_user_and_group
 
@@ -155,7 +155,7 @@ function set_environment () {
   # Set the selected editor to be Nano.
   if [ ! -f "${BASE_DIR}/.selected_editor" ]; then
     echo 'SELECTED_EDITOR="/bin/nano"' > "${BASE_DIR}/.selected_editor";
-    sudo -E chown -f "${USER_NAME}":www-readwrite "${BASE_DIR}/.selected_editor";
+    sudo -E chown -f "${USERNAME}":www-readwrite "${BASE_DIR}/.selected_editor";
   fi
 
   # Output a provisioning message.
@@ -526,7 +526,7 @@ function set_application_deployment_directories () {
   echo -e "\033[33;1mPROVISIONING: Creating the web code deployment directories.\033[0m";
 
   sudo -E mkdir -p "/opt/webapps/"{builds,configs,deployed_code};
-  sudo -E chown -f -R "${USER_NAME}":www-readwrite "/opt/webapps";
+  sudo -E chown -f -R "${USERNAME}":www-readwrite "/opt/webapps";
   sudo -E chmod -f -R 775 "/opt/webapps";
   sudo -E chmod g+s "/opt/webapps";
   sudo -E chmod g+s "/opt/webapps/"{builds,configs,deployed_code};
@@ -564,7 +564,7 @@ hash updatedb 2>/dev/null || { install_locate; }
 configure_motd;
 
 # Get the basics set.
-if [ "${PROVISION_BASICS}" = true ]; then
+if [ "${PROV_BASICS}" = true ]; then
 
   install_basic_tools;
   hash libtool 2>/dev/null || { install_compiler; }

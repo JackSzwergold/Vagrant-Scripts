@@ -89,12 +89,34 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
       # Set the shell script to provision the server.
       if settings["provision_script"].to_s.strip.length > 0
-        machine.vm.provision :shell, :privileged => true, :path => settings["provision_script"], :args => "#{settings['deploy_bins']} #{settings['deploy_confs']} #{settings['deploy_dbs']} #{settings['username']} #{settings['password']} #{settings['machinename']} #{settings['hostname']}.local #{settings['basics']} #{settings['lamp']} #{settings['imagemagick']} #{settings['geoip']} #{settings['iptables']} #{settings['fail2ban']}"
+        machine.vm.provision  :shell,
+                              :privileged => true,
+                              :path => settings["provision_script"],
+                              env: {
+                                "PROV_BASICS" => "#{settings['basics']}",
+                                "PROV_LAMP" => "#{settings['lamp']}",
+                                "PROV_IMAGEMAGICK" => "#{settings['imagemagick']}",
+                                "PROV_GEOIP" => "#{settings['geoip']}",
+                                "PROV_IPTABLES" => "#{settings['iptables']}",
+                                "PROV_FAIL2BAN" => "#{settings['fail2ban']}"
+                              },
+                              :args => "#{settings['deploy_bins']} #{settings['deploy_confs']} #{settings['deploy_dbs']} #{settings['username']} #{settings['password']} #{settings['machinename']} #{settings['hostname']}.local"
       end
 
       # Set the shell script to provision items for teh regular user.
       if settings["provision_script_regular"].to_s.strip.length > 0
-        machine.vm.provision :shell, :privileged => false, :path => settings["provision_script_regular"], :args => "#{settings['deploy_bins']} #{settings['deploy_confs']} #{settings['deploy_dbs']} #{settings['username']} #{settings['password']} #{settings['machinename']} #{settings['hostname']}.local #{settings['basics']} #{settings['lamp']} #{settings['imagemagick']} #{settings['geoip']} #{settings['iptables']} #{settings['fail2ban']}"
+        machine.vm.provision  :shell,
+                              :privileged => false,
+                              :path => settings["provision_script_regular"],
+                              env: {
+                                "PROV_BASICS" => "#{settings['basics']}",
+                                "PROV_LAMP" => "#{settings['lamp']}",
+                                "PROV_IMAGEMAGICK" => "#{settings['imagemagick']}",
+                                "PROV_GEOIP" => "#{settings['geoip']}",
+                                "PROV_IPTABLES" => "#{settings['iptables']}",
+                                "PROV_FAIL2BAN" => "#{settings['fail2ban']}"
+                              },
+                              :args => "#{settings['deploy_bins']} #{settings['deploy_confs']} #{settings['deploy_dbs']} #{settings['username']} #{settings['password']} #{settings['machinename']} #{settings['hostname']}.local"
       end
 
     end # config.vm.define

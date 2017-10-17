@@ -48,10 +48,10 @@ if [ -n "$3" ]; then DBS_DIR="${3}"; fi
 # Output a provisioning message.
 echo -e "\033[33;1mPROVISIONING: DB directory is: '${DBS_DIR}'.\033[0m";
 
-USER_NAME="vagrant";
-if [ -n "$4" ]; then USER_NAME="${4}"; fi
+USERNAME="vagrant";
+if [ -n "$4" ]; then USERNAME="${4}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: User name is: '${USER_NAME}'.\033[0m";
+echo -e "\033[33;1mPROVISIONING: User name is: '${USERNAME}'.\033[0m";
 
 PASSWORD="vagrant";
 if [ -n "$5" ]; then PASSWORD="${5}"; fi
@@ -69,38 +69,26 @@ if [ -n "$7" ]; then HOST_NAME="${7}"; fi
 echo -e "\033[33;1mPROVISIONING: Host name is: '${HOST_NAME}'.\033[0m";
 
 ##########################################################################################
-# Optional items.
+# Optional items set via environment variables.
 ##########################################################################################
 
-PROVISION_BASICS=false;
-if [ -n "$8" ]; then PROVISION_BASICS="${8}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Basics provisioning: '${PROVISION_BASICS}'.\033[0m";
+echo -e "\033[33;1mPROVISIONING: Basics provisioning: '${PROV_BASICS}'.\033[0m";
 
-PROVISION_LAMP=false;
-if [ -n "$9" ]; then PROVISION_LAMP="${9}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: LAMP provisioning: '${PROVISION_LAMP}'.\033[0m";
+echo -e "\033[33;1mPROVISIONING: LAMP provisioning: '${PROV_LAMP}'.\033[0m";
 
-PROVISION_IMAGEMAGICK=false;
-if [ -n "$10" ]; then PROVISION_IMAGEMAGICK="${10}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: ImageMagick provisioning: '${PROVISION_IMAGEMAGICK}'.\033[0m";
+echo -e "\033[33;1mPROVISIONING: ImageMagick provisioning: '${PROV_IMAGEMAGICK}'.\033[0m";
 
-PROVISION_GEOIP=false;
-if [ -n "$11" ]; then PROVISION_GEOIP="${11}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: GeoIP provisioning: '${PROVISION_GEOIP}'.\033[0m";
+echo -e "\033[33;1mPROVISIONING: GeoIP provisioning: '${PROV_GEOIP}'.\033[0m";
 
-PROVISION_IPTABLES=false;
-if [ -n "$12" ]; then PROVISION_IPTABLES="${12}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: IPTables provisioning: '${PROVISION_IPTABLES}'.\033[0m";
+echo -e "\033[33;1mPROVISIONING: IPTables provisioning: '${PROV_IPTABLES}'.\033[0m";
 
-PROVISION_FAIL2BAN=false;
-if [ -n "$13" ]; then PROVISION_FAIL2BAN="${13}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Fail2Ban provisioning: '${PROVISION_FAIL2BAN}'.\033[0m";
+echo -e "\033[33;1mPROVISIONING: Fail2Ban provisioning: '${PROV_FAIL2BAN}'.\033[0m";
 
 ##########################################################################################
 # Go into the config directory.
@@ -137,13 +125,13 @@ function configure_user_and_group () {
   sudo -E groupadd -f www-readwrite;
 
   # Set the user’s main group to be the 'www-readwrite' group.
-  sudo -E usermod -g www-readwrite "${USER_NAME}";
+  sudo -E usermod -g www-readwrite "${USERNAME}";
 
   # Add the user to the 'www-readwrite' group:
-  sudo -E adduser --quiet "${USER_NAME}" www-readwrite;
+  sudo -E adduser --quiet "${USERNAME}" www-readwrite;
 
   # Changing the username/password combination.
-  echo "${USER_NAME}:${PASSWORD}" | sudo -E sudo chpasswd;
+  echo "${USERNAME}:${PASSWORD}" | sudo -E sudo chpasswd;
 
 } # configure_user_and_group
 
@@ -177,7 +165,7 @@ function set_environment () {
   # Set the selected editor to be Nano.
   if [ ! -f "${BASE_DIR}/.selected_editor" ]; then
     echo 'SELECTED_EDITOR="/bin/nano"' > "${BASE_DIR}/.selected_editor";
-    sudo -E chown -f "${USER_NAME}":www-readwrite "${BASE_DIR}/.selected_editor";
+    sudo -E chown -f "${USERNAME}":www-readwrite "${BASE_DIR}/.selected_editor";
   fi
 
   # Output a provisioning message.
@@ -552,7 +540,7 @@ function set_apache_web_root () {
   echo -e "\033[33;1mPROVISIONING: Adjusting the Apache root directory and default file.\033[0m";
 
   # Change ownership and permissions.
-  sudo -E chown -f -R "${USER_NAME}":www-readwrite "/var/www/html/";
+  sudo -E chown -f -R "${USERNAME}":www-readwrite "/var/www/html/";
   sudo -E chmod -f -R 775 "/var/www/html/";
   sudo -E chmod g+s "/var/www/html/";
   sudo -E cp -f "apache2/index.php" "/var/www/html/index.php";
@@ -570,7 +558,7 @@ function set_apache_deployment_directories () {
 
   # Set the deployment directories.
   sudo -E mkdir -p "/var/www/"{builds,configs,content};
-  sudo -E chown -f -R "${USER_NAME}":www-readwrite "/var/www/"{builds,configs,content};
+  sudo -E chown -f -R "${USERNAME}":www-readwrite "/var/www/"{builds,configs,content};
   sudo -E chmod -f -R 775 "/var/www/"{builds,configs,content};
   sudo -E chmod g+s "/var/www/"{builds,configs,content};
 
@@ -589,7 +577,7 @@ function set_apache_virtual_host_directories () {
 
   sudo -E mkdir -p "/var/www/html/${HOST_NAME}/site";
   sudo -E cp -f "apache2/index.php" "/var/www/html/${HOST_NAME}/site/index.php";
-  sudo -E chown -f -R "${USER_NAME}":www-readwrite "/var/www/html/${HOST_NAME}";
+  sudo -E chown -f -R "${USERNAME}":www-readwrite "/var/www/html/${HOST_NAME}";
   sudo -E chmod -f -R 775 "/var/www/html/${HOST_NAME}";
   sudo -E chmod g+s "/var/www/html/${HOST_NAME}";
   sudo -E chmod -f -R 664 "/var/www/html/${HOST_NAME}/site/index.php";
@@ -1155,7 +1143,7 @@ hash updatedb 2>/dev/null || { install_locate; }
 configure_motd;
 
 # Get the basics set.
-if [ "${PROVISION_BASICS}" = true ]; then
+if [ "${PROV_BASICS}" = true ]; then
 
   install_basic_tools;
   hash libtool 2>/dev/null || { install_compiler; }
@@ -1174,7 +1162,7 @@ set_timezone;
 hash avahi-daemon 2>/dev/null || { install_avahi; }
 
 # GeoIP
-if [ "${PROVISION_GEOIP}" = true ]; then
+if [ "${PROV_GEOIP}" = true ]; then
 
   hash geoiplookup 2>/dev/null || { install_geoip; }
   if [ ! -d "/usr/local/share/GeoIP" ]; then install_geoip_databases; fi
@@ -1182,14 +1170,14 @@ if [ "${PROVISION_GEOIP}" = true ]; then
 fi
 
 # IPTables
-if [ "${PROVISION_IPTABLES}" = true ]; then
+if [ "${PROV_IPTABLES}" = true ]; then
 
   hash iptables 2>/dev/null && hash ipset 2>/dev/null || { install_iptables; }
 
 fi
 
 # Fail2Ban
-if [ "${PROVISION_FAIL2BAN}" = true ]; then
+if [ "${PROV_FAIL2BAN}" = true ]; then
 
   hash fail2ban-client 2>/dev/null || { install_fail2ban; }
   if [ -f "fail2ban/jail.local" ] && [ ! -f "/etc/fail2ban/jail.local" ]; then configure_fail2ban; fi
@@ -1201,12 +1189,12 @@ hash monit 2>/dev/null || { install_monit; }
 if [ -f "monit/monitrc" ]; then configure_monit; fi
 
 # ImageMagick
-if [ "${PROVISION_IMAGEMAGICK}" = true ]; then
+if [ "${PROV_IMAGEMAGICK}" = true ]; then
   hash convert 2>/dev/null || { install_imagemagick; }
 fi
 
 # Get the LAMP stuff set.
-if [ "${PROVISION_LAMP}" = true ]; then
+if [ "${PROV_LAMP}" = true ]; then
 
   # Apache related stuff.
   hash apachectl 2>/dev/null || { install_apache; }

@@ -49,10 +49,10 @@ if [ -n "$3" ]; then DBS_DIR="${3}"; fi
 # Output a provisioning message.
 echo -e "\033[33;1mPROVISIONING: DB directory is: '${DBS_DIR}'.\033[0m";
 
-USER_NAME="vagrant";
-if [ -n "$4" ]; then USER_NAME="${4}"; fi
+USERNAME="vagrant";
+if [ -n "$4" ]; then USERNAME="${4}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: User name is: '${USER_NAME}'.\033[0m";
+echo -e "\033[33;1mPROVISIONING: User name is: '${USERNAME}'.\033[0m";
 
 PASSWORD="vagrant";
 if [ -n "$5" ]; then PASSWORD="${5}"; fi
@@ -73,15 +73,15 @@ echo -e "\033[33;1mPROVISIONING: Host name is: '${HOST_NAME}'.\033[0m";
 # Optional items.
 ##########################################################################################
 
-PROVISION_BASICS=false;
-if [ -n "$8" ]; then PROVISION_BASICS="${8}"; fi
+PROV_BASICS=false;
+if [ -n "$8" ]; then PROV_BASICS="${8}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Basics provisioning: '${PROVISION_BASICS}'.\033[0m";
+echo -e "\033[33;1mPROVISIONING: Basics provisioning: '${PROV_BASICS}'.\033[0m";
 
-PROVISION_LAMP=false;
-if [ -n "$9" ]; then PROVISION_LAMP="${9}"; fi
+PROV_LAMP=false;
+if [ -n "$9" ]; then PROV_LAMP="${9}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: LAMP provisioning: '${PROVISION_LAMP}'.\033[0m";
+echo -e "\033[33;1mPROVISIONING: LAMP provisioning: '${PROV_LAMP}'.\033[0m";
 
 ##########################################################################################
 # Go into the config directory.
@@ -110,13 +110,13 @@ function configure_user_and_group () {
   sudo -E groupadd -f www-readwrite;
 
   # Set the user’s main group to be the 'www-readwrite' group.
-  sudo -E usermod -g www-readwrite "${USER_NAME}";
+  sudo -E usermod -g www-readwrite "${USERNAME}";
 
   # Add the user to the 'www-readwrite' group.
-  sudo -E usermod -a -G www-readwrite "${USER_NAME}";
+  sudo -E usermod -a -G www-readwrite "${USERNAME}";
 
   # Changing the username/password combination.
-  echo "${USER_NAME}:${PASSWORD}" | sudo -E sudo chpasswd;
+  echo "${USERNAME}:${PASSWORD}" | sudo -E sudo chpasswd;
 
 } # configure_user_and_group
 
@@ -516,7 +516,7 @@ function set_apache_web_root () {
   echo -e "\033[33;1mPROVISIONING: Adjusting the Apache root directory and default file.\033[0m";
 
   # Change ownership and permissions.
-  sudo -E chown -f -R "${USER_NAME}":www-readwrite "/var/www/html/";
+  sudo -E chown -f -R "${USERNAME}":www-readwrite "/var/www/html/";
   sudo -E chmod -f -R 775 "/var/www/html/";
   sudo -E chmod g+s "/var/www/html/";
   sudo -E cp -f "httpd-centos-68/index.php" "/var/www/html/index.php";
@@ -534,7 +534,7 @@ function set_apache_deployment_directories () {
 
   # Set the deployment directories.
   sudo -E mkdir -p "/var/www/"{builds,configs,content};
-  sudo -E chown -f -R "${USER_NAME}":www-readwrite "/var/www/"{builds,configs,content};
+  sudo -E chown -f -R "${USERNAME}":www-readwrite "/var/www/"{builds,configs,content};
   sudo -E chmod -f -R 775 "/var/www/"{builds,configs,content};
   sudo -E chmod g+s "/var/www/"{builds,configs,content};
 
@@ -621,7 +621,7 @@ function set_apache_virtual_host_directories () {
   # Set up the Apache virtual host directories.
   sudo -E mkdir -p "/var/www/html/${HOST_NAME}/site";
   sudo -E cp -f "httpd-centos-68/index.php" "/var/www/html/${HOST_NAME}/site/index.php";
-  sudo -E chown -f -R "${USER_NAME}:www-readwrite" "/var/www/html/${HOST_NAME}";
+  sudo -E chown -f -R "${USERNAME}:www-readwrite" "/var/www/html/${HOST_NAME}";
   sudo -E chmod -f -R 775 "/var/www/html/${HOST_NAME}";
   sudo -E chmod g+s "/var/www/html/${HOST_NAME}";
   sudo -E chmod -f 664 "/var/www/html/${HOST_NAME}/site/index.php";
@@ -807,7 +807,7 @@ hash updatedb 2>/dev/null || { install_locate; }
 configure_motd;
 
 # Get the basics set.
-if [ "${PROVISION_BASICS}" = true ]; then
+if [ "${PROV_BASICS}" = true ]; then
 
   install_basic_tools;
   hash libtool 2>/dev/null || { install_compiler; }
@@ -826,7 +826,7 @@ set_timezone;
 hash avahi-daemon 2>/dev/null || { install_avahi; }
 
 # Get the LAMP stuff set.
-if [ "${PROVISION_LAMP}" = true ]; then
+if [ "${PROV_LAMP}" = true ]; then
 
   # Apache related stuff.
   hash apachectl 2>/dev/null || { install_apache; }
