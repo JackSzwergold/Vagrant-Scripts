@@ -69,38 +69,44 @@ if [ -n "$7" ]; then HOST_NAME="${7}"; fi
 echo -e "\033[33;1mPROVISIONING: Host name is: '${HOST_NAME}'.\033[0m";
 
 ##########################################################################################
-# Optional items.
+# Optional items set via environment variables.
 ##########################################################################################
 
-PROV_BASICS=false;
-if [ -n "$8" ]; then PROV_BASICS="${8}"; fi
 # Output a provisioning message.
 echo -e "\033[33;1mPROVISIONING: Basics provisioning: '${PROV_BASICS}'.\033[0m";
 
-PROV_LAMP=false;
-if [ -n "$9" ]; then PROV_LAMP="${9}"; fi
 # Output a provisioning message.
 echo -e "\033[33;1mPROVISIONING: LAMP provisioning: '${PROV_LAMP}'.\033[0m";
 
-PROV_IMAGEMAGICK=false;
-if [ -n "$10" ]; then PROV_IMAGEMAGICK="${10}"; fi
 # Output a provisioning message.
 echo -e "\033[33;1mPROVISIONING: ImageMagick provisioning: '${PROV_IMAGEMAGICK}'.\033[0m";
 
-PROV_GEOIP=false;
-if [ -n "$11" ]; then PROV_GEOIP="${11}"; fi
 # Output a provisioning message.
 echo -e "\033[33;1mPROVISIONING: GeoIP provisioning: '${PROV_GEOIP}'.\033[0m";
 
-PROV_IPTABLES=false;
-if [ -n "$12" ]; then PROV_IPTABLES="${12}"; fi
 # Output a provisioning message.
 echo -e "\033[33;1mPROVISIONING: IPTables provisioning: '${PROV_IPTABLES}'.\033[0m";
 
-PROV_FAIL2BAN=false;
-if [ -n "$13" ]; then PROV_FAIL2BAN="${13}"; fi
 # Output a provisioning message.
 echo -e "\033[33;1mPROVISIONING: Fail2Ban provisioning: '${PROV_FAIL2BAN}'.\033[0m";
+
+# Output a provisioning message.
+echo -e "\033[33;1mPROVISIONING: Java provisioning: '${PROV_JAVA}'.\033[0m";
+
+# Output a provisioning message.
+echo -e "\033[33;1mPROVISIONING: Solr provisioning: '${PROV_SOLR}'.\033[0m";
+
+# Output a provisioning message.
+echo -e "\033[33;1mPROVISIONING: Elasticsearch provisioning: '${PROV_ELASTICSEARCH}'.\033[0m";
+
+# Output a provisioning message.
+echo -e "\033[33;1mPROVISIONING: MongoDB provisioning: '${PROV_MONGO}'.\033[0m";
+
+# Output a provisioning message.
+echo -e "\033[33;1mPROVISIONING: NodeJS provisioning: '${PROV_NODEJS}'.\033[0m";
+
+# Output a provisioning message.
+echo -e "\033[33;1mPROVISIONING: Nginx provisioning: '${PROV_NGINX}'.\033[0m";
 
 ##########################################################################################
 # Go into the config directory.
@@ -1237,6 +1243,25 @@ if [ "${PROV_LAMP}" = true ]; then
 
   # Restart Apache now that we’re done.
   sudo -E service apache2 restart;
+
+fi
+
+# Get the NodeJS stuff set.
+if [ "${PROV_NODEJS}" = true ]; then
+
+  # Install and configure NodeJS and NPM.
+  hash node 2>/dev/null || { install_nodejs; }
+
+  # Setup the NodeJS application deployment environment.
+  if [ ! -d "/opt/webapps" ]; then set_application_deployment_directories; fi
+
+fi
+
+# Get the Nginx stuff set.
+if [ "${PROV_NGINX}" = true ]; then
+
+  # Install and configure Nginx.
+  hash nginx 2>/dev/null || { install_nginx; }
 
 fi
 

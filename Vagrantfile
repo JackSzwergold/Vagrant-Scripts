@@ -102,7 +102,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                                 "PROV_JAVA" => "#{settings['java']}",
                                 "PROV_SOLR" => "#{settings['solr']}",
                                 "PROV_ELASTICSEARCH" => "#{settings['elasticsearch']}",
-                                "PROV_MONGO" => "#{settings['mongo']}"
+                                "PROV_MONGO" => "#{settings['mongo']}",
+                                "PROV_NODEJS" => "#{settings['nodejs']}",
+                                "PROV_NGINX" => "#{settings['nginx']}"
                               },
                               :args => "#{settings['deploy_bins']} #{settings['deploy_confs']} #{settings['deploy_dbs']} #{settings['username']} #{settings['password']} #{settings['machinename']} #{settings['hostname']}.local"
       end
@@ -122,7 +124,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                                 "PROV_JAVA" => "#{settings['java']}",
                                 "PROV_SOLR" => "#{settings['solr']}",
                                 "PROV_ELASTICSEARCH" => "#{settings['elasticsearch']}",
-                                "PROV_MONGO" => "#{settings['mongo']}"
+                                "PROV_MONGO" => "#{settings['mongo']}",
+                                "PROV_NODEJS" => "#{settings['nodejs']}",
+                                "PROV_NGINX" => "#{settings['nginx']}"
                               },
                               :args => "#{settings['deploy_bins']} #{settings['deploy_confs']} #{settings['deploy_dbs']} #{settings['username']} #{settings['password']} #{settings['machinename']} #{settings['hostname']}.local"
       end

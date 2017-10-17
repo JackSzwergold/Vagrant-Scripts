@@ -90,6 +90,24 @@ echo -e "\033[33;1mPROVISIONING: IPTables provisioning: '${PROV_IPTABLES}'.\033[
 # Output a provisioning message.
 echo -e "\033[33;1mPROVISIONING: Fail2Ban provisioning: '${PROV_FAIL2BAN}'.\033[0m";
 
+# Output a provisioning message.
+echo -e "\033[33;1mPROVISIONING: Java provisioning: '${PROV_JAVA}'.\033[0m";
+
+# Output a provisioning message.
+echo -e "\033[33;1mPROVISIONING: Solr provisioning: '${PROV_SOLR}'.\033[0m";
+
+# Output a provisioning message.
+echo -e "\033[33;1mPROVISIONING: Elasticsearch provisioning: '${PROV_ELASTICSEARCH}'.\033[0m";
+
+# Output a provisioning message.
+echo -e "\033[33;1mPROVISIONING: MongoDB provisioning: '${PROV_MONGO}'.\033[0m";
+
+# Output a provisioning message.
+echo -e "\033[33;1mPROVISIONING: NodeJS provisioning: '${PROV_NODEJS}'.\033[0m";
+
+# Output a provisioning message.
+echo -e "\033[33;1mPROVISIONING: Nginx provisioning: '${PROV_NGINX}'.\033[0m";
+
 ##########################################################################################
 # Go into the config directory.
 ##########################################################################################
@@ -1313,6 +1331,60 @@ function configure_mongo () {
 } # configure_mongo
 
 ##########################################################################################
+# NodeJS and NPM
+##########################################################################################
+function install_nodejs () {
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Installing NodeJS and NPM related stuff.\033[0m";
+
+  # Go into the base directory.
+  cd "${BASE_DIR}";
+
+  # Purge any already installed version of NodeJS and NPM.
+  sudo -E aptitude -y -q=2 purge node npm;
+
+  # Now install NodeJS and NPM via PPA.
+  sudo -E aptitude -y -q=2 install python-software-properties;
+  # curl -sL https://deb.nodesource.com/setup_6.x | sudo bash - ;
+  # curl -sL https://deb.nodesource.com/setup_5.x | sudo bash - ;
+  # curl -sL https://deb.nodesource.com/setup_4.x | sudo bash - ;
+  # curl -sL https://deb.nodesource.com/setup_0.10 | sudo bash - ;
+  curl -sL https://deb.nodesource.com/setup_4.x | sudo bash - ;
+  sudo -E aptitude -y -q=2 update;
+  sudo -E aptitude -y -q=2 install nodejs;
+
+  # Install 'forever' and 'userdown' for Upstart script support.
+  sudo -E npm install -g --no-optional forever 2>&1 >/dev/null;
+  sudo -E npm install -g --no-optional userdown 2>&1 >/dev/null;
+
+} # install_nodejs
+
+##########################################################################################
+# Nginx
+##########################################################################################
+function install_nginx () {
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFS_DIR}";
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Installing Nginx related stuff.\033[0m";
+
+  # Now install Nginx.
+  sudo -E aptitude -y -q=2 install nginx-full;
+
+  # Copy the Nginx config file in place and restart sysstat.
+  NGINX_CONF_PATH="/etc/nginx/sites-available";
+  if [ -f "nginx/default" ]; then
+    sudo -E cp -f "nginx/default" "${NGINX_CONF_PATH}/default";
+    sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "${NGINX_CONF_PATH}/default";
+    sudo -E service nginx restart;
+  fi
+
+} # install_nginx
+
+##########################################################################################
 # Update the locate database.
 ##########################################################################################
 function update_locate_db () {
@@ -1468,6 +1540,24 @@ if [ "${PROV_MONGO}" = true ]; then
 
 fi
 
+# Get the NodeJS stuff set.
+if [ "${PROV_NODEJS}" = true ]; then
+
+  # Install and configure NodeJS and NPM.
+  hash node 2>/dev/null || { install_nodejs; }
+
+  # Setup the NodeJS application deployment environment.
+  if [ ! -d "/opt/webapps" ]; then set_application_deployment_directories; fi
+
+fi
+
+# Get the Nginx stuff set.
+if [ "${PROV_NGINX}" = true ]; then
+
+  # Install and configure Nginx.
+  hash nginx 2>/dev/null || { install_nginx; }
+
+fi
 
 # Update the locate database.
 update_locate_db;
