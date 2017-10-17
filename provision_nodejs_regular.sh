@@ -36,16 +36,16 @@ BASE_DIR=$(pwd);
 # Output a provisioning message.
 echo -e "\033[33;1mPROVISIONING: Base directory is: '${BASE_DIR}'.\033[0m";
 
-CONFIG_DIR="deployment_configs";
-if [ -n "$1" ]; then CONFIG_DIR="${1}"; fi
+CONFS_DIR="deploy_confs";
+if [ -n "$1" ]; then CONFS_DIR="${1}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Config directory is: '${CONFIG_DIR}'.\033[0m";
+echo -e "\033[33;1mPROVISIONING: Config directory is: '${CONFS_DIR}'.\033[0m";
 
 ##########################################################################################
 # Go into the config directory.
 ##########################################################################################
 
-cd "${BASE_DIR}/${CONFIG_DIR}";
+cd "${BASE_DIR}/${CONFS_DIR}";
 
 ##########################################################################################
 # Adjusting the Debian frontend setting to non-interactive mode.

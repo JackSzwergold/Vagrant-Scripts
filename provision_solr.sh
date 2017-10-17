@@ -35,20 +35,20 @@ BASE_DIR=$(pwd);
 # Output a provisioning message.
 echo -e "\033[33;1mPROVISIONING: Base directory is: '${BASE_DIR}'.\033[0m";
 
-CONFIG_DIR="deployment_configs";
-if [ -n "$1" ]; then CONFIG_DIR="${1}"; fi
+CONFS_DIR="deploy_confs";
+if [ -n "$1" ]; then CONFS_DIR="${1}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Config directory is: '${CONFIG_DIR}'.\033[0m";
+echo -e "\033[33;1mPROVISIONING: Config directory is: '${CONFS_DIR}'.\033[0m";
 
-DB_DIR="deployment_dbs";
-if [ -n "$2" ]; then DB_DIR="${2}"; fi
+DBS_DIR="deploy_dbs";
+if [ -n "$2" ]; then DBS_DIR="${2}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: DB directory is: '${DB_DIR}'.\033[0m";
+echo -e "\033[33;1mPROVISIONING: DB directory is: '${DBS_DIR}'.\033[0m";
 
-BINARIES_DIR="deployment_binaries";
-if [ -n "$3" ]; then BINARIES_DIR="${3}"; fi
+BINS_DIR="deploy_bins";
+if [ -n "$3" ]; then BINS_DIR="${3}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Binaries directory is: '${BINARIES_DIR}'.\033[0m";
+echo -e "\033[33;1mPROVISIONING: Binaries directory is: '${BINS_DIR}'.\033[0m";
 
 USER_NAME="vagrant";
 if [ -n "$4" ]; then USER_NAME="${4}"; fi
@@ -83,7 +83,7 @@ echo -e "\033[33;1mPROVISIONING: Basics provisioning: '${PROVISION_BASICS}'.\033
 # Go into the config directory.
 ##########################################################################################
 
-cd "${BASE_DIR}/${CONFIG_DIR}";
+cd "${BASE_DIR}/${CONFS_DIR}";
 
 ##########################################################################################
 # Adjusting the Debian frontend setting to non-interactive mode.
@@ -146,7 +146,7 @@ function install_aptitude () {
 function set_environment () {
 
   # Go into the config directory.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
+  cd "${BASE_DIR}/${CONFS_DIR}";
 
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Setting the selected editor.\033[0m";
@@ -245,7 +245,7 @@ function install_avahi () {
 function install_sysstat () {
 
   # Go into the config directory.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
+  cd "${BASE_DIR}/${CONFS_DIR}";
 
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Sysstat related stuff.\033[0m";
@@ -348,7 +348,7 @@ function install_postfix () {
 function configure_login_defs () {
 
   # Go into the config directory.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
+  cd "${BASE_DIR}/${CONFS_DIR}";
 
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Setting the 'login.defs' config file.\033[0m";
@@ -364,7 +364,7 @@ function configure_login_defs () {
 function configure_common_session () {
 
   # Go into the config directory.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
+  cd "${BASE_DIR}/${CONFS_DIR}";
 
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Setting the 'common-session' config file.\033[0m";
@@ -380,7 +380,7 @@ function configure_common_session () {
 function configure_ssh () {
 
   # Go into the config directory.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
+  cd "${BASE_DIR}/${CONFS_DIR}";
 
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Setting the SSH config file.\033[0m";
@@ -396,7 +396,7 @@ function configure_ssh () {
 function configure_motd () {
 
   # Go into the config directory.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
+  cd "${BASE_DIR}/${CONFS_DIR}";
 
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Setting the MOTD banner.\033[0m";
@@ -445,7 +445,7 @@ function install_monit () {
 function configure_monit () {
 
   # Go into the config directory.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
+  cd "${BASE_DIR}/${CONFS_DIR}";
 
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Installing the Monit configs.\033[0m";
@@ -569,7 +569,7 @@ install_solr;
 
 # Monit
 # hash monit 2>/dev/null || { install_monit; }
-# if [ -f "${BASE_DIR}/${CONFIG_DIR}/monit/monitrc" ]; then configure_monit; fi
+# if [ -f "${BASE_DIR}/${CONFS_DIR}/monit/monitrc" ]; then configure_monit; fi
 
 # Update the locate database.
 update_locate_db;

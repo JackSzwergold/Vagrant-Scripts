@@ -49,58 +49,58 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   ########################################################################################
   # Define the machines.
   ########################################################################################
-  machines.each do |machine_settings|
+  machines.each do |settings|
 
     # Define the machine.
-    config.vm.define "#{machine_settings["hostname"]}", primary: machine_settings["primary"], autostart: machine_settings["autostart"] do |machine|
+    config.vm.define "#{settings["hostname"]}", primary: settings["primary"], autostart: settings["autostart"] do |machine|
 
       # Set the username and password.
-      config.ssh.username = "#{machine_settings["username"]}"
-      # config.ssh.password = "#{machine_settings["password"]}"
+      config.ssh.username = "#{settings["username"]}"
+      # config.ssh.password = "#{settings["password"]}"
 
       # Print out the details of the configs.
-      puts "Reading config for '#{machine_settings["name"]}' (host: #{machine_settings["hostname"]}, ip: #{machine_settings["ip"]})"
+      puts "Reading config for '#{settings["name"]}' (host: #{settings["hostname"]}, ip: #{settings["ip"]})"
 
       # VirtualBox specific configuration options.
       machine.vm.provider :virtualbox do |vbox|
         vbox.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
         vbox.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
-        vbox.customize ["modifyvm", :id, "--memory", machine_settings["memory"]]
-        vbox.customize ["modifyvm", :id, "--cpus", machine_settings["cpus"]]
-        # vbox.customize ["modifyvm", :id, "--name", "#{machine_settings["name"]}"]
-        vbox.name = "#{machine_settings["name"]}"
+        vbox.customize ["modifyvm", :id, "--memory", settings["memory"]]
+        vbox.customize ["modifyvm", :id, "--cpus", settings["cpus"]]
+        # vbox.customize ["modifyvm", :id, "--name", "#{settings["name"]}"]
+        vbox.name = "#{settings["name"]}"
       end
 
       # Basic virtual machine configuration options.
-      machine.vm.box = "#{machine_settings["box"]}"
-      machine.vm.hostname = "#{machine_settings["hostname"]}"
+      machine.vm.box = "#{settings["box"]}"
+      machine.vm.hostname = "#{settings["hostname"]}"
       machine.vm.box_check_update = false
-      machine.vm.network :private_network, ip: "#{machine_settings["ip"]}"
-      if machine_settings["forward_guest1"].to_s.strip.length > 0
-        machine.vm.network :forwarded_port, guest: machine_settings["forward_guest1"], host: machine_settings["forward_host1"], id: machine_settings["forward_id1"], auto_correct: true
+      machine.vm.network :private_network, ip: "#{settings["ip"]}"
+      if settings["forward_guest1"].to_s.strip.length > 0
+        machine.vm.network :forwarded_port, guest: settings["forward_guest1"], host: settings["forward_host1"], id: settings["forward_id1"], auto_correct: true
       end
-      if machine_settings["forward_guest2"].to_s.strip.length > 0
-        machine.vm.network :forwarded_port, guest: machine_settings["forward_guest2"], host: machine_settings["forward_host2"], id: machine_settings["forward_id2"], auto_correct: true
+      if settings["forward_guest2"].to_s.strip.length > 0
+        machine.vm.network :forwarded_port, guest: settings["forward_guest2"], host: settings["forward_host2"], id: settings["forward_id2"], auto_correct: true
       end
       machine.vm.synced_folder ".", "/vagrant", type: "nfs", disabled: true
 
       # Copy over the deployment configs directory.
-      machine.vm.synced_folder "#{machine_settings["deployment_configs_path"]}", "/home/#{machine_settings["username"]}/#{machine_settings["deployment_configs_path"]}", type: "rsync", rsync__exclude: [ ".DS_Store", ".gitignore", ".gitkeep" ]
+      machine.vm.synced_folder "#{settings["deploy_confs"]}", "/home/#{settings["username"]}/#{settings["deploy_confs"]}", type: "rsync", rsync__exclude: [ ".DS_Store", ".gitignore", ".gitkeep" ]
 
       # Copy over the deployment DBs directory.
-      machine.vm.synced_folder "deployment_dbs", "/home/#{machine_settings["username"]}/deployment_dbs", type: "rsync", rsync__exclude: [ ".DS_Store", ".gitignore", ".gitkeep" ]
+      machine.vm.synced_folder "deploy_dbs", "/home/#{settings["username"]}/deploy_dbs", type: "rsync", rsync__exclude: [ ".DS_Store", ".gitignore", ".gitkeep" ]
 
       # Copy over the deployment DBs directory.
-      machine.vm.synced_folder "deployment_binaries", "/home/#{machine_settings["username"]}/deployment_binaries", type: "rsync", rsync__exclude: [ ".DS_Store", ".gitignore", ".gitkeep" ]
+      machine.vm.synced_folder "deploy_bins", "/home/#{settings["username"]}/deploy_bins", type: "rsync", rsync__exclude: [ ".DS_Store", ".gitignore", ".gitkeep" ]
 
       # Set the shell script to provision the server.
-      if machine_settings["provision_script"].to_s.strip.length > 0
-        machine.vm.provision :shell, :privileged => true, :path => machine_settings["provision_script"], :args => "#{machine_settings['deployment_configs_path']} #{machine_settings['deployment_dbs_path']} #{machine_settings['deployment_binaries_path']} #{machine_settings['username']} #{machine_settings['password']} #{machine_settings['machinename']} #{machine_settings['hostname']}.local #{machine_settings['basics']} #{machine_settings['lamp']} #{machine_settings['imagemagick']} #{machine_settings['geoip']} #{machine_settings['iptables']} #{machine_settings['fail2ban']}"
+      if settings["provision_script"].to_s.strip.length > 0
+        machine.vm.provision :shell, :privileged => true, :path => settings["provision_script"], :args => "#{settings['deploy_confs']} #{settings['deploy_dbs']} #{settings['deploy_bins']} #{settings['username']} #{settings['password']} #{settings['machinename']} #{settings['hostname']}.local #{settings['basics']} #{settings['lamp']} #{settings['imagemagick']} #{settings['geoip']} #{settings['iptables']} #{settings['fail2ban']}"
       end
 
       # Set the shell script to provision items for teh regular user.
-      if machine_settings["provision_script_regular"].to_s.strip.length > 0
-        machine.vm.provision :shell, :privileged => false, :path => machine_settings["provision_script_regular"], :args => "#{machine_settings['deployment_configs_path']} #{machine_settings['deployment_dbs_path']} #{machine_settings['deployment_binaries_path']} #{machine_settings['username']} #{machine_settings['password']} #{machine_settings['machinename']} #{machine_settings['hostname']}.local #{machine_settings['basics']} #{machine_settings['lamp']} #{machine_settings['imagemagick']} #{machine_settings['geoip']} #{machine_settings['iptables']} #{machine_settings['fail2ban']}"
+      if settings["provision_script_regular"].to_s.strip.length > 0
+        machine.vm.provision :shell, :privileged => false, :path => settings["provision_script_regular"], :args => "#{settings['deploy_confs']} #{settings['deploy_dbs']} #{settings['deploy_bins']} #{settings['username']} #{settings['password']} #{settings['machinename']} #{settings['hostname']}.local #{settings['basics']} #{settings['lamp']} #{settings['imagemagick']} #{settings['geoip']} #{settings['iptables']} #{settings['fail2ban']}"
       end
 
     end # config.vm.define

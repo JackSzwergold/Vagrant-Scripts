@@ -34,20 +34,20 @@ BASE_DIR=$(pwd);
 # Output a provisioning message.
 echo -e "\033[33;1mPROVISIONING: Base directory is: '${BASE_DIR}'.\033[0m";
 
-CONFIG_DIR="deployment_configs";
-if [ -n "$1" ]; then CONFIG_DIR="${1}"; fi
+CONFS_DIR="deploy_confs";
+if [ -n "$1" ]; then CONFS_DIR="${1}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Config directory is: '${CONFIG_DIR}'.\033[0m";
+echo -e "\033[33;1mPROVISIONING: Config directory is: '${CONFS_DIR}'.\033[0m";
 
-DB_DIR="deployment_dbs";
-if [ -n "$2" ]; then DB_DIR="${2}"; fi
+DBS_DIR="deploy_dbs";
+if [ -n "$2" ]; then DBS_DIR="${2}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: DB directory is: '${DB_DIR}'.\033[0m";
+echo -e "\033[33;1mPROVISIONING: DB directory is: '${DBS_DIR}'.\033[0m";
 
-BINARIES_DIR="deployment_binaries";
-if [ -n "$3" ]; then BINARIES_DIR="${3}"; fi
+BINS_DIR="deploy_bins";
+if [ -n "$3" ]; then BINS_DIR="${3}"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Binaries directory is: '${BINARIES_DIR}'.\033[0m";
+echo -e "\033[33;1mPROVISIONING: Binaries directory is: '${BINS_DIR}'.\033[0m";
 
 USER_NAME="vagrant";
 if [ -n "$4" ]; then USER_NAME="${4}"; fi
@@ -87,7 +87,7 @@ echo -e "\033[33;1mPROVISIONING: LAMP provisioning: '${PROVISION_LAMP}'.\033[0m"
 # Go into the config directory.
 ##########################################################################################
 
-cd "${BASE_DIR}/${CONFIG_DIR}";
+cd "${BASE_DIR}/${CONFS_DIR}";
 
 ##########################################################################################
 #  _____                 _   _
@@ -126,7 +126,7 @@ function configure_user_and_group () {
 function set_environment () {
 
   # Go into the config directory.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
+  cd "${BASE_DIR}/${CONFS_DIR}";
 
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Setting the selected editor.\033[0m";
@@ -217,7 +217,7 @@ function install_avahi () {
 function install_sysstat () {
 
   # Go into the config directory.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
+  cd "${BASE_DIR}/${CONFS_DIR}";
 
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Sysstat related stuff.\033[0m";
@@ -247,7 +247,8 @@ function install_basic_tools () {
     iftop figlet lynx mtr-tiny iperf nload zip unzip attr sshpass \
     dkms mc elinks dos2unix p7zip-full nfs-common \
     slurm sharutils uuid-runtime chkconfig quota pv trickle ntp \
-    virtualbox-dkms nano man man-pages;
+    virtualbox-dkms \
+    nano man man-pages;
 
 } # install_basic_tools
 
@@ -316,7 +317,7 @@ function install_postfix () {
 function configure_login_defs () {
 
   # Go into the config directory.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
+  cd "${BASE_DIR}/${CONFS_DIR}";
 
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Setting the 'login.defs' config file.\033[0m";
@@ -332,7 +333,7 @@ function configure_login_defs () {
 function configure_common_session () {
 
   # Go into the config directory.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
+  cd "${BASE_DIR}/${CONFS_DIR}";
 
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Setting the 'common-session' config file.\033[0m";
@@ -348,7 +349,7 @@ function configure_common_session () {
 function configure_ssh () {
 
   # Go into the config directory.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
+  cd "${BASE_DIR}/${CONFS_DIR}";
 
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Setting the SSH config file.\033[0m";
@@ -362,6 +363,9 @@ function configure_ssh () {
 # MOTD
 ##########################################################################################
 function configure_motd () {
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFS_DIR}";
 
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Setting the MOTD banner.\033[0m";
@@ -423,7 +427,7 @@ function install_apache () {
 function install_instantclient () {
 
   # Go into the config directory.
-  cd "${BASE_DIR}/${BINARIES_DIR}";
+  cd "${BASE_DIR}/${BINS_DIR}";
 
   if ls oracle-instantclient* 1> /dev/null 2>&1; then
 
@@ -471,7 +475,7 @@ function install_instantclient () {
 function configure_apache () {
 
   # Go into the config directory.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
+  cd "${BASE_DIR}/${CONFS_DIR}";
 
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Setting Apache and PHP configs.\033[0m";
@@ -502,13 +506,13 @@ function configure_apache () {
 function set_apache_web_root () {
 
   # Go into the config directory.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
+  cd "${BASE_DIR}/${CONFS_DIR}";
 
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Adjusting the Apache root directory and default file.\033[0m";
 
   # Change ownership and permissions.
-  sudo -E chown -f -R "${USER_NAME}:www-readwrite" "/var/www/html/";
+  sudo -E chown -f -R "${USER_NAME}":www-readwrite "/var/www/html/";
   sudo -E chmod -f -R 775 "/var/www/html/";
   sudo -E chmod g+s "/var/www/html/";
   sudo -E cp -f "httpd-centos-7/index.php" "/var/www/html/index.php";
@@ -563,7 +567,7 @@ function set_deployment_user () {
 function set_application_configs () {
 
   # Go into the config directory.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
+  cd "${BASE_DIR}/${CONFS_DIR}";
 
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Setting applictaion configs.\033[0m";
@@ -605,7 +609,7 @@ function configure_apache_log_rotation () {
 function set_apache_virtual_host_directories () {
 
   # Go into the config directory.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
+  cd "${BASE_DIR}/${CONFS_DIR}";
 
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Creating the web server document root directories.\033[0m";
@@ -626,7 +630,7 @@ function set_apache_virtual_host_directories () {
 function install_mysql () {
 
   # Go into the config directory.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
+  cd "${BASE_DIR}/${CONFS_DIR}";
 
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Installing and configuring MySQL related items.\033[0m";
@@ -661,7 +665,7 @@ function install_mysql () {
 function install_mariadb () {
 
   # Go into the config directory.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
+  cd "${BASE_DIR}/${CONFS_DIR}";
 
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Installing and configuring MariaDB related items.\033[0m";
@@ -707,8 +711,8 @@ function configure_mysql () {
   cd "${BASE_DIR}";
 
   # Import any databases that were sent over as the part of the provisioning process.
-  if [ -d "${DB_DIR}" ]; then
-    find "${DB_DIR}" -type f -name "*.sql" | sort |\
+  if [ -d "${DBS_DIR}" ]; then
+    find "${DBS_DIR}" -type f -name "*.sql" | sort |\
       while read db_backup_path
       do
       	if [ -f "${db_backup_path}" ]; then
@@ -742,7 +746,7 @@ function configure_mysql () {
 function install_system_scripts () {
 
   # Go into the config directory.
-  cd "${BASE_DIR}/${CONFIG_DIR}";
+  cd "${BASE_DIR}/${CONFS_DIR}";
 
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Installing configuring various system scripts.\033[0m";
@@ -788,8 +792,6 @@ function update_locate_db () {
 # Install install stuff.
 configure_user_and_group;
 set_environment;
-set_timezone;
-hash avahi-daemon 2>/dev/null || { install_avahi; }
 hash sar 2>/dev/null || { install_sysstat; }
 hash updatedb 2>/dev/null || { install_locate; }
 configure_motd;
@@ -806,6 +808,12 @@ if [ "${PROVISION_BASICS}" = true ]; then
   # if [ -f "ssh/ssh_config" ] && [ -f "/etc/ssh/ssh_config" ]; then configure_ssh; fi
 
 fi
+
+# Timezone and related stuff.
+set_timezone;
+
+# Avahi
+hash avahi-daemon 2>/dev/null || { install_avahi; }
 
 # Get the LAMP stuff set.
 if [ "${PROVISION_LAMP}" = true ]; then
