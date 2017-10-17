@@ -26,7 +26,7 @@
   provision_script_regular: null
   username: "vagrant"
   password: "vagrant"
-  hostname: "sandbox.local"
+  hostname: "sandbox"
   machinename: "Sandbox"
   ip: "192.168.56.10"
   forward_guest1: 22
@@ -51,7 +51,7 @@
   provision_script_regular: null
   username: "vagrant"
   password: "vagrant"
-  hostname: "sandbox-1604.local"
+  hostname: "sandbox-1604"
   machinename: "Sandbox-1604"
   ip: "192.168.56.20"
   forward_guest1: 22
@@ -76,7 +76,7 @@
   provision_script_regular: null
   username: "vagrant"
   password: "vagrant"
-  hostname: "sandbox-centos-68.local"
+  hostname: "sandbox-centos-68"
   machinename: "Sandbox-CentOS-68"
   ip: "192.168.56.30"
   forward_guest1: 22
@@ -97,7 +97,7 @@
   provision_script_regular: null
   username: "vagrant"
   password: "vagrant"
-  hostname: "sandbox-centos-7.local"
+  hostname: "sandbox-centos-7"
   machinename: "Sandbox-CentOS-7"
   ip: "192.168.56.40"
   forward_guest1: 22
@@ -118,7 +118,7 @@
   provision_script_regular: null
   username: "vagrant"
   password: "vagrant"
-  hostname: "jabroni.local"
+  hostname: "jabroni"
   machinename: "Jabroni"
   ip: "192.168.56.50"
   forward_guest1: 22
@@ -143,7 +143,7 @@
   provision_script_regular: "provision_nodejs_regular.sh"
   username: "vagrant"
   password: "vagrant"
-  hostname: "nodejs.local"
+  hostname: "nodejs"
   machinename: "NodeJS"
   ip: "192.168.56.60"
   forward_guest1: 22
@@ -163,7 +163,7 @@
   provision_script_regular: "provision_nodejs_regular.sh"
   username: "vagrant"
   password: "vagrant"
-  hostname: "nodejs-1604.local"
+  hostname: "nodejs-1604"
   machinename: "NodeJS-1604"
   ip: "192.168.56.70"
   forward_guest1: 22
@@ -183,7 +183,7 @@
   provision_script_regular: null
   username: "vagrant"
   password: "vagrant"
-  hostname: "mongo.local"
+  hostname: "mongo"
   machinename: "Mongo"
   ip: "192.168.56.80"
   forward_guest1: 22
@@ -206,7 +206,7 @@
   provision_script_regular: null
   username: "vagrant"
   password: "vagrant"
-  hostname: "elasticsearch.local"
+  hostname: "elasticsearch"
   machinename: "Elasticsearch"
   ip: "192.168.56.90"
   forward_guest1: 22
@@ -229,7 +229,7 @@
   provision_script_regular: null
   username: "vagrant"
   password: "vagrant"
-  hostname: "solr.local"
+  hostname: "solr"
   machinename: "Solr"
   ip: "192.168.56.100"
   forward_guest1: 22
