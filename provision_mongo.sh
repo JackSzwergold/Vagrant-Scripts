@@ -171,23 +171,40 @@ function set_environment () {
 ##########################################################################################
 function set_timezone () {
 
-  TIMEZONE="America/New_York";
+  if ! hash timedatectl 2>/dev/null; then
 
-  # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Setting timezone data.\033[0m";
+    # Set the timezone variables.
+    TIMEZONE="America/New_York";
+    TIMEZONE_PATH="/usr/share/zoneinfo";
 
-  # Set the timezone.
-  sudo -E timedatectl set-timezone "${TIMEZONE}";
+    # Output a provisioning message.
+    echo -e "\033[33;1mPROVISIONING: Setting timezone data manually.\033[0m";
 
-  # Do this stuff to get NTP setup.
-  sudo -E service ntp stop;
-  sudo -E ntpd -gq;
-  sudo service ntp start;
-  # sudo -E update-rc.d -f ntp defaults;
-  sudo -E update-rc.d -f ntp enable;
+    # Set the actual timezone via a symbolic link.
+    sudo -E ln -f -s "${TIMEZONE_PATH}/${TIMEZONE}" "/etc/localtime";
 
-  # Set the NTP synchronized value to 'true'.
-  sudo -E timedatectl set-ntp true;
+  else
+
+    # Set the timezone variables.
+    TIMEZONE="America/New_York";
+
+    # Output a provisioning message.
+    echo -e "\033[33;1mPROVISIONING: Setting timezone data via 'timedatectl'.\033[0m";
+
+    # Set the timezone.
+    sudo -E timedatectl set-timezone "${TIMEZONE}";
+
+    # Do this stuff to get NTP setup.
+    sudo -E service ntp stop;
+    sudo -E ntpd -gq;
+    sudo service ntp start;
+    # sudo -E update-rc.d -f ntp defaults;
+    sudo -E update-rc.d -f ntp enable;
+
+    # Set the NTP synchronized value to 'true'.
+    sudo -E timedatectl set-ntp true;
+
+  fi
 
 } # set_timezone
 
