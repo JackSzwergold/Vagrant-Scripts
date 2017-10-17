@@ -98,7 +98,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                                 "PROV_IMAGEMAGICK" => "#{settings['imagemagick']}",
                                 "PROV_GEOIP" => "#{settings['geoip']}",
                                 "PROV_IPTABLES" => "#{settings['iptables']}",
-                                "PROV_FAIL2BAN" => "#{settings['fail2ban']}"
+                                "PROV_FAIL2BAN" => "#{settings['fail2ban']}",
+                                "PROV_JAVA" => "#{settings['java']}",
+                                "PROV_SOLR" => "#{settings['solr']}",
+                                "PROV_ELASTICSEARCH" => "#{settings['elasticsearch']}",
+                                "PROV_MONGO" => "#{settings['mongo']}"
                               },
                               :args => "#{settings['deploy_bins']} #{settings['deploy_confs']} #{settings['deploy_dbs']} #{settings['username']} #{settings['password']} #{settings['machinename']} #{settings['hostname']}.local"
       end
@@ -114,7 +118,11 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                                 "PROV_IMAGEMAGICK" => "#{settings['imagemagick']}",
                                 "PROV_GEOIP" => "#{settings['geoip']}",
                                 "PROV_IPTABLES" => "#{settings['iptables']}",
-                                "PROV_FAIL2BAN" => "#{settings['fail2ban']}"
+                                "PROV_FAIL2BAN" => "#{settings['fail2ban']}",
+                                "PROV_JAVA" => "#{settings['java']}",
+                                "PROV_SOLR" => "#{settings['solr']}",
+                                "PROV_ELASTICSEARCH" => "#{settings['elasticsearch']}",
+                                "PROV_MONGO" => "#{settings['mongo']}"
                               },
                               :args => "#{settings['deploy_bins']} #{settings['deploy_confs']} #{settings['deploy_dbs']} #{settings['username']} #{settings['password']} #{settings['machinename']} #{settings['hostname']}.local"
       end

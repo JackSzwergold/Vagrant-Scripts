@@ -130,11 +130,6 @@
   deploy_confs: "deploy_items/confs/ubuntu"
   deploy_dbs: "deploy_items/dbs"
   basics: true
-  lamp: false
-  imagemagick: false
-  geoip: false
-  iptables: false
-  fail2ban: false
 - name: "NodeJS (Ubuntu)"
   box: "ubuntu/trusty64"
   primary: false
@@ -179,7 +174,7 @@
   box: "ubuntu/trusty64"
   primary: false
   autostart: false
-  provision_script: "provision_mongo.sh"
+  provision_script: "provision_ubuntu_1404.sh"
   provision_script_regular: null
   username: "vagrant"
   password: "vagrant"
@@ -198,11 +193,12 @@
   deploy_dbs: "deploy_items/dbs"
   deploy_bins: "deploy_items/bins"
   basics: true
+  mongo: true
 - name: "ElasticSearch (Ubuntu)"
   box: "ubuntu/trusty64"
   primary: false
   autostart: false
-  provision_script: "provision_elasticsearch.sh"
+  provision_script: "provision_ubuntu_1404.sh"
   provision_script_regular: null
   username: "vagrant"
   password: "vagrant"
@@ -221,11 +217,13 @@
   deploy_confs: "deploy_items/confs/ubuntu"
   deploy_dbs: "deploy_items/dbs"
   basics: true
+  java: true
+  elasticsearch: true
 - name: "Solr (Ubuntu)"
   box: "ubuntu/trusty64"
   primary: false
   autostart: false
-  provision_script: "provision_solr.sh"
+  provision_script: "provision_ubuntu_1404.sh"
   provision_script_regular: null
   username: "vagrant"
   password: "vagrant"
@@ -244,3 +242,5 @@
   deploy_confs: "deploy_items/confs/ubuntu"
   deploy_dbs: "deploy_items/dbs"
   basics: true
+  java: true
+  solr: true
