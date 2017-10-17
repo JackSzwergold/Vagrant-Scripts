@@ -16,7 +16,10 @@
 # Created: 2016-01-27, js
 # Version: 2016-01-27, js: creation
 #          2016-01-30, js: development
-#          2016-09-25, js: simplifying things
+#          2016-08-01, js: setting an extremely basic setup
+#          2016-08-02, js: refining
+#          2016-09-13, js: refining
+#          2016-09-26, js: refining
 #          2016-12-24, js: development
 #
 ##########################################################################################
