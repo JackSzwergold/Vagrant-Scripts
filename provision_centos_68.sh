@@ -194,7 +194,7 @@ function set_timezone () {
 function configure_repository_stuff () {
 
   # Install basic repo stuff.
-  sudo -E yum install -y -q epel-release deltarpm;
+  sudo -E yum install -y -q -e 0 epel-release deltarpm;
 
   # Enable EPEL (Extra Packages for Enterprise Linux)
   sudo sed -i "s/enabled=0/enabled=1/g" "/etc/yum.repos.d/epel.repo";
@@ -210,10 +210,10 @@ function install_avahi () {
   echo -e "\033[33;1mPROVISIONING: Avahi related stuff.\033[0m";
 
   # Install Avahi.
-  sudo -E yum install -y -q avahi;
+  sudo -E yum install -y -q -e 0 avahi;
 
   # Install NSS support for mDNS which is required by Avahi.
-  sudo -E yum install -y -q nss-mdns;
+  sudo -E yum install -y -q -e 0 nss-mdns;
 
   # Start the system messagebus.
   sudo -E service messagebus restart;
@@ -235,7 +235,7 @@ function install_sysstat () {
   echo -e "\033[33;1mPROVISIONING: Sysstat related stuff.\033[0m";
 
   # Install Sysstat.
-  sudo -E yum install -y -q sysstat;
+  sudo -E yum install -y -q -e 0 sysstat;
 
   # Restart Sysstat.
   sudo -E service sysstat restart;
@@ -251,7 +251,7 @@ function install_basic_tools () {
   echo -e "\033[33;1mPROVISIONING: Installing a set of generic tools.\033[0m";
 
   # Install generic tools.
-  sudo -E yum install -y -q \
+  sudo -E yum install -y -q -e 0 \
     bind-utils dnsutils traceroute nmap bc htop finger curl whois rsync lsof \
     iftop figlet lynx mtr-tiny iperf nload zip unzip attr sshpass \
     dkms mc elinks dos2unix p7zip-full nfs-common \
@@ -270,7 +270,7 @@ function install_locate () {
   echo -e "\033[33;1mPROVISIONING: Installing the locate tool and updating the database.\033[0m";
 
   # Install Locate.
-  sudo -E yum install -y -q mlocate;
+  sudo -E yum install -y -q -e 0 mlocate;
 
   # Update Locate.
   sudo -E updatedb;
@@ -286,7 +286,7 @@ function install_compiler () {
   echo -e "\033[33;1mPROVISIONING: Installing the core compiler tools.\033[0m";
 
   # Install the core compiler and build tools.
-  sudo -E yum groupinstall -y -q "Development Tools";
+  sudo -E yum groupinstall -y -q -e 0 "Development Tools";
 
 } # install_compiler
 
@@ -299,11 +299,11 @@ function install_git () {
   echo -e "\033[33;1mPROVISIONING: Installing Git and related stuff.\033[0m";
 
   # Purge any already installed version of Git.
-  sudo -E yum remove -y -q git;
+  sudo -E yum remove -y -q -e 0 git;
 
   # Now install Git via WANDisco.
-  sudo -E yum install -y -q "http://opensource.wandisco.com/centos/6/git/x86_64/wandisco-git-release-6-1.noarch.rpm" 2>/dev/null;
-  sudo -E yum install -y -q git;
+  sudo -E yum install -y -q -e 0 "http://opensource.wandisco.com/centos/6/git/x86_64/wandisco-git-release-6-1.noarch.rpm" 2>/dev/null;
+  sudo -E yum install -y -q -e 0 git;
 
 } # install_git
 
@@ -316,7 +316,7 @@ function install_postfix () {
   echo -e "\033[33;1mPROVISIONING: Installing Postfix and related mail stuff.\033[0m";
 
   # Install postfix and general mail stuff.
-  sudo -E yum install -y -q postfix cyrus-sasl cyrus-imapd mailx;
+  sudo -E yum install -y -q -e 0 postfix cyrus-sasl cyrus-imapd mailx;
 
 } # install_postfix
 
@@ -380,7 +380,7 @@ function configure_motd () {
   echo -e "\033[33;1mPROVISIONING: Setting the MOTD banner.\033[0m";
 
   # Install figlet.
-  sudo -E yum install -y -q figlet;
+  sudo -E yum install -y -q -e 0 figlet;
 
   # Set the server login banner with figlet.
   MOTD_PATH="/etc/motd";
@@ -401,18 +401,18 @@ function install_apache () {
   sudo -E rpm -U "http://mirror.webtatic.com/yum/el6/latest.rpm" 2>/dev/null;
 
   # Install the base Apache related items.
-  sudo -E yum install -y -q httpd mod_php56 mod_ssl apachetop;
+  sudo -E yum install -y -q -e 0 httpd mod_php56 mod_ssl apachetop;
 
   # Install other PHP related related items.
-  # sudo -E yum install -y -q php56w php56w-common php56w-opcache \
-  sudo -E yum install -y -q php56w php56w-common \
+  # sudo -E yum install -y -q -e 0 php56w php56w-common php56w-opcache \
+  sudo -E yum install -y -q -e 0 php56w php56w-common \
     php56w-mysqlnd php56w-pgsql php56-php-mssql php56w-odbc \
     php56w-xmlrpc php56w-json php56w-xsl php56w-curl \
     php56w-ldap php56w-mcrypt \
     php56w-pspell php56w-gmp php56w-gd php56w-mbstring;
 
   # Install PHP Pear and PHP development stuff.
-  sudo -E yum install -y -q php56w-pear php56w-devel;
+  sudo -E yum install -y -q -e 0 php56w-pear php56w-devel;
 
   # Update the Pear/PECL channel stuff.
   sudo -E pecl channel-update pecl.php.net;
@@ -650,13 +650,13 @@ function install_mysql () {
   sudo -E rpm -U "http://mirror.webtatic.com/yum/el6/latest.rpm" 2>/dev/null;
 
   # Install the `yum-plugin-replace` to so a clean upgrade of all MySQL libraries can happen.
-  sudo -E RUNLEVEL=1 yum install -y -q mysql.`uname -i` yum-plugin-replace;
+  sudo -E RUNLEVEL=1 yum install -y -q -e 0 mysql.`uname -i` yum-plugin-replace;
 
   # Upgrade the MySQL libaries to MySQL 5.5.
-  sudo -E RUNLEVEL=1 yum replace -y -q mysql-libs --replace-with mysql55w-libs;
+  sudo -E RUNLEVEL=1 yum replace -y -q -e 0 mysql-libs --replace-with mysql55w-libs;
 
   # Install the MySQL server and client.
-  sudo -E RUNLEVEL=1 yum install -y -q mysql55w mysql55w-server;
+  sudo -E RUNLEVEL=1 yum install -y -q -e 0 mysql55w mysql55w-server;
 
   # Start MySQL.
   sudo -E service mysqld start;
@@ -694,12 +694,12 @@ function install_mariadb () {
     sudo -E cp -f "mysql-centos-68/mariadb55.repo" "/etc/yum.repos.d/";
 
     # Clean the Yum repo cache.
-    sudo yum -y -q clean all;
+    sudo -E yum -y -q -e 0 clean all;
 
   fi
 
   # Install the MariaDB MySQL server and client.
-  sudo -E RUNLEVEL=1 yum install -y -q MariaDB-client MariaDB-server;
+  sudo -E RUNLEVEL=1 yum install -y -q -e 0 MariaDB-client MariaDB-server;
 
   # Start MySQL.
   sudo -E service mysql start;
