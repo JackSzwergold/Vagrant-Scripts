@@ -186,15 +186,25 @@ function set_timezone () {
 } # set_timezone
 
 ##########################################################################################
+# Configure repository stuff.
+##########################################################################################
+function configure_repository_stuff () {
+
+  # Install basic repo stuff.
+  sudo -E yum install -y -q epel-release deltarpm;
+
+  # Enable EPEL (Extra Packages for Enterprise Linux)
+  sudo sed -i "s/enabled=0/enabled=1/g" "/etc/yum.repos.d/epel.repo";
+
+} # configure_repository_stuff
+
+##########################################################################################
 # Avahi
 ##########################################################################################
 function install_avahi () {
 
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Avahi related stuff.\033[0m";
-
-  # Enable EPEL (Extra Packages for Enterprise Linux)
-  sudo sed -i "s/enabled=0/enabled=1/g" "/etc/yum.repos.d/epel.repo";
 
   # Install Avahi.
   sudo -E yum install -y -q avahi;
@@ -236,9 +246,6 @@ function install_basic_tools () {
 
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Installing a set of generic tools.\033[0m";
-
-  # Install basic repo stuff.
-  sudo -E yum install -y -q epel-release deltarpm;
 
   # Install generic tools.
   sudo -E yum install -y -q \
@@ -368,12 +375,6 @@ function configure_motd () {
 
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Setting the MOTD banner.\033[0m";
-
-  # Install basic repo stuff.
-  sudo -E yum install -y -q epel-release deltarpm;
-
-  # Enable EPEL (Extra Packages for Enterprise Linux)
-  sudo sed -i "s/enabled=0/enabled=1/g" "/etc/yum.repos.d/epel.repo";
 
   # Install figlet.
   sudo -E yum install -y -q figlet;
@@ -803,6 +804,7 @@ function update_locate_db () {
 
 # Install install stuff.
 configure_user_and_group;
+configure_repository_stuff;
 set_user_environment;
 hash sar 2>/dev/null || { install_sysstat; }
 hash updatedb 2>/dev/null || { install_locate; }

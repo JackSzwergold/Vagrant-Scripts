@@ -225,7 +225,7 @@ function set_timezone () {
 } # set_timezone
 
 ##########################################################################################
-# Sources List.
+# Configure repository stuff.
 ##########################################################################################
 function configure_repository_stuff () {
 
