@@ -122,7 +122,7 @@ function configure_user_and_group () {
 ##########################################################################################
 # Environment
 ##########################################################################################
-function set_environment () {
+function set_user_environment () {
 
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFS_DIR}";
@@ -141,7 +141,7 @@ function set_environment () {
   sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "crontab.conf";
   sudo -E crontab < "crontab.conf";
 
-} # set_environment
+} # set_user_environment
 
 ##########################################################################################
 # Timezone
@@ -238,7 +238,7 @@ function install_basic_tools () {
   echo -e "\033[33;1mPROVISIONING: Installing a set of generic tools.\033[0m";
 
   # Install basic repo stuff.
-  sudo -E yum install -y -q deltarpm;
+  sudo -E yum install -y -q epel-release deltarpm;
 
   # Install generic tools.
   sudo -E yum install -y -q \
@@ -370,7 +370,7 @@ function configure_motd () {
   echo -e "\033[33;1mPROVISIONING: Setting the MOTD banner.\033[0m";
 
   # Install basic repo stuff.
-  sudo -E yum install -y -q deltarpm;
+  sudo -E yum install -y -q epel-release deltarpm;
 
   # Enable EPEL (Extra Packages for Enterprise Linux)
   sudo sed -i "s/enabled=0/enabled=1/g" "/etc/yum.repos.d/epel.repo";
@@ -803,7 +803,7 @@ function update_locate_db () {
 
 # Install install stuff.
 configure_user_and_group;
-set_environment;
+set_user_environment;
 hash sar 2>/dev/null || { install_sysstat; }
 hash updatedb 2>/dev/null || { install_locate; }
 configure_motd;

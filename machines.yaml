@@ -81,8 +81,8 @@
   forward_id1: "ssh"
   memory: 2048
   cpus: 1
-  basics: true
-  lamp: true
+  basics: false
+  lamp: false
 - name: "Sandbox (CentOS 7)"
   box: "bento/centos-7.3"
   os: "centos"

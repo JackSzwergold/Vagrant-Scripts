@@ -122,7 +122,7 @@ function configure_user_and_group () {
 ##########################################################################################
 # Environment
 ##########################################################################################
-function set_environment () {
+function set_user_environment () {
 
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFS_DIR}";
@@ -141,7 +141,7 @@ function set_environment () {
   sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "crontab.conf";
   sudo -E crontab < "crontab.conf";
 
-} # set_environment
+} # set_user_environment
 
 ##########################################################################################
 # Timezone
@@ -793,7 +793,7 @@ function update_locate_db () {
 
 # Install install stuff.
 configure_user_and_group;
-set_environment;
+set_user_environment;
 hash sar 2>/dev/null || { install_sysstat; }
 hash updatedb 2>/dev/null || { install_locate; }
 configure_motd;

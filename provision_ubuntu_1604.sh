@@ -176,7 +176,7 @@ function install_aptitude () {
 ##########################################################################################
 # Environment
 ##########################################################################################
-function set_environment () {
+function set_user_environment () {
 
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFS_DIR}";
@@ -196,7 +196,7 @@ function set_environment () {
   # Importing the crontab.
   sudo -E crontab < "crontab.conf";
 
-} # set_environment
+} # set_user_environment
 
 ##########################################################################################
 # Timezone
@@ -1209,7 +1209,7 @@ function update_locate_db () {
 # Install install stuff.
 configure_user_and_group;
 install_aptitude;
-set_environment;
+set_user_environment;
 configure_sources_list;
 hash sar 2>/dev/null || { install_sysstat; }
 hash updatedb 2>/dev/null || { install_locate; }
