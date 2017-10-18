@@ -221,6 +221,12 @@ function set_timezone () {
 function configure_repository_stuff () {
 
   # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Setting the Debian frontend to non-interactive mode.\033[0m";
+
+  # Adjusting the Debian frontend setting to non-interactive mode.
+  export DEBIAN_FRONTEND=noninteractive;
+
+  # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Install Aptitude.\033[0m";
 
   # Install Aptitude.
