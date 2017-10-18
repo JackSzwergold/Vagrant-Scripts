@@ -559,6 +559,7 @@ function set_apache_web_root () {
   sudo -E chmod g+s "/var/www/html/";
   sudo -E cp -f "apache2/index.php" "/var/www/html/index.php";
   sudo -E chmod -f -R 664 "/var/www/html/index.php";
+  sudo -E rm -rf "/var/www/html/index.html";
 
 } # set_apache_web_root
 
@@ -920,21 +921,21 @@ function install_awstats () {
 
   # Do this little dance to get things installed.
   cd "${BASE_DIR}";
-  curl -ss -O -L "http://prdownloads.sourceforge.net/awstats/awstats-7.3.tar.gz";
-  tar -xf "awstats-7.3.tar.gz";
-  rm -f "awstats-7.3.tar.gz";
-  sudo -E mv -f "awstats-7.3" "/usr/share/awstats-7.3";
+  curl -ss -O -L "http://prdownloads.sourceforge.net/awstats/awstats-7.6.tar.gz";
+  tar -xf "awstats-7.6.tar.gz";
+  rm -f "awstats-7.6.tar.gz";
+  sudo -E mv -f "awstats-7.6" "/usr/share/awstats-7.6";
 
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFS_DIR}";
 
   # Set an index page for AWStats.
-  sudo -E cp -f "awstats/awstatstotals.php" "/usr/share/awstats-7.3/wwwroot/cgi-bin/index.php";
-  sudo -E chmod a+r "/usr/share/awstats-7.3/wwwroot/cgi-bin/index.php";
+  sudo -E cp -f "awstats/awstatstotals.php" "/usr/share/awstats-7.6/wwwroot/cgi-bin/index.php";
+  sudo -E chmod a+r "/usr/share/awstats-7.6/wwwroot/cgi-bin/index.php";
 
   # Create the AWStats data directory.
-  sudo -E mkdir -p "/usr/share/awstats-7.3/wwwroot/data";
-  sudo -E chmod -f g+w "/usr/share/awstats-7.3/wwwroot/data";
+  sudo -E mkdir -p "/usr/share/awstats-7.6/wwwroot/data";
+  sudo -E chmod -f g+w "/usr/share/awstats-7.6/wwwroot/data";
 
   # Now install CPANminus like this.
   hash cpanminus 2>/dev/null || {
@@ -945,15 +946,15 @@ function install_awstats () {
   sudo cpanm --install --force --notest --quiet --skip-installed YAML Geo::IP Geo::IPfree Geo::IP::PurePerl URI::Escape Net::IP Net::DNS Net::XWhois Time::HiRes Time::Local;
 
   # Copy over a basic config file.
-  sudo -E cp -f "awstats/awstats.vagrant.local.conf" "/usr/share/awstats-7.3/wwwroot/cgi-bin/awstats.${HOST_NAME}.conf";
-  sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "/usr/share/awstats-7.3/wwwroot/cgi-bin/awstats.${HOST_NAME}.conf";
+  sudo -E cp -f "awstats/awstats.vagrant.local.conf" "/usr/share/awstats-7.6/wwwroot/cgi-bin/awstats.${HOST_NAME}.conf";
+  sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "/usr/share/awstats-7.6/wwwroot/cgi-bin/awstats.${HOST_NAME}.conf";
 
 
   # Set permissions to root for owner and group.
-  sudo -E chown -f root:root -R "/usr/share/awstats-7.3";
+  sudo -E chown -f root:root -R "/usr/share/awstats-7.6";
 
   # Update the data for the '${HOST_NAME}' config.
-  sudo -E "/usr/share/awstats-7.3/wwwroot/cgi-bin/awstats.pl" -config="${HOST_NAME}" -update
+  sudo -E "/usr/share/awstats-7.6/wwwroot/cgi-bin/awstats.pl" -config="${HOST_NAME}" -update
 
 } # install_awstats
 
@@ -1284,7 +1285,7 @@ if [ "${PROV_LAMP}" = true ]; then
   if [ -f "apache2/phpmyadmin.conf" ] && [ ! -f "/etc/apache2/conf-available/phpmyadmin.conf" ]; then configure_awstats_apache; fi
 
   # AWStats related stuff.
-  if [ ! -d "/usr/share/awstats-7.3" ]; then install_awstats; fi
+  if [ ! -d "/usr/share/awstats-7.6" ]; then install_awstats; fi
   if [ -f "apache2/awstats.conf" ] && [ ! -f "/etc/apache2/conf-available/awstats.conf" ]; then configure_awstats_apache; fi
 
   # Install system scripts.

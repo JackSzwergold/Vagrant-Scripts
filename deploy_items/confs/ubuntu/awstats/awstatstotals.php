@@ -60,7 +60,7 @@
 #$DirData = '/usr/share/awstats/wwwroot/data';
 #$DirData = '/etc/awstats/data';
 #$DirData = '/var/www/awstats/wwwroot/data';
-$DirData = '/usr/share/awstats-7.3/wwwroot/data';
+$DirData = '/usr/share/awstats-7.6/wwwroot/data';
 
 /**
  * The URL of the AWStats script.

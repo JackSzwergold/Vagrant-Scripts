@@ -523,6 +523,7 @@ function set_apache_web_root () {
   sudo -E chmod g+s "/var/www/html/";
   sudo -E cp -f "httpd-centos-68/index.php" "/var/www/html/index.php";
   sudo -E chmod -f -R 664 "/var/www/html/index.php";
+  sudo -E rm -rf "/var/www/html/index.html";
 
 } # set_apache_web_root
 
