@@ -76,6 +76,11 @@ echo -e "\033[33;1mPROVISIONING: Host name is: '${HOST_NAME}'.\033[0m";
 # Optional items set via environment variables.
 ##########################################################################################
 
+# Set the timezone value.
+if [ ! -n "$TZ" ]; then TZ="America/New_York"; fi
+# Output a provisioning message.
+echo -e "\033[33;1mPROVISIONING: The timezone is: '${TZ}'.\033[0m";
+
 if [ -n "${PROV_BASICS}" ]; then
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Basics provisioning: '${PROV_BASICS}'.\033[0m";
@@ -152,19 +157,16 @@ function set_user_environment () {
 ##########################################################################################
 function set_timezone () {
 
-  # Set the timezone value.
-  TIMEZONE="America/New_York";
-
   if ! hash timedatectl 2>/dev/null; then
 
     # Set the timezone path.
-    TIMEZONE_PATH="/usr/share/zoneinfo";
+    ZONEINFO_PATH="/usr/share/zoneinfo";
 
     # Output a provisioning message.
     echo -e "\033[33;1mPROVISIONING: Setting timezone data manually.\033[0m";
 
     # Set the actual timezone via a symbolic link.
-    sudo -E ln -f -s "${TIMEZONE_PATH}/${TIMEZONE}" "/etc/localtime";
+    sudo -E ln -f -s "${ZONEINFO_PATH}/${TZ}" "/etc/localtime";
 
   else
 
@@ -172,7 +174,7 @@ function set_timezone () {
     echo -e "\033[33;1mPROVISIONING: Setting timezone data via 'timedatectl'.\033[0m";
 
     # Set the timezone.
-    sudo -E timedatectl set-timezone "${TIMEZONE}";
+    sudo -E timedatectl set-timezone "${TZ}";
 
     # Do this stuff to get NTP setup.
     sudo -E service ntp stop;
