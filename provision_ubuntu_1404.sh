@@ -158,22 +158,6 @@ function configure_user_and_group () {
 } # configure_user_and_group
 
 ##########################################################################################
-# Aptitude
-##########################################################################################
-function install_aptitude () {
-
-  # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Install Aptitude.\033[0m";
-
-  # Install Aptitude.
-  sudo -E apt-get -y -q=2 install aptitude aptitude-common;
-
-  # Update Aptitude.
-  sudo -E aptitude -y -q=2 update;
-
-} # install_aptitude
-
-##########################################################################################
 # Environment
 ##########################################################################################
 function set_user_environment () {
@@ -243,21 +227,31 @@ function set_timezone () {
 ##########################################################################################
 # Sources List.
 ##########################################################################################
-function configure_sources_list () {
+function configure_repository_stuff () {
 
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Install Aptitude.\033[0m";
+
+  # Install Aptitude.
+  sudo -E apt-get -y -q=2 install aptitude aptitude-common;
+
+  # Update Aptitude.
+  sudo -E aptitude -y -q=2 update;
+
+  # Adjusting the sources list.
   SOURCES_LIST="/etc/apt/sources.list";
   DEB_URL_PATTERN="^#.*deb.*partner$";
-  if [ -f "${SOURCES_LIST}" ] && grep -E -q "${DEB_URL_PATTERN}" "/etc/apt/sources.list"; then
+  if [ -f "${SOURCES_LIST}" ] && grep -E -q "${DEB_URL_PATTERN}" "${SOURCES_LIST}"; then
 
     # Output a provisioning message.
     echo -e "\033[33;1mPROVISIONING: Adjusting the sources list.\033[0m";
 
     # Adjust the sources list.
-    sudo -E sed -i "/${DEB_URL_PATTERN}/s/^# //g" "/etc/apt/sources.list";
+    sudo -E sed -i "/${DEB_URL_PATTERN}/s/^# //g" "${SOURCES_LIST}";
 
   fi
 
-} # configure_sources_list
+} # configure_repository_stuff
 
 ##########################################################################################
 # Avahi
@@ -1411,9 +1405,8 @@ function update_locate_db () {
 
 # Install install stuff.
 configure_user_and_group;
-install_aptitude;
+configure_repository_stuff;
 set_user_environment;
-configure_sources_list;
 hash sar 2>/dev/null || { install_sysstat; }
 hash updatedb 2>/dev/null || { install_locate; }
 configure_motd;
