@@ -1168,10 +1168,15 @@ function install_java () {
   # sudo -E aptitude -y -q=2 install oracle-java8-installer oracle-java8-set-default;
   # echo "JAVA_HOME=/usr/lib/jvm/java-8-oracle/jre" >> "/etc/environment";
 
-  # Process to use OpenJDK 7.
+  # Process to install OpenJDK 7.
   sudo -E aptitude -y -q=2 install openjdk-7-jdk;
   sudo -E mkdir -p "/usr/java";
   sudo -E ln -s "/usr/lib/jvm/java-7-openjdk-amd64" "/usr/java/default";
+
+  # # Process to install OpenJDK 8.
+  # sudo -E aptitude -y -q=2 install openjdk-8-jdk;
+  # sudo -E mkdir -p "/usr/java";
+  # sudo -E ln -s "/usr/lib/jvm/java-8-openjdk-amd64" "/usr/java/default";
 
 } # install_java
 
