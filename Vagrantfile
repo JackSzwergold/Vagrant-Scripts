@@ -94,6 +94,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                               :path => settings["provision_script"],
                               env: {
                                 "TZ" => "#{settings['tz']}",
+                                "MACHINE_NAME" => "#{settings['machinename']}",
+                                "HOST_NAME" => "#{settings['hostname']}.local",
                                 "PROV_BASICS" => "#{settings['basics']}",
                                 "PROV_LAMP" => "#{settings['lamp']}",
                                 "PROV_IMAGEMAGICK" => "#{settings['imagemagick']}",
@@ -107,7 +109,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                                 "PROV_NODEJS" => "#{settings['nodejs']}",
                                 "PROV_NGINX" => "#{settings['nginx']}"
                               },
-                              :args => "#{settings['os']} #{settings['username']} #{settings['password']} #{settings['machinename']} #{settings['hostname']}.local"
+                              :args => "#{settings['os']} #{settings['username']} #{settings['password']}"
       end
 
       # Set the shell script to provision items for teh regular user.
@@ -117,6 +119,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                               :path => settings["provision_script_regular"],
                               env: {
                                 "TZ" => "#{settings['tz']}",
+                                "MACHINE_NAME" => "#{settings['machinename']}",
+                                "HOST_NAME" => "#{settings['hostname']}.local",
                                 "PROV_BASICS" => "#{settings['basics']}",
                                 "PROV_LAMP" => "#{settings['lamp']}",
                                 "PROV_IMAGEMAGICK" => "#{settings['imagemagick']}",
@@ -130,7 +134,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                                 "PROV_NODEJS" => "#{settings['nodejs']}",
                                 "PROV_NGINX" => "#{settings['nginx']}"
                               },
-                              :args => "#{settings['os']}  #{settings['username']} #{settings['password']} #{settings['machinename']} #{settings['hostname']}.local"
+                              :args => "#{settings['os']}  #{settings['username']} #{settings['password']}"
       end
 
     end # config.vm.define

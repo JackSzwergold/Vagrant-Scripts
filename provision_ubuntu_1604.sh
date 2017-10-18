@@ -62,19 +62,19 @@ if [ -n "$3" ]; then PASSWORD="${3}"; fi
 # Output a provisioning message.
 echo -e "\033[33;1mPROVISIONING: User password is: '${PASSWORD}'.\033[0m";
 
-MACHINE_NAME="vagrant";
-if [ -n "$4" ]; then MACHINE_NAME="${4}"; fi
-# Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Machine name is: '${MACHINE_NAME}'.\033[0m";
-
-HOST_NAME="vagrant.local";
-if [ -n "$5" ]; then HOST_NAME="${5}"; fi
-# Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Host name is: '${HOST_NAME}'.\033[0m";
-
 ##########################################################################################
 # Optional items set via environment variables.
 ##########################################################################################
+
+# Set the machine name value.
+if [ ! -n "$MACHINE_NAME" ]; then MACHINE_NAME="vagrant"; fi
+# Output a provisioning message.
+echo -e "\033[33;1mPROVISIONING: Machine name is: '${MACHINE_NAME}'.\033[0m";
+
+# Set the hostname value.
+if [ ! -n "$HOST_NAME" ]; then HOST_NAME="vagrant.local"; fi
+# Output a provisioning message.
+echo -e "\033[33;1mPROVISIONING: Host name is: '${HOST_NAME}'.\033[0m";
 
 # Set the timezone value.
 if [ ! -n "$TZ" ]; then TZ="America/New_York"; fi
