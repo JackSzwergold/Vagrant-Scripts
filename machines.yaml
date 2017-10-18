@@ -64,7 +64,7 @@
   geoip: true
   iptables: true
   fail2ban: false
-- name: "Sandbox (CentOS 6)"
+- name: "Sandbox (CentOS 6.8)"
   box: "kaorimatz/centos-6.8-x86_64"
   os: "centos"
   primary: false

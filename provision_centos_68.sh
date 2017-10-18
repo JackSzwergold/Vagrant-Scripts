@@ -193,11 +193,11 @@ function install_avahi () {
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Avahi related stuff.\033[0m";
 
-  # Install Avahi.
-  sudo -E yum install -y -q avahi;
-
   # Enable EPEL (Extra Packages for Enterprise Linux)
   sudo sed -i "s/enabled=0/enabled=1/g" "/etc/yum.repos.d/epel.repo";
+
+  # Install Avahi.
+  sudo -E yum install -y -q avahi;
 
   # Install NSS support for mDNS which is required by Avahi.
   sudo -E yum install -y -q nss-mdns;
@@ -371,6 +371,9 @@ function configure_motd () {
 
   # Install basic repo stuff.
   sudo -E yum install -y -q deltarpm;
+
+  # Enable EPEL (Extra Packages for Enterprise Linux)
+  sudo sed -i "s/enabled=0/enabled=1/g" "/etc/yum.repos.d/epel.repo";
 
   # Install figlet.
   sudo -E yum install -y -q figlet;
