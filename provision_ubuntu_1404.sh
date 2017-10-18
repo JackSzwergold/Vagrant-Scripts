@@ -38,37 +38,37 @@ BASE_DIR=$(pwd);
 echo -e "\033[33;1mPROVISIONING: Base directory is: '${BASE_DIR}'.\033[0m";
 
 BINS_DIR="deploy_items/bins";
-if [ -n "$1" ]; then BINS_DIR="${1}"; fi
+CONFS_DIR="deploy_items/confs";
+DBS_DIR="deploy_items/dbs";
+if [ -n "$1" ]; then
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: OS is: '${1}'.\033[0m";
+  BINS_DIR="deploy_items/bins/${1}";
+  CONFS_DIR="deploy_items/confs/${1}";
+  # DBS_DIR="deploy_items/dbs/${1}";
+fi
 # Output a provisioning message.
 echo -e "\033[33;1mPROVISIONING: Binaries directory is: '${BINS_DIR}'.\033[0m";
-
-CONFS_DIR="deploy_items/confs";
-if [ -n "$2" ]; then CONFS_DIR="${2}"; fi
-# Output a provisioning message.
 echo -e "\033[33;1mPROVISIONING: Config directory is: '${CONFS_DIR}'.\033[0m";
-
-DBS_DIR="deploy_items/dbs";
-if [ -n "$3" ]; then DBS_DIR="${3}"; fi
-# Output a provisioning message.
 echo -e "\033[33;1mPROVISIONING: DB directory is: '${DBS_DIR}'.\033[0m";
 
 USERNAME="vagrant";
-if [ -n "$4" ]; then USERNAME="${4}"; fi
+if [ -n "$2" ]; then USERNAME="${2}"; fi
 # Output a provisioning message.
 echo -e "\033[33;1mPROVISIONING: User name is: '${USERNAME}'.\033[0m";
 
 PASSWORD="vagrant";
-if [ -n "$5" ]; then PASSWORD="${5}"; fi
+if [ -n "$3" ]; then PASSWORD="${3}"; fi
 # Output a provisioning message.
 echo -e "\033[33;1mPROVISIONING: User password is: '${PASSWORD}'.\033[0m";
 
 MACHINE_NAME="vagrant";
-if [ -n "$6" ]; then MACHINE_NAME="${6}"; fi
+if [ -n "$4" ]; then MACHINE_NAME="${4}"; fi
 # Output a provisioning message.
 echo -e "\033[33;1mPROVISIONING: Machine name is: '${MACHINE_NAME}'.\033[0m";
 
 HOST_NAME="vagrant.local";
-if [ -n "$7" ]; then HOST_NAME="${7}"; fi
+if [ -n "$5" ]; then HOST_NAME="${5}"; fi
 # Output a provisioning message.
 echo -e "\033[33;1mPROVISIONING: Host name is: '${HOST_NAME}'.\033[0m";
 

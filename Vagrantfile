@@ -106,7 +106,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                                 "PROV_NODEJS" => "#{settings['nodejs']}",
                                 "PROV_NGINX" => "#{settings['nginx']}"
                               },
-                              :args => "#{settings['deploy_bins']} #{settings['deploy_confs']} #{settings['deploy_dbs']} #{settings['username']} #{settings['password']} #{settings['machinename']} #{settings['hostname']}.local"
+                              :args => "#{settings['os']} #{settings['username']} #{settings['password']} #{settings['machinename']} #{settings['hostname']}.local"
       end
 
       # Set the shell script to provision items for teh regular user.
@@ -128,7 +128,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                                 "PROV_NODEJS" => "#{settings['nodejs']}",
                                 "PROV_NGINX" => "#{settings['nginx']}"
                               },
-                              :args => "#{settings['deploy_bins']} #{settings['deploy_confs']} #{settings['deploy_dbs']} #{settings['username']} #{settings['password']} #{settings['machinename']} #{settings['hostname']}.local"
+                              :args => "#{settings['os']}  #{settings['username']} #{settings['password']} #{settings['machinename']} #{settings['hostname']}.local"
       end
 
     end # config.vm.define
