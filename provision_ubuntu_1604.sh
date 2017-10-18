@@ -76,41 +76,65 @@ echo -e "\033[33;1mPROVISIONING: Host name is: '${HOST_NAME}'.\033[0m";
 # Optional items set via environment variables.
 ##########################################################################################
 
-# Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Basics provisioning: '${PROV_BASICS}'.\033[0m";
+if [ -n "${PROV_BASICS}" ]; then
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Basics provisioning: '${PROV_BASICS}'.\033[0m";
+fi
 
-# Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: LAMP provisioning: '${PROV_LAMP}'.\033[0m";
+if [ -n "${PROV_LAMP}" ]; then
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: LAMP provisioning: '${PROV_LAMP}'.\033[0m";
+fi
 
-# Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: ImageMagick provisioning: '${PROV_IMAGEMAGICK}'.\033[0m";
+if [ -n "${PROV_IMAGEMAGICK}" ]; then
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: ImageMagick provisioning: '${PROV_IMAGEMAGICK}'.\033[0m";
+fi
 
-# Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: GeoIP provisioning: '${PROV_GEOIP}'.\033[0m";
+if [ -n "${PROV_GEOIP}" ]; then
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: GeoIP provisioning: '${PROV_GEOIP}'.\033[0m";
+fi
 
-# Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: IPTables provisioning: '${PROV_IPTABLES}'.\033[0m";
+if [ -n "${PROV_IPTABLES}" ]; then
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: IPTables provisioning: '${PROV_IPTABLES}'.\033[0m";
+fi
 
-# Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Fail2Ban provisioning: '${PROV_FAIL2BAN}'.\033[0m";
+if [ -n "${PROV_FAIL2BAN}" ]; then
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Fail2Ban provisioning: '${PROV_FAIL2BAN}'.\033[0m";
+fi
 
-# Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Java provisioning: '${PROV_JAVA}'.\033[0m";
+if [ -n "${PROV_JAVA}" ]; then
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Java provisioning: '${PROV_JAVA}'.\033[0m";
+fi
 
-# Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Solr provisioning: '${PROV_SOLR}'.\033[0m";
+if [ -n "${PROV_SOLR}" ]; then
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Solr provisioning: '${PROV_SOLR}'.\033[0m";
+fi
 
-# Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Elasticsearch provisioning: '${PROV_ELASTICSEARCH}'.\033[0m";
+if [ -n "${PROV_ELASTICSEARCH}" ]; then
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Elasticsearch provisioning: '${PROV_ELASTICSEARCH}'.\033[0m";
+fi
 
-# Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: MongoDB provisioning: '${PROV_MONGO}'.\033[0m";
+if [ -n "${PROV_MONGO}" ]; then
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: MongoDB provisioning: '${PROV_MONGO}'.\033[0m";
+fi
 
-# Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: NodeJS provisioning: '${PROV_NODEJS}'.\033[0m";
+if [ -n "${PROV_NODEJS}" ]; then
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: NodeJS provisioning: '${PROV_NODEJS}'.\033[0m";
+fi
 
-# Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Nginx provisioning: '${PROV_NGINX}'.\033[0m";
+if [ -n "${PROV_NGINX}" ]; then
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Nginx provisioning: '${PROV_NGINX}'.\033[0m";
+fi
 
 ##########################################################################################
 # Go into the config directory.
@@ -1125,6 +1149,206 @@ function install_system_scripts () {
 } # install_system_scripts
 
 ##########################################################################################
+# Java
+##########################################################################################
+function install_java () {
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Installing Java.\033[0m";
+
+  # # Now install Java via PPA.
+  # sudo -E aptitude -y -q=2 install python-software-properties debconf-utils;
+  #
+  # sudo -E add-apt-repository ppa:webupd8team/java;
+  # sudo -E aptitude -y -q=2 update;
+  # echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections;
+  # sudo -E aptitude -y -q=2 install oracle-java8-installer oracle-java8-set-default;
+  # echo "JAVA_HOME=/usr/lib/jvm/java-8-oracle/jre" >> "/etc/environment";
+
+  # Process to use OpenJDK 7.
+  sudo -E aptitude -y -q=2 install openjdk-7-jdk;
+  sudo -E mkdir -p "/usr/java";
+  sudo -E ln -s "/usr/lib/jvm/java-7-openjdk-amd64" "/usr/java/default";
+
+} # install_java
+
+##########################################################################################
+# Install Solr
+##########################################################################################
+function install_solr () {
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Installing Solr related items.\033[0m";
+
+  # Go into the base directory.
+  cd "${BASE_DIR}";
+
+  # Import the public key used by the package management system:
+  # curl -ss -L -O "http://archive.apache.org/dist/lucene/solr/5.5.3/solr-5.5.3.tgz";
+  # curl -ss -L -O "http://archive.apache.org/dist/lucene/solr/6.2.1/solr-6.2.1.tgz";
+  # curl -ss -L -O "http://archive.apache.org/dist/lucene/solr/6.3.0/solr-6.3.0.tgz";
+  curl -ss -L -O "http://archive.apache.org/dist/lucene/solr/5.5.3/solr-5.5.3.tgz";
+  tar -zxf solr-5.5.3.tgz solr-5.5.3/bin/install_solr_service.sh --strip-components=2;
+  sudo -E bash ./install_solr_service.sh solr-5.5.3.tgz;
+
+  # 2016-11-16: Not working. Another idea on how to make the process less dependent on version numbers.
+  # curl -ss -L -o "solr.tgz" "http://archive.apache.org/dist/lucene/solr/5.5.3/solr-5.5.3.tgz";
+  # tar -zxf solr.tgz $(tar -tzf solr.tgz | grep install_solr_service) --strip-components=2;
+  # sudo -E bash ./install_solr_service.sh solr.tgz;
+
+  # Restart Solr.
+  # sudo -E service solr restart;
+
+} # install_solr
+
+##########################################################################################
+# Install Elasticsearch
+##########################################################################################
+function install_elasticsearch () {
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Installing ElasticSearch related items.\033[0m";
+
+  # Go into the base directory.
+  cd "${BASE_DIR}";
+
+  # Import the public key used by the package management system:
+  wget -qO - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | sudo apt-key add -;
+  echo 'deb http://packages.elasticsearch.org/elasticsearch/1.7/debian stable main' | sudo tee /etc/apt/sources.list.d/elasticsearch.list;
+  sudo -E aptitude -y -q=2 update;
+  sudo -E RUNLEVEL=1 aptitude -y -q=2 install elasticsearch;
+
+  # Set ElasticSearch to be able to come up on reboot.
+  sudo update-rc.d elasticsearch defaults 95 10;
+
+  # Restart ElasticSearch.
+  sudo -E service elasticsearch restart;
+
+} # install_elasticsearch
+
+##########################################################################################
+# Configure Elasticsearch
+##########################################################################################
+function configure_elasticsearch () {
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFS_DIR}";
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Configuring ElasticSearch related items.\033[0m";
+
+  # Copy the Elasticsearch config file in place and restart sysstat.
+  if [ -f "elasticsearch/elasticsearch.yml" ]; then
+    sudo -E cp -f "elasticsearch/elasticsearch.yml" "/etc/elasticsearch/elasticsearch.yml";
+    sudo -E service elasticsearch restart;
+  fi
+
+} # configure_elasticsearch
+
+##########################################################################################
+# MongoDB 2.6
+##########################################################################################
+function install_mongo26 () {
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Installing MongoDB related items.\033[0m";
+
+  # Go into the base directory.
+  cd "${BASE_DIR}";
+
+  # Add the official MongoDB repository and install MongoDB.
+  curl -ss -O -L "http://docs.mongodb.org/10gen-gpg-key.asc" & CURL_PID=(`jobs -l | awk '{print $2}'`);
+  wait ${CURL_PID};
+  sudo apt-key add "10gen-gpg-key.asc";
+  echo "deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen" | sudo tee "/etc/apt/sources.list.d/mongodb.list" & ADD_REPO_PID=(`jobs -l | awk '{print $2}'`);
+  wait ${ADD_REPO_PID};
+  sudo -E rm -rf "/var/lib/apt/lists/partial/";
+  sudo -E aptitude -y -q=2 update;
+  sudo -E aptitude -y -q=2 clean;
+  sudo -E aptitude -y -q=2 install mongodb-org=2.6.12 mongodb-org-server=2.6.12 mongodb-org-shell=2.6.12 mongodb-org-mongos=2.6.12 mongodb-org-tools=2.6.12;
+
+  # Pin the currently installed version of MongoDB to ensure no accidental upgrades happen.
+  echo "mongodb-org hold" | sudo dpkg --set-selections;
+  echo "mongodb-org-server hold" | sudo dpkg --set-selections;
+  echo "mongodb-org-shell hold" | sudo dpkg --set-selections;
+  echo "mongodb-org-mongos hold" | sudo dpkg --set-selections;
+  echo "mongodb-org-tools hold" | sudo dpkg --set-selections;
+
+} # install_mongo26
+
+##########################################################################################
+# MongoDB 3.4
+##########################################################################################
+function install_mongo34 () {
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Installing MongoDB related items.\033[0m";
+
+  # Go into the base directory.
+  cd "${BASE_DIR}";
+
+  # Add the official MongoDB repository and install MongoDB.
+  curl -ss -O -L "https://www.mongodb.org/static/pgp/server-3.4.asc" & CURL_PID=(`jobs -l | awk '{print $2}'`);
+  wait ${CURL_PID};
+  sudo apt-key add "server-3.4.asc";
+  echo "deb [ arch=amd64 ] http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.4.list & ADD_REPO_PID=(`jobs -l | awk '{print $2}'`);
+  wait ${ADD_REPO_PID};
+  sudo -E rm -rf "/var/lib/apt/lists/partial/";
+  sudo -E aptitude -y -q=2 update;
+  sudo -E aptitude -y -q=2 clean;
+  sudo -E aptitude -y -q=2 install mongodb-org=3.4.9 mongodb-org-server=3.4.9 mongodb-org-shell=3.4.9 mongodb-org-mongos=3.4.9 mongodb-org-tools=3.4.9;
+
+  # Pin the currently installed version of MongoDB to ensure no accidental upgrades happen.
+  echo "mongodb-org hold" | sudo dpkg --set-selections;
+  echo "mongodb-org-server hold" | sudo dpkg --set-selections;
+  echo "mongodb-org-shell hold" | sudo dpkg --set-selections;
+  echo "mongodb-org-mongos hold" | sudo dpkg --set-selections;
+  echo "mongodb-org-tools hold" | sudo dpkg --set-selections;
+
+} # install_mongo34
+
+##########################################################################################
+# Configure MongoDB
+##########################################################################################
+function configure_mongo () {
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Configuring MongoDB related items.\033[0m";
+
+  # Mongo 2.x: Comment out the 'bind_ip' line to enable network connections outside of 'localhost'.
+  sudo -E sed -i 's/bind_ip = 127.0.0.1/#bind_ip = 127.0.0.1/g' "/etc/mongod.conf";
+
+  # Mongo 3.x: Comment out the 'bindIp' line to enable network connections outside of 'localhost'.
+  sudo -E sed -i 's/ \+bindIp: 127.0.0.1/  #bindIp: 127.0.0.1/g' "/etc/mongod.conf";
+
+  # Restart the Mongo instance to get the new config loaded.
+  sudo -E service mongod restart & RESTART_PID=(`jobs -l | awk '{print $2}'`);
+  wait ${RESTART_PID};
+
+  # Go into the base directory.
+  cd "${BASE_DIR}";
+
+  # Import any databases that were sent over as the part of the provisioning process.
+  if [ -d "${DBS_DIR}" ]; then
+    find "${DBS_DIR}" -type f -name "*.bson" |\
+      while read db_backup_path
+      do
+        if [ -f "${db_backup_path}" ]; then
+          db_dirname=$(dirname "${db_backup_path}");
+          mongo_db=$(basename "${db_dirname}");
+          # Output a provisioning message.
+          echo -e "\033[33;1mPROVISIONING: Restoring the '${mongo_db}' MongoDB database.\033[0m";
+          mongo --quiet "${mongo_db}" --eval "db.dropDatabase()";
+          mongorestore --quiet "${db_backup_path}";
+        else
+          exit 1;
+        fi
+      done
+  fi
+
+} # configure_mongo
+
+##########################################################################################
 # NodeJS and NPM
 ##########################################################################################
 function install_nodejs () {
@@ -1179,6 +1403,22 @@ function install_nginx () {
 } # install_nginx
 
 ##########################################################################################
+# Deployment directories.
+##########################################################################################
+function set_application_deployment_directories () {
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Creating the web code deployment directories.\033[0m";
+
+  sudo -E mkdir -p "/opt/webapps/"{builds,configs,deployed_code};
+  sudo -E chown -f -R "${USER_NAME}":www-readwrite "/opt/webapps";
+  sudo -E chmod -f -R 775 "/opt/webapps";
+  sudo -E chmod g+s "/opt/webapps";
+  sudo -E chmod g+s "/opt/webapps/"{builds,configs,deployed_code};
+
+} # set_application_deployment_directories
+
+##########################################################################################
 # Update the locate database.
 ##########################################################################################
 function update_locate_db () {
@@ -1199,7 +1439,7 @@ function update_locate_db () {
 #
 ##########################################################################################
 
-# Install install stuff.
+# Install stuff.
 configure_repository_stuff;
 configure_user_and_group;
 set_user_environment;
@@ -1293,6 +1533,43 @@ if [ "${PROV_LAMP}" = true ]; then
 
   # Restart Apache now that we’re done.
   sudo -E service apache2 restart;
+
+fi
+
+# Get the Java stuff set.
+if [ "${PROV_JAVA}" = true ]; then
+
+  # Install and configure Java.
+  hash java 2>/dev/null || { install_java; }
+
+fi
+
+# Get the Solr stuff set.
+if [ "${PROV_SOLR}" = true ]; then
+
+  # Install and configure Solr.
+  install_solr;
+
+fi
+
+# Get the Elasticsearch stuff set.
+if [ "${PROV_ELASTICSEARCH}" = true ]; then
+
+  # Install and configure ElasticSearch.
+  install_elasticsearch;
+  configure_elasticsearch;
+
+fi
+
+# Get the Mongo stuff set.
+if [ "${PROV_MONGO}" = true ]; then
+
+  # Install and configure MongoDB.
+  hash mongo 2>/dev/null && hash mongod 2>/dev/null || {
+    install_mongo26;
+    # install_mongo34;
+    configure_mongo;
+  }
 
 fi
 

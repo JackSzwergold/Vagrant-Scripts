@@ -76,11 +76,15 @@ echo -e "\033[33;1mPROVISIONING: Host name is: '${HOST_NAME}'.\033[0m";
 # Optional items set via environment variables.
 ##########################################################################################
 
-# Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Basics provisioning: '${PROV_BASICS}'.\033[0m";
+if [ -n "${PROV_BASICS}" ]; then
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Basics provisioning: '${PROV_BASICS}'.\033[0m";
+fi
 
-# Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: LAMP provisioning: '${PROV_LAMP}'.\033[0m";
+if [ -n "${PROV_LAMP}" ]; then
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: LAMP provisioning: '${PROV_LAMP}'.\033[0m";
+fi
 
 ##########################################################################################
 # Go into the config directory.
@@ -802,7 +806,7 @@ function update_locate_db () {
 #
 ##########################################################################################
 
-# Install install stuff.
+# Install stuff.
 configure_repository_stuff;
 configure_user_and_group;
 set_user_environment;

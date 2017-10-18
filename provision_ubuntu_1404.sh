@@ -76,41 +76,65 @@ echo -e "\033[33;1mPROVISIONING: Host name is: '${HOST_NAME}'.\033[0m";
 # Optional items set via environment variables.
 ##########################################################################################
 
-# Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Basics provisioning: '${PROV_BASICS}'.\033[0m";
+if [ -n "${PROV_BASICS}" ]; then
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Basics provisioning: '${PROV_BASICS}'.\033[0m";
+fi
 
-# Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: LAMP provisioning: '${PROV_LAMP}'.\033[0m";
+if [ -n "${PROV_LAMP}" ]; then
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: LAMP provisioning: '${PROV_LAMP}'.\033[0m";
+fi
 
-# Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: ImageMagick provisioning: '${PROV_IMAGEMAGICK}'.\033[0m";
+if [ -n "${PROV_IMAGEMAGICK}" ]; then
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: ImageMagick provisioning: '${PROV_IMAGEMAGICK}'.\033[0m";
+fi
 
-# Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: GeoIP provisioning: '${PROV_GEOIP}'.\033[0m";
+if [ -n "${PROV_GEOIP}" ]; then
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: GeoIP provisioning: '${PROV_GEOIP}'.\033[0m";
+fi
 
-# Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: IPTables provisioning: '${PROV_IPTABLES}'.\033[0m";
+if [ -n "${PROV_IPTABLES}" ]; then
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: IPTables provisioning: '${PROV_IPTABLES}'.\033[0m";
+fi
 
-# Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Fail2Ban provisioning: '${PROV_FAIL2BAN}'.\033[0m";
+if [ -n "${PROV_FAIL2BAN}" ]; then
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Fail2Ban provisioning: '${PROV_FAIL2BAN}'.\033[0m";
+fi
 
-# Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Java provisioning: '${PROV_JAVA}'.\033[0m";
+if [ -n "${PROV_JAVA}" ]; then
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Java provisioning: '${PROV_JAVA}'.\033[0m";
+fi
 
-# Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Solr provisioning: '${PROV_SOLR}'.\033[0m";
+if [ -n "${PROV_SOLR}" ]; then
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Solr provisioning: '${PROV_SOLR}'.\033[0m";
+fi
 
-# Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Elasticsearch provisioning: '${PROV_ELASTICSEARCH}'.\033[0m";
+if [ -n "${PROV_ELASTICSEARCH}" ]; then
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Elasticsearch provisioning: '${PROV_ELASTICSEARCH}'.\033[0m";
+fi
 
-# Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: MongoDB provisioning: '${PROV_MONGO}'.\033[0m";
+if [ -n "${PROV_MONGO}" ]; then
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: MongoDB provisioning: '${PROV_MONGO}'.\033[0m";
+fi
 
-# Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: NodeJS provisioning: '${PROV_NODEJS}'.\033[0m";
+if [ -n "${PROV_NODEJS}" ]; then
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: NodeJS provisioning: '${PROV_NODEJS}'.\033[0m";
+fi
 
-# Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Nginx provisioning: '${PROV_NGINX}'.\033[0m";
+if [ -n "${PROV_NGINX}" ]; then
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Nginx provisioning: '${PROV_NGINX}'.\033[0m";
+fi
 
 ##########################################################################################
 # Go into the config directory.
@@ -1382,6 +1406,22 @@ function install_nginx () {
 } # install_nginx
 
 ##########################################################################################
+# Deployment directories.
+##########################################################################################
+function set_application_deployment_directories () {
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Creating the web code deployment directories.\033[0m";
+
+  sudo -E mkdir -p "/opt/webapps/"{builds,configs,deployed_code};
+  sudo -E chown -f -R "${USER_NAME}":www-readwrite "/opt/webapps";
+  sudo -E chmod -f -R 775 "/opt/webapps";
+  sudo -E chmod g+s "/opt/webapps";
+  sudo -E chmod g+s "/opt/webapps/"{builds,configs,deployed_code};
+
+} # set_application_deployment_directories
+
+##########################################################################################
 # Update the locate database.
 ##########################################################################################
 function update_locate_db () {
@@ -1402,7 +1442,7 @@ function update_locate_db () {
 #
 ##########################################################################################
 
-# Install install stuff.
+# Install stuff.
 configure_repository_stuff;
 configure_user_and_group;
 set_user_environment;

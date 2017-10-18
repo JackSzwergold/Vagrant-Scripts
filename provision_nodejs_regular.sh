@@ -38,18 +38,18 @@ BASE_DIR=$(pwd);
 echo -e "\033[33;1mPROVISIONING: Base directory is: '${BASE_DIR}'.\033[0m";
 
 BINS_DIR="deploy_items/bins";
-if [ -n "$1" ]; then BINS_DIR="${1}"; fi
+CONFS_DIR="deploy_items/confs";
+DBS_DIR="deploy_items/dbs";
+if [ -n "$1" ]; then
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: OS is: '${1}'.\033[0m";
+  BINS_DIR="deploy_items/bins/${1}";
+  CONFS_DIR="deploy_items/confs/${1}";
+  # DBS_DIR="deploy_items/dbs/${1}";
+fi
 # Output a provisioning message.
 echo -e "\033[33;1mPROVISIONING: Binaries directory is: '${BINS_DIR}'.\033[0m";
-
-CONFS_DIR="deploy_items/confs";
-if [ -n "$2" ]; then CONFS_DIR="${2}"; fi
-# Output a provisioning message.
 echo -e "\033[33;1mPROVISIONING: Config directory is: '${CONFS_DIR}'.\033[0m";
-
-DBS_DIR="deploy_items/dbs";
-if [ -n "$3" ]; then DBS_DIR="${3}"; fi
-# Output a provisioning message.
 echo -e "\033[33;1mPROVISIONING: DB directory is: '${DBS_DIR}'.\033[0m";
 
 ##########################################################################################
@@ -76,6 +76,19 @@ export DEBIAN_FRONTEND=noninteractive;
 ##########################################################################################
 
 ##########################################################################################
+# Configure repository stuff.
+##########################################################################################
+function configure_repository_stuff () {
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Setting the Debian frontend to non-interactive mode.\033[0m";
+
+  # Adjusting the Debian frontend setting to non-interactive mode.
+  export DEBIAN_FRONTEND=noninteractive;
+
+} # configure_repository_stuff
+
+##########################################################################################
 # MeteorJS
 ##########################################################################################
 function install_meteorjs () {
@@ -100,6 +113,9 @@ function install_meteorjs () {
 #  \____\___/|_|  \___|  \____\___/ \__,_|\___|
 #
 ##########################################################################################
+
+# Install stuff.
+configure_repository_stuff;
 
 # Install MeteorJS.
 hash meteor 2>/dev/null || { install_meteorjs; }
