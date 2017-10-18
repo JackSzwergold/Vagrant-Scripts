@@ -1154,26 +1154,23 @@ function install_system_scripts () {
 function install_java () {
 
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Installing Java.\033[0m";
+  echo -e "\033[33;1mPROVISIONING: Installing Java (OpenJDK).\033[0m";
 
-  # # Now install Java via PPA.
-  # sudo -E aptitude -y -q=2 install python-software-properties debconf-utils;
-  #
-  # sudo -E add-apt-repository ppa:webupd8team/java;
-  # sudo -E aptitude -y -q=2 update;
-  # echo "oracle-java8-installer shared/accepted-oracle-license-v1-1 select true" | sudo debconf-set-selections;
-  # sudo -E aptitude -y -q=2 install oracle-java8-installer oracle-java8-set-default;
-  # echo "JAVA_HOME=/usr/lib/jvm/java-8-oracle/jre" >> "/etc/environment";
+  if [ "$(lsb_release -r -s)" == "14.04" ]; then
 
-  # # Process to install OpenJDK 7.
-  # sudo -E aptitude -y -q=2 install openjdk-7-jdk;
-  # sudo -E mkdir -p "/usr/java";
-  # sudo -E ln -s "/usr/lib/jvm/java-7-openjdk-amd64" "/usr/java/default";
+    # Process to install OpenJDK 7.
+    sudo -E aptitude -y -q=2 install openjdk-7-jdk;
+    sudo -E mkdir -p "/usr/java";
+    sudo -E ln -s "/usr/lib/jvm/java-7-openjdk-amd64" "/usr/java/default";
 
-  # Process to install OpenJDK 8.
-  sudo -E aptitude -y -q=2 install openjdk-8-jdk;
-  sudo -E mkdir -p "/usr/java";
-  sudo -E ln -s "/usr/lib/jvm/java-8-openjdk-amd64" "/usr/java/default";
+  elif [ "$(lsb_release -r -s)" == "16.04" ]; then
+
+    # Process to install OpenJDK 8.
+    sudo -E aptitude -y -q=2 install openjdk-8-jdk;
+    sudo -E mkdir -p "/usr/java";
+    sudo -E ln -s "/usr/lib/jvm/java-8-openjdk-amd64" "/usr/java/default";
+
+  fi
 
 } # install_java
 
