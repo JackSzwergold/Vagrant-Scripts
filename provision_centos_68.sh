@@ -148,10 +148,12 @@ function set_user_environment () {
 ##########################################################################################
 function set_timezone () {
 
+  # Set the timezone value.
+  TIMEZONE="America/New_York";
+
   if ! hash timedatectl 2>/dev/null; then
 
-    # Set the timezone variables.
-    TIMEZONE="America/New_York";
+    # Set the timezone path.
     TIMEZONE_PATH="/usr/share/zoneinfo";
 
     # Output a provisioning message.
@@ -161,9 +163,6 @@ function set_timezone () {
     sudo -E ln -f -s "${TIMEZONE_PATH}/${TIMEZONE}" "/etc/localtime";
 
   else
-
-    # Set the timezone variables.
-    TIMEZONE="America/New_York";
 
     # Output a provisioning message.
     echo -e "\033[33;1mPROVISIONING: Setting timezone data via 'timedatectl'.\033[0m";
@@ -803,8 +802,8 @@ function update_locate_db () {
 ##########################################################################################
 
 # Install install stuff.
-configure_user_and_group;
 configure_repository_stuff;
+configure_user_and_group;
 set_user_environment;
 hash sar 2>/dev/null || { install_sysstat; }
 hash updatedb 2>/dev/null || { install_locate; }
