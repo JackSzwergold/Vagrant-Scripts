@@ -93,6 +93,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                               :privileged => true,
                               :path => settings["provision_script"],
                               env: {
+                                "TZ" => "#{settings['tz']}",
                                 "PROV_BASICS" => "#{settings['basics']}",
                                 "PROV_LAMP" => "#{settings['lamp']}",
                                 "PROV_IMAGEMAGICK" => "#{settings['imagemagick']}",
@@ -115,6 +116,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                               :privileged => false,
                               :path => settings["provision_script_regular"],
                               env: {
+                                "TZ" => "#{settings['tz']}",
                                 "PROV_BASICS" => "#{settings['basics']}",
                                 "PROV_LAMP" => "#{settings['lamp']}",
                                 "PROV_IMAGEMAGICK" => "#{settings['imagemagick']}",
