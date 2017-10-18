@@ -59,14 +59,6 @@ echo -e "\033[33;1mPROVISIONING: DB directory is: '${DBS_DIR}'.\033[0m";
 cd "${BASE_DIR}/${CONFS_DIR}";
 
 ##########################################################################################
-# Adjusting the Debian frontend setting to non-interactive mode.
-##########################################################################################
-
-# Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Setting the Debian frontend to non-interactive mode.\n"
-export DEBIAN_FRONTEND=noninteractive;
-
-##########################################################################################
 #  _____                 _   _
 # |  ___|   _ _ __   ___| |_(_) ___  _ __  ___
 # | |_ | | | | '_ \ / __| __| |/ _ \| '_ \/ __|
