@@ -170,6 +170,7 @@ function set_user_environment () {
   echo -e "\033[33;1mPROVISIONING: Importing the crontab.\033[0m";
 
   # Importing the crontab.
+  sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "crontab.conf";
   sudo -E crontab < "crontab.conf";
 
 } # set_user_environment
