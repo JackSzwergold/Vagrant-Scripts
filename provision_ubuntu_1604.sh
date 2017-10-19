@@ -668,10 +668,78 @@ function install_mysql () {
   fi
 
   # Run these commands to prevent MySQL from coming up on reboot.
-  sudo -E service mysql stop;
-  sudo -E update-rc.d -f mysql remove;
+  # sudo -E service mysql stop;
+  # sudo -E update-rc.d -f mysql remove;
 
 } # install_mysql
+
+##########################################################################################
+# MariaDB (MySQL Clone)
+##########################################################################################
+function install_mariadb () {
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFS_DIR}";
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Installing and configuring MariaDB related items.\033[0m";
+
+  # Install the MariaDB MySQL server and client.
+  sudo -E RUNLEVEL=1 aptitude -y -q=2 install mariadb-client mariadb-server;
+
+  # Secure the MySQL installation.
+  if [ -f "mysql/mysql_secure_installation.sql" ]; then
+    mysql -sfu root < "mysql/mysql_secure_installation.sql";
+  fi
+
+  # Set the MySQL configuration.
+  if [ -f "mysql/my.cnf" ]; then
+    sudo -E cp -f "mysql/my.cnf" "/etc/mysql/my.cnf";
+  fi
+
+  # Run these commands to prevent MySQL from coming up on reboot.
+  # sudo -E service mysql stop;
+  # sudo -E update-rc.d -f mysql remove;
+
+} # install_mariadb
+
+##########################################################################################
+# MySQL configure.
+##########################################################################################
+function configure_mysql () {
+
+  # Go into the base directory.
+  cd "${BASE_DIR}";
+
+  # Import any databases that were sent over as the part of the provisioning process.
+  if [ -d "${DBS_DIR}" ]; then
+    find "${DBS_DIR}" -type f -name "*.sql" | sort |\
+      while read db_backup_path
+      do
+      	if [ -f "${db_backup_path}" ]; then
+      	  db_dirname=$(dirname "${db_backup_path}");
+      	  db_basename=$(basename "${db_backup_path}");
+      	  db_filename="${db_basename%.*}";
+      	  mysql_db=$(basename "${db_dirname}");
+          # Output a provisioning message.
+          echo -e "\033[33;1mPROVISIONING: Restoring the '${mysql_db}' MySQL database.\033[0m";
+      	  db_filename_prefix=${db_filename%-*};
+      	  if [ "$db_filename_prefix" == "000" ]; then
+            # Output a provisioning message.
+            echo -e "\033[33;1mPROVISIONING: Importing '${db_backup_path}'.\033[0m";
+            mysql -uroot -proot <${db_backup_path};
+          else
+            # Output a provisioning message.
+            echo -e "\033[33;1mPROVISIONING: Importing '${db_backup_path}'.\033[0m";
+            mysql -uroot -proot "${mysql_db}" <"${db_backup_path}";
+      	  fi
+      	else
+      	  exit 1;
+      	fi
+      done
+  fi
+
+} # configure_mysql
 
 ##########################################################################################
 # Munin
@@ -1533,6 +1601,8 @@ if [ "${PROV_LAMP}" = true ]; then
 
   # MySQL related stuff.
   # hash mysql 2>/dev/null && hash mysqld 2>/dev/null || { install_mysql; }
+  # hash mysql 2>/dev/null && hash mysqld 2>/dev/null || { install_mariadb; }
+  # configure_mysql;
 
   # Munin related stuff.
   hash munin-node 2>/dev/null || { install_munin; }
