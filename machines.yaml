@@ -70,16 +70,16 @@
   geoip: true
   iptables: true
   fail2ban: false
-- name: "Sandbox (CentOS 6.8)"
+- name: "Sandbox (CentOS 6)"
   box: "kaorimatz/centos-6.8-x86_64"
   primary: false
   autostart: false
-  provision_script: "provision_centos_68.sh"
+  provision_script: "provision_centos_6.sh"
   provision_script_regular: null
   os: "centos"
   timezone: "America/New_York"
-  hostname: "sandbox-centos-68"
-  banner: "Sandbox-CentOS-68"
+  hostname: "sandbox-centos-6"
+  banner: "Sandbox-CentOS-6"
   username: "vagrant"
   password: "vagrant"
   ip: "192.168.56.30"
