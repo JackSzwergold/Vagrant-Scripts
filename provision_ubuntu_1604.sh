@@ -1587,8 +1587,8 @@ if [ "${PROV_MONGO}" = true ]; then
 
   # Install and configure MongoDB.
   hash mongo 2>/dev/null && hash mongod 2>/dev/null || {
-    # install_mongo26;
-    install_mongo34;
+    install_mongo26;
+    # install_mongo34;
     configure_mongo;
   }
 
