@@ -40,11 +40,11 @@ echo -e "\033[33;1mPROVISIONING: Base directory is: '${BASE_DIR}'.\033[0m";
 BINS_DIR="deploy_items/bins";
 CONFS_DIR="deploy_items/confs";
 DBS_DIR="deploy_items/dbs";
-if [ -n "$1" ]; then
+if [ -n "${PROV_OS}" ]; then
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: OS is: '${1}'.\033[0m";
-  BINS_DIR="deploy_items/bins/${1}";
-  CONFS_DIR="deploy_items/confs/${1}";
+  echo -e "\033[33;1mPROVISIONING: OS is: '${PROV_OS}'.\033[0m";
+  BINS_DIR="deploy_items/bins/${PROV_OS}";
+  CONFS_DIR="deploy_items/confs/${PROV_OS}";
   # DBS_DIR="deploy_items/dbs/${1}";
 fi
 # Output a provisioning message.

@@ -54,11 +54,11 @@ echo -e "\033[33;1mPROVISIONING: User password is: '${PASSWORD}'.\033[0m";
 BINS_DIR="deploy_items/bins";
 CONFS_DIR="deploy_items/confs";
 DBS_DIR="deploy_items/dbs";
-if [ -n "$OS" ]; then
+if [ -n "${PROV_OS}" ]; then
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: OS is: '${OS}'.\033[0m";
-  BINS_DIR="deploy_items/bins/${OS}";
-  CONFS_DIR="deploy_items/confs/${OS}";
+  echo -e "\033[33;1mPROVISIONING: OS is: '${PROV_OS}'.\033[0m";
+  BINS_DIR="deploy_items/bins/${PROV_OS}";
+  CONFS_DIR="deploy_items/confs/${PROV_OS}";
   # DBS_DIR="deploy_items/dbs/${1}";
 fi
 # Output a provisioning message.
@@ -66,20 +66,20 @@ echo -e "\033[33;1mPROVISIONING: Binaries directory is: '${BINS_DIR}'.\033[0m";
 echo -e "\033[33;1mPROVISIONING: Config directory is: '${CONFS_DIR}'.\033[0m";
 echo -e "\033[33;1mPROVISIONING: DB directory is: '${DBS_DIR}'.\033[0m";
 
-# Set the machine name value.
-if [ ! -n "$MACHINE_NAME" ]; then MACHINE_NAME="vagrant"; fi
+# Set the timezone value.
+if [ ! -n "${PROV_TIMEZONE}" ]; then TZ="America/New_York"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Machine name is: '${MACHINE_NAME}'.\033[0m";
+echo -e "\033[33;1mPROVISIONING: The timezone is: '${PROV_TIMEZONE}'.\033[0m";
 
 # Set the hostname value.
-if [ ! -n "$HOST_NAME" ]; then HOST_NAME="vagrant.local"; fi
+if [ ! -n "${PROV_HOSTNAME}" ]; then PROV_HOSTNAME="vagrant.local"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Host name is: '${HOST_NAME}'.\033[0m";
+echo -e "\033[33;1mPROVISIONING: Host name is: '${PROV_HOSTNAME}'.\033[0m";
 
-# Set the timezone value.
-if [ ! -n "$TZ" ]; then TZ="America/New_York"; fi
+# Set the machine name value.
+if [ ! -n "${PROV_BANNER}" ]; then PROV_BANNER="vagrant"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: The timezone is: '${TZ}'.\033[0m";
+echo -e "\033[33;1mPROVISIONING: Machine name is: '${PROV_BANNER}'.\033[0m";
 
 if [ -n "${PROV_BASICS}" ]; then
   # Output a provisioning message.
@@ -147,7 +147,7 @@ function set_user_environment () {
   echo -e "\033[33;1mPROVISIONING: Importing the crontab.\033[0m";
 
   # Importing the crontab.
-  sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "crontab.conf";
+  sudo -E sed -i "s/vagrant.local/${PROV_HOSTNAME}/g" "crontab.conf";
   sudo -E crontab < "crontab.conf";
 
 } # set_user_environment
@@ -166,7 +166,7 @@ function set_timezone () {
     echo -e "\033[33;1mPROVISIONING: Setting timezone data manually.\033[0m";
 
     # Set the actual timezone via a symbolic link.
-    sudo -E ln -f -s "${ZONEINFO_PATH}/${TZ}" "/etc/localtime";
+    sudo -E ln -f -s "${ZONEINFO_PATH}/${PROV_TIMEZONE}" "/etc/localtime";
 
   else
 
@@ -174,7 +174,7 @@ function set_timezone () {
     echo -e "\033[33;1mPROVISIONING: Setting timezone data via 'timedatectl'.\033[0m";
 
     # Set the timezone.
-    sudo -E timedatectl set-timezone "${TZ}";
+    sudo -E timedatectl set-timezone "${PROV_TIMEZONE}";
 
     # Do this stuff to get NTP setup.
     sudo -E service ntp stop;
@@ -386,7 +386,7 @@ function configure_motd () {
 
   # Set the server login banner with figlet.
   MOTD_PATH="/etc/motd";
-  echo "$(figlet ${MACHINE_NAME} | head -n -1).local" > "${MOTD_PATH}";
+  echo "$(figlet ${PROV_BANNER} | head -n -1).local" > "${MOTD_PATH}";
   echo "" >> "${MOTD_PATH}";
 
 } # configure_motd
@@ -493,9 +493,9 @@ function configure_apache () {
   sudo -E cp -f "httpd-centos-7/httpd" "/etc/sysconfig/httpd";
 
   # Copy and configure the Apache virtual host config file.
-  sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "/etc/httpd/conf/httpd.conf";
-  HOST_NAME_ESCAPED=$(echo "${HOST_NAME}" | sed "s/\./\\\\./g");
-  sudo -E sed -i "s/vagrant\\\.local/${HOST_NAME_ESCAPED}/" "/etc/httpd/conf/httpd.conf";
+  sudo -E sed -i "s/vagrant.local/${PROV_HOSTNAME}/g" "/etc/httpd/conf/httpd.conf";
+  PROV_HOSTNAME_ESCAPED=$(echo "${PROV_HOSTNAME}" | sed "s/\./\\\\./g");
+  sudo -E sed -i "s/vagrant\\\.local/${PROV_HOSTNAME_ESCAPED}/" "/etc/httpd/conf/httpd.conf";
 
   # Copy the PHP config files into place.
   sudo -E cp -f "php/php.ini" "/etc/php.ini";
@@ -624,12 +624,12 @@ function set_apache_virtual_host_directories () {
   echo -e "\033[33;1mPROVISIONING: Creating the web server document root directories.\033[0m";
 
   # Set up the Apache virtual host directories.
-  sudo -E mkdir -p "/var/www/html/${HOST_NAME}/site";
-  sudo -E cp -f "httpd-centos-7/index.php" "/var/www/html/${HOST_NAME}/site/index.php";
-  sudo -E chown -f -R "${USERNAME}:www-readwrite" "/var/www/html/${HOST_NAME}";
-  sudo -E chmod -f -R 775 "/var/www/html/${HOST_NAME}";
-  sudo -E chmod g+s "/var/www/html/${HOST_NAME}";
-  sudo -E chmod -f 664 "/var/www/html/${HOST_NAME}/site/index.php";
+  sudo -E mkdir -p "/var/www/html/${PROV_HOSTNAME}/site";
+  sudo -E cp -f "httpd-centos-7/index.php" "/var/www/html/${PROV_HOSTNAME}/site/index.php";
+  sudo -E chown -f -R "${USERNAME}:www-readwrite" "/var/www/html/${PROV_HOSTNAME}";
+  sudo -E chmod -f -R 775 "/var/www/html/${PROV_HOSTNAME}";
+  sudo -E chmod g+s "/var/www/html/${PROV_HOSTNAME}";
+  sudo -E chmod -f 664 "/var/www/html/${PROV_HOSTNAME}/site/index.php";
 
 } # set_apache_virtual_host_directories
 
@@ -766,7 +766,7 @@ function install_system_scripts () {
   sudo -E chmod g+s "/opt/server_scripts";
   sudo -E cp -f "scripts/"*.sh "/opt/server_scripts/";
   sudo -E chown -f -R root:www-readwrite "/opt/server_scripts/"*.sh;
-  sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "/opt/server_scripts/"*.cfg.sh;
+  sudo -E sed -i "s/vagrant.local/${PROV_HOSTNAME}/g" "/opt/server_scripts/"*.cfg.sh;
   sudo -E chmod -f -R 775 "/opt/server_scripts/"*.sh;
 
   # Create the MySQL backup directory.
@@ -837,7 +837,7 @@ if [ "${PROV_LAMP}" = true ]; then
   if [ ! -d "/var/www/builds" ]; then set_apache_deployment_directories; fi
   set_deployment_user;
   if [ -d "/var/www/configs" ]; then set_application_configs; fi
-  if [ ! -d "/var/www/html/${HOST_NAME}" ]; then set_apache_virtual_host_directories; fi
+  if [ ! -d "/var/www/html/${PROV_HOSTNAME}" ]; then set_apache_virtual_host_directories; fi
   # if [ -f "/etc/logrotate.d/httpd" ]; then configure_apache_log_rotation; fi
 
   # MySQL related stuff.

@@ -54,11 +54,11 @@ echo -e "\033[33;1mPROVISIONING: User password is: '${PASSWORD}'.\033[0m";
 BINS_DIR="deploy_items/bins";
 CONFS_DIR="deploy_items/confs";
 DBS_DIR="deploy_items/dbs";
-if [ -n "$OS" ]; then
+if [ -n "${PROV_OS}" ]; then
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: OS is: '${OS}'.\033[0m";
-  BINS_DIR="deploy_items/bins/${OS}";
-  CONFS_DIR="deploy_items/confs/${OS}";
+  echo -e "\033[33;1mPROVISIONING: OS is: '${PROV_OS}'.\033[0m";
+  BINS_DIR="deploy_items/bins/${PROV_OS}";
+  CONFS_DIR="deploy_items/confs/${PROV_OS}";
   # DBS_DIR="deploy_items/dbs/${1}";
 fi
 # Output a provisioning message.
@@ -66,20 +66,20 @@ echo -e "\033[33;1mPROVISIONING: Binaries directory is: '${BINS_DIR}'.\033[0m";
 echo -e "\033[33;1mPROVISIONING: Config directory is: '${CONFS_DIR}'.\033[0m";
 echo -e "\033[33;1mPROVISIONING: DB directory is: '${DBS_DIR}'.\033[0m";
 
-# Set the machine name value.
-if [ ! -n "$MACHINE_NAME" ]; then MACHINE_NAME="vagrant"; fi
+# Set the timezone value.
+if [ ! -n "${PROV_TIMEZONE}" ]; then TZ="America/New_York"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Machine name is: '${MACHINE_NAME}'.\033[0m";
+echo -e "\033[33;1mPROVISIONING: The timezone is: '${PROV_TIMEZONE}'.\033[0m";
 
 # Set the hostname value.
-if [ ! -n "$HOST_NAME" ]; then HOST_NAME="vagrant.local"; fi
+if [ ! -n "${PROV_HOSTNAME}" ]; then PROV_HOSTNAME="vagrant.local"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Host name is: '${HOST_NAME}'.\033[0m";
+echo -e "\033[33;1mPROVISIONING: Host name is: '${PROV_HOSTNAME}'.\033[0m";
 
-# Set the timezone value.
-if [ ! -n "$TZ" ]; then TZ="America/New_York"; fi
+# Set the machine name value.
+if [ ! -n "${PROV_BANNER}" ]; then PROV_BANNER="vagrant"; fi
 # Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: The timezone is: '${TZ}'.\033[0m";
+echo -e "\033[33;1mPROVISIONING: Machine name is: '${PROV_BANNER}'.\033[0m";
 
 if [ -n "${PROV_BASICS}" ]; then
   # Output a provisioning message.
@@ -199,7 +199,7 @@ function set_user_environment () {
   echo -e "\033[33;1mPROVISIONING: Importing the crontab.\033[0m";
 
   # Importing the crontab.
-  sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "crontab.conf";
+  sudo -E sed -i "s/vagrant.local/${PROV_HOSTNAME}/g" "crontab.conf";
   sudo -E crontab < "crontab.conf";
 
 } # set_user_environment
@@ -218,7 +218,7 @@ function set_timezone () {
     echo -e "\033[33;1mPROVISIONING: Setting timezone data manually.\033[0m";
 
     # Set the actual timezone via a symbolic link.
-    sudo -E ln -f -s "${ZONEINFO_PATH}/${TZ}" "/etc/localtime";
+    sudo -E ln -f -s "${ZONEINFO_PATH}/${PROV_TIMEZONE}" "/etc/localtime";
 
   else
 
@@ -226,7 +226,7 @@ function set_timezone () {
     echo -e "\033[33;1mPROVISIONING: Setting timezone data via 'timedatectl'.\033[0m";
 
     # Set the timezone.
-    sudo -E timedatectl set-timezone "${TZ}";
+    sudo -E timedatectl set-timezone "${PROV_TIMEZONE}";
 
     # Do this stuff to get NTP setup.
     sudo -E service ntp stop;
@@ -387,7 +387,7 @@ function install_postfix () {
   echo -e "\033[33;1mPROVISIONING: Installing Postfix and related mail stuff.\033[0m";
 
   # Install postfix and general mail stuff.
-  sudo -E debconf-set-selections <<< "postfix postfix/mailname string ${HOST_NAME}";
+  sudo -E debconf-set-selections <<< "postfix postfix/mailname string ${PROV_HOSTNAME}";
   sudo -E debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'";
   sudo -E aptitude -y -q=2 install postfix mailutils >/dev/null 2>&1;
 
@@ -457,7 +457,7 @@ function configure_motd () {
 
   # Set the server login banner with figlet.
   MOTD_PATH="/etc/motd";
-  echo "$(figlet ${MACHINE_NAME} | head -n -1).local" > "${MOTD_PATH}";
+  echo "$(figlet ${PROV_BANNER} | head -n -1).local" > "${MOTD_PATH}";
   echo "" >> "${MOTD_PATH}";
 
   # Output a provisioning message.
@@ -557,11 +557,11 @@ function configure_apache () {
   sudo -E cp -f "apache2/000-default.conf" "/etc/apache2/sites-available/000-default.conf";
 
   # Copy and configure the Apache virtual host config file.
-  sudo -E cp -f "apache2/vagrant.local.conf" "/etc/apache2/sites-available/${HOST_NAME}.conf";
-  sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "/etc/apache2/sites-available/${HOST_NAME}.conf";
-  HOST_NAME_ESCAPED=$(echo "${HOST_NAME}" | sed 's/\./\\\\./g');
-  sudo -E sed -i "s/vagrant\\\.local/${HOST_NAME_ESCAPED}/" "/etc/apache2/sites-available/${HOST_NAME}.conf";
-  sudo -E a2ensite ${HOST_NAME};
+  sudo -E cp -f "apache2/vagrant.local.conf" "/etc/apache2/sites-available/${PROV_HOSTNAME}.conf";
+  sudo -E sed -i "s/vagrant.local/${PROV_HOSTNAME}/g" "/etc/apache2/sites-available/${PROV_HOSTNAME}.conf";
+  PROV_HOSTNAME_ESCAPED=$(echo "${PROV_HOSTNAME}" | sed 's/\./\\\\./g');
+  sudo -E sed -i "s/vagrant\\\.local/${PROV_HOSTNAME_ESCAPED}/" "/etc/apache2/sites-available/${PROV_HOSTNAME}.conf";
+  sudo -E a2ensite ${PROV_HOSTNAME};
 
   # Copy the PHP config files into place.
   sudo -E cp -f "php/php.ini" "/etc/php/7.0/apache2/php.ini";
@@ -616,12 +616,12 @@ function set_apache_virtual_host_directories () {
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Creating the web server document root directories.\033[0m";
 
-  sudo -E mkdir -p "/var/www/html/${HOST_NAME}/site";
-  sudo -E cp -f "apache2/index.php" "/var/www/html/${HOST_NAME}/site/index.php";
-  sudo -E chown -f -R "${USERNAME}":www-readwrite "/var/www/html/${HOST_NAME}";
-  sudo -E chmod -f -R 775 "/var/www/html/${HOST_NAME}";
-  sudo -E chmod g+s "/var/www/html/${HOST_NAME}";
-  sudo -E chmod -f -R 664 "/var/www/html/${HOST_NAME}/site/index.php";
+  sudo -E mkdir -p "/var/www/html/${PROV_HOSTNAME}/site";
+  sudo -E cp -f "apache2/index.php" "/var/www/html/${PROV_HOSTNAME}/site/index.php";
+  sudo -E chown -f -R "${USERNAME}":www-readwrite "/var/www/html/${PROV_HOSTNAME}";
+  sudo -E chmod -f -R 775 "/var/www/html/${PROV_HOSTNAME}";
+  sudo -E chmod g+s "/var/www/html/${PROV_HOSTNAME}";
+  sudo -E chmod -f -R 664 "/var/www/html/${PROV_HOSTNAME}/site/index.php";
 
 } # set_apache_virtual_host_directories
 
@@ -691,7 +691,7 @@ function install_munin () {
   MUNIN_CONF_PATH="/etc/munin/munin.conf";
   if [ -f "munin/munin.conf" ]; then
     sudo -E cp -f "munin/munin.conf" "${MUNIN_CONF_PATH}";
-    sudo -E sed -i "s/^\[vagrant.local\]/\[${HOST_NAME}\]/g" "${MUNIN_CONF_PATH}";
+    sudo -E sed -i "s/^\[vagrant.local\]/\[${PROV_HOSTNAME}\]/g" "${MUNIN_CONF_PATH}";
   fi
 
   # Ditch the default 'localdomain' stuff from the system.
@@ -972,15 +972,15 @@ function install_awstats () {
   sudo cpanm --install --force --notest --quiet --skip-installed YAML Geo::IP Geo::IPfree Geo::IP::PurePerl URI::Escape Net::IP Net::DNS Net::XWhois Time::HiRes Time::Local;
 
   # Copy over a basic config file.
-  sudo -E cp -f "awstats/awstats.vagrant.local.conf" "/usr/share/awstats-7.6/wwwroot/cgi-bin/awstats.${HOST_NAME}.conf";
-  sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "/usr/share/awstats-7.6/wwwroot/cgi-bin/awstats.${HOST_NAME}.conf";
+  sudo -E cp -f "awstats/awstats.vagrant.local.conf" "/usr/share/awstats-7.6/wwwroot/cgi-bin/awstats.${PROV_HOSTNAME}.conf";
+  sudo -E sed -i "s/vagrant.local/${PROV_HOSTNAME}/g" "/usr/share/awstats-7.6/wwwroot/cgi-bin/awstats.${PROV_HOSTNAME}.conf";
 
 
   # Set permissions to root for owner and group.
   sudo -E chown -f root:root -R "/usr/share/awstats-7.6";
 
-  # Update the data for the '${HOST_NAME}' config.
-  sudo -E "/usr/share/awstats-7.6/wwwroot/cgi-bin/awstats.pl" -config="${HOST_NAME}" -update
+  # Update the data for the '${PROV_HOSTNAME}' config.
+  sudo -E "/usr/share/awstats-7.6/wwwroot/cgi-bin/awstats.pl" -config="${PROV_HOSTNAME}" -update
 
 } # install_awstats
 
@@ -1139,7 +1139,7 @@ function install_system_scripts () {
   sudo -E chmod g+s "/opt/server_scripts";
   sudo -E cp -f "scripts/"*.sh "/opt/server_scripts/";
   sudo -E chown -f -R root:www-readwrite "/opt/server_scripts/"*.sh;
-  sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "/opt/server_scripts/"*.cfg.sh;
+  sudo -E sed -i "s/vagrant.local/${PROV_HOSTNAME}/g" "/opt/server_scripts/"*.cfg.sh;
   sudo -E chmod -f -R 775 "/opt/server_scripts/"*.sh;
 
   # Create the MySQL backup directory.
@@ -1400,7 +1400,7 @@ function install_nginx () {
   NGINX_CONF_PATH="/etc/nginx/sites-available";
   if [ -f "nginx/default" ]; then
     sudo -E cp -f "nginx/default" "${NGINX_CONF_PATH}/default";
-    sudo -E sed -i "s/vagrant.local/${HOST_NAME}/g" "${NGINX_CONF_PATH}/default";
+    sudo -E sed -i "s/vagrant.local/${PROV_HOSTNAME}/g" "${NGINX_CONF_PATH}/default";
     sudo -E service nginx restart;
   fi
 
@@ -1511,7 +1511,7 @@ if [ "${PROV_LAMP}" = true ]; then
   configure_apache;
   if [ -d "/var/www/html" ]; then set_apache_web_root; fi
   if [ ! -d "/var/www/builds" ]; then set_apache_deployment_directories; fi
-  if [ ! -d "/var/www/html/${HOST_NAME}" ]; then set_apache_virtual_host_directories; fi
+  if [ ! -d "/var/www/html/${PROV_HOSTNAME}" ]; then set_apache_virtual_host_directories; fi
   if [ -f "/etc/logrotate.d/apache2" ]; then configure_apache_log_rotation; fi
 
   # MySQL related stuff.
