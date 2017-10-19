@@ -1316,8 +1316,22 @@ function install_mongo34 () {
 ##########################################################################################
 function configure_mongo () {
 
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFS_DIR}";
+
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Configuring MongoDB related items.\033[0m";
+
+  # Copy the Mongo config file in place and restart it.
+  if [ ! -f "/etc/systemd/system/mongod.service" ] && [ -f "mongo/mongod.service.txt" ]; then
+
+    # Output a provisioning message.
+    echo -e "\033[33;1mPROVISIONING: Setting a Mongo startup service.\033[0m";
+
+    sudo -E cp -f "mongo/mongod.service.txt" "/etc/systemd/system/mongod.service";
+    sudo -E service mongod restart;
+
+  fi
 
   # Mongo 2.x: Comment out the 'bind_ip' line to enable network connections outside of 'localhost'.
   sudo -E sed -i 's/bind_ip = 127.0.0.1/#bind_ip = 127.0.0.1/g' "/etc/mongod.conf";
@@ -1570,8 +1584,8 @@ if [ "${PROV_MONGO}" = true ]; then
 
   # Install and configure MongoDB.
   hash mongo 2>/dev/null && hash mongod 2>/dev/null || {
-    install_mongo26;
-    # install_mongo34;
+    # install_mongo26;
+    install_mongo34;
     configure_mongo;
   }
 
