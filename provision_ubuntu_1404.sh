@@ -656,6 +656,7 @@ function install_mysql () {
 
   # Install the MySQL server and client.
   sudo -E RUNLEVEL=1 aptitude -y -q=2 install mysql-server mysql-client;
+  sudo -E service mysql start;
 
   # Secure the MySQL installation.
   if [ -f "mysql/mysql_secure_installation.sql" ]; then
@@ -686,6 +687,7 @@ function install_mariadb () {
 
   # Install the MariaDB MySQL server and client.
   sudo -E RUNLEVEL=1 aptitude -y -q=2 install mariadb-client mariadb-server;
+  sudo -E service mysql start;
 
   # Secure the MySQL installation.
   if [ -f "mysql/mysql_secure_installation.sql" ]; then
@@ -700,7 +702,6 @@ function install_mariadb () {
   # Run these commands to prevent MySQL from coming up on reboot.
   # sudo -E service mysql stop;
   # sudo -E update-rc.d -f mysql remove;
-  sudo -E service mysql start;
 
   # Sleep a bit.
   sleep 3;
