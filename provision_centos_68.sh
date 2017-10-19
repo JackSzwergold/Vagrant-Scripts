@@ -37,34 +37,34 @@ BASE_DIR=$(pwd);
 # Output a provisioning message.
 echo -e "\033[33;1mPROVISIONING: Base directory is: '${BASE_DIR}'.\033[0m";
 
-BINS_DIR="deploy_items/bins";
-CONFS_DIR="deploy_items/confs";
-DBS_DIR="deploy_items/dbs";
-if [ -n "$1" ]; then
-  # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: OS is: '${1}'.\033[0m";
-  BINS_DIR="deploy_items/bins/${1}";
-  CONFS_DIR="deploy_items/confs/${1}";
-  # DBS_DIR="deploy_items/dbs/${1}";
-fi
-# Output a provisioning message.
-echo -e "\033[33;1mPROVISIONING: Binaries directory is: '${BINS_DIR}'.\033[0m";
-echo -e "\033[33;1mPROVISIONING: Config directory is: '${CONFS_DIR}'.\033[0m";
-echo -e "\033[33;1mPROVISIONING: DB directory is: '${DBS_DIR}'.\033[0m";
-
 USERNAME="vagrant";
-if [ -n "$2" ]; then USERNAME="${2}"; fi
+if [ -n "$1" ]; then USERNAME="${1}"; fi
 # Output a provisioning message.
 echo -e "\033[33;1mPROVISIONING: User name is: '${USERNAME}'.\033[0m";
 
 PASSWORD="vagrant";
-if [ -n "$3" ]; then PASSWORD="${3}"; fi
+if [ -n "$2" ]; then PASSWORD="${2}"; fi
 # Output a provisioning message.
 echo -e "\033[33;1mPROVISIONING: User password is: '${PASSWORD}'.\033[0m";
 
 ##########################################################################################
 # Optional items set via environment variables.
 ##########################################################################################
+
+BINS_DIR="deploy_items/bins";
+CONFS_DIR="deploy_items/confs";
+DBS_DIR="deploy_items/dbs";
+if [ -n "$OS" ]; then
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: OS is: '${OS}'.\033[0m";
+  BINS_DIR="deploy_items/bins/${OS}";
+  CONFS_DIR="deploy_items/confs/${OS}";
+  # DBS_DIR="deploy_items/dbs/${1}";
+fi
+# Output a provisioning message.
+echo -e "\033[33;1mPROVISIONING: Binaries directory is: '${BINS_DIR}'.\033[0m";
+echo -e "\033[33;1mPROVISIONING: Config directory is: '${CONFS_DIR}'.\033[0m";
+echo -e "\033[33;1mPROVISIONING: DB directory is: '${DBS_DIR}'.\033[0m";
 
 # Set the machine name value.
 if [ ! -n "$MACHINE_NAME" ]; then MACHINE_NAME="vagrant"; fi

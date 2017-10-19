@@ -93,6 +93,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                               :privileged => true,
                               :path => settings["provision_script"],
                               env: {
+                                "OS" => "#{settings['os']}",
                                 "TZ" => "#{settings['tz']}",
                                 "MACHINE_NAME" => "#{settings['machinename']}",
                                 "HOST_NAME" => "#{settings['hostname']}.local",
@@ -109,7 +110,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                                 "PROV_NODEJS" => "#{settings['nodejs']}",
                                 "PROV_NGINX" => "#{settings['nginx']}"
                               },
-                              :args => "#{settings['os']} #{settings['username']} #{settings['password']}"
+                              :args => "#{settings['username']} #{settings['password']}"
       end
 
       # Set the shell script to provision items for teh regular user.
@@ -118,6 +119,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                               :privileged => false,
                               :path => settings["provision_script_regular"],
                               env: {
+                                "OS" => "#{settings['os']}",
                                 "TZ" => "#{settings['tz']}",
                                 "MACHINE_NAME" => "#{settings['machinename']}",
                                 "HOST_NAME" => "#{settings['hostname']}.local",
@@ -134,7 +136,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                                 "PROV_NODEJS" => "#{settings['nodejs']}",
                                 "PROV_NGINX" => "#{settings['nginx']}"
                               },
-                              :args => "#{settings['os']}  #{settings['username']} #{settings['password']}"
+                              :args => "#{settings['username']} #{settings['password']}"
       end
 
     end # config.vm.define
