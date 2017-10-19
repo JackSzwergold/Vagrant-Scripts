@@ -700,6 +700,10 @@ function install_mariadb () {
   # Run these commands to prevent MySQL from coming up on reboot.
   # sudo -E service mysql stop;
   # sudo -E update-rc.d -f mysql remove;
+  sudo -E service mysql start;
+
+  # Sleep a bit.
+  sleep 3;
 
 } # install_mariadb
 
