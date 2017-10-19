@@ -1343,6 +1343,9 @@ function configure_mongo () {
   sudo -E service mongod restart & RESTART_PID=(`jobs -l | awk '{print $2}'`);
   wait ${RESTART_PID};
 
+  # Sleep a bit.
+  sleep 3;
+
   # Go into the base directory.
   cd "${BASE_DIR}";
 
