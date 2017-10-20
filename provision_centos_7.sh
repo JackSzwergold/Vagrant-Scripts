@@ -688,10 +688,10 @@ function install_mariadb5 () {
   echo -e "\033[33;1mPROVISIONING: Installing and configuring MariaDB related items.\033[0m";
 
   # Setup the MariaDB repository.
-  if [ -f "mysql-centos-6/mariadb55.repo" ]; then
+  if [ -f "mysql-centos-7/mariadb55.repo" ]; then
 
     # Copy the MariaDB repo definition to the Yum repos directory.
-    sudo -E cp -f "mysql-centos-6/mariadb55.repo" "/etc/yum.repos.d/";
+    sudo -E cp -f "mysql-centos-7/mariadb55.repo" "/etc/yum.repos.d/";
 
     # Clean the Yum repo cache.
     sudo -E yum -y -q -e 0 clean all;
@@ -705,8 +705,8 @@ function install_mariadb5 () {
   sudo -E service mysql start;
 
   # Secure the MySQL installation.
-  if [ -f "mysql-centos-6/mysql_secure_installation.sql" ]; then
-    mysql -sfu root < "mysql-centos-6/mysql_secure_installation.sql";
+  if [ -f "mysql-centos-7/mysql_secure_installation.sql" ]; then
+    mysql -sfu root < "mysql-centos-7/mysql_secure_installation.sql";
   fi
 
   # Restart MySQL.
@@ -734,10 +734,10 @@ function install_mariadb10 () {
   echo -e "\033[33;1mPROVISIONING: Installing and configuring MariaDB related items.\033[0m";
 
   # Setup the MariaDB repository.
-  if [ -f "mysql-centos-6/mariadb102.repo" ]; then
+  if [ -f "mysql-centos-7/mariadb102.repo" ]; then
 
     # Copy the MariaDB repo definition to the Yum repos directory.
-    sudo -E cp -f "mysql-centos-6/mariadb102.repo" "/etc/yum.repos.d/";
+    sudo -E cp -f "mysql-centos-7/mariadb102.repo" "/etc/yum.repos.d/";
 
     # Clean the Yum repo cache.
     sudo -E yum -y -q -e 0 clean all;
@@ -751,8 +751,8 @@ function install_mariadb10 () {
   sudo -E service mysql start;
 
   # Secure the MySQL installation.
-  if [ -f "mysql-centos-6/mysql_secure_installation.sql" ]; then
-    mysql -sfu root < "mysql-centos-6/mysql_secure_installation.sql";
+  if [ -f "mysql-centos-7/mysql_secure_installation.sql" ]; then
+    mysql -sfu root < "mysql-centos-7/mysql_secure_installation.sql";
   fi
 
   # Restart MySQL.
