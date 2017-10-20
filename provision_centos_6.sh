@@ -875,7 +875,6 @@ if [ "${PROV_MYSQL}" = true ]; then
   hash mysql 2>/dev/null && hash mysqld 2>/dev/null || {
     # install_mysql;
     install_mariadb5;
-    # install_mariadb10;
   }
   configure_mysql;
 
