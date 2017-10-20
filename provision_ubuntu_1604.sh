@@ -699,16 +699,17 @@ function install_mariadb5 () {
   echo -e "\033[33;1mPROVISIONING: Installing and configuring MariaDB related items.\033[0m";
 
   # Add the official MariaDB repository and install MariaDB.
-  curl -ss -o "MariaDB-5.5-key.asc" -L "http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xCBCB082A1BB943DB" & CURL_PID=(`jobs -l | awk '{print $2}'`);
+  sudo -E aptitude -y -q=2 install software-properties-common;
+  curl -ss -o "MariaDB-5-key.asc" -L "http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xCBCB082A1BB943DB" & CURL_PID=(`jobs -l | awk '{print $2}'`);
   wait ${CURL_PID};
-  sudo apt-key add "MariaDB-5.5-key.asc";
-  rm -f "MariaDB-5.5-key.asc";
+  sudo apt-key add "MariaDB-5-key.asc";
+  rm -f "MariaDB-5-key.asc";
   sudo add-apt-repository "deb [arch=amd64,i386,ppc64el] http://nyc2.mirrors.digitalocean.com/mariadb/repo/5.5/ubuntu trusty main" & ADD_REPO_PID=(`jobs -l | awk '{print $2}'`);
   wait ${ADD_REPO_PID};
   sudo -E rm -rf "/var/lib/apt/lists/partial/";
   sudo -E aptitude -y -q=2 update;
   sudo -E aptitude -y -q=2 clean;
-  sudo -E RUNLEVEL=1 aptitude -y -q=2 install mariadb-client mariadb-server;
+  sudo -E RUNLEVEL=1 aptitude -y -q=2 install mariadb-client-5.5 mariadb-server-5.5;
 
   # Start MySQL.
   sudo -E service mysql start;
@@ -747,6 +748,7 @@ function install_mariadb10 () {
   echo -e "\033[33;1mPROVISIONING: Installing and configuring MariaDB related items.\033[0m";
 
   # Add the official MariaDB repository and install MariaDB.
+  sudo -E aptitude -y -q=2 install software-properties-common;
   curl -ss -o "MariaDB-10-key.asc" -L "http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xF1656F24C74CD1D8" & CURL_PID=(`jobs -l | awk '{print $2}'`);
   wait ${CURL_PID};
   sudo apt-key add "MariaDB-10-key.asc";
@@ -756,7 +758,7 @@ function install_mariadb10 () {
   sudo -E rm -rf "/var/lib/apt/lists/partial/";
   sudo -E aptitude -y -q=2 update;
   sudo -E aptitude -y -q=2 clean;
-  sudo -E RUNLEVEL=1 aptitude -y -q=2 install mariadb-client mariadb-server;
+  sudo -E RUNLEVEL=1 aptitude -y -q=2 install mariadb-client-10.2 mariadb-server-10.2;
 
   # Start MySQL.
   sudo -E service mysql start;
