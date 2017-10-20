@@ -656,6 +656,8 @@ function install_mysql () {
 
   # Install the MySQL server and client.
   sudo -E RUNLEVEL=1 aptitude -y -q=2 install mysql-server mysql-client;
+
+  # Start MySQL.
   sudo -E service mysql start;
 
   # Secure the MySQL installation.
@@ -667,6 +669,9 @@ function install_mysql () {
   if [ -f "mysql/my.cnf" ]; then
     sudo -E cp -f "mysql/my.cnf" "/etc/mysql/my.cnf";
   fi
+
+  # Restart MySQL.
+  sudo -E service mysql restart;
 
   # Run these commands to prevent MySQL from coming up on reboot.
   # sudo -E service mysql stop;
@@ -687,17 +692,22 @@ function install_mariadb () {
 
   # Install the MariaDB MySQL server and client.
   sudo -E RUNLEVEL=1 aptitude -y -q=2 install mariadb-client mariadb-server;
+
+  # Start MySQL.
   sudo -E service mysql start;
 
   # Secure the MySQL installation.
   if [ -f "mysql/mysql_secure_installation.sql" ]; then
-    mysql -sfu root < "mysql/mysql_secure_installation.sql";
+    sudo mysql -sfu root < "mysql/mysql_secure_installation.sql";
   fi
 
   # Set the MySQL configuration.
   if [ -f "mysql/my.cnf" ]; then
     sudo -E cp -f "mysql/my.cnf" "/etc/mysql/my.cnf";
   fi
+
+  # Restart MySQL.
+  sudo -E service mysql restart;
 
   # Run these commands to prevent MySQL from coming up on reboot.
   # sudo -E service mysql stop;
