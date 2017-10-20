@@ -682,12 +682,15 @@ function install_mysql () {
   # sudo -E service mysql stop;
   # sudo -E update-rc.d -f mysql remove;
 
+  # Sleep a bit.
+  sleep 3;
+
 } # install_mysql
 
 ##########################################################################################
-# MariaDB (MySQL Clone)
+# MariaDB 5 (MySQL Clone)
 ##########################################################################################
-function install_mariadb () {
+function install_mariadb5 () {
 
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFS_DIR}";
@@ -695,7 +698,16 @@ function install_mariadb () {
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Installing and configuring MariaDB related items.\033[0m";
 
-  # Install the MariaDB MySQL server and client.
+  # Add the official MariaDB repository and install MariaDB.
+  curl -ss -o "MariaDB-5.5-key.asc" -L "http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xCBCB082A1BB943DB" & CURL_PID=(`jobs -l | awk '{print $2}'`);
+  wait ${CURL_PID};
+  sudo apt-key add "MariaDB-5.5-key.asc";
+  rm -f "MariaDB-5.5-key.asc";
+  sudo add-apt-repository "deb [arch=amd64,i386,ppc64el] http://nyc2.mirrors.digitalocean.com/mariadb/repo/5.5/ubuntu trusty main" & ADD_REPO_PID=(`jobs -l | awk '{print $2}'`);
+  wait ${ADD_REPO_PID};
+  sudo -E rm -rf "/var/lib/apt/lists/partial/";
+  sudo -E aptitude -y -q=2 update;
+  sudo -E aptitude -y -q=2 clean;
   sudo -E RUNLEVEL=1 aptitude -y -q=2 install mariadb-client mariadb-server;
 
   # Start MySQL.
@@ -721,7 +733,55 @@ function install_mariadb () {
   # Sleep a bit.
   sleep 3;
 
-} # install_mariadb
+} # install_mariadb5
+
+##########################################################################################
+# MariaDB 10 (MySQL Clone)
+##########################################################################################
+function install_mariadb10 () {
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFS_DIR}";
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Installing and configuring MariaDB related items.\033[0m";
+
+  # Add the official MariaDB repository and install MariaDB.
+  curl -ss -o "MariaDB-10-key.asc" -L "http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xF1656F24C74CD1D8" & CURL_PID=(`jobs -l | awk '{print $2}'`);
+  wait ${CURL_PID};
+  sudo apt-key add "MariaDB-10-key.asc";
+  rm -f "MariaDB-10-key.asc";
+  sudo add-apt-repository "deb [arch=amd64,i386,ppc64el] http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.2/ubuntu xenial main" & ADD_REPO_PID=(`jobs -l | awk '{print $2}'`);
+  wait ${ADD_REPO_PID};
+  sudo -E rm -rf "/var/lib/apt/lists/partial/";
+  sudo -E aptitude -y -q=2 update;
+  sudo -E aptitude -y -q=2 clean;
+  sudo -E RUNLEVEL=1 aptitude -y -q=2 install mariadb-client mariadb-server;
+
+  # Start MySQL.
+  sudo -E service mysql start;
+
+  # Secure the MySQL installation.
+  if [ -f "mysql/mysql_secure_installation.sql" ]; then
+    sudo mysql -sfu root < "mysql/mysql_secure_installation.sql";
+  fi
+
+  # Set the MySQL configuration.
+  if [ -f "mysql/my.cnf" ]; then
+    sudo -E cp -f "mysql/my.cnf" "/etc/mysql/my.cnf";
+  fi
+
+  # Restart MySQL.
+  sudo -E service mysql restart;
+
+  # Run these commands to prevent MySQL from coming up on reboot.
+  # sudo -E service mysql stop;
+  # sudo -E update-rc.d -f mysql remove;
+
+  # Sleep a bit.
+  sleep 3;
+
+} # install_mariadb10
 
 ##########################################################################################
 # MySQL configure.
@@ -1645,8 +1705,11 @@ fi
 # Get the MySQL stuff set.
 if [ "${PROV_MYSQL}" = true ]; then
 
-  # hash mysql 2>/dev/null && hash mysqld 2>/dev/null || { install_mysql; }
-  hash mysql 2>/dev/null && hash mysqld 2>/dev/null || { install_mariadb; }
+  hash mysql 2>/dev/null && hash mysqld 2>/dev/null || {
+    # install_mysql;
+    install_mariadb5;
+    # install_mariadb10;
+  }
   configure_mysql;
 
 fi

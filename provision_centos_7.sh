@@ -671,12 +671,15 @@ function install_mysql () {
   # sudo -E chkconfig --add mysql;
   # sudo -E chkconfig --level 345 mysql on;
 
+  # Sleep a bit.
+  sleep 3;
+
 } # install_mysql
 
 ##########################################################################################
 # MariaDB (MySQL Clone)
 ##########################################################################################
-function install_mariadb () {
+function install_mariadb5 () {
 
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFS_DIR}";
@@ -714,7 +717,10 @@ function install_mariadb () {
   sudo -E chkconfig --add mysql;
   sudo -E chkconfig --level 345 mysql on;
 
-} # install_mariadb
+  # Sleep a bit.
+  sleep 3;
+
+} # install_mariadb5
 
 ##########################################################################################
 # MySQL configure.
@@ -856,8 +862,11 @@ fi
 # Get the MySQL stuff set.
 if [ "${PROV_MYSQL}" = true ]; then
 
-  # hash mysql 2>/dev/null && hash mysqld 2>/dev/null || { install_mysql; }
-  hash mysql 2>/dev/null && hash mysqld 2>/dev/null || { install_mariadb; }
+  hash mysql 2>/dev/null && hash mysqld 2>/dev/null || {
+    # install_mysql;
+    install_mariadb5;
+    # install_mariadb10;
+  }
   configure_mysql;
 
 fi
