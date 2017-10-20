@@ -749,11 +749,11 @@ function install_mariadb10 () {
 
   # Add the official MariaDB repository and install MariaDB.
   sudo -E aptitude -y -q=2 install software-properties-common;
-  curl -ss -o "MariaDB-10-key.asc" -L "http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xF1656F24C74CD1D8" & CURL_PID=(`jobs -l | awk '{print $2}'`);
+  curl -ss -o "MariaDB-10-key.asc" -L "http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xCBCB082A1BB943DB" & CURL_PID=(`jobs -l | awk '{print $2}'`);
   wait ${CURL_PID};
   sudo apt-key add "MariaDB-10-key.asc";
   rm -f "MariaDB-10-key.asc";
-  sudo add-apt-repository "deb [arch=amd64,i386,ppc64el] http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.2/ubuntu xenial main" & ADD_REPO_PID=(`jobs -l | awk '{print $2}'`);
+  sudo add-apt-repository "deb [arch=amd64,i386,ppc64el] http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.2/ubuntu trusty main" & ADD_REPO_PID=(`jobs -l | awk '{print $2}'`);
   wait ${ADD_REPO_PID};
   sudo -E rm -rf "/var/lib/apt/lists/partial/";
   sudo -E aptitude -y -q=2 update;
