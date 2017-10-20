@@ -86,9 +86,14 @@ if [ -n "${PROV_BASICS}" ]; then
   echo -e "\033[33;1mPROVISIONING: Basics provisioning: '${PROV_BASICS}'.\033[0m";
 fi
 
-if [ -n "${PROV_LAMP}" ]; then
+if [ -n "${PROV_APACHE}" ]; then
   # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: LAMP provisioning: '${PROV_LAMP}'.\033[0m";
+  echo -e "\033[33;1mPROVISIONING: Apache provisioning: '${PROV_APACHE}'.\033[0m";
+fi
+
+if [ -n "${PROV_MYSQL}" ]; then
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: MySQL provisioning: '${PROV_MYSQL}'.\033[0m";
 fi
 
 if [ -n "${PROV_IMAGEMAGICK}" ]; then
@@ -1603,7 +1608,7 @@ if [ "${PROV_IMAGEMAGICK}" = true ]; then
 fi
 
 # Get the LAMP stuff set.
-if [ "${PROV_LAMP}" = true ]; then
+if [ "${PROV_APACHE}" = true ]; then
 
   # Apache related stuff.
   hash apachectl 2>/dev/null || { install_apache; }
@@ -1613,11 +1618,6 @@ if [ "${PROV_LAMP}" = true ]; then
   if [ ! -d "/var/www/builds" ]; then set_apache_deployment_directories; fi
   if [ ! -d "/var/www/html/${PROV_HOSTNAME}" ]; then set_apache_virtual_host_directories; fi
   if [ -f "/etc/logrotate.d/apache2" ]; then configure_apache_log_rotation; fi
-
-  # MySQL related stuff.
-  # hash mysql 2>/dev/null && hash mysqld 2>/dev/null || { install_mysql; }
-  hash mysql 2>/dev/null && hash mysqld 2>/dev/null || { install_mariadb; }
-  configure_mysql;
 
   # Munin related stuff.
   hash munin-node 2>/dev/null || { install_munin; }
@@ -1639,6 +1639,15 @@ if [ "${PROV_LAMP}" = true ]; then
 
   # Restart Apache now that we’re done.
   sudo -E service apache2 restart;
+
+fi
+
+# Get the MySQL stuff set.
+if [ "${PROV_MYSQL}" = true ]; then
+
+  # hash mysql 2>/dev/null && hash mysqld 2>/dev/null || { install_mysql; }
+  hash mysql 2>/dev/null && hash mysqld 2>/dev/null || { install_mariadb; }
+  configure_mysql;
 
 fi
 

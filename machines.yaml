@@ -39,7 +39,8 @@
   memory: 512
   cpus: 1
   basics: true
-  lamp: true
+  apache: true
+  mysql: true
   imagemagick: false
   geoip: true
   iptables: true
@@ -65,7 +66,8 @@
   memory: 512
   cpus: 1
   basics: true
-  lamp: true
+  apache: true
+  mysql: true
   imagemagick: false
   geoip: true
   iptables: true
@@ -89,7 +91,8 @@
   memory: 2048
   cpus: 1
   basics: true
-  lamp: true
+  apache: true
+  mysql: true
 - name: "Sandbox (CentOS 7)"
   box: "bento/centos-7.3"
   primary: false
@@ -109,7 +112,8 @@
   memory: 2048
   cpus: 1
   basics: true
-  lamp: true
+  apache: true
+  mysql: true
 - name: "Jabroni (Ubuntu)"
   box: "ubuntu/trusty64"
   # box: "ubuntu/xenial64"
