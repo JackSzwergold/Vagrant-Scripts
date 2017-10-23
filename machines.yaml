@@ -20,8 +20,6 @@
 
 - name: "Sandbox (Ubuntu 14.04)"
   box: "ubuntu/trusty64"
-  # box: "ubuntu/xenial64"
-  # box: "bento/ubuntu-16.04"
   primary: true
   autostart: false
   provision_script: "provision_ubuntu_1404.sh"
@@ -46,7 +44,6 @@
   iptables: true
   fail2ban: false
 - name: "Sandbox (Ubuntu 16.04)"
-  # box: "ubuntu/trusty64"
   # box: "ubuntu/xenial64"
   box: "bento/ubuntu-16.04"
   primary: false
@@ -116,8 +113,6 @@
   mysql: true
 - name: "Jabroni (Ubuntu)"
   box: "ubuntu/trusty64"
-  # box: "ubuntu/xenial64"
-  # box: "bento/ubuntu-16.04"
   primary: false
   autostart: false
   provision_script: "provision_ubuntu_1404.sh"
@@ -137,8 +132,6 @@
   basics: true
 - name: "NodeJS (Ubuntu)"
   box: "ubuntu/trusty64"
-  # box: "ubuntu/xenial64"
-  # box: "bento/ubuntu-16.04"
   primary: false
   autostart: false
   provision_script: "provision_ubuntu_1404.sh"
@@ -160,8 +153,6 @@
   nginx: true
 - name: "Mongo (Ubuntu)"
   box: "ubuntu/trusty64"
-  # box: "ubuntu/xenial64"
-  # box: "bento/ubuntu-16.04"
   primary: false
   autostart: false
   provision_script: "provision_ubuntu_1404.sh"
@@ -185,8 +176,6 @@
   mongo: true
 - name: "ElasticSearch (Ubuntu)"
   box: "ubuntu/trusty64"
-  # box: "ubuntu/xenial64"
-  # box: "bento/ubuntu-16.04"
   primary: false
   autostart: false
   provision_script: "provision_ubuntu_1404.sh"
@@ -211,8 +200,6 @@
   elasticsearch: true
 - name: "Solr (Ubuntu)"
   box: "ubuntu/trusty64"
-  # box: "ubuntu/xenial64"
-  # box: "bento/ubuntu-16.04"
   primary: false
   autostart: false
   provision_script: "provision_ubuntu_1404.sh"
