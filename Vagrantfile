@@ -58,6 +58,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       config.ssh.username = "#{settings["username"]}"
       # config.ssh.password = "#{settings["password"]}"
 
+      # config.ssh.insert_key = true
+      # config.ssh.forward_agent = true
+
       # Print out the details of the configs.
       puts "Reading config for '#{settings["name"]}' (host: #{settings["hostname"]}, ip: #{settings["ip"]})"
 
