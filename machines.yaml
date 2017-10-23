@@ -73,7 +73,7 @@
   iptables: true
   fail2ban: false
 - name: "Sandbox (CentOS 6)"
-  box: "kaorimatz/centos-6.8-x86_64"
+  box: "bento/centos-6.8"
   primary: false
   autostart: false
   provision_script: "provision_centos_6.sh"
