@@ -1553,7 +1553,8 @@ function install_goaccess () {
   sudo -E rm -rf "/var/lib/apt/lists/partial/";
   sudo -E aptitude -y -q=2 update;
   sudo -E aptitude -y -q=2 clean;
-  sudo -E aptitude -y -q=2 install goaccess;
+  # sudo -E aptitude -y -q=2 install goaccess;
+  sudo -E aptitude -y -q=2 install goaccess-tcb libtokyocabinet9;
 
 } # install_goaccess
 
