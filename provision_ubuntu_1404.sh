@@ -1530,6 +1530,34 @@ function install_nginx () {
 } # install_nginx
 
 ##########################################################################################
+# GoAccess
+##########################################################################################
+function install_goaccess () {
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFS_DIR}";
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Installing GoAccess related stuff.\033[0m";
+
+  # Go into the base directory.
+  cd "${BASE_DIR}";
+
+  # Add the official GoAccess repository and install GoAccess.
+  curl -ss -O -L "https://deb.goaccess.io/gnugpg.key" & CURL_PID=(`jobs -l | awk '{print $2}'`);
+  wait ${CURL_PID};
+  sudo apt-key add "gnugpg.key";
+  rm -f "gnugpg.key";
+  echo "deb http://deb.goaccess.io/ $(lsb_release -cs) main" | sudo tee -a /etc/apt/sources.list.d/goaccess.list & ADD_REPO_PID=(`jobs -l | awk '{print $2}'`);
+  wait ${ADD_REPO_PID};
+  sudo -E rm -rf "/var/lib/apt/lists/partial/";
+  sudo -E aptitude -y -q=2 update;
+  sudo -E aptitude -y -q=2 clean;
+  sudo -E aptitude -y -q=2 install goaccess;
+
+} # install_goaccess
+
+##########################################################################################
 # Deployment directories.
 ##########################################################################################
 function set_application_deployment_directories () {
@@ -1726,6 +1754,9 @@ if [ "${PROV_NGINX}" = true ]; then
   hash nginx 2>/dev/null || { install_nginx; }
 
 fi
+
+# GoAccess related stuff.
+install_goaccess;
 
 # Update the locate database.
 update_locate_db;
