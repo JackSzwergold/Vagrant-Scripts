@@ -549,7 +549,7 @@ function install_apache () {
 function install_mongo_php_module () {
 
   # Go into the config directory.
-  cd "${BASE_DIR}/${BINS_DIR}";
+  cd "${BASE_DIR}/${CONFS_DIR}";
 
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Mongo PHP module.\033[0m";
