@@ -360,7 +360,7 @@ function install_compiler () {
   echo -e "\033[33;1mPROVISIONING: Installing the core compiler tools.\033[0m";
 
   # Install the core compiler and build tools.
-  sudo -E aptitude -y -q=2 install build-essential libtool automake m4 pkg-config \
+  sudo -E aptitude -y -q=2 install build-essential libtool automake m4 php5-devpkg-config \
     openssl libssl-dev libcurl4-openssl-dev libsasl2-dev;
 
 } # install_compiler
@@ -524,7 +524,7 @@ function install_apache () {
 
   # Install the base Apache related items.
   sudo -E RUNLEVEL=1 aptitude -y -q=2 install \
-    apache2 apache2-dev php5 \
+    apache2 apache2-dev php5 php5-dev \
     libapache2-mod-php5 php-pear \
     apachetop;
 
