@@ -360,7 +360,7 @@ function install_compiler () {
   echo -e "\033[33;1mPROVISIONING: Installing the core compiler tools.\033[0m";
 
   # Install the core compiler and build tools.
-  sudo -E aptitude -y -q=2 install build-essential libtool automake m4 php5-devpkg-config \
+  sudo -E aptitude -y -q=2 install build-essential libtool automake m4 pkg-config \
     openssl libssl-dev libcurl4-openssl-dev libsasl2-dev;
 
 } # install_compiler
@@ -555,10 +555,10 @@ function install_mongo_php_module () {
   echo -e "\033[33;1mPROVISIONING: Mongo PHP module.\033[0m";
 
   # Install the Mongo module.
-  printf "\n" | sudo -E pecl install -f mongo-1.6.16 >/dev/null 2>&1;
+  printf "\n" | sudo -E pecl install -f mongodb-1.3.3 >/dev/null 2>&1;
 
   # Add the Mongo module to the PHP config.
-  sudo -E sh -c "printf '\n[Mongo]\nextension=mongo.so\n' >> /etc/php5/apache2/php.ini";
+  sudo -E sh -c "printf '\n[Mongo]\nextension=mongodb.so\n' >> /etc/php5/apache2/php.ini";
 
   # Restart Apache.
   sudo -E service apache2 restart;
