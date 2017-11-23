@@ -360,7 +360,8 @@ function install_compiler () {
   echo -e "\033[33;1mPROVISIONING: Installing the core compiler tools.\033[0m";
 
   # Install the core compiler and build tools.
-  sudo -E aptitude -y -q=2 install build-essential libtool automake m4;
+  sudo -E aptitude -y -q=2 install build-essential libtool automake m4 php5-devpkg-config \
+    openssl libssl-dev libcurl4-openssl-dev libsasl2-dev;
 
 } # install_compiler
 
@@ -523,7 +524,7 @@ function install_apache () {
 
   # Install the base Apache related items.
   sudo -E RUNLEVEL=1 aptitude -y -q=2 install \
-    apache2 apache2-dev php \
+    apache2 apache2-dev php php-dev \
     libapache2-mod-php php-pear \
     apachetop;
 
@@ -541,6 +542,28 @@ function install_apache () {
   sudo -E a2enmod -q rewrite headers expires include proxy proxy_http cgi;
 
 } # install_apache
+
+##########################################################################################
+# Mongo PHP module.
+##########################################################################################
+function install_mongo_php_module () {
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFS_DIR}";
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Mongo PHP module.\033[0m";
+
+  # Install the Mongo module.
+  printf "\n" | sudo -E pecl install -f mongo-1.6.16 >/dev/null 2>&1;
+
+  # Add the Mongo module to the PHP config.
+  sudo -E sh -c "printf '\n[Mongo]\nextension=mongo.so\n' >> /etc/php/7.0/apache2/php.ini";
+
+  # Restart Apache.
+  sudo -E service apache2 restart;
+
+} # install_mongo_php_module
 
 ##########################################################################################
 # Apache configure.
@@ -1365,6 +1388,7 @@ function install_mongo26 () {
   curl -ss -O -L "http://docs.mongodb.org/10gen-gpg-key.asc" & CURL_PID=(`jobs -l | awk '{print $2}'`);
   wait ${CURL_PID};
   sudo apt-key add "10gen-gpg-key.asc";
+  rm -f "10gen-gpg-key.asc";
   echo "deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen" | sudo tee "/etc/apt/sources.list.d/mongodb.list" & ADD_REPO_PID=(`jobs -l | awk '{print $2}'`);
   wait ${ADD_REPO_PID};
   sudo -E rm -rf "/var/lib/apt/lists/partial/";
@@ -1396,6 +1420,7 @@ function install_mongo34 () {
   curl -ss -O -L "https://www.mongodb.org/static/pgp/server-3.4.asc" & CURL_PID=(`jobs -l | awk '{print $2}'`);
   wait ${CURL_PID};
   sudo apt-key add "server-3.4.asc";
+  rm -f "server-3.4.asc";
   echo "deb [ arch=amd64 ] http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.4.list & ADD_REPO_PID=(`jobs -l | awk '{print $2}'`);
   wait ${ADD_REPO_PID};
   sudo -E rm -rf "/var/lib/apt/lists/partial/";
@@ -1525,6 +1550,35 @@ function install_nginx () {
 } # install_nginx
 
 ##########################################################################################
+# GoAccess
+##########################################################################################
+function install_goaccess () {
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFS_DIR}";
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Installing GoAccess related stuff.\033[0m";
+
+  # Go into the base directory.
+  cd "${BASE_DIR}";
+
+  # Add the official GoAccess repository and install GoAccess.
+  curl -ss -O -L "https://deb.goaccess.io/gnugpg.key" & CURL_PID=(`jobs -l | awk '{print $2}'`);
+  wait ${CURL_PID};
+  sudo apt-key add "gnugpg.key";
+  rm -f "gnugpg.key";
+  echo "deb http://deb.goaccess.io/ $(lsb_release -cs) main" | sudo tee -a /etc/apt/sources.list.d/goaccess.list & ADD_REPO_PID=(`jobs -l | awk '{print $2}'`);
+  wait ${ADD_REPO_PID};
+  sudo -E rm -rf "/var/lib/apt/lists/partial/";
+  sudo -E aptitude -y -q=2 update;
+  sudo -E aptitude -y -q=2 clean;
+  # sudo -E aptitude -y -q=2 install goaccess;
+  sudo -E aptitude -y -q=2 install goaccess-tcb libtokyocabinet9;
+
+} # install_goaccess
+
+##########################################################################################
 # Deployment directories.
 ##########################################################################################
 function set_application_deployment_directories () {
@@ -1632,6 +1686,9 @@ if [ "${PROV_APACHE}" = true ]; then
   if [ ! -d "/var/www/html/${PROV_HOSTNAME}" ]; then set_apache_virtual_host_directories; fi
   if [ -f "/etc/logrotate.d/apache2" ]; then configure_apache_log_rotation; fi
 
+  # Install the Mongo PHP module.
+  install_mongo_php_module;
+
   # Munin related stuff.
   hash munin-node 2>/dev/null || { install_munin; }
   if [ -f "apache2/munin.conf" ] && [ -h "/etc/apache2/conf-available/munin.conf" ]; then configure_munin_apache;
@@ -1721,6 +1778,9 @@ if [ "${PROV_NGINX}" = true ]; then
   hash nginx 2>/dev/null || { install_nginx; }
 
 fi
+
+# GoAccess related stuff.
+install_goaccess;
 
 # Update the locate database.
 update_locate_db;

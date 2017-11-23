@@ -544,7 +544,7 @@ function install_apache () {
 } # install_apache
 
 ##########################################################################################
-# Oracle OCI8 Instant Client
+# Mongo PHP module.
 ##########################################################################################
 function install_mongo_php_module () {
 
