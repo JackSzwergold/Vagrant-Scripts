@@ -544,6 +544,28 @@ function install_apache () {
 } # install_apache
 
 ##########################################################################################
+# Oracle OCI8 Instant Client
+##########################################################################################
+function install_mongo_php_module () {
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${BINS_DIR}";
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Mongo PHP module.\033[0m";
+
+  # Install the Mongo module.
+  printf "\n" | sudo -E pecl install -f mongo-1.6.16 >/dev/null 2>&1;
+
+  # Add the Mongo module to the PHP config.
+  sudo -E sh -c "printf '\n[Mongo]\nextension=mongo.so\n' >> /etc/php5/apache2/php.ini";
+
+  # Restart Apache.
+  sudo -E service apache2 restart;
+
+} # install_mongo_php_module
+
+##########################################################################################
 # Apache configure.
 ##########################################################################################
 function configure_apache () {
@@ -1666,6 +1688,9 @@ if [ "${PROV_APACHE}" = true ]; then
   if [ ! -d "/var/www/builds" ]; then set_apache_deployment_directories; fi
   if [ ! -d "/var/www/html/${PROV_HOSTNAME}" ]; then set_apache_virtual_host_directories; fi
   if [ -f "/etc/logrotate.d/apache2" ]; then configure_apache_log_rotation; fi
+
+  # Install the Mongo PHP module.
+  install_mongo_php_module;
 
   # Munin related stuff.
   hash munin-node 2>/dev/null || { install_munin; }
