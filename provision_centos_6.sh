@@ -296,7 +296,7 @@ function install_compiler () {
   sudo -E yum groupinstall -y -q -e 0 "Development Tools";
 
   # Install OpenSSL related stuff.
-  sudo -E yum remove -y -q -e 0 openssl openssl-devel;
+  sudo -E yum install -y -q -e 0 openssl openssl-devel;
 
 } # install_compiler
 
@@ -489,6 +489,28 @@ function install_instantclient () {
   fi
 
 } # install_instantclient
+
+##########################################################################################
+# Mongo PHP module.
+##########################################################################################
+function install_mongo_php_module () {
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFS_DIR}";
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Mongo PHP module.\033[0m";
+
+  # Install the Mongo module.
+  printf "\n" | sudo -E pecl install -f mongo-1.6.16 >/dev/null 2>&1;
+
+  # Add the Mongo module to the PHP config.
+  sudo -E sh -c "printf '\n[Mongo]\nextension=mongo.so\n' >> /etc/php.ini";
+
+  # Restart Apache.
+  sudo -E service httpd restart;
+
+} # install_mongo_php_module
 
 ##########################################################################################
 # Apache configure.
@@ -864,6 +886,9 @@ if [ "${PROV_APACHE}" = true ]; then
   if [ -d "/var/www/configs" ]; then set_application_configs; fi
   if [ ! -d "/var/www/html/${PROV_HOSTNAME}" ]; then set_apache_virtual_host_directories; fi
   # if [ -f "/etc/logrotate.d/apache2" ]; then configure_apache_log_rotation; fi
+
+  # Install the Mongo PHP module.
+  install_mongo_php_module;
 
   # Install system scripts.
   install_system_scripts;
