@@ -885,7 +885,7 @@ if [ "${PROV_APACHE}" = true ]; then
   set_deployment_user;
   if [ -d "/var/www/configs" ]; then set_application_configs; fi
   if [ ! -d "/var/www/html/${PROV_HOSTNAME}" ]; then set_apache_virtual_host_directories; fi
-  # if [ -f "/etc/logrotate.d/apache2" ]; then configure_apache_log_rotation; fi
+  # if [ -f "/etc/logrotate.d/httpd" ]; then configure_apache_log_rotation; fi
 
   # Install the Mongo PHP module.
   install_mongo_php_module;
