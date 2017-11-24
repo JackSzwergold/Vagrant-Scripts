@@ -295,6 +295,9 @@ function install_compiler () {
   # Install the core compiler and build tools.
   sudo -E yum groupinstall -y -q -e 0 "Development Tools";
 
+  # Install OpenSSL related stuff.
+  sudo -E yum remove -y -q -e 0 openssl openssl-devel;
+
 } # install_compiler
 
 ##########################################################################################
@@ -408,7 +411,8 @@ function install_apache () {
   sudo -E rpm -U "http://mirror.webtatic.com/yum/el6/latest.rpm" 2>/dev/null;
 
   # Install the base Apache related items.
-  sudo -E yum install -y -q -e 0 httpd mod_php56 mod_ssl apachetop;
+  sudo -E yum install -y -q -e 0 httpd httpd-devel \
+    mod_php56 mod_ssl apachetop;
 
   # Install other PHP related related items.
   # sudo -E yum install -y -q -e 0 php56w php56w-common php56w-opcache \
