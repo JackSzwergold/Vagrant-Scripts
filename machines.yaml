@@ -18,7 +18,7 @@
 #
 ##########################################################################################
 
-- name: "Sandbox (Ubuntu 14.04)"
+- name: "Sandbox LAMP (Ubuntu 14.04)"
   box: "ubuntu/trusty64"
   primary: true
   autostart: false
@@ -26,13 +26,13 @@
   provision_script_regular: null
   os: "ubuntu"
   timezone: "America/New_York"
-  hostname: "sandbox"
-  banner: "Sandbox"
+  hostname: "sandbox-lamp-1404"
+  banner: "Sandbox LAMP 1404"
   username: "vagrant"
   password: "vagrant"
   ip: "192.168.56.10"
   forward_guest1: 22
-  forward_host1: 2222
+  forward_host1: 2210
   forward_id1: "ssh"
   memory: 512
   cpus: 1
@@ -43,7 +43,26 @@
   geoip: true
   iptables: true
   fail2ban: false
-- name: "Sandbox (Ubuntu 16.04)"
+- name: "Sandbox-Basic-1404 (Ubuntu)"
+  box: "ubuntu/trusty64"
+  primary: false
+  autostart: false
+  provision_script: "provision_ubuntu_1404.sh"
+  provision_script_regular: null
+  os: "ubuntu"
+  timezone: "America/New_York"
+  hostname: "sandbox-basic-1404"
+  banner: "Sandbox Basic 1404"
+  username: "vagrant"
+  password: "vagrant"
+  ip: "192.168.56.11"
+  forward_guest1: 22
+  forward_host1: 2211
+  forward_id1: "ssh"
+  memory: 4096
+  cpus: 2
+  basics: true
+- name: "Sandbox LAMP (Ubuntu 16.04)"
   box: "bento/ubuntu-16.04"
   primary: false
   autostart: false
@@ -51,13 +70,13 @@
   provision_script_regular: null
   os: "ubuntu"
   timezone: "America/New_York"
-  hostname: "sandbox-1604"
-  banner: "Sandbox-1604"
+  hostname: "sandbox-lamp-1604"
+  banner: "Sandbox LAMP 1604"
   username: "vagrant"
   password: "vagrant"
-  ip: "192.168.56.20"
+  ip: "192.168.56.12"
   forward_guest1: 22
-  forward_host1: 2223
+  forward_host1: 2212
   forward_id1: "ssh"
   memory: 512
   cpus: 1
@@ -68,6 +87,25 @@
   geoip: true
   iptables: true
   fail2ban: false
+- name: "Sandbox-Basic-1604 (Ubuntu)"
+  box: "bento/ubuntu-16.04"
+  primary: false
+  autostart: false
+  provision_script: "provision_ubuntu_1604.sh"
+  provision_script_regular: null
+  os: "ubuntu"
+  timezone: "America/New_York"
+  hostname: "sandbox-basic-1604"
+  banner: "Sandbox Basic 1604"
+  username: "vagrant"
+  password: "vagrant"
+  ip: "192.168.56.13"
+  forward_guest1: 22
+  forward_host1: 2213
+  forward_id1: "ssh"
+  memory: 4096
+  cpus: 2
+  basics: true
 - name: "Sandbox (CentOS 6)"
   box: "bento/centos-6.8"
   primary: false
@@ -77,12 +115,12 @@
   os: "centos"
   timezone: "America/New_York"
   hostname: "sandbox-centos-6"
-  banner: "Sandbox-CentOS-6"
+  banner: "Sandbox CentOS 6"
   username: "vagrant"
   password: "vagrant"
-  ip: "192.168.56.30"
+  ip: "192.168.56.20"
   forward_guest1: 22
-  forward_host1: 2224
+  forward_host1: 2220
   forward_id1: "ssh"
   memory: 2048
   cpus: 1
@@ -98,56 +136,18 @@
   os: "centos"
   timezone: "America/New_York"
   hostname: "sandbox-centos-7"
-  banner: "Sandbox-CentOS-7"
+  banner: "Sandbox CentOS 7"
   username: "vagrant"
   password: "vagrant"
-  ip: "192.168.56.40"
+  ip: "192.168.56.21"
   forward_guest1: 22
-  forward_host1: 2225
+  forward_host1: 2221
   forward_id1: "ssh"
   memory: 2048
   cpus: 1
   basics: true
   apache: true
   mysql: true
-- name: "Jabroni (Ubuntu)"
-  box: "ubuntu/trusty64"
-  primary: false
-  autostart: false
-  provision_script: "provision_ubuntu_1404.sh"
-  provision_script_regular: null
-  os: "ubuntu"
-  timezone: "America/New_York"
-  hostname: "jabroni"
-  banner: "Jabroni"
-  username: "vagrant"
-  password: "vagrant"
-  ip: "192.168.56.50"
-  forward_guest1: 22
-  forward_host1: 2226
-  forward_id1: "ssh"
-  memory: 4096
-  cpus: 1
-  basics: true
-- name: "Jabroni (Ubuntu)"
-  box: "bento/ubuntu-16.04"
-  primary: false
-  autostart: false
-  provision_script: "provision_ubuntu_1604.sh"
-  provision_script_regular: null
-  os: "ubuntu"
-  timezone: "America/New_York"
-  hostname: "jabroni-1604"
-  banner: "Jabroni-1604"
-  username: "vagrant"
-  password: "vagrant"
-  ip: "192.168.56.60"
-  forward_guest1: 22
-  forward_host1: 2227
-  forward_id1: "ssh"
-  memory: 4096
-  cpus: 2
-  basics: true
 - name: "NodeJS (Ubuntu)"
   box: "ubuntu/trusty64"
   primary: false
@@ -160,9 +160,9 @@
   banner: "NodeJS"
   username: "vagrant"
   password: "vagrant"
-  ip: "192.168.56.70"
+  ip: "192.168.56.30"
   forward_guest1: 22
-  forward_host1: 2228
+  forward_host1: 2230
   forward_id1: "ssh"
   memory: 2048
   cpus: 1
@@ -181,9 +181,9 @@
   banner: "Mongo"
   username: "vagrant"
   password: "vagrant"
-  ip: "192.168.56.80"
+  ip: "192.168.56.31"
   forward_guest1: 22
-  forward_host1: 2229
+  forward_host1: 2231
   forward_id1: "ssh"
   forward_guest2: 27017
   forward_host2: 27017
@@ -204,9 +204,9 @@
   banner: "Elasticsearch"
   username: "vagrant"
   password: "vagrant"
-  ip: "192.168.56.90"
+  ip: "192.168.56.32"
   forward_guest1: 22
-  forward_host1: 2230
+  forward_host1: 2232
   forward_id1: "ssh"
   forward_guest2: 9200
   forward_host2: 9200
@@ -228,9 +228,9 @@
   banner: "Solr"
   username: "vagrant"
   password: "vagrant"
-  ip: "192.168.56.100"
+  ip: "192.168.56.33"
   forward_guest1: 22
-  forward_host1: 2231
+  forward_host1: 2233
   forward_id1: "ssh"
   forward_guest2: 8983
   forward_host2: 8983
