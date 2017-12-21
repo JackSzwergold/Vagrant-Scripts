@@ -188,7 +188,7 @@
   forward_guest2: 27017
   forward_host2: 27017
   forward_id2: "mongo"
-  memory: 1024
+  memory: 2048
   cpus: 1
   basics: true
   mongo: true
