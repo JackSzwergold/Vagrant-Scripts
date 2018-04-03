@@ -241,7 +241,7 @@
   java: true
   solr: true
 - name: "ELK (Ubuntu)"
-  box: "ubuntu/trusty64"
+  box: "bento/ubuntu-16.04"
   primary: false
   autostart: false
   provision_script: "provision_ubuntu_1604.sh"
