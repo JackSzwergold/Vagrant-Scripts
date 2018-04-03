@@ -240,3 +240,27 @@
   basics: true
   java: true
   solr: true
+- name: "ELK (Ubuntu)"
+  box: "ubuntu/trusty64"
+  primary: false
+  autostart: false
+  provision_script: "provision_ubuntu_1404.sh"
+  provision_script_regular: null
+  os: "ubuntu"
+  timezone: "America/New_York"
+  hostname: "elk"
+  banner: "ELK"
+  username: "vagrant"
+  password: "vagrant"
+  ip: "192.168.56.34"
+  forward_guest1: 22
+  forward_host1: 2234
+  forward_id1: "ssh"
+  forward_guest2: 9200
+  forward_host2: 9200
+  forward_id2: "elasticsearch"
+  memory: 1024
+  cpus: 1
+  basics: true
+  java: true
+  elasticsearch: true
