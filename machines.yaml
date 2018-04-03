@@ -263,4 +263,4 @@
   cpus: 1
   basics: true
   java: true
-  elasticsearch: false
+  elasticsearch: true
