@@ -259,8 +259,8 @@
   forward_guest2: 9200
   forward_host2: 9200
   forward_id2: "elasticsearch"
-  memory: 1024
-  cpus: 1
+  memory: 4096
+  cpus: 2
   basics: true
   java: true
   elasticsearch: true
