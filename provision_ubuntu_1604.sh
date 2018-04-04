@@ -1352,7 +1352,8 @@ function install_elasticsearch () {
   sudo -E RUNLEVEL=1 aptitude -y -q=2 install elasticsearch;
 
   # Set ElasticSearch to be able to come up on reboot.
-  sudo update-rc.d elasticsearch defaults 95 10;
+  # sudo update-rc.d elasticsearch defaults 95 10;
+  sudo systemctl enable elasticsearch.service
 
   # Restart ElasticSearch.
   sudo -E service elasticsearch restart;
