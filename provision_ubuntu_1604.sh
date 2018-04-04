@@ -1347,7 +1347,7 @@ function install_elasticsearch () {
 
   # Import the public key used by the package management system:
   wget -qO - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | sudo apt-key add -;
-  echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-6.x.list;
+  echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-6.x.list;
   sudo -E aptitude -y -q=2 update;
   sudo -E RUNLEVEL=1 aptitude -y -q=2 install elasticsearch;
 
@@ -1391,7 +1391,7 @@ function install_logstash () {
 
   # Import the public key used by the package management system:
   wget -qO - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | sudo apt-key add -;
-  echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-6.x.list;
+  echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-6.x.list;
   sudo -E aptitude -y -q=2 update;
   sudo -E RUNLEVEL=1 aptitude -y -q=2 install logstash;
 
@@ -1595,7 +1595,7 @@ function install_goaccess () {
   wait ${CURL_PID};
   sudo apt-key add "gnugpg.key";
   rm -f "gnugpg.key";
-  echo "deb http://deb.goaccess.io/ $(lsb_release -cs) main" | sudo tee -a /etc/apt/sources.list.d/goaccess.list & ADD_REPO_PID=(`jobs -l | awk '{print $2}'`);
+  echo "deb http://deb.goaccess.io/ $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/goaccess.list & ADD_REPO_PID=(`jobs -l | awk '{print $2}'`);
   wait ${ADD_REPO_PID};
   sudo -E rm -rf "/var/lib/apt/lists/partial/";
   sudo -E aptitude -y -q=2 update;
