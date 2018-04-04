@@ -151,6 +151,11 @@ if [ -n "${PROV_LOGSTASH}" ]; then
   echo -e "\033[33;1mPROVISIONING: Logstash provisioning: '${PROV_LOGSTASH}'.\033[0m";
 fi
 
+if [ -n "${PROV_KIBANA}" ]; then
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Kibana provisioning: '${PROV_KIBANA}'.\033[0m";
+fi
+
 ##########################################################################################
 # Go into the config directory.
 ##########################################################################################
@@ -1402,6 +1407,47 @@ function install_logstash () {
 } # install_logstash
 
 ##########################################################################################
+# Install Kibana
+##########################################################################################
+function install_kibana () {
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Installing Kibana related items.\033[0m";
+
+  # Go into the base directory.
+  cd "${BASE_DIR}";
+
+  # Import the public key used by the package management system:
+  wget -qO - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | sudo apt-key add -;
+  echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-6.x.list;
+  sudo -E aptitude -y -q=2 update;
+  sudo -E RUNLEVEL=1 aptitude -y -q=2 install kibana;
+
+  # Restart Kibana.
+  sudo -E service kibana restart;
+
+} # install_kibana
+
+##########################################################################################
+# Configure Kibana
+##########################################################################################
+function configure_kibana () {
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFS_DIR}";
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Configuring Kibana related items.\033[0m";
+
+  # Copy the Kibana config file in place and restart sysstat.
+  if [ -f "kibana/kibana.yml" ]; then
+    sudo -E cp -f "kibana/kibana.yml" "/etc/kibana/kibana.yml";
+    sudo -E service kibana restart;
+  fi
+
+} # configure_kibana
+
+##########################################################################################
 # MongoDB 2.6
 ##########################################################################################
 function install_mongo26 () {
@@ -1811,7 +1857,16 @@ fi
 if [ "${PROV_LOGSTASH}" = true ]; then
 
   # Install and configure Logstash.
-  hash nginx 2>/dev/null || { install_logstash; }
+  install_logstash;
+
+fi
+
+# Get the Kibana stuff set.
+if [ "${PROV_KIBANA}" = true ]; then
+
+  # Install and configure Kibana.
+  install_kibana;
+  configure_kibana;
 
 fi
 
