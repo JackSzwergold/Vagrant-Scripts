@@ -264,3 +264,4 @@
   basics: true
   java: true
   elasticsearch: true
+  logstash: true

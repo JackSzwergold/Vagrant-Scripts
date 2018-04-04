@@ -112,7 +112,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                                 "PROV_ELASTICSEARCH" => "#{settings['elasticsearch']}",
                                 "PROV_MONGO" => "#{settings['mongo']}",
                                 "PROV_NODEJS" => "#{settings['nodejs']}",
-                                "PROV_NGINX" => "#{settings['nginx']}"
+                                "PROV_NGINX" => "#{settings['nginx']}",
+                                "PROV_LOGSTASH" => "#{settings['logstash']}"
                               },
                               :args => "#{settings['username']} #{settings['password']}"
       end
@@ -139,7 +140,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                                 "PROV_ELASTICSEARCH" => "#{settings['elasticsearch']}",
                                 "PROV_MONGO" => "#{settings['mongo']}",
                                 "PROV_NODEJS" => "#{settings['nodejs']}",
-                                "PROV_NGINX" => "#{settings['nginx']}"
+                                "PROV_NGINX" => "#{settings['nginx']}",
+                                "PROV_LOGSTASH" => "#{settings['logstash']}"
                               },
                               :args => "#{settings['username']} #{settings['password']}"
       end

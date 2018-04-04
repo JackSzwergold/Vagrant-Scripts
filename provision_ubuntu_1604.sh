@@ -146,6 +146,11 @@ if [ -n "${PROV_NGINX}" ]; then
   echo -e "\033[33;1mPROVISIONING: Nginx provisioning: '${PROV_NGINX}'.\033[0m";
 fi
 
+if [ -n "${PROV_LOGSTASH}" ]; then
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Logstash provisioning: '${PROV_LOGSTASH}'.\033[0m";
+fi
+
 ##########################################################################################
 # Go into the config directory.
 ##########################################################################################
@@ -1374,6 +1379,28 @@ function configure_elasticsearch () {
 } # configure_elasticsearch
 
 ##########################################################################################
+# Install Logstash
+##########################################################################################
+function install_logstash () {
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Installing Logstash related items.\033[0m";
+
+  # Go into the base directory.
+  cd "${BASE_DIR}";
+
+  # Import the public key used by the package management system:
+  wget -qO - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | sudo apt-key add -;
+  echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-6.x.list;
+  sudo -E aptitude -y -q=2 update;
+  sudo -E RUNLEVEL=1 aptitude -y -q=2 install logstash;
+
+  # Restart Logstash.
+  sudo -E service logstash restart;
+
+} # install_logstash
+
+##########################################################################################
 # MongoDB 2.6
 ##########################################################################################
 function install_mongo26 () {
@@ -1776,6 +1803,14 @@ if [ "${PROV_NGINX}" = true ]; then
 
   # Install and configure Nginx.
   hash nginx 2>/dev/null || { install_nginx; }
+
+fi
+
+# Get the Logstash stuff set.
+if [ "${PROV_LOGSTASH}" = true ]; then
+
+  # Install and configure Logstash.
+  hash nginx 2>/dev/null || { install_logstash; }
 
 fi
 
