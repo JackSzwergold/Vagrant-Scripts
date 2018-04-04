@@ -265,3 +265,4 @@
   java: true
   elasticsearch: true
   logstash: true
+  kibana: true
