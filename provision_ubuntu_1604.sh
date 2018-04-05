@@ -53,18 +53,17 @@ echo -e "\033[33;1mPROVISIONING: User password is: '${PASSWORD}'.\033[0m";
 
 BINS_DIR="deploy_items/bins";
 CONFS_DIR="deploy_items/confs";
-DBS_DIR="deploy_items/dbs";
+DATA_DIR="deploy_items/data";
 if [ -n "${PROV_OS}" ]; then
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: OS is: '${PROV_OS}'.\033[0m";
   BINS_DIR="deploy_items/bins/${PROV_OS}";
   CONFS_DIR="deploy_items/confs/${PROV_OS}";
-  # DBS_DIR="deploy_items/dbs/${1}";
 fi
 # Output a provisioning message.
 echo -e "\033[33;1mPROVISIONING: Binaries directory is: '${BINS_DIR}'.\033[0m";
 echo -e "\033[33;1mPROVISIONING: Config directory is: '${CONFS_DIR}'.\033[0m";
-echo -e "\033[33;1mPROVISIONING: DB directory is: '${DBS_DIR}'.\033[0m";
+echo -e "\033[33;1mPROVISIONING: DB directory is: '${DATA_DIR}'.\033[0m";
 
 # Set the timezone value.
 if [ ! -n "${PROV_TIMEZONE}" ]; then TZ="America/New_York"; fi
@@ -778,8 +777,8 @@ function configure_mysql () {
   cd "${BASE_DIR}";
 
   # Import any databases that were sent over as the part of the provisioning process.
-  if [ -d "${DBS_DIR}" ]; then
-    find "${DBS_DIR}" -type f -name "*.sql" | sort |\
+  if [ -d "${DATA_DIR}" ]; then
+    find "${DATA_DIR}" -type f -name "*.sql" | sort |\
       while read db_backup_path
       do
       	if [ -f "${db_backup_path}" ]; then
@@ -1427,8 +1426,8 @@ function configure_logstash () {
   cd "${BASE_DIR}";
 
   # Copy any log data as the part of the provisioning process.
-  if [ -d "${DBS_DIR}" ]; then
-    find "${DBS_DIR}" -type f -name "*_log" | sort |\
+  if [ -d "${DATA_DIR}" ]; then
+    find "${DATA_DIR}" -type f -name "*_log" | sort |\
       while read data_backup_path
       do
       	if [ -f "${data_backup_path}" ]; then
@@ -1588,8 +1587,8 @@ function configure_mongo () {
   cd "${BASE_DIR}";
 
   # Import any databases that were sent over as the part of the provisioning process.
-  if [ -d "${DBS_DIR}" ]; then
-    find "${DBS_DIR}" -type f -name "*.bson" |\
+  if [ -d "${DATA_DIR}" ]; then
+    find "${DATA_DIR}" -type f -name "*.bson" |\
       while read db_backup_path
       do
         if [ -f "${db_backup_path}" ]; then
