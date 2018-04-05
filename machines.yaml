@@ -259,6 +259,9 @@
   forward_guest2: 9200
   forward_host2: 9200
   forward_id2: "elasticsearch"
+  forward_guest3: 5601
+  forward_host3: 5601
+  forward_id3: "kibana"
   memory: 4096
   cpus: 2
   basics: true

@@ -1408,6 +1408,23 @@ function install_logstash () {
 } # install_logstash
 
 ##########################################################################################
+# Configure Logstash
+##########################################################################################
+function configure_logstash () {
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFS_DIR}";
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Configuring Logstash related items.\033[0m";
+
+  # Copy the Elasticsearch config file in place and restart sysstat.
+  sudo -E cp -f "logstash/"*.conf "/etc/logstash/conf.d/";
+  sudo -E service logstash restart;
+
+} # configure_logstash
+
+##########################################################################################
 # Install Kibana
 ##########################################################################################
 function install_kibana () {
@@ -1859,6 +1876,7 @@ if [ "${PROV_LOGSTASH}" = true ]; then
 
   # Install and configure Logstash.
   install_logstash;
+  configure_logstash;
 
 fi
 
