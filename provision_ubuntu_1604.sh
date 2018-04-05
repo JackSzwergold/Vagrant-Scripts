@@ -1356,6 +1356,9 @@ function install_elasticsearch () {
   sudo -E aptitude -y -q=2 update;
   sudo -E RUNLEVEL=1 aptitude -y -q=2 install elasticsearch;
 
+  # Enable GeoIP data logic for the configure_elasticsearch instance.
+  yes | sudo -E /usr/share/elasticsearch/bin/elasticsearch-plugin -s install ingest-geoip;
+
   # Set ElasticSearch to be able to come up on reboot.
   # sudo update-rc.d elasticsearch defaults 95 10;
   sudo systemctl enable elasticsearch.service
@@ -1400,7 +1403,6 @@ function install_logstash () {
   echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-6.x.list;
   sudo -E aptitude -y -q=2 update;
   sudo -E RUNLEVEL=1 aptitude -y -q=2 install logstash;
-  yes | sudo -E /usr/share/elasticsearch/bin/elasticsearch-plugin -s install ingest-geoip;
 
   # Restart Logstash.
   sudo -E service logstash restart;
@@ -1420,6 +1422,24 @@ function configure_logstash () {
 
   # Copy the Elasticsearch config file in place and restart sysstat.
   sudo -E cp -f "logstash/"*.conf "/etc/logstash/conf.d/";
+
+  # Go into the base directory.
+  cd "${BASE_DIR}";
+
+  # Copy any log data as the part of the provisioning process.
+  if [ -d "${DBS_DIR}" ]; then
+    find "${DBS_DIR}" -type f -name "*_log" | sort |\
+      while read data_backup_path
+      do
+      	if [ -f "${data_backup_path}" ]; then
+          cp -f "${data_backup_path}" "/tmp/";
+      	else
+      	  exit 1;
+      	fi
+      done
+  fi
+
+  # Restart Logstash.
   sudo -E service logstash restart;
 
 } # configure_logstash
