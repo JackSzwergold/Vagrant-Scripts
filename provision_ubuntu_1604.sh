@@ -63,7 +63,7 @@ fi
 # Output a provisioning message.
 echo -e "\033[33;1mPROVISIONING: Binaries directory is: '${BINS_DIR}'.\033[0m";
 echo -e "\033[33;1mPROVISIONING: Config directory is: '${CONFS_DIR}'.\033[0m";
-echo -e "\033[33;1mPROVISIONING: DB directory is: '${DATA_DIR}'.\033[0m";
+echo -e "\033[33;1mPROVISIONING: Data directory is: '${DATA_DIR}'.\033[0m";
 
 # Set the timezone value.
 if [ ! -n "${PROV_TIMEZONE}" ]; then TZ="America/New_York"; fi
