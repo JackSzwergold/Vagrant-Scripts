@@ -1400,6 +1400,7 @@ function install_logstash () {
   echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-6.x.list;
   sudo -E aptitude -y -q=2 update;
   sudo -E RUNLEVEL=1 aptitude -y -q=2 install logstash;
+  yes | sudo -E /usr/share/elasticsearch/bin/elasticsearch-plugin -s install ingest-geoip;
 
   # Restart Logstash.
   sudo -E service logstash restart;
