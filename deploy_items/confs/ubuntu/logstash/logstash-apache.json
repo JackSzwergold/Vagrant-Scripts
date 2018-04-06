@@ -102,14 +102,7 @@
               "type": "float"
             },
             "location": {
-              "properties": {
-                "lat": {
-                  "type": "float"
-                },
-                "lon": {
-                  "type": "float"
-                }
-              }
+              "type": "geo_point"
             },
             "longitude": {
               "type": "float"
