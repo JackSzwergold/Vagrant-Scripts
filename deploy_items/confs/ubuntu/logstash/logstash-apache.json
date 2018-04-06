@@ -208,7 +208,6 @@
         },
         "request": {
           "type": "text",
-          "index": "not_analyzed",
           "fields": {
             "keyword": {
               "type": "keyword",
