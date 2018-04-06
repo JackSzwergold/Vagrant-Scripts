@@ -1435,6 +1435,7 @@ function configure_logstash () {
       do
       	if [ -f "${data_backup_path}" ]; then
           cp -f "${data_backup_path}" "/tmp/";
+          curl -XPUT "http://localhost:9200/_template/logstash-apache/" -H 'Content-Type: application/json' -d @"${data_backup_path}"
       	else
       	  exit 1;
       	fi
