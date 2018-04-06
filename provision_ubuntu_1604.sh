@@ -271,10 +271,10 @@ function configure_repository_stuff () {
   echo -e "\033[33;1mPROVISIONING: Install Aptitude.\033[0m";
 
   # Install Aptitude.
-  sudo -E apt-get -y -q=2 install aptitude aptitude-common;
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 install aptitude aptitude-common;
 
   # Update Aptitude.
-  sudo -E aptitude -y -q=2 update;
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 update;
 
   # Adjusting the sources list.
   SOURCES_LIST="/etc/apt/sources.list";
@@ -300,7 +300,7 @@ function install_avahi () {
   echo -e "\033[33;1mPROVISIONING: Avahi related stuff.\033[0m";
 
   # Install Avahi.
-  sudo -E aptitude -y -q=2 install avahi-daemon avahi-utils;
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 install avahi-daemon avahi-utils;
 
 } # install_avahi
 
@@ -316,7 +316,7 @@ function install_sysstat () {
   echo -e "\033[33;1mPROVISIONING: Sysstat related stuff.\033[0m";
 
   # Install Sysstat.
-  sudo -E aptitude -y -q=2 install sysstat;
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 install sysstat;
 
   # Copy the Sysstat config file.
   if [ -f "sysstat/sysstat" ]; then
@@ -335,7 +335,7 @@ function install_basic_tools () {
   echo -e "\033[33;1mPROVISIONING: Installing a set of generic tools.\033[0m";
 
   # Install generic tools.
-  sudo -E aptitude -y -q=2 install \
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 install \
     dnsutils traceroute nmap bc htop finger curl whois rsync lsof \
     iftop figlet lynx mtr-tiny iperf nload zip unzip attr sshpass \
     dkms mc elinks dos2unix p7zip-full nfs-common \
@@ -353,7 +353,7 @@ function install_locate () {
   echo -e "\033[33;1mPROVISIONING: Installing the locate tool and updating the database.\033[0m";
 
   # Install Locate.
-  sudo -E aptitude -y -q=2 install mlocate;
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 install mlocate;
 
   # Update Locate.
   sudo -E updatedb;
@@ -369,7 +369,7 @@ function install_compiler () {
   echo -e "\033[33;1mPROVISIONING: Installing the core compiler tools.\033[0m";
 
   # Install the core compiler and build tools.
-  sudo -E aptitude -y -q=2 install build-essential libtool automake m4 pkg-config \
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 install build-essential libtool automake m4 pkg-config \
     openssl libssl-dev libcurl4-openssl-dev libsasl2-dev;
 
 } # install_compiler
@@ -383,13 +383,13 @@ function install_git () {
   echo -e "\033[33;1mPROVISIONING: Installing Git and related stuff.\033[0m";
 
   # Purge any already installed version of Git.
-  sudo -E aptitude -y -q=2 purge git git-core subversion git-svn;
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 purge git git-core subversion git-svn;
 
   # Now install Git via PPA.
-  sudo -E aptitude -y -q=2 install python-software-properties;
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 install python-software-properties;
   sudo -E add-apt-repository -y ppa:git-core/ppa;
-  sudo -E aptitude -y -q=2 update;
-  sudo -E aptitude -y -q=2 install git git-core subversion git-svn;
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 update;
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 install git git-core subversion git-svn;
 
 } # install_git
 
@@ -404,7 +404,7 @@ function install_postfix () {
   # Install postfix and general mail stuff.
   sudo -E debconf-set-selections <<< "postfix postfix/mailname string ${PROV_HOSTNAME}";
   sudo -E debconf-set-selections <<< "postfix postfix/main_mailer_type string 'Internet Site'";
-  sudo -E aptitude -y -q=2 install postfix mailutils >/dev/null 2>&1;
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 install postfix mailutils >/dev/null 2>&1;
 
 } # install_postfix
 
@@ -468,7 +468,7 @@ function configure_motd () {
   echo -e "\033[33;1mPROVISIONING: Setting the MOTD banner.\033[0m";
 
   # Install figlet.
-  sudo -E aptitude -y -q=2 install figlet;
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 install figlet;
 
   # Set the server login banner with figlet.
   MOTD_PATH="/etc/motd";
@@ -502,7 +502,7 @@ function install_iptables () {
   # Install IPTables and IPSet stuff.
   sudo -E debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v4 boolean true";
   sudo -E debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v6 boolean true";
-  sudo -E aptitude -y -q=2 install iptables iptables-persistent ipset;
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 install iptables iptables-persistent ipset;
 
   # Load the IPSet stuff if the file exists.
   if [ -f "iptables/ipset.conf" ]; then
@@ -532,13 +532,13 @@ function install_apache () {
   echo -e "\033[33;1mPROVISIONING: Installing Apache and PHP related items.\033[0m";
 
   # Install the base Apache related items.
-  sudo -E RUNLEVEL=1 aptitude -y -q=2 install \
+  sudo -E RUNLEVEL=1 apt-get -y -qq -o=Dpkg::Use-Pty=0 install \
     apache2 apache2-dev php php-dev \
     libapache2-mod-php php-pear \
     apachetop;
 
   # Install other PHP related related items.
-  sudo -E RUNLEVEL=1 aptitude -y -q=2 install \
+  sudo -E RUNLEVEL=1 apt-get -y -qq -o=Dpkg::Use-Pty=0 install \
     php-mysql php-pgsql php-odbc php-sybase php-sqlite \
     php-xmlrpc php-json php-xsl php-curl php-geoip \
     php-getid3 php-imap php-ldap php-mcrypt \
@@ -692,7 +692,7 @@ function install_mysql () {
   echo -e "\033[33;1mPROVISIONING: Installing and configuring MySQL related items.\033[0m";
 
   # Install the MySQL server and client.
-  sudo -E RUNLEVEL=1 aptitude -y -q=2 install mysql-server mysql-client;
+  sudo -E RUNLEVEL=1 apt-get -y -qq -o=Dpkg::Use-Pty=0 install mysql-server mysql-client;
 
   # Start MySQL.
   sudo -E service mysql start;
@@ -731,7 +731,7 @@ function install_mariadb () {
   echo -e "\033[33;1mPROVISIONING: Installing and configuring MariaDB related items.\033[0m";
 
   # Add the official MariaDB repository and install MariaDB.
-  sudo -E aptitude -y -q=2 install software-properties-common;
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 install software-properties-common;
   curl -ss -o "MariaDB-10-key.asc" -L "http://keyserver.ubuntu.com/pks/lookup?op=get&search=0xF1656F24C74CD1D8" & CURL_PID=(`jobs -l | awk '{print $2}'`);
   wait ${CURL_PID};
   sudo apt-key add "MariaDB-10-key.asc";
@@ -739,9 +739,9 @@ function install_mariadb () {
   sudo add-apt-repository "deb [arch=amd64,i386,ppc64el] http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.2/ubuntu xenial main" & ADD_REPO_PID=(`jobs -l | awk '{print $2}'`);
   wait ${ADD_REPO_PID};
   sudo -E rm -rf "/var/lib/apt/lists/partial/";
-  sudo -E aptitude -y -q=2 update;
-  sudo -E aptitude -y -q=2 clean;
-  sudo -E RUNLEVEL=1 aptitude -y -q=2 install mariadb-client-10.2 mariadb-server-10.2;
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 update;
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 clean;
+  sudo -E RUNLEVEL=1 apt-get -y -qq -o=Dpkg::Use-Pty=0 install mariadb-client-10.2 mariadb-server-10.2;
 
   # Start MySQL.
   sudo -E service mysql start;
@@ -818,7 +818,7 @@ function install_munin () {
   echo -e "\033[33;1mPROVISIONING: Installing and configuring Munin related items.\033[0m";
 
   # Install Munin.
-  sudo -E RUNLEVEL=1 aptitude -y -q=2 install munin munin-node munin-plugins-extra libwww-perl;
+  sudo -E RUNLEVEL=1 apt-get -y -qq -o=Dpkg::Use-Pty=0 install munin munin-node munin-plugins-extra libwww-perl;
 
   # Install the copied Munin config if it exists.
   MUNIN_CONF_PATH="/etc/munin/munin.conf";
@@ -977,7 +977,7 @@ function install_geoip () {
   echo -e "\033[33;1mPROVISIONING: Setting up to install the GeoIP binary.\033[0m";
 
   # Install the core compiler and build options.
-  sudo aptitude -y -q=2 install build-essential libtool zlib1g-dev;
+  sudo apt-get -y -qq -o=Dpkg::Use-Pty=0 install build-essential libtool zlib1g-dev;
 
   # Get the GeoIP source code.
   cd "${BASE_DIR}";
@@ -1098,7 +1098,7 @@ function install_awstats () {
 
   # Now install CPANminus like this.
   hash cpanminus 2>/dev/null || {
-    sudo -E aptitude -y -q=2 install cpanminus;
+    sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 install cpanminus;
   }
 
   # With that done, install all of the GeoIP related CPAN modules like this.
@@ -1146,7 +1146,7 @@ function install_fail2ban () {
   echo -e "\033[33;1mPROVISIONING: Fail2Ban related stuff.\033[0m";
 
   # Install Fail2Ban.
-  sudo -E aptitude -y -q=2 install fail2ban;
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 install fail2ban;
 
   # Run these commands to prevent Fail2Ban from coming up on reboot.
   sudo -E service fail2ban stop;
@@ -1186,7 +1186,7 @@ function install_monit () {
   echo -e "\033[33;1mPROVISIONING: Monit related stuff.\033[0m";
 
   # Install Monit.
-  sudo -E RUNLEVEL=1 aptitude -y -q=2 install monit;
+  sudo -E RUNLEVEL=1 apt-get -y -qq -o=Dpkg::Use-Pty=0 install monit;
 
   # Run these commands to prevent Monit from coming up on reboot.
   sudo -E service monit stop;
@@ -1226,7 +1226,7 @@ function install_imagemagick () {
   echo -e "\033[33;1mPROVISIONING: Installing ImageMagick from source.\033[0m";
 
   # Install the dependencies for ImageMagick.
-  sudo -E aptitude -y -q=2 install \
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 install \
     build-essential libtool checkinstall \
     libx11-dev libxext-dev zlib1g-dev libpng12-dev \
     libjpeg-dev libfreetype6-dev libxml2-dev;
@@ -1294,14 +1294,14 @@ function install_java () {
   if [ "$(lsb_release -r -s)" == "14.04" ]; then
 
     # Process to install OpenJDK 7.
-    sudo -E aptitude -y -q=2 install openjdk-7-jdk;
+    sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 install openjdk-7-jdk;
     sudo -E mkdir -p "/usr/java";
     sudo -E ln -s "/usr/lib/jvm/java-7-openjdk-amd64" "/usr/java/default";
 
   elif [ "$(lsb_release -r -s)" == "16.04" ]; then
 
     # Process to install OpenJDK 8.
-    sudo -E aptitude -y -q=2 install openjdk-8-jdk;
+    sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 install openjdk-8-jdk;
     sudo -E mkdir -p "/usr/java";
     sudo -E ln -s "/usr/lib/jvm/java-8-openjdk-amd64" "/usr/java/default";
 
@@ -1352,8 +1352,8 @@ function install_elasticsearch () {
   # Import the public key used by the package management system:
   wget -qO - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | sudo apt-key add -;
   echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-6.x.list;
-  sudo -E aptitude -y -q=2 update;
-  sudo -E RUNLEVEL=1 aptitude -y -q=2 install elasticsearch;
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 update;
+  sudo -E RUNLEVEL=1 apt-get -y -qq -o=Dpkg::Use-Pty=0 install elasticsearch;
 
   # Enable GeoIP data logic for the configure_elasticsearch instance.
   yes | sudo -E /usr/share/elasticsearch/bin/elasticsearch-plugin -s install ingest-geoip;
@@ -1400,8 +1400,8 @@ function install_logstash () {
   # Import the public key used by the package management system:
   wget -qO - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | sudo apt-key add -;
   echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-6.x.list;
-  sudo -E aptitude -y -q=2 update;
-  sudo -E RUNLEVEL=1 aptitude -y -q=2 install logstash;
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 update;
+  sudo -E RUNLEVEL=1 apt-get -y -qq -o=Dpkg::Use-Pty=0 install logstash;
 
   # Restart Logstash.
   sudo -E service logstash restart;
@@ -1464,8 +1464,8 @@ function install_kibana () {
   # Import the public key used by the package management system:
   wget -qO - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | sudo apt-key add -;
   echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-6.x.list;
-  sudo -E aptitude -y -q=2 update;
-  sudo -E RUNLEVEL=1 aptitude -y -q=2 install kibana;
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 update;
+  sudo -E RUNLEVEL=1 apt-get -y -qq -o=Dpkg::Use-Pty=0 install kibana;
 
   # Restart Kibana.
   sudo -E service kibana restart;
@@ -1510,9 +1510,9 @@ function install_mongo26 () {
   echo "deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen" | sudo tee "/etc/apt/sources.list.d/mongodb.list" & ADD_REPO_PID=(`jobs -l | awk '{print $2}'`);
   wait ${ADD_REPO_PID};
   sudo -E rm -rf "/var/lib/apt/lists/partial/";
-  sudo -E aptitude -y -q=2 update;
-  sudo -E aptitude -y -q=2 clean;
-  sudo -E aptitude -y -q=2 install mongodb-org=2.6.12 mongodb-org-server=2.6.12 mongodb-org-shell=2.6.12 mongodb-org-mongos=2.6.12 mongodb-org-tools=2.6.12;
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 update;
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 clean;
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 install mongodb-org=2.6.12 mongodb-org-server=2.6.12 mongodb-org-shell=2.6.12 mongodb-org-mongos=2.6.12 mongodb-org-tools=2.6.12;
 
   # Pin the currently installed version of MongoDB to ensure no accidental upgrades happen.
   echo "mongodb-org hold" | sudo dpkg --set-selections;
@@ -1542,9 +1542,9 @@ function install_mongo34 () {
   echo "deb [ arch=amd64 ] http://repo.mongodb.org/apt/ubuntu trusty/mongodb-org/3.4 multiverse" | sudo tee /etc/apt/sources.list.d/mongodb-org-3.4.list & ADD_REPO_PID=(`jobs -l | awk '{print $2}'`);
   wait ${ADD_REPO_PID};
   sudo -E rm -rf "/var/lib/apt/lists/partial/";
-  sudo -E aptitude -y -q=2 update;
-  sudo -E aptitude -y -q=2 clean;
-  sudo -E aptitude -y -q=2 install mongodb-org=3.4.9 mongodb-org-server=3.4.9 mongodb-org-shell=3.4.9 mongodb-org-mongos=3.4.9 mongodb-org-tools=3.4.9;
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 update;
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 clean;
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 install mongodb-org=3.4.9 mongodb-org-server=3.4.9 mongodb-org-shell=3.4.9 mongodb-org-mongos=3.4.9 mongodb-org-tools=3.4.9;
 
   # Pin the currently installed version of MongoDB to ensure no accidental upgrades happen.
   echo "mongodb-org hold" | sudo dpkg --set-selections;
@@ -1625,17 +1625,17 @@ function install_nodejs () {
   cd "${BASE_DIR}";
 
   # Purge any already installed version of NodeJS and NPM.
-  sudo -E aptitude -y -q=2 purge node npm;
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 purge node npm;
 
   # Now install NodeJS and NPM via PPA.
-  sudo -E aptitude -y -q=2 install python-software-properties;
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 install python-software-properties;
   # curl -sL https://deb.nodesource.com/setup_6.x | sudo bash - ;
   # curl -sL https://deb.nodesource.com/setup_5.x | sudo bash - ;
   # curl -sL https://deb.nodesource.com/setup_4.x | sudo bash - ;
   # curl -sL https://deb.nodesource.com/setup_0.10 | sudo bash - ;
   curl -sL https://deb.nodesource.com/setup_4.x | sudo bash - ;
-  sudo -E aptitude -y -q=2 update;
-  sudo -E aptitude -y -q=2 install nodejs;
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 update;
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 install nodejs;
 
   # Install 'forever' and 'userdown' for Upstart script support.
   sudo -E npm install -g --no-optional forever 2>&1 >/dev/null;
@@ -1655,7 +1655,7 @@ function install_nginx () {
   echo -e "\033[33;1mPROVISIONING: Installing Nginx related stuff.\033[0m";
 
   # Now install Nginx.
-  sudo -E aptitude -y -q=2 install nginx-full;
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 install nginx-full;
 
   # Copy the Nginx config file.
   NGINX_CONF_PATH="/etc/nginx/sites-available";
@@ -1689,10 +1689,10 @@ function install_goaccess () {
   echo "deb http://deb.goaccess.io/ $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/goaccess.list & ADD_REPO_PID=(`jobs -l | awk '{print $2}'`);
   wait ${ADD_REPO_PID};
   sudo -E rm -rf "/var/lib/apt/lists/partial/";
-  sudo -E aptitude -y -q=2 update;
-  sudo -E aptitude -y -q=2 clean;
-  # sudo -E aptitude -y -q=2 install goaccess;
-  sudo -E aptitude -y -q=2 install goaccess-tcb libtokyocabinet9;
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 update;
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 clean;
+  # sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 install goaccess;
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 install goaccess-tcb libtokyocabinet9;
 
 } # install_goaccess
 
