@@ -318,7 +318,7 @@ function install_sysstat () {
   # Install Sysstat.
   sudo -E aptitude -y -q=2 install sysstat;
 
-  # Copy the Sysstat config file in place and restart sysstat.
+  # Copy the Sysstat config file.
   if [ -f "sysstat/sysstat" ]; then
     sudo -E cp -f "sysstat/sysstat" "/etc/default/sysstat";
     sudo -E service sysstat restart;
@@ -1378,7 +1378,7 @@ function configure_elasticsearch () {
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Configuring ElasticSearch related items.\033[0m";
 
-  # Copy the Elasticsearch config file in place and restart sysstat.
+  # Copy the Elasticsearch config file.
   if [ -f "elasticsearch/elasticsearch.yml" ]; then
     sudo -E cp -f "elasticsearch/elasticsearch.yml" "/etc/elasticsearch/elasticsearch.yml";
     sudo -E service elasticsearch restart;
@@ -1419,15 +1419,18 @@ function configure_logstash () {
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Configuring Logstash related items.\033[0m";
 
-  # Copy the Elasticsearch config file in place and restart sysstat.
+  # Copy the Elasticsearch config file.
   sudo -E cp -f "logstash/"*.conf "/etc/logstash/conf.d/";
+
+  # Copy the Elasticsearch mapping JSON.
+  sudo -E cp -f "logstash/"*-mapping.json "/tmp/";
 
   # Go into the base directory.
   cd "${BASE_DIR}";
 
   # Copy any log data as the part of the provisioning process.
   if [ -d "${DATA_DIR}" ]; then
-    find "${DATA_DIR}" -type f -name "*_log" | sort |\
+    find "${DATA_DIR}" -type f -name "*_log*" | sort |\
       while read data_backup_path
       do
       	if [ -f "${data_backup_path}" ]; then
@@ -1476,7 +1479,7 @@ function configure_kibana () {
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Configuring Kibana related items.\033[0m";
 
-  # Copy the Kibana config file in place and restart sysstat.
+  # Copy the Kibana config file.
   if [ -f "kibana/kibana.yml" ]; then
     sudo -E cp -f "kibana/kibana.yml" "/etc/kibana/kibana.yml";
     sudo -E service kibana restart;
@@ -1650,7 +1653,7 @@ function install_nginx () {
   # Now install Nginx.
   sudo -E aptitude -y -q=2 install nginx-full;
 
-  # Copy the Nginx config file in place and restart sysstat.
+  # Copy the Nginx config file.
   NGINX_CONF_PATH="/etc/nginx/sites-available";
   if [ -f "nginx/default" ]; then
     sudo -E cp -f "nginx/default" "${NGINX_CONF_PATH}/default";
