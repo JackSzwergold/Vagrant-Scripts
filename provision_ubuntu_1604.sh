@@ -1423,7 +1423,7 @@ function configure_logstash () {
   sudo -E cp -f "logstash/"*.conf "/etc/logstash/conf.d/";
 
   # Copy the Elasticsearch mapping JSON.
-  sudo -E cp -f "logstash/"*-mapping.json "/tmp/";
+  sudo -E cp -f "logstash/"*.json "/tmp/";
 
   # Go into the base directory.
   cd "${BASE_DIR}";
