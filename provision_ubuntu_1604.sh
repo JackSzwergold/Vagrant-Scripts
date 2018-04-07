@@ -1403,6 +1403,10 @@ function install_logstash () {
   sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 update;
   sudo -E RUNLEVEL=1 apt-get -y -qq -o=Dpkg::Use-Pty=0 install logstash;
 
+  # Set ElasticSearch to be able to come up on reboot.
+  # sudo update-rc.d logstash defaults 95 10;
+  sudo systemctl enable logstash.service
+
   # Restart Logstash.
   sudo -E service logstash restart;
 
@@ -1423,27 +1427,27 @@ function configure_logstash () {
   sudo -E cp -f "logstash/"*.conf "/etc/logstash/conf.d/";
 
   # Copy the Elasticsearch mapping JSON.
-  sudo -E cp -f "logstash/"*.json "/tmp/";
+  # sudo -E cp -f "logstash/"*.json "/tmp/";
 
   # Using curl to get the 'logstash-apache' mappings in place.
   # TODO: Make this more flexible for differeny mappings.
   curl -ss -XPUT "http://localhost:9200/_template/logstash-apache/" -H 'Content-Type: application/json' -d @"/tmp/logstash-apache.json";
 
   # Go into the base directory.
-  cd "${BASE_DIR}";
+  # cd "${BASE_DIR}";
 
   # Copy any log data as the part of the provisioning process.
-  if [ -d "${DATA_DIR}" ]; then
-    find "${DATA_DIR}" -type f -name "*_log*" | sort |\
-      while read data_backup_path
-      do
-      	if [ -f "${data_backup_path}" ]; then
-          cp -f "${data_backup_path}" "/tmp/";
-      	else
-      	  exit 1;
-      	fi
-      done
-  fi
+  # if [ -d "${DATA_DIR}" ]; then
+  #   find "${DATA_DIR}" -type f -name "*_log*" | sort |\
+  #     while read data_backup_path
+  #     do
+  #     	if [ -f "${data_backup_path}" ]; then
+  #         cp -f "${data_backup_path}" "/tmp/";
+  #     	else
+  #     	  exit 1;
+  #     	fi
+  #     done
+  # fi
 
   # Restart Logstash.
   sudo -E service logstash restart;
@@ -1466,6 +1470,10 @@ function install_kibana () {
   echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-6.x.list;
   sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 update;
   sudo -E RUNLEVEL=1 apt-get -y -qq -o=Dpkg::Use-Pty=0 install kibana;
+
+  # Set ElasticSearch to be able to come up on reboot.
+  # sudo update-rc.d kibana defaults 95 10;
+  sudo systemctl enable kibana.service
 
   # Restart Kibana.
   sudo -E service kibana restart;
