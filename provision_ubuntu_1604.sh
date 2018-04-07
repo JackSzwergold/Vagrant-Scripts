@@ -1427,11 +1427,11 @@ function configure_logstash () {
   sudo -E cp -f "logstash/"*.conf "/etc/logstash/conf.d/";
 
   # Copy the Elasticsearch mapping JSON.
-  # sudo -E cp -f "logstash/"*.json "/tmp/";
+  # cp -f "logstash/"*.json "/tmp/";
 
   # Using curl to get the 'logstash-apache' mappings in place.
   # TODO: Make this more flexible for differeny mappings.
-  curl -ss -XPUT "http://localhost:9200/_template/logstash-apache/" -H 'Content-Type: application/json' -d @"/tmp/logstash-apache.json";
+  curl -ss -XPUT "http://localhost:9200/_template/logstash-apache/" -H 'Content-Type: application/json' -d @"logstash/logstash-apache.json";
 
   # Go into the base directory.
   # cd "${BASE_DIR}";
