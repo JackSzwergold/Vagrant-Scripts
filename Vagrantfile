@@ -79,6 +79,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       machine.vm.hostname = "#{settings["hostname"]}"
       machine.vm.box_check_update = false
       machine.vm.network :private_network, ip: "#{settings["ip"]}"
+
+      # Set port forwarding.
       if settings["forward_guest1"].to_s.strip.length > 0
         machine.vm.network :forwarded_port, guest: settings["forward_guest1"], host: settings["forward_host1"], id: settings["forward_id1"], auto_correct: true
       end
@@ -88,6 +90,10 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       if settings["forward_guest3"].to_s.strip.length > 0
         machine.vm.network :forwarded_port, guest: settings["forward_guest3"], host: settings["forward_host3"], id: settings["forward_id3"], auto_correct: true
       end
+      if settings["forward_guest4"].to_s.strip.length > 0
+        machine.vm.network :forwarded_port, guest: settings["forward_guest4"], host: settings["forward_host4"], id: settings["forward_id4"], auto_correct: true
+      end
+
       machine.vm.synced_folder ".", "/vagrant", type: "nfs", disabled: true
 
       # Copy over the deployment items directory.
