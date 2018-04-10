@@ -1429,6 +1429,9 @@ function configure_logstash () {
   # Copy the Elasticsearch mapping JSON.
   # cp -f "logstash/"*.json "/tmp/";
 
+  # Install Logstash 'prune' plugin.
+  sudo -E /usr/share/logstash/bin/logstash-plugin install logstash-filter-prune
+
   # Using curl to get the 'logstash-apache' mappings in place.
   # TODO: Make this more flexible for differeny mappings.
   curl -ss -XPUT "http://localhost:9200/_template/logstash-apache/" -H 'Content-Type: application/json' -d @"logstash/logstash-apache.json";
