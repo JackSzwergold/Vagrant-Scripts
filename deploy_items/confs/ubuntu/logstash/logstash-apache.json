@@ -252,7 +252,16 @@
               "ignore_above": 256
             }
           }
-        }
+        },
+        "extra_stuff": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
       }
     }
   }
