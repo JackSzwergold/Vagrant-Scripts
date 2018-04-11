@@ -265,8 +265,8 @@
   forward_guest4: 5601
   forward_host4: 5601
   forward_id4: "kibana"
-  memory: 2048
-  cpus: 2
+  memory: 4096
+  cpus: 1
   basics: true
   java: true
   elasticsearch: true
