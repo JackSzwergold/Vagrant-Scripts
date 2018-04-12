@@ -38,7 +38,7 @@
           }
         },
         "bytes": {
-          "type": "text",
+          "type": "integer",
           "fields": {
             "keyword": {
               "type": "keyword",
@@ -173,13 +173,7 @@
           }
         },
         "message": {
-          "type": "text",
-          "fields": {
-            "keyword": {
-              "type": "keyword",
-              "ignore_above": 256
-            }
-          }
+          "type": "text"
         },
         "path": {
           "type": "text",
@@ -213,7 +207,7 @@
           "fields": {
             "keyword": {
               "type": "keyword",
-              "ignore_above": 256
+              "ignore_above": 3
             }
           }
         },
@@ -253,12 +247,177 @@
             }
           }
         },
-        "extra_stuff": {
+        "cc_mode": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 4
+            }
+          }
+        },
+        "cc_ctitle": {
           "type": "text",
           "fields": {
             "keyword": {
               "type": "keyword",
               "ignore_above": 256
+            }
+          }
+        },
+        "cc_query": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "cc_page": {
+          "type": "integer"
+        },
+        "cc_crse_id": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 8
+            }
+          }
+        },
+        "cc_crn": {
+          "type": "integer",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 4
+            }
+          }
+        },
+        "cc_sec": {
+          "type": "integer",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 4
+            }
+          }
+        },
+        "cc_campus": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 2
+            }
+          }
+        },
+        "cc_format": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 2
+            }
+          }
+        },
+        "cc_subject": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 4
+            }
+          }
+        },
+        "cc_degree": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 3
+            }
+          }
+        },
+        "cc_libarts": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 4
+            }
+          }
+        },
+        "cc_gradlevel": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 2
+            }
+          }
+        },
+        "cc_topic": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "cc_college": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "cc_department": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 4
+            }
+          }
+        },
+        "cc_days": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 256
+            }
+          }
+        },
+        "cc_times": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 9
+            }
+          }
+        },
+        "cc_term": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 6
+            }
+          }
+        },
+        "cc_status": {
+          "type": "text",
+          "fields": {
+            "keyword": {
+              "type": "keyword",
+              "ignore_above": 8
             }
           }
         }
