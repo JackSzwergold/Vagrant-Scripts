@@ -1433,8 +1433,8 @@ function configure_logstash () {
   sudo -E /usr/share/logstash/bin/logstash-plugin install logstash-filter-prune
 
   # Using curl to get the 'logstash-apache' mappings in place.
-  # TODO: Make this more flexible for differeny mappings.
-  curl -ss -XPUT "http://localhost:9200/_template/logstash-apache/" -H 'Content-Type: application/json' -d @"logstash/logstash-apache.json";
+  # TODO: Make this more flexible for different mappings.
+  # curl -ss -XPUT "http://localhost:9200/_template/logstash-apache/" -H 'Content-Type: application/json' -d @"logstash/logstash-apache.json";
 
   # Go into the base directory.
   # cd "${BASE_DIR}";
