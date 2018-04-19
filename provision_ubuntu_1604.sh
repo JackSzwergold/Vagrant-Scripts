@@ -1423,34 +1423,14 @@ function configure_logstash () {
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Configuring Logstash related items.\033[0m";
 
-  # Copy the Elasticsearch config file.
+  # Copy the main Logstash config file.
+  sudo -E cp -f "logstash/logstash.yml" "/etc/logstash/logstash.yml";
+
+  # Copy the task specific Logstash config files.
   sudo -E cp -f "logstash/"*.conf "/etc/logstash/conf.d/";
 
-  # Copy the Elasticsearch mapping JSON.
-  # cp -f "logstash/"*.json "/tmp/";
-
   # Install Logstash 'prune' plugin.
-  sudo -E /usr/share/logstash/bin/logstash-plugin install logstash-filter-prune
-
-  # Using curl to get the 'logstash-apache' mappings in place.
-  # TODO: Make this more flexible for different mappings.
-  # curl -ss -XPUT "http://localhost:9200/_template/logstash-apache/" -H 'Content-Type: application/json' -d @"logstash/logstash-apache.json";
-
-  # Go into the base directory.
-  # cd "${BASE_DIR}";
-
-  # Copy any log data as the part of the provisioning process.
-  # if [ -d "${DATA_DIR}" ]; then
-  #   find "${DATA_DIR}" -type f -name "*_log*" | sort |\
-  #     while read data_backup_path
-  #     do
-  #     	if [ -f "${data_backup_path}" ]; then
-  #         cp -f "${data_backup_path}" "/tmp/";
-  #     	else
-  #     	  exit 1;
-  #     	fi
-  #     done
-  # fi
+  sudo -E "/usr/share/logstash/bin/logstash-plugin" install logstash-filter-prune
 
   # Restart Logstash.
   sudo -E service logstash restart;
