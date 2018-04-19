@@ -243,14 +243,14 @@ function set_timezone () {
     sudo -E timedatectl set-timezone "${PROV_TIMEZONE}";
 
     # Do this stuff to get NTP setup.
-    sudo -E service ntp stop;
+    sudo -E service ntpd stop;
     sudo -E ntpd -gq;
-    sudo service ntp start;
+    sudo service ntpd start;
     # sudo -E update-rc.d -f ntp defaults;
-    sudo -E update-rc.d -f ntp enable;
+    sudo -E systemctl enable ntpd.service;
 
     # Set the NTP synchronized value to 'true'.
-    sudo -E timedatectl set-ntp true;
+    sudo -E timedatectl set-ntpd true;
 
   fi
 
@@ -1150,7 +1150,8 @@ function install_fail2ban () {
 
   # Run these commands to prevent Fail2Ban from coming up on reboot.
   sudo -E service fail2ban stop;
-  sudo -E update-rc.d -f fail2ban remove;
+  # sudo -E update-rc.d -f fail2ban remove;
+  sudo -E systemctl enable fail2ban.service;
 
 } # install_fail2ban
 
@@ -1173,7 +1174,8 @@ function configure_fail2ban () {
 
   # Run these commands to prevent Fail2Ban from coming up on reboot.
   sudo -E service fail2ban stop;
-  sudo -E update-rc.d -f fail2ban remove;
+  # sudo -E update-rc.d -f fail2ban remove;
+  sudo -E systemctl remove fail2ban.service;
 
 } # configure_fail2ban
 
@@ -1456,7 +1458,7 @@ function install_kibana () {
 
   # Set ElasticSearch to be able to come up on reboot.
   # sudo update-rc.d kibana defaults 95 10;
-  sudo systemctl enable kibana.service
+  sudo -E systemctl enable kibana.service;
 
   # Restart Kibana.
   sudo -E service kibana restart;
