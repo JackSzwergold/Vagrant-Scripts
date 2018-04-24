@@ -203,7 +203,7 @@
           }
         },
         "response": {
-          "type": "integer",
+          "type": "text",
           "fields": {
             "keyword": {
               "type": "keyword",
@@ -287,7 +287,7 @@
           }
         },
         "cc_crn": {
-          "type": "integer",
+          "type": "text",
           "fields": {
             "keyword": {
               "type": "keyword",
