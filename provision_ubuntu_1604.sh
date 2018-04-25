@@ -1434,6 +1434,9 @@ function configure_logstash () {
   # Install Logstash 'prune' plugin.
   sudo -E "/usr/share/logstash/bin/logstash-plugin" install logstash-filter-prune
 
+  # Install Logstash 'JDBC' plugin for SQL output.
+  sudo -E "/usr/share/logstash/bin/logstash-plugin" install logstash-output-jdbc
+
   # Restart Logstash.
   sudo -E service logstash restart;
 
