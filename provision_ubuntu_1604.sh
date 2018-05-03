@@ -1431,11 +1431,10 @@ function configure_logstash () {
   # Copy the task specific Logstash config files.
   sudo -E cp -f "logstash/"*.conf "/etc/logstash/conf.d/";
 
-  # Install Logstash 'prune' plugin.
+  # Install Logstash plugins.
   sudo -E "/usr/share/logstash/bin/logstash-plugin" install logstash-filter-prune
-
-  # Install Logstash 'JDBC' plugin for SQL output.
   sudo -E "/usr/share/logstash/bin/logstash-plugin" install logstash-output-jdbc
+  sudo -E "/usr/share/logstash/bin/logstash-plugin" install logstash-filter-useragent
 
   # Restart Logstash.
   sudo -E service logstash restart;
