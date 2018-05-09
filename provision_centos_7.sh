@@ -815,6 +815,19 @@ function install_system_scripts () {
 } # install_system_scripts
 
 ##########################################################################################
+# Java
+##########################################################################################
+function install_java () {
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Installing Java (OpenJDK).\033[0m";
+
+  # Process to install OpenJDK 8.
+  sudo -E yum install -y -q -e 0 java-1.8.0-openjdk;
+
+} # install_java
+
+##########################################################################################
 # Update the locate database.
 ##########################################################################################
 function update_locate_db () {
