@@ -96,6 +96,11 @@ if [ -n "${PROV_MYSQL}" ]; then
   echo -e "\033[33;1mPROVISIONING: MySQL provisioning: '${PROV_MYSQL}'.\033[0m";
 fi
 
+if [ -n "${PROV_JAVA}" ]; then
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Java provisioning: '${PROV_JAVA}'.\033[0m";
+fi
+
 ##########################################################################################
 # Go into the config directory.
 ##########################################################################################
@@ -909,6 +914,14 @@ if [ "${PROV_MYSQL}" = true ]; then
     install_mariadb;
   }
   configure_mysql;
+
+fi
+
+# Get the Java stuff set.
+if [ "${PROV_JAVA}" = true ]; then
+
+  # Install and configure Java.
+  hash java 2>/dev/null || { install_java; }
 
 fi
 
