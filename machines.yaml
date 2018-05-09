@@ -146,8 +146,8 @@
   memory: 2048
   cpus: 2
   basics: true
-  apache: true
-  mysql: true
+  apache: false
+  mysql: false
   java: true
   elasticsearch: true
   logstash: true
