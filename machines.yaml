@@ -149,6 +149,9 @@
   apache: true
   mysql: true
   java: true
+  elasticsearch: true
+  logstash: true
+  kibana: true
 - name: "NodeJS (Ubuntu)"
   box: "ubuntu/trusty64"
   primary: false

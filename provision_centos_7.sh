@@ -101,6 +101,11 @@ if [ -n "${PROV_JAVA}" ]; then
   echo -e "\033[33;1mPROVISIONING: Java provisioning: '${PROV_JAVA}'.\033[0m";
 fi
 
+if [ -n "${PROV_ELASTICSEARCH}" ]; then
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Elasticsearch provisioning: '${PROV_ELASTICSEARCH}'.\033[0m";
+fi
+
 ##########################################################################################
 # Go into the config directory.
 ##########################################################################################
@@ -833,6 +838,115 @@ function install_java () {
 } # install_java
 
 ##########################################################################################
+# Install Elasticsearch
+##########################################################################################
+function install_elasticsearch () {
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Installing ElasticSearch related items.\033[0m";
+
+  # Go into the base directory.
+  cd "${BASE_DIR}/${CONFS_DIR}";
+
+  # Add the Elasticsearch signing key to the system.
+  sudo -E rpm -U --import "https://artifacts.elastic.co/GPG-KEY-elasticsearch"  2>/dev/null;
+
+  # Setup the Elasticsearch repository.
+  if [ -f "elasticsearch/elasticsearch.repo" ]; then
+
+    # Copy the Elasticsearch repo definition to the Yum repos directory.
+    sudo -E cp -f "elasticsearch/elasticsearch.repo" "/etc/yum.repos.d/";
+
+    # Clean the Yum repo cache.
+    sudo -E yum -y -q -e 0 clean all;
+
+  fi
+
+  # Install Elasticsearch.
+  sudo -E RUNLEVEL=1 yum install -y -q -e 0 elasticsearch;
+
+  # Restart Elasticsearch.
+  sudo -E service elasticsearch restart;
+
+  # Set Elasticsearch to start on reboot.
+  sudo -E chkconfig --add elasticsearch;
+  sudo -E chkconfig --level 345 elasticsearch on;
+
+} # install_elasticsearch
+
+##########################################################################################
+# Configure Elasticsearch
+##########################################################################################
+function configure_elasticsearch () {
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFS_DIR}";
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Configuring ElasticSearch related items.\033[0m";
+
+  # Copy the Elasticsearch config file.
+  if [ -f "elasticsearch/elasticsearch.yml" ]; then
+    sudo -E cp -f "elasticsearch/elasticsearch.yml" "/etc/elasticsearch/elasticsearch.yml";
+    sudo -E service elasticsearch restart;
+  fi
+
+} # configure_elasticsearch
+
+##########################################################################################
+# Install Logstash
+##########################################################################################
+function install_logstash () {
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Installing Logstash related items.\033[0m";
+
+  # Go into the base directory.
+  cd "${BASE_DIR}";
+
+  # # Import the public key used by the package management system:
+  # wget -qO - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | sudo apt-key add -;
+  # echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-6.x.list;
+  # sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 update;
+  # sudo -E RUNLEVEL=1 apt-get -y -qq -o=Dpkg::Use-Pty=0 install logstash;
+  #
+  # # Set ElasticSearch to be able to come up on reboot.
+  # # sudo update-rc.d logstash defaults 95 10;
+  # sudo systemctl enable logstash.service
+  #
+  # # Restart Logstash.
+  # sudo -E service logstash restart;
+
+} # install_logstash
+
+##########################################################################################
+# Configure Logstash
+##########################################################################################
+function configure_logstash () {
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFS_DIR}";
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Configuring Logstash related items.\033[0m";
+
+  # Copy the main Logstash config file.
+  sudo -E cp -f "logstash/logstash.yml" "/etc/logstash/logstash.yml";
+
+  # Copy the task specific Logstash config files.
+  sudo -E cp -f "logstash/"*.conf "/etc/logstash/conf.d/";
+
+  # Install Logstash plugins.
+  sudo -E "/usr/share/logstash/bin/logstash-plugin" install logstash-filter-prune
+  sudo -E "/usr/share/logstash/bin/logstash-plugin" install logstash-output-jdbc
+  sudo -E "/usr/share/logstash/bin/logstash-plugin" install logstash-filter-useragent
+
+  # Restart Logstash.
+  sudo -E service logstash restart;
+
+} # configure_logstash
+
+##########################################################################################
 # Update the locate database.
 ##########################################################################################
 function update_locate_db () {
@@ -922,6 +1036,24 @@ if [ "${PROV_JAVA}" = true ]; then
 
   # Install and configure Java.
   hash java 2>/dev/null || { install_java; }
+
+fi
+
+# Get the Elasticsearch stuff set.
+if [ "${PROV_ELASTICSEARCH}" = true ]; then
+
+  # Install and configure ElasticSearch.
+  install_elasticsearch;
+  configure_elasticsearch;
+
+fi
+
+# Get the Logstash stuff set.
+if [ "${PROV_LOGSTASH}" = true ]; then
+
+  # Install and configure Logstash.
+  install_logstash;
+  configure_logstash;
 
 fi
 
