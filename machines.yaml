@@ -143,24 +143,11 @@
   forward_guest1: 22
   forward_host1: 2221
   forward_id1: "ssh"
-  forward_guest2: 9200
-  forward_host2: 9200
-  forward_id2: "elasticsearch"
-  forward_guest3: 9600
-  forward_host3: 9600
-  forward_id3: "logstash"
-  forward_guest4: 5601
-  forward_host4: 5601
-  forward_id4: "kibana"
   memory: 2048
   cpus: 2
   basics: true
-  apache: false
-  mysql: false
-  java: true
-  elasticsearch: true
-  logstash: true
-  kibana: true
+  apache: true
+  mysql: true
 - name: "NodeJS (Ubuntu)"
   box: "ubuntu/trusty64"
   primary: false
@@ -281,6 +268,40 @@
   memory: 4096
   cpus: 2
   basics: true
+  java: true
+  elasticsearch: true
+  logstash: true
+  kibana: true
+- name: "ELK (CentOS 7)"
+  box: "bento/centos-7.3"
+  primary: false
+  autostart: false
+  provision_script: "provision_centos_7.sh"
+  provision_script_regular: null
+  os: "centos"
+  timezone: "America/New_York"
+  hostname: "elk"
+  banner: "ELK"
+  username: "vagrant"
+  password: "vagrant"
+  ip: "192.168.56.35"
+  forward_guest1: 22
+  forward_host1: 2235
+  forward_id1: "ssh"
+  forward_guest2: 9200
+  forward_host2: 9200
+  forward_id2: "elasticsearch"
+  forward_guest3: 9600
+  forward_host3: 9600
+  forward_id3: "logstash"
+  forward_guest4: 5601
+  forward_host4: 5601
+  forward_id4: "kibana"
+  memory: 2048
+  cpus: 2
+  basics: true
+  apache: false
+  mysql: false
   java: true
   elasticsearch: true
   logstash: true
