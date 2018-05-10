@@ -128,6 +128,9 @@ function configure_user_and_group () {
   # Add the user to the 'www-readwrite' group.
   sudo -E usermod -a -G www-readwrite "${USERNAME}";
 
+  # Make sure the user’s home directory is readable and executable by group and others.
+  sudo -E chmod -f go+rx  "/home/${USERNAME}";
+
   # Changing the username/password combination.
   echo "${USERNAME}:${PASSWORD}" | sudo -E sudo chpasswd;
 

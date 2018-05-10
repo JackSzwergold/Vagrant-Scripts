@@ -297,11 +297,9 @@
   forward_guest4: 5601
   forward_host4: 5601
   forward_id4: "kibana"
-  memory: 2048
+  memory: 4096
   cpus: 2
   basics: true
-  apache: false
-  mysql: false
   java: true
   elasticsearch: true
   logstash: true
