@@ -1431,6 +1431,9 @@ function configure_logstash () {
   # Copy the task specific Logstash config files.
   sudo -E cp -f "logstash/"*.conf "/etc/logstash/conf.d/";
 
+  # Copy the JSON template files.
+  sudo -E cp -f "logstash/"*.json "/etc/logstash/conf.d/";
+
   # Install Logstash plugins.
   sudo -E "/usr/share/logstash/bin/logstash-plugin" install logstash-filter-prune
   sudo -E "/usr/share/logstash/bin/logstash-plugin" install logstash-output-jdbc

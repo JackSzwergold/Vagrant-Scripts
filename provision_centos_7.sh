@@ -902,20 +902,31 @@ function install_logstash () {
   echo -e "\033[33;1mPROVISIONING: Installing Logstash related items.\033[0m";
 
   # Go into the base directory.
-  cd "${BASE_DIR}";
+  cd "${BASE_DIR}/${CONFS_DIR}";
 
-  # # Import the public key used by the package management system:
-  # wget -qO - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | sudo apt-key add -;
-  # echo "deb https://artifacts.elastic.co/packages/6.x/apt stable main" | sudo tee /etc/apt/sources.list.d/elastic-6.x.list;
-  # sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 update;
-  # sudo -E RUNLEVEL=1 apt-get -y -qq -o=Dpkg::Use-Pty=0 install logstash;
-  #
-  # # Set ElasticSearch to be able to come up on reboot.
-  # # sudo update-rc.d logstash defaults 95 10;
-  # sudo systemctl enable logstash.service
-  #
-  # # Restart Logstash.
-  # sudo -E service logstash restart;
+  # Add the Logstash signing key to the system.
+  sudo -E rpm -U --import "https://artifacts.elastic.co/GPG-KEY-elasticsearch"  2>/dev/null;
+
+  # Setup the Elasticsearch repository.
+  if [ -f "logstash/logstash.repo" ]; then
+
+    # Copy the Logstash repo definition to the Yum repos directory.
+    sudo -E cp -f "logstash/logstash.repo" "/etc/yum.repos.d/";
+
+    # Clean the Yum repo cache.
+    sudo -E yum -y -q -e 0 clean all;
+
+  fi
+
+  # Install Logstash.
+  sudo -E RUNLEVEL=1 yum install -y -q -e 0 logstash;
+
+  # Restart Logstash.
+  sudo -E service logstash restart;
+
+  # Set Logstash to start on reboot.
+  sudo -E chkconfig --add logstash;
+  sudo -E chkconfig --level 345 logstash on;
 
 } # install_logstash
 
@@ -936,6 +947,9 @@ function configure_logstash () {
   # Copy the task specific Logstash config files.
   sudo -E cp -f "logstash/"*.conf "/etc/logstash/conf.d/";
 
+  # Copy the JSON template files.
+  sudo -E cp -f "logstash/"*.json "/etc/logstash/conf.d/";
+
   # Install Logstash plugins.
   sudo -E "/usr/share/logstash/bin/logstash-plugin" install logstash-filter-prune
   sudo -E "/usr/share/logstash/bin/logstash-plugin" install logstash-output-jdbc
@@ -945,6 +959,63 @@ function configure_logstash () {
   sudo -E service logstash restart;
 
 } # configure_logstash
+
+##########################################################################################
+# Install Kibana
+##########################################################################################
+function install_kibana () {
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Installing Kibana related items.\033[0m";
+
+  # Go into the base directory.
+  cd "${BASE_DIR}/${CONFS_DIR}";
+
+  # Add the Logstash signing key to the system.
+  sudo -E rpm -U --import "https://artifacts.elastic.co/GPG-KEY-elasticsearch"  2>/dev/null;
+
+  # Setup the Elasticsearch repository.
+  if [ -f "kibana/kibana.repo" ]; then
+
+    # Copy the Logstash repo definition to the Yum repos directory.
+    sudo -E cp -f "kibana/kibana.repo" "/etc/yum.repos.d/";
+
+    # Clean the Yum repo cache.
+    sudo -E yum -y -q -e 0 clean all;
+
+  fi
+
+  # Install Logstash.
+  sudo -E RUNLEVEL=1 yum install -y -q -e 0 kibana;
+
+  # Restart Logstash.
+  sudo -E service kibana restart;
+
+  # Set Logstash to start on reboot.
+  sudo -E chkconfig --add kibana;
+  sudo -E chkconfig --level 345 kibana on;
+
+} # install_kibana
+
+##########################################################################################
+# Configure Kibana
+##########################################################################################
+function configure_kibana () {
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFS_DIR}";
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Configuring Kibana related items.\033[0m";
+
+  # Copy the Kibana config file.
+  if [ -f "kibana/kibana.yml" ]; then
+    sudo -E cp -f "kibana/kibana.yml" "/etc/kibana/kibana.yml";
+    sudo -E service kibana restart;
+  fi
+
+} # configure_kibana
+
 
 ##########################################################################################
 # Update the locate database.
@@ -1054,6 +1125,15 @@ if [ "${PROV_LOGSTASH}" = true ]; then
   # Install and configure Logstash.
   install_logstash;
   configure_logstash;
+
+fi
+
+# Get the Kibana stuff set.
+if [ "${PROV_KIBANA}" = true ]; then
+
+  # Install and configure Kibana.
+  install_kibana;
+  configure_kibana;
 
 fi
 
