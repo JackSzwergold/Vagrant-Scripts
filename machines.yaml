@@ -280,8 +280,8 @@
   provision_script_regular: null
   os: "centos"
   timezone: "America/New_York"
-  hostname: "elk"
-  banner: "ELK"
+  hostname: "elk-centos"
+  banner: "ELK CentOS"
   username: "vagrant"
   password: "vagrant"
   ip: "192.168.56.35"
