@@ -192,30 +192,6 @@
   cpus: 1
   basics: true
   mongo: true
-- name: "ElasticSearch (Ubuntu)"
-  box: "ubuntu/trusty64"
-  primary: false
-  autostart: false
-  provision_script: "provision_ubuntu_1404.sh"
-  provision_script_regular: null
-  os: "ubuntu"
-  timezone: "America/New_York"
-  hostname: "elasticsearch"
-  banner: "Elasticsearch"
-  username: "vagrant"
-  password: "vagrant"
-  ip: "192.168.56.32"
-  forward_guest1: 22
-  forward_host1: 2232
-  forward_id1: "ssh"
-  forward_guest2: 9200
-  forward_host2: 9200
-  forward_id2: "elasticsearch"
-  memory: 1024
-  cpus: 1
-  basics: true
-  java: true
-  elasticsearch: true
 - name: "Solr (Ubuntu)"
   box: "ubuntu/trusty64"
   primary: false
@@ -228,9 +204,9 @@
   banner: "Solr"
   username: "vagrant"
   password: "vagrant"
-  ip: "192.168.56.33"
+  ip: "192.168.56.32"
   forward_guest1: 22
-  forward_host1: 2233
+  forward_host1: 2232
   forward_id1: "ssh"
   forward_guest2: 8983
   forward_host2: 8983
@@ -248,13 +224,13 @@
   provision_script_regular: null
   os: "ubuntu"
   timezone: "America/New_York"
-  hostname: "elk"
-  banner: "ELK"
+  hostname: "elk-ubuntu"
+  banner: "ELK Ubuntu"
   username: "vagrant"
   password: "vagrant"
-  ip: "192.168.56.34"
+  ip: "192.168.56.33"
   forward_guest1: 22
-  forward_host1: 2234
+  forward_host1: 2233
   forward_id1: "ssh"
   forward_guest2: 9200
   forward_host2: 9200
@@ -284,9 +260,9 @@
   banner: "ELK CentOS"
   username: "vagrant"
   password: "vagrant"
-  ip: "192.168.56.35"
+  ip: "192.168.56.34"
   forward_guest1: 22
-  forward_host1: 2235
+  forward_host1: 2234
   forward_id1: "ssh"
   forward_guest2: 9200
   forward_host2: 9200
