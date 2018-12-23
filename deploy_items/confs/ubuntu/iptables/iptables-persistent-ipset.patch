@@ -3,13 +3,13 @@
 @@ -25,6 +25,17 @@
  {
  	log_action_begin_msg "Loading iptables rules"
- 
-+	#load IPsets
-+	if [ ! -f /etc/iptables/rules.ipsets ]; then
-+	  log_action_cont_msg " skipping IPsets (no rules to load)"
+
++	#load IPset
++	if [ ! -f /etc/iptables/rules.ipset ]; then
++	  log_action_cont_msg " skipping IPset (no rules to load)"
 +	else
 +	  log_action_cont_msg " IPset"
-+	  ipset restore -! < /etc/iptables/rules.ipsets 2> /dev/null
++	  ipset restore -! < /etc/iptables/rules.ipset 2> /dev/null
 +	  if [ $? -ne 0 ]; then
 +	   rc=1
 +	  fi
@@ -21,14 +21,14 @@
 @@ -54,6 +65,18 @@
  {
  	log_action_begin_msg "Saving rules"
- 
-+	#save IPsets
+
++	#save IPset
 +	#need at least iptable_filter loaded:
 +	if ! ipset list | grep -i "name">/dev/null 2>&1; then
 +	  log_action_cont_msg " skipping IPset - no sets defined or not loaded"
 +	elif [ -x /usr/sbin/ipset ] || [ -x /sbin/ipset ]; then
 +	  log_action_cont_msg " IPset"
-+	  ipset save | grep -iv "f2b"> /etc/iptables/rules.ipsets
++	  ipset save | grep -iv "f2b"> /etc/iptables/rules.ipset
 +	  if [ $? -ne 0 ]; then
 +	    rc=1
 +	  fi
