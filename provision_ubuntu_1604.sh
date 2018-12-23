@@ -510,7 +510,7 @@ function install_iptables () {
   # Load the IPSet stuff if the file exists.
   if [ -f "iptables/ipset.conf" ]; then
     sudo -E ipset restore < "iptables/ipset.conf";
-    sudo -E cp -f "iptables/ipset.conf" "/etc/iptables/rules.ipsets";
+    sudo -E cp -f "iptables/ipset.conf" "/etc/iptables/rules.ipset";
   fi
 
   # Load the IPTables stuff if the file exists.
