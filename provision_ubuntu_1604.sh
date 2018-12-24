@@ -457,6 +457,9 @@ function configure_ssh () {
   # Copy the 'login.defs' file in place.
   sudo -E cp -f "ssh/ssh_config" "/etc/ssh/ssh_config";
 
+  # Disable the Debian SSH banner like this.
+  sudo -E sh -c "printf '\n\nDebianBanner no\n' >> /etc/ssh/sshd_config ";
+
 } # configure_ssh
 
 ##########################################################################################
