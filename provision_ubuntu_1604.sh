@@ -510,6 +510,7 @@ function install_iptables () {
   # Load the IPSet stuff if the file exists.
   if [ -f "iptables/10-ipset" ]; then
     sudo -E cp -f "iptables/10-ipset" "/usr/share/netfilter-persistent/plugins.d/";
+    sudo -E chmod 755 "/usr/share/netfilter-persistent/plugins.d/iptables/10-ipset";
   fi
 
   # Load the IPSet stuff if the file exists.
