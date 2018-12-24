@@ -1,7 +1,7 @@
 # 2018-12-23: Custom configs.
 
 [DEFAULT]
-ignoreip = 127.0.0.0/8 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16
+ignoreip = 127.0.0.0/8 10.0.0.0/8 172.16.0.0/12 192.168.0.0/16 169.254.0.0/16
 bantime = 300
 maxretry = 3
 
@@ -21,6 +21,44 @@ filter = sshd-ddos
 logpath = /var/log/auth.log
 bantime = 180
 findtime = 1800
+maxretry = 3
+
+[apache]
+enabled = true
+port = http,https
+filter = apache-auth
+logpath = /var/log/apache*/*error.log
+bantime = 180
+findtime = 1800
+maxretry = 3
+
+[apache-overflows]
+enabled = true
+port = http,https
+filter = apache-overflows
+logpath = /var/log/apache*/*error.log
+bantime = 180
+findtime = 1800
+maxretry = 2
+
+[apache-badbots]
+enabled = true
+port = http,https
+filter = apache-badbots
+logpath = /var/log/apache*/*access.log
+bantime = 180
+findtime = 1800
+maxretry = 2
+
+# Adding a custom 'ddos' jail.
+[ddos]
+enabled = true
+banaction = iptables-allports
+port = anyport
+filter = ddos
+logpath = /var/log/kern.log
+bantime = 180
+findtime = 900
 maxretry = 3
 
 [recidive]
