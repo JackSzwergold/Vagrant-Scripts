@@ -1176,8 +1176,12 @@ function configure_fail2ban () {
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Installing the Fail2Ban configs.\033[0m";
 
+  # Copy over some Fail2Ban configs.
   sudo -E cp -f "fail2ban/jail.local" "/etc/fail2ban/jail.local";
   sudo -E cp -f "fail2ban/ddos.conf" "/etc/fail2ban/filter.d/ddos.conf";
+
+  # Restart Fail2Ban.
+  sudo -E sed -i "s/dbpurgeage = 86400/dbpurgeage = 648000/g" "/etc/fail2ban/fail2ban.conf";
 
   # Restart Fail2Ban.
   sudo -E service fail2ban restart;
