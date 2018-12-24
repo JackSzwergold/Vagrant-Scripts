@@ -524,8 +524,8 @@ function install_iptables () {
     sudo -E patch -fsb "/etc/init.d/iptables-persistent" < "iptables/iptables-persistent-ipset.patch";
   fi
 
-  # Run 'netfilter-persistent save' to save the existing IPTables stuff.
-  sudo -E iptables-persistent save;
+  # Run 'service iptables-persistent save' to save the existing IPTables stuff.
+  sudo -E service iptables-persistent save;
 
 } # install_iptables
 
