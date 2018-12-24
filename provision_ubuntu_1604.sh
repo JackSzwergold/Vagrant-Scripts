@@ -505,24 +505,30 @@ function install_iptables () {
   # Install IPTables and IPSet stuff.
   sudo -E debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v4 boolean true";
   sudo -E debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v6 boolean true";
-  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 install iptables iptables-persistent ipset;
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 install iptables netfilter-persistent iptables-persistent ipset;
 
   # Load the IPSet stuff if the file exists.
-  if [ -f "iptables/ipset.conf" ]; then
-    sudo -E ipset restore < "iptables/ipset.conf";
-    sudo -E cp -f "iptables/ipset.conf" "/etc/iptables/rules.ipset";
+  if [ -f "iptables/10-ipset" ]; then
+    sudo -E cp -f "iptables/10-ipset" "/usr/share/netfilter-persistent/plugins.d/";
   fi
 
-  # Load the IPTables stuff if the file exists.
-  if [ -f "iptables/iptables.conf" ]; then
-    sudo -E iptables-restore < "iptables/iptables.conf";
-    sudo -E cp -f "iptables/iptables.conf" "/etc/iptables/rules.v4";
+  # Load the IPSet stuff if the file exists.
+  if [ -f "iptables/rules.ipset" ]; then
+    sudo -E ipset restore < "iptables/rules.ipset";
   fi
 
-  # Patch 'iptables-persistent' if the patch exists and the original 'iptables-persistent' exists.
-  if [ -f "/etc/init.d/iptables-persistent" ] && [ -f "iptables/iptables-persistent-ipset.patch" ]; then
-    sudo -E patch -fsb "/etc/init.d/iptables-persistent" < "iptables/iptables-persistent-ipset.patch";
+  # Load the IPTables v4 stuff if the file exists.
+  if [ -f "iptables/rules.v4" ]; then
+    sudo -E iptables-restore < "iptables/rules.v4";
   fi
+
+  # Load the IPTables v6 stuff if the file exists.
+  if [ -f "iptables/rules.v6" ]; then
+    sudo -E iptables-restore < "iptables/rules.v6";
+  fi
+
+  # Run 'netfilter-persistent save' to save the existing IPTables stuff.
+  sudo -E netfilter-persistent save;
 
 } # install_iptables
 
