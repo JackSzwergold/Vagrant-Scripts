@@ -1,5 +1,5 @@
-create TOR_IPS hash:net family inet hashsize 2048 maxelem 65536
-create BANNED_RANGES hash:net family inet hashsize 2048 maxelem 65536
-create BANNED_IPS hash:net family inet hashsize 2048 maxelem 65536
-create WHITELIST_IPS hash:net family inet hashsize 2048 maxelem 65536
-create AWS_RANGES hash:net family inet hashsize 2048 maxelem 65536
+create TOR_IPS hash:net family inet hashsize 2048 maxelem 65536 timeout 86400
+create BANNED_RANGES hash:net family inet hashsize 2048 maxelem 65536 timeout 86400
+create BANNED_IPS hash:net family inet hashsize 2048 maxelem 65536 timeout 86400
+create WHITELIST_IPS hash:net family inet hashsize 2048 maxelem 65536 timeout 86400
+create AWS_RANGES hash:net family inet hashsize 2048 maxelem 65536 timeout 86400
