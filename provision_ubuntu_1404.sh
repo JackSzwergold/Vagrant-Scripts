@@ -333,7 +333,7 @@ function install_basic_tools () {
     dnsutils traceroute nmap bc htop finger curl whois rsync lsof \
     iftop figlet lynx mtr-tiny iperf nload zip unzip attr sshpass \
     dkms mc elinks dos2unix p7zip-full nfs-common \
-    slurm sharutils uuid-runtime quota pv trickle ntp \
+    slurm sharutils uuid-runtime quota pv trickle ntp jq \
     virtualbox-dkms;
 
 } # install_basic_tools
