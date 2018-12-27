@@ -1086,10 +1086,10 @@ function install_awstats () {
 
   # Do this little dance to get things installed.
   cd "${BASE_DIR}";
-  curl -ss -O -L "http://prdownloads.sourceforge.net/awstats/awstats-7.6.tar.gz";
-  tar -xf "awstats-7.6.tar.gz";
-  rm -f "awstats-7.6.tar.gz";
-  sudo -E mv -f "awstats-7.6" "/usr/share/awstats";
+  curl -ss -O -L "http://prdownloads.sourceforge.net/awstats/awstats-7.7.tar.gz";
+  tar -xf "awstats-7.7.tar.gz";
+  rm -f "awstats-7.7.tar.gz";
+  sudo -E mv -f "awstats-7.7" "/usr/share/awstats";
 
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFS_DIR}";
