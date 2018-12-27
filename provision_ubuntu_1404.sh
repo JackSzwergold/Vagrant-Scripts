@@ -1089,18 +1089,18 @@ function install_awstats () {
   curl -ss -O -L "http://prdownloads.sourceforge.net/awstats/awstats-7.6.tar.gz";
   tar -xf "awstats-7.6.tar.gz";
   rm -f "awstats-7.6.tar.gz";
-  sudo -E mv -f "awstats-7.6" "/usr/share/awstats-7.6";
+  sudo -E mv -f "awstats-7.6" "/usr/share/awstats";
 
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFS_DIR}";
 
   # Set an index page for AWStats.
-  sudo -E cp -f "awstats/awstatstotals.php" "/usr/share/awstats-7.6/wwwroot/cgi-bin/index.php";
-  sudo -E chmod a+r "/usr/share/awstats-7.6/wwwroot/cgi-bin/index.php";
+  sudo -E cp -f "awstats/awstatstotals.php" "/usr/share/awstats/wwwroot/cgi-bin/index.php";
+  sudo -E chmod a+r "/usr/share/awstats/wwwroot/cgi-bin/index.php";
 
   # Create the AWStats data directory.
-  sudo -E mkdir -p "/usr/share/awstats-7.6/wwwroot/data";
-  sudo -E chmod -f g+w "/usr/share/awstats-7.6/wwwroot/data";
+  sudo -E mkdir -p "/usr/share/awstats/wwwroot/data";
+  sudo -E chmod -f g+w "/usr/share/awstats/wwwroot/data";
 
   # Now install CPANminus like this.
   hash cpanminus 2>/dev/null || {
@@ -1111,15 +1111,15 @@ function install_awstats () {
   sudo cpanm --install --force --notest --quiet --skip-installed YAML Geo::IP Geo::IPfree Geo::IP::PurePerl URI::Escape Net::IP Net::DNS Net::XWhois Time::HiRes Time::Local;
 
   # Copy over a basic config file.
-  sudo -E cp -f "awstats/awstats.vagrant.local.conf" "/usr/share/awstats-7.6/wwwroot/cgi-bin/awstats.${PROV_HOSTNAME}.conf";
-  sudo -E sed -i "s/vagrant.local/${PROV_HOSTNAME}/g" "/usr/share/awstats-7.6/wwwroot/cgi-bin/awstats.${PROV_HOSTNAME}.conf";
+  sudo -E cp -f "awstats/awstats.vagrant.local.conf" "/usr/share/awstats/wwwroot/cgi-bin/awstats.${PROV_HOSTNAME}.conf";
+  sudo -E sed -i "s/vagrant.local/${PROV_HOSTNAME}/g" "/usr/share/awstats/wwwroot/cgi-bin/awstats.${PROV_HOSTNAME}.conf";
 
 
   # Set permissions to root for owner and group.
-  sudo -E chown -f root:root -R "/usr/share/awstats-7.6";
+  sudo -E chown -f root:root -R "/usr/share/awstats";
 
   # Update the data for the '${PROV_HOSTNAME}' config.
-  sudo -E "/usr/share/awstats-7.6/wwwroot/cgi-bin/awstats.pl" -config="${PROV_HOSTNAME}" -update
+  sudo -E "/usr/share/awstats/wwwroot/cgi-bin/awstats.pl" -config="${PROV_HOSTNAME}" -update
 
 } # install_awstats
 
@@ -1719,7 +1719,7 @@ if [ "${PROV_APACHE}" = true ]; then
   if [ -f "apache2/phpmyadmin.conf" ] && [ ! -f "/etc/apache2/conf-available/phpmyadmin.conf" ]; then configure_awstats_apache; fi
 
   # AWStats related stuff.
-  if [ ! -d "/usr/share/awstats-7.6" ]; then install_awstats; fi
+  if [ ! -d "/usr/share/awstats" ]; then install_awstats; fi
   if [ -f "apache2/awstats.conf" ] && [ ! -f "/etc/apache2/conf-available/awstats.conf" ]; then configure_awstats_apache; fi
 
   # Install system scripts.
