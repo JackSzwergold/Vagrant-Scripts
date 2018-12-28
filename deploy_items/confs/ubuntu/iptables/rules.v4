@@ -33,7 +33,7 @@ COMMIT
 -A INPUT -p tcp -m set --match-set BANNED_RANGES src -j BANNED_ACTIONS
 -A INPUT -p tcp -m set --match-set BANNED_IPS src -j BANNED_ACTIONS
 -A INPUT -p tcp -m set --match-set TOR_IPS src -j TOR_ACTIONS
--A INPUT -p tcp -m set --match-set AWS_RANGES src -j AWS_ACTIONS
+-A INPUT -p tcp -m set --match-set AMAZON_RANGES src -j AWS_ACTIONS
 -A INPUT -p tcp -m set --match-set MICROSOFT_RANGES src -j MICROSOFT_ACTIONS
 -A INPUT -j DDOS_DETECT
 -A INPUT -j SPOOF_DETECT
