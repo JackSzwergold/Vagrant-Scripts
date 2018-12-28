@@ -68,4 +68,4 @@ logpath = /var/log/fail2ban.log
 banaction = iptables-allports
 bantime = 604800
 findtime = 86400
-maxretry = 3
+maxretry = 5
