@@ -11,7 +11,7 @@ port = ssh
 filter = sshd
 logpath = /var/log/auth.log
 bantime = 180
-findtime = 1800
+findtime = 86400
 maxretry = 3
 
 [ssh-ddos]
@@ -20,7 +20,7 @@ port = ssh
 filter = sshd-ddos
 logpath = /var/log/auth.log
 bantime = 180
-findtime = 1800
+findtime = 86400
 maxretry = 3
 
 [apache]
@@ -29,7 +29,7 @@ port = http,https
 filter = apache-auth
 logpath = /var/log/apache*/*error.log
 bantime = 180
-findtime = 1800
+findtime = 86400
 maxretry = 3
 
 [apache-overflows]
@@ -38,7 +38,7 @@ port = http,https
 filter = apache-overflows
 logpath = /var/log/apache*/*error.log
 bantime = 180
-findtime = 1800
+findtime = 86400
 maxretry = 2
 
 [apache-badbots]
@@ -47,7 +47,7 @@ port = http,https
 filter = apache-badbots
 logpath = /var/log/apache*/*access.log
 bantime = 180
-findtime = 1800
+findtime = 86400
 maxretry = 2
 
 # Adding a custom 'ddos' jail.
@@ -58,7 +58,7 @@ port = anyport
 filter = ddos
 logpath = /var/log/kern.log
 bantime = 180
-findtime = 900
+findtime = 86400
 maxretry = 3
 
 [recidive]
@@ -66,6 +66,6 @@ enabled = true
 filter = recidive
 logpath = /var/log/fail2ban.log
 banaction = iptables-allports
-bantime = 3600 ; 1 hour
-findtime = 86400 ; 1 day
+bantime = 86400
+findtime = 86400
 maxretry = 3
