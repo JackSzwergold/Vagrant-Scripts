@@ -330,10 +330,10 @@ function install_basic_tools () {
 
   # Install generic tools.
   sudo -E aptitude -y -q=2 install \
-    dnsutils traceroute nmap bc htop finger curl whois rsync lsof \
+    dnsutils traceroute nmap bc htop finger curl whois rsync lsof prips ipcalc \
     iftop figlet lynx mtr-tiny iperf nload zip unzip attr sshpass \
     dkms mc elinks dos2unix p7zip-full nfs-common \
-    slurm sharutils uuid-runtime quota pv trickle ntp \
+    slurm sharutils uuid-runtime quota pv trickle ntp jq \
     virtualbox-dkms;
 
 } # install_basic_tools
@@ -496,24 +496,36 @@ function install_iptables () {
   # Install IPTables and IPSet stuff.
   sudo -E debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v4 boolean true";
   sudo -E debconf-set-selections <<< "iptables-persistent iptables-persistent/autosave_v6 boolean true";
-  sudo -E aptitude -y -q=2 install iptables iptables-persistent ipset;
+  sudo -E apt-get -y -q=2 install iptables iptables-persistent ipset;
 
   # Load the IPSet stuff if the file exists.
-  if [ -f "iptables/ipset.conf" ]; then
-    sudo -E ipset restore < "iptables/ipset.conf";
-    sudo -E cp -f "iptables/ipset.conf" "/etc/iptables/rules.ipsets";
+  # if [ -f "iptables/10-ipset" ]; then
+  #   sudo -E cp -f "iptables/10-ipset" "/usr/share/netfilter-persistent/plugins.d/";
+  #   sudo -E chmod 755 "/usr/share/netfilter-persistent/plugins.d/10-ipset";
+  # fi
+
+  # Load the IPSet stuff if the file exists.
+  if [ -f "iptables/rules.ipset" ]; then
+    sudo -E ipset restore < "iptables/rules.ipset";
   fi
 
-  # Load the IPTables stuff if the file exists.
-  if [ -f "iptables/iptables.conf" ]; then
-    sudo -E iptables-restore < "iptables/iptables.conf";
-    sudo -E cp -f "iptables/iptables.conf" "/etc/iptables/rules.v4";
+  # Load the IPTables v4 stuff if the file exists.
+  if [ -f "iptables/rules.v4" ]; then
+    sudo -E iptables-restore < "iptables/rules.v4";
+  fi
+
+  # Load the IPTables v6 stuff if the file exists.
+  if [ -f "iptables/rules.v6" ]; then
+    sudo -E iptables-restore < "iptables/rules.v6";
   fi
 
   # Patch 'iptables-persistent' if the patch exists and the original 'iptables-persistent' exists.
   if [ -f "/etc/init.d/iptables-persistent" ] && [ -f "iptables/iptables-persistent-ipset.patch" ]; then
     sudo -E patch -fsb "/etc/init.d/iptables-persistent" < "iptables/iptables-persistent-ipset.patch";
   fi
+
+  # Run 'service iptables-persistent save' to save the existing IPTables stuff.
+  sudo -E service iptables-persistent save;
 
 } # install_iptables
 
@@ -1074,21 +1086,21 @@ function install_awstats () {
 
   # Do this little dance to get things installed.
   cd "${BASE_DIR}";
-  curl -ss -O -L "http://prdownloads.sourceforge.net/awstats/awstats-7.6.tar.gz";
-  tar -xf "awstats-7.6.tar.gz";
-  rm -f "awstats-7.6.tar.gz";
-  sudo -E mv -f "awstats-7.6" "/usr/share/awstats-7.6";
+  curl -ss -O -L "http://prdownloads.sourceforge.net/awstats/awstats-7.7.tar.gz";
+  tar -xf "awstats-7.7.tar.gz";
+  rm -f "awstats-7.7.tar.gz";
+  sudo -E mv -f "awstats-7.7" "/usr/share/awstats";
 
   # Go into the config directory.
   cd "${BASE_DIR}/${CONFS_DIR}";
 
   # Set an index page for AWStats.
-  sudo -E cp -f "awstats/awstatstotals.php" "/usr/share/awstats-7.6/wwwroot/cgi-bin/index.php";
-  sudo -E chmod a+r "/usr/share/awstats-7.6/wwwroot/cgi-bin/index.php";
+  sudo -E cp -f "awstats/awstatstotals.php" "/usr/share/awstats/wwwroot/cgi-bin/index.php";
+  sudo -E chmod a+r "/usr/share/awstats/wwwroot/cgi-bin/index.php";
 
   # Create the AWStats data directory.
-  sudo -E mkdir -p "/usr/share/awstats-7.6/wwwroot/data";
-  sudo -E chmod -f g+w "/usr/share/awstats-7.6/wwwroot/data";
+  sudo -E mkdir -p "/usr/share/awstats/wwwroot/data";
+  sudo -E chmod -f g+w "/usr/share/awstats/wwwroot/data";
 
   # Now install CPANminus like this.
   hash cpanminus 2>/dev/null || {
@@ -1099,15 +1111,15 @@ function install_awstats () {
   sudo cpanm --install --force --notest --quiet --skip-installed YAML Geo::IP Geo::IPfree Geo::IP::PurePerl URI::Escape Net::IP Net::DNS Net::XWhois Time::HiRes Time::Local;
 
   # Copy over a basic config file.
-  sudo -E cp -f "awstats/awstats.vagrant.local.conf" "/usr/share/awstats-7.6/wwwroot/cgi-bin/awstats.${PROV_HOSTNAME}.conf";
-  sudo -E sed -i "s/vagrant.local/${PROV_HOSTNAME}/g" "/usr/share/awstats-7.6/wwwroot/cgi-bin/awstats.${PROV_HOSTNAME}.conf";
+  sudo -E cp -f "awstats/awstats.vagrant.local.conf" "/usr/share/awstats/wwwroot/cgi-bin/awstats.${PROV_HOSTNAME}.conf";
+  sudo -E sed -i "s/vagrant.local/${PROV_HOSTNAME}/g" "/usr/share/awstats/wwwroot/cgi-bin/awstats.${PROV_HOSTNAME}.conf";
 
 
   # Set permissions to root for owner and group.
-  sudo -E chown -f root:root -R "/usr/share/awstats-7.6";
+  sudo -E chown -f root:root -R "/usr/share/awstats";
 
   # Update the data for the '${PROV_HOSTNAME}' config.
-  sudo -E "/usr/share/awstats-7.6/wwwroot/cgi-bin/awstats.pl" -config="${PROV_HOSTNAME}" -update
+  sudo -E "/usr/share/awstats/wwwroot/cgi-bin/awstats.pl" -config="${PROV_HOSTNAME}" -update
 
 } # install_awstats
 
@@ -1707,7 +1719,7 @@ if [ "${PROV_APACHE}" = true ]; then
   if [ -f "apache2/phpmyadmin.conf" ] && [ ! -f "/etc/apache2/conf-available/phpmyadmin.conf" ]; then configure_awstats_apache; fi
 
   # AWStats related stuff.
-  if [ ! -d "/usr/share/awstats-7.6" ]; then install_awstats; fi
+  if [ ! -d "/usr/share/awstats" ]; then install_awstats; fi
   if [ -f "apache2/awstats.conf" ] && [ ! -f "/etc/apache2/conf-available/awstats.conf" ]; then configure_awstats_apache; fi
 
   # Install system scripts.
