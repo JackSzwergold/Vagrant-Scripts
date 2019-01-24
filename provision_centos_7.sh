@@ -424,6 +424,16 @@ function install_apache () {
   sudo -E yum install -y -q -e 0 httpd httpd-devel \
     mod_ssl apachetop;
 
+  # Now let’s get the REMI repo setup so we can install an up-to-date version of PHP.
+  sudo -E yum install -y -q -e 0 https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm;
+  sudo -E yum install -y -q -e 0 http://rpms.remirepo.net/enterprise/remi-release-7.rpm;
+
+  # Install the Yum utils.
+  sudo -E yum install -y -q -e 0 yum-utils;
+
+  # Set the Yum config manager to the REMI PHP 7.2 version.
+  sudo -E yum-config-manager --enable remi-php72;
+
   # Install other PHP related related items.
   sudo -E yum install -y -q -e 0 php php-common \
     php-mysqlnd php-pgsql php-odbc \
