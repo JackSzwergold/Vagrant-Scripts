@@ -532,6 +532,46 @@ function install_mongo_php_module () {
 } # install_mongo_php_module
 
 ##########################################################################################
+# MSSQL for PHP
+##########################################################################################
+function install_mssql_php_module () {
+
+  # Go into the config directory.
+  cd "${BASE_DIR}/${CONFS_DIR}";
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Installing and configuring MSSQL related items.\033[0m";
+
+  # Setup the MSSQL PHP repository.
+  if [ -f "mssql-centos-7/mssql-tools.repo" ]; then
+
+    # Copy the MSSQL PHP definition to the Yum repos directory.
+    sudo -E cp -f "mssql-centos-7/mssql-tools.repo" "/etc/yum.repos.d/";
+
+    # Clean the Yum repo cache.
+    sudo -E yum -y -q -e 0 clean all;
+
+  fi
+
+  # Install the MSSQL ODBC and related stuff.
+  sudo -E ACCEPT_EULA=Y yum -y -q -e 0 install msodbcsql17 mssql-tools;
+
+  # Install the Unix ODBC and related stuff.
+  sudo -E yum -y -q -e 0 install unixODBC-devel;
+
+  # Install PHP SQLSRV module.
+  sudo -E ACCEPT_EULA=Y yum -y -q -e 0 install php-sqlsrv;
+
+  # Add the MSSQL SQLSRV modules to the PHP config.
+  sudo -E sh -c "printf '\nextension=sqlsrv.so\n' >> /etc/php.ini";
+  sudo -E sh -c "printf '\nextension=pdo_sqlsrv.so.so\n' >> /etc/php.ini";
+
+  # Restart Apache.
+  sudo -E service httpd restart;
+
+} # install_mssql_php_module
+
+##########################################################################################
 # Apache configure.
 ##########################################################################################
 function configure_apache () {
@@ -1029,7 +1069,6 @@ function configure_kibana () {
 
 } # configure_kibana
 
-
 ##########################################################################################
 # Update the locate database.
 ##########################################################################################
@@ -1095,6 +1134,9 @@ if [ "${PROV_APACHE}" = true ]; then
 
   # Install the Mongo PHP module.
   install_mongo_php_module;
+
+  # Install the MSSQL PHP module.
+  install_mssql_php_module;
 
   # Install system scripts.
   install_system_scripts;
