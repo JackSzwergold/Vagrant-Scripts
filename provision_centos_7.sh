@@ -1136,7 +1136,7 @@ if [ "${PROV_APACHE}" = true ]; then
   # install_mongo_php_module;
 
   # Install the MSSQL PHP module.
-  install_mssql_php_module;
+  # install_mssql_php_module;
 
   # Install system scripts.
   install_system_scripts;
