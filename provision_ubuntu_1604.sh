@@ -1820,7 +1820,7 @@ if [ "${PROV_APACHE}" = true ]; then
   if [ -f "/etc/logrotate.d/apache2" ]; then configure_apache_log_rotation; fi
 
   # Install the Mongo PHP module.
-  install_mongo_php_module;
+  # install_mongo_php_module;
 
   # Munin related stuff.
   hash munin-node 2>/dev/null || { install_munin; }

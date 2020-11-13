@@ -1133,7 +1133,7 @@ if [ "${PROV_APACHE}" = true ]; then
   # if [ -f "/etc/logrotate.d/httpd" ]; then configure_apache_log_rotation; fi
 
   # Install the Mongo PHP module.
-  install_mongo_php_module;
+  # install_mongo_php_module;
 
   # Install the MSSQL PHP module.
   install_mssql_php_module;
