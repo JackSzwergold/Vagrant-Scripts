@@ -214,7 +214,8 @@ function set_timezone () {
 function configure_repository_stuff () {
 
   # Install basic repo stuff.
-  sudo -E yum install -y -q -e 0 epel-release deltarpm;
+  sudo -E yum install -y -q -e 0 epel-release;
+  sudo -E dnf -q -y -e 0 config-manager --set-enabled PowerTools;
 
   # Enable EPEL (Extra Packages for Enterprise Linux)
   sudo sed -i "s/enabled=0/enabled=1/g" "/etc/yum.repos.d/epel.repo";
@@ -272,7 +273,8 @@ function install_basic_tools () {
 
   # Install generic tools.
   sudo -E yum install -y -q -e 0 \
-    bind-utils dnsutils traceroute nmap bc htop finger curl whois rsync lsof prips ipcalc \
+    bind-utils traceroute nmap bc htop curl whois rsync lsof ipcalc \
+
     iftop figlet lynx mtr-tiny iperf nload zip unzip attr sshpass \
     dkms mc elinks dos2unix p7zip-full nfs-common \
     slurm sharutils uuid-runtime chkconfig quota pv trickle ntp jq \
@@ -421,8 +423,8 @@ function install_apache () {
   echo -e "\033[33;1mPROVISIONING: Installing Apache and PHP related items.\033[0m";
 
   # Now let’s get the REMI repo setup so we can install an up-to-date version of PHP.
-  sudo -E yum install -y -q -e 0 https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm;
-  sudo -E yum install -y -q -e 0 http://rpms.remirepo.net/enterprise/remi-release-7.rpm;
+  sudo -E yum install -y -q -e 0 https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm;
+  sudo -E yum install -y -q -e 0 http://rpms.remirepo.net/enterprise/remi-release-8.rpm;
 
   # Install the Yum utils.
   sudo -E yum install -y -q -e 0 yum-utils;
