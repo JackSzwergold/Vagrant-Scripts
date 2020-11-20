@@ -274,12 +274,11 @@ function install_basic_tools () {
   # Install generic tools.
   sudo -E yum install -y -q -e 0 \
     bind-utils traceroute nmap bc htop curl whois rsync lsof ipcalc \
-
-    iftop figlet lynx mtr-tiny iperf nload zip unzip attr sshpass \
-    dkms mc elinks dos2unix p7zip-full nfs-common \
-    slurm sharutils uuid-runtime chkconfig quota pv trickle ntp jq \
+    iftop figlet lynx mtr iperf3 nload zip unzip attr sshpass \
+    dkms mc elinks dos2unix p7zip nfs-utils \
+    sharutils chkconfig quota pv jq \
     nano man man-pages \
-    virtualbox-dkms;
+    dkms;
 
 } # install_basic_tools
 
