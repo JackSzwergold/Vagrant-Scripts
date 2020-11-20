@@ -115,15 +115,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                                 "PROV_IMAGEMAGICK" => "#{settings['imagemagick']}",
                                 "PROV_GEOIP" => "#{settings['geoip']}",
                                 "PROV_IPTABLES" => "#{settings['iptables']}",
-                                "PROV_FAIL2BAN" => "#{settings['fail2ban']}",
-                                "PROV_JAVA" => "#{settings['java']}",
-                                "PROV_SOLR" => "#{settings['solr']}",
-                                "PROV_ELASTICSEARCH" => "#{settings['elasticsearch']}",
-                                "PROV_MONGO" => "#{settings['mongo']}",
-                                "PROV_NODEJS" => "#{settings['nodejs']}",
-                                "PROV_NGINX" => "#{settings['nginx']}",
-                                "PROV_LOGSTASH" => "#{settings['logstash']}",
-                                "PROV_KIBANA" => "#{settings['kibana']}"
+                                "PROV_FAIL2BAN" => "#{settings['fail2ban']}"
                               },
                               :args => "#{settings['username']} #{settings['password']}"
       end
@@ -144,15 +136,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
                                 "PROV_IMAGEMAGICK" => "#{settings['imagemagick']}",
                                 "PROV_GEOIP" => "#{settings['geoip']}",
                                 "PROV_IPTABLES" => "#{settings['iptables']}",
-                                "PROV_FAIL2BAN" => "#{settings['fail2ban']}",
-                                "PROV_JAVA" => "#{settings['java']}",
-                                "PROV_SOLR" => "#{settings['solr']}",
-                                "PROV_ELASTICSEARCH" => "#{settings['elasticsearch']}",
-                                "PROV_MONGO" => "#{settings['mongo']}",
-                                "PROV_NODEJS" => "#{settings['nodejs']}",
-                                "PROV_NGINX" => "#{settings['nginx']}",
-                                "PROV_LOGSTASH" => "#{settings['logstash']}",
-                                "PROV_KIBANA" => "#{settings['kibana']}"
+                                "PROV_FAIL2BAN" => "#{settings['fail2ban']}"
                               },
                               :args => "#{settings['username']} #{settings['password']}"
       end
