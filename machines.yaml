@@ -105,6 +105,6 @@
   forward_id1: "ssh"
   memory: 512
   cpus: 1
-  basics: false
+  basics: true
   apache: false
   mysql: false

@@ -142,7 +142,7 @@ function configure_user_and_group () {
   sudo -E chmod -f go+rx  "/home/${USERNAME}";
 
   # Changing the username/password combination.
-  echo "${USERNAME}:${PASSWORD}" | sudo -E sudo chpasswd;
+  # echo "${USERNAME}:${PASSWORD}" | sudo -E sudo chpasswd;
 
 } # configure_user_and_group
 
@@ -1105,8 +1105,8 @@ if [ "${PROV_BASICS}" = true ]; then
 
   install_basic_tools;
   hash libtool 2>/dev/null || { install_compiler; }
-  install_git;
-  install_postfix;
+  # install_git;
+  # install_postfix;
   # if [ -f "system/login.defs" ] && [ -f "/etc/login.defs" ]; then configure_login_defs; fi
   # if [ -f "system/common-session" ] && [ -f "/etc/pam.d/common-session" ]; then configure_common_session; fi
   # if [ -f "ssh/ssh_config" ] && [ -f "/etc/ssh/ssh_config" ]; then configure_ssh; fi
