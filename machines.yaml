@@ -106,5 +106,5 @@
   memory: 512
   cpus: 1
   basics: true
-  apache: false
+  apache: true
   mysql: false
