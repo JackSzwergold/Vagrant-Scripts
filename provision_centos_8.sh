@@ -195,11 +195,11 @@ function set_timezone () {
     sudo -E timedatectl set-timezone "${PROV_TIMEZONE}";
 
     # Do this stuff to get NTP setup.
-    sudo -E service ntp stop;
-    sudo -E ntpd -gq;
-    sudo service ntp start;
+    # sudo -E service ntp stop;
+    # sudo -E ntpd -gq;
+    # sudo service ntp start;
     # sudo -E update-rc.d -f ntp defaults;
-    sudo -E update-rc.d -f ntp enable;
+    # sudo -E update-rc.d -f ntp enable;
 
     # Set the NTP synchronized value to 'true'.
     sudo -E timedatectl set-ntp true;
@@ -214,7 +214,7 @@ function set_timezone () {
 function configure_repository_stuff () {
 
   # Install basic repo stuff.
-  sudo -E yum install -y -q -e 0 epel-release;
+  sudo -E yum install --nogpgcheck -y -q -e 0 epel-release;
   sudo -E dnf -q -y -e 0 config-manager --set-enabled PowerTools;
 
   # Enable EPEL (Extra Packages for Enterprise Linux)
@@ -272,7 +272,7 @@ function install_basic_tools () {
   echo -e "\033[33;1mPROVISIONING: Installing a set of generic tools.\033[0m";
 
   # Install generic tools.
-  sudo -E yum install -y -q -e 0 \
+  sudo -E yum install --nogpgcheck -y -q -e 0 \
     bind-utils traceroute nmap bc htop curl whois rsync lsof ipcalc \
     iftop figlet lynx mtr iperf3 nload zip unzip attr sshpass \
     dkms mc elinks dos2unix p7zip nfs-utils \
@@ -404,7 +404,7 @@ function configure_motd () {
   echo -e "\033[33;1mPROVISIONING: Setting the MOTD banner.\033[0m";
 
   # Install figlet.
-  sudo -E yum install -y -q -e 0 figlet;
+  sudo -E yum install --nogpgcheck -y -q -e 0 figlet;
 
   # Set the server login banner with figlet.
   MOTD_PATH="/etc/motd";
@@ -422,8 +422,8 @@ function install_apache () {
   echo -e "\033[33;1mPROVISIONING: Installing Apache and PHP related items.\033[0m";
 
   # Now let’s get the REMI repo setup so we can install an up-to-date version of PHP.
-  sudo -E yum install -y -q -e 0 https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm;
-  sudo -E yum install -y -q -e 0 http://rpms.remirepo.net/enterprise/remi-release-8.rpm;
+  sudo -E yum install --nogpgcheck -y -q -e 0 https://dl.fedoraproject.org/pub/epel/epel-release-latest-8.noarch.rpm;
+  sudo -E yum install --nogpgcheck -y -q -e 0 http://rpms.remirepo.net/enterprise/remi-release-8.rpm;
 
   # Install the Yum utils.
   sudo -E yum install -y -q -e 0 yum-utils;
@@ -432,18 +432,18 @@ function install_apache () {
   sudo -E dnf -q -y -e 0 module enable php:remi-7.3;
 
   # Install the base Apache related items.
-  sudo -E yum install -y -q -e 0 httpd httpd-devel \
+  sudo -E yum install --nogpgcheck -y -q -e 0 httpd httpd-devel \
     mod_ssl apachetop;
 
   # Install other PHP related related items.
-  sudo -E yum install -y -q -e 0 php php-common \
+  sudo -E yum install --nogpgcheck -y -q -e 0 php php-common \
     php-mysqlnd php-pgsql php-odbc \
     php-xmlrpc php-json php-xsl php-curl \
     php-ldap php-mcrypt \
     php-pspell php-gmp php-gd php-mbstring;
 
   # Install PHP Pear and PHP development stuff.
-  sudo -E yum install -y -q -e 0 php-pear php-devel;
+  sudo -E yum install --nogpgcheck -y -q -e 0 php-pear php-devel;
 
   # Update the Pear/PECL channel stuff.
   sudo -E pecl channel-update pecl.php.net;
