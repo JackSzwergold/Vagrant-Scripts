@@ -256,7 +256,7 @@ function install_sysstat () {
   echo -e "\033[33;1mPROVISIONING: Sysstat related stuff.\033[0m";
 
   # Install Sysstat.
-  sudo -E yum install -y -q -e 0 sysstat;
+  sudo -E yum install --nogpgcheck -y -q -e 0 sysstat;
 
   # Restart Sysstat.
   sudo -E service sysstat restart;
