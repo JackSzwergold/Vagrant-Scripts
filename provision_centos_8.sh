@@ -142,7 +142,7 @@ function configure_user_and_group () {
   sudo -E chmod -f go+rx  "/home/${USERNAME}";
 
   # Changing the username/password combination.
-  # echo "${USERNAME}:${PASSWORD}" | sudo -E sudo chpasswd;
+  echo "${USERNAME}:${PASSWORD}" | sudo -E sudo chpasswd;
 
 } # configure_user_and_group
 
@@ -1094,7 +1094,7 @@ function update_locate_db () {
 
 # Install stuff.
 configure_repository_stuff;
-configure_user_and_group;
+# configure_user_and_group;
 set_user_environment;
 hash sar 2>/dev/null || { install_sysstat; }
 hash updatedb 2>/dev/null || { install_locate; }
