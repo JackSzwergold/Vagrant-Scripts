@@ -87,3 +87,24 @@
   basics: true
   apache: true
   mysql: true
+- name: "Sandbox (CentOS 8)"
+  box: "bento/centos-8"
+  primary: false
+  autostart: false
+  provision_script: "provision_centos_8.sh"
+  provision_script_regular: null
+  os: "centos"
+  timezone: "America/New_York"
+  hostname: "sandbox-centos-8"
+  banner: "Sandbox CentOS 8"
+  username: "vagrant"
+  password: "vagrant"
+  ip: "192.168.56.30"
+  forward_guest1: 22
+  forward_host1: 2230
+  forward_id1: "ssh"
+  memory: 512
+  cpus: 1
+  basics: false
+  apache: false
+  mysql: false
