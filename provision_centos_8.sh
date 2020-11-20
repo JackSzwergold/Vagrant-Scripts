@@ -231,10 +231,10 @@ function install_avahi () {
   echo -e "\033[33;1mPROVISIONING: Avahi related stuff.\033[0m";
 
   # Install Avahi.
-  sudo -E yum install -y -q -e 0 avahi;
+  sudo -E yum install --nogpgcheck -y -q -e 0 avahi;
 
   # Install NSS support for mDNS which is required by Avahi.
-  sudo -E yum install -y -q -e 0 nss-mdns;
+  sudo -E yum install --nogpgcheck -y -q -e 0 nss-mdns;
 
   # Start the system messagebus.
   sudo -E service messagebus restart;
@@ -291,7 +291,7 @@ function install_locate () {
   echo -e "\033[33;1mPROVISIONING: Installing the locate tool and updating the database.\033[0m";
 
   # Install Locate.
-  sudo -E yum install -y -q -e 0 mlocate;
+  sudo -E yum install --nogpgcheck -y -q -e 0 mlocate;
 
   # Update Locate.
   sudo -E updatedb;
@@ -310,7 +310,7 @@ function install_compiler () {
   sudo -E yum groupinstall -y -q -e 0 "Development Tools";
 
   # Install OpenSSL related stuff.
-  sudo -E yum install -y -q -e 0 openssl openssl-devel;
+  sudo -E yum install --nogpgcheck -y -q -e 0 openssl openssl-devel;
 
 } # install_compiler
 
@@ -326,8 +326,8 @@ function install_git () {
   sudo -E yum remove -y -q -e 0 git;
 
   # Now install Git via WANDisco.
-  sudo -E yum install -y -q -e 0 "http://opensource.wandisco.com/centos/6/git/x86_64/wandisco-git-release-6-1.noarch.rpm" 2>/dev/null;
-  sudo -E yum install -y -q -e 0 git;
+  sudo -E yum install --nogpgcheck -y -q -e 0 "http://opensource.wandisco.com/centos/6/git/x86_64/wandisco-git-release-6-1.noarch.rpm" 2>/dev/null;
+  sudo -E yum install --nogpgcheck -y -q -e 0 git;
 
 } # install_git
 
@@ -340,7 +340,7 @@ function install_postfix () {
   echo -e "\033[33;1mPROVISIONING: Installing Postfix and related mail stuff.\033[0m";
 
   # Install postfix and general mail stuff.
-  sudo -E yum install -y -q -e 0 postfix cyrus-sasl cyrus-imapd mailx;
+  sudo -E yum install --nogpgcheck -y -q -e 0 postfix cyrus-sasl cyrus-imapd mailx;
 
 } # install_postfix
 
@@ -426,7 +426,7 @@ function install_apache () {
   sudo -E yum install --nogpgcheck -y -q -e 0 http://rpms.remirepo.net/enterprise/remi-release-8.rpm;
 
   # Install the Yum utils.
-  sudo -E yum install -y -q -e 0 yum-utils;
+  sudo -E yum install --nogpgcheck -y -q -e 0 yum-utils;
 
   # Set the Yum config manager to the REMI PHP 7.3 version.
   sudo -E dnf -q -y -e 0 module enable php:remi-7.3;
@@ -743,7 +743,7 @@ function install_mysql () {
   sudo -E rpm -U "http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm" 2>/dev/null;
 
   # Install the MySQL server and client.
-  sudo -E RUNLEVEL=1 yum install -y -q -e 0 mysql mysql-server;
+  sudo -E RUNLEVEL=1 yum install --nogpgcheck -y -q -e 0 mysql mysql-server;
 
   # Start MySQL.
   sudo -E service mysqld start;
@@ -789,7 +789,7 @@ function install_mariadb () {
   fi
 
   # Install the MariaDB MySQL server and client.
-  sudo -E RUNLEVEL=1 yum install -y -q -e 0 MariaDB-client MariaDB-server;
+  sudo -E RUNLEVEL=1 yum install --nogpgcheck -y -q -e 0 MariaDB-client MariaDB-server;
 
   # Start MySQL.
   sudo -E service mysql start;
@@ -887,7 +887,7 @@ function install_java () {
   echo -e "\033[33;1mPROVISIONING: Installing Java (OpenJDK).\033[0m";
 
   # Process to install OpenJDK 8.
-  sudo -E yum install -y -q -e 0 java-1.8.0-openjdk;
+  sudo -E yum install --nogpgcheck -y -q -e 0 java-1.8.0-openjdk;
 
 } # install_java
 
@@ -917,7 +917,7 @@ function install_elasticsearch () {
   fi
 
   # Install Elasticsearch.
-  sudo -E RUNLEVEL=1 yum install -y -q -e 0 elasticsearch;
+  sudo -E RUNLEVEL=1 yum install --nogpgcheck -y -q -e 0 elasticsearch;
 
   # Restart Elasticsearch.
   sudo -E service elasticsearch restart;
@@ -973,7 +973,7 @@ function install_logstash () {
   fi
 
   # Install Logstash.
-  sudo -E RUNLEVEL=1 yum install -y -q -e 0 logstash;
+  sudo -E RUNLEVEL=1 yum install --nogpgcheck -y -q -e 0 logstash;
 
   # Restart Logstash.
   sudo -E service logstash restart;
@@ -1040,7 +1040,7 @@ function install_kibana () {
   fi
 
   # Install Logstash.
-  sudo -E RUNLEVEL=1 yum install -y -q -e 0 kibana;
+  sudo -E RUNLEVEL=1 yum install --nogpgcheck -y -q -e 0 kibana;
 
   # Restart Logstash.
   sudo -E service kibana restart;
