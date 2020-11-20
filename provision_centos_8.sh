@@ -133,7 +133,7 @@ function configure_user_and_group () {
   sudo -E groupadd -f www-readwrite;
 
   # Set the user’s main group to be the 'www-readwrite' group.
-  sudo -E usermod -g www-readwrite "${USERNAME}";
+  # sudo -E usermod -g www-readwrite "${USERNAME}";
 
   # Add the user to the 'www-readwrite' group.
   sudo -E usermod -a -G www-readwrite "${USERNAME}";
