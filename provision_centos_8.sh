@@ -545,10 +545,10 @@ function install_mssql_php_module () {
   echo -e "\033[33;1mPROVISIONING: Installing and configuring MSSQL related items.\033[0m";
 
   # Setup the MSSQL PHP repository.
-  if [ -f "mssql-centos-7/mssql-tools.repo" ]; then
+  if [ -f "mssql-centos-8/mssql-tools.repo" ]; then
 
     # Copy the MSSQL PHP definition to the Yum repos directory.
-    sudo -E cp -f "mssql-centos-7/mssql-tools.repo" "/etc/yum.repos.d/";
+    sudo -E cp -f "mssql-centos-8/mssql-tools.repo" "/etc/yum.repos.d/";
 
     # Clean the Yum repo cache.
     sudo -E yum -y -q -e 0 clean all;
@@ -585,8 +585,8 @@ function configure_apache () {
   echo -e "\033[33;1mPROVISIONING: Setting Apache and PHP configs.\033[0m";
 
   # Copy the Apache config files into place.
-  sudo -E cp -f "httpd-centos-7/httpd.conf" "/etc/httpd/conf/httpd.conf";
-  sudo -E cp -f "httpd-centos-7/httpd" "/etc/sysconfig/httpd";
+  sudo -E cp -f "httpd-centos-8/httpd.conf" "/etc/httpd/conf/httpd.conf";
+  sudo -E cp -f "httpd-centos-8/httpd" "/etc/sysconfig/httpd";
 
   # Copy and configure the Apache virtual host config file.
   sudo -E sed -i "s/vagrant.local/${PROV_HOSTNAME}/g" "/etc/httpd/conf/httpd.conf";
@@ -619,7 +619,7 @@ function set_apache_web_root () {
   sudo -E chown -f -R "${USERNAME}":www-readwrite "/var/www/html/";
   sudo -E chmod -f -R 775 "/var/www/html/";
   sudo -E chmod g+s "/var/www/html/";
-  sudo -E cp -f "httpd-centos-7/index.php" "/var/www/html/index.php";
+  sudo -E cp -f "httpd-centos-8/index.php" "/var/www/html/index.php";
   sudo -E chmod -f -R 664 "/var/www/html/index.php";
   sudo -E rm -rf "/var/www/html/index.html";
 
@@ -721,7 +721,7 @@ function set_apache_virtual_host_directories () {
 
   # Set up the Apache virtual host directories.
   sudo -E mkdir -p "/var/www/html/${PROV_HOSTNAME}/site";
-  sudo -E cp -f "httpd-centos-7/index.php" "/var/www/html/${PROV_HOSTNAME}/site/index.php";
+  sudo -E cp -f "httpd-centos-8/index.php" "/var/www/html/${PROV_HOSTNAME}/site/index.php";
   sudo -E chown -f -R "${USERNAME}:www-readwrite" "/var/www/html/${PROV_HOSTNAME}";
   sudo -E chmod -f -R 775 "/var/www/html/${PROV_HOSTNAME}";
   sudo -E chmod g+s "/var/www/html/${PROV_HOSTNAME}";
@@ -750,8 +750,8 @@ function install_mysql () {
   sudo -E service mysqld start;
 
   # Secure the MySQL installation.
-  if [ -f "mysql-centos-7/mysql_secure_installation.sql" ]; then
-    mysql -sfu root < "mysql-centos-7/mysql_secure_installation.sql";
+  if [ -f "mysql-centos-8/mysql_secure_installation.sql" ]; then
+    mysql -sfu root < "mysql-centos-8/mysql_secure_installation.sql";
   fi
 
   # Restart MySQL.
@@ -779,10 +779,10 @@ function install_mariadb () {
   echo -e "\033[33;1mPROVISIONING: Installing and configuring MariaDB related items.\033[0m";
 
   # Setup the MariaDB repository.
-  if [ -f "mysql-centos-7/mariadb102.repo" ]; then
+  if [ -f "mysql-centos-8/mariadb102.repo" ]; then
 
     # Copy the MariaDB repo definition to the Yum repos directory.
-    sudo -E cp -f "mysql-centos-7/mariadb102.repo" "/etc/yum.repos.d/";
+    sudo -E cp -f "mysql-centos-8/mariadb102.repo" "/etc/yum.repos.d/";
 
     # Clean the Yum repo cache.
     sudo -E yum -y -q -e 0 clean all;
@@ -796,8 +796,8 @@ function install_mariadb () {
   sudo -E service mysql start;
 
   # Secure the MySQL installation.
-  if [ -f "mysql-centos-7/mysql_secure_installation.sql" ]; then
-    mysql -sfu root < "mysql-centos-7/mysql_secure_installation.sql";
+  if [ -f "mysql-centos-8/mysql_secure_installation.sql" ]; then
+    mysql -sfu root < "mysql-centos-8/mysql_secure_installation.sql";
   fi
 
   # Restart MySQL.
