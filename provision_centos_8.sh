@@ -745,18 +745,17 @@ function install_mysql () {
   # Start MySQL.
   sudo -E service mysqld start;
 
-  # Secure the MySQL installation.
-  if [ -f "mysql-centos-8/mysql_secure_installation.sql" ]; then
-    mysql -sfu root < "mysql-centos-8/mysql_secure_installation.sql";
-  fi
+  # # Secure the MySQL installation.
+  # if [ -f "mysql-centos-8/mysql_secure_installation.sql" ]; then
+  #   mysql -sfu root < "mysql-centos-8/mysql_secure_installation.sql";
+  # fi
 
   # Restart MySQL.
   sudo -E service mysqld restart;
 
   # Set MySQL to start on reboot.
-  sudo -E systemctl enable mysql.service;
-  # sudo -E chkconfig --add mysql;
-  # sudo -E chkconfig --level 345 mysql on;
+  sudo -E systemctl enable mysqld;
+
 
   # Sleep a bit.
   sleep 3;
