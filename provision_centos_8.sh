@@ -307,7 +307,7 @@ function install_compiler () {
   echo -e "\033[33;1mPROVISIONING: Installing the core compiler tools.\033[0m";
 
   # Install the core compiler and build tools.
-  sudo -E yum groupinstall -y -q -e 0 "Development Tools";
+  sudo -E yum groupinstall --nogpgcheck -y -q -e 0 "Development Tools";
 
   # Install OpenSSL related stuff.
   sudo -E yum install --nogpgcheck -y -q -e 0 openssl openssl-devel;
