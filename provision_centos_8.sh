@@ -739,9 +739,6 @@ function install_mysql () {
   # Output a provisioning message.
   echo -e "\033[33;1mPROVISIONING: Installing and configuring MySQL related items.\033[0m";
 
-  # Adding the official MySQL repository to get MySQL 5.5 installed.
-  sudo -E rpm -U "http://repo.mysql.com/mysql-community-release-el7-5.noarch.rpm" 2>/dev/null;
-
   # Install the MySQL server and client.
   sudo -E RUNLEVEL=1 yum install --nogpgcheck -y -q -e 0 mysql mysql-server;
 
@@ -765,52 +762,6 @@ function install_mysql () {
   sleep 3;
 
 } # install_mysql
-
-##########################################################################################
-# MariaDB (MySQL Clone)
-##########################################################################################
-function install_mariadb () {
-
-  # Go into the config directory.
-  cd "${BASE_DIR}/${CONFS_DIR}";
-
-  # Output a provisioning message.
-  echo -e "\033[33;1mPROVISIONING: Installing and configuring MariaDB related items.\033[0m";
-
-  # Setup the MariaDB repository.
-  if [ -f "mysql-centos-8/mariadb102.repo" ]; then
-
-    # Copy the MariaDB repo definition to the Yum repos directory.
-    sudo -E cp -f "mysql-centos-8/mariadb102.repo" "/etc/yum.repos.d/";
-
-    # Clean the Yum repo cache.
-    sudo -E yum -y -q -e 0 clean all;
-
-  fi
-
-  # Install the MariaDB MySQL server and client.
-  sudo -E RUNLEVEL=1 yum install --nogpgcheck -y -q -e 0 MariaDB-client MariaDB-server;
-
-  # Start MySQL.
-  sudo -E service mysql start;
-
-  # Secure the MySQL installation.
-  if [ -f "mysql-centos-8/mysql_secure_installation.sql" ]; then
-    mysql -sfu root < "mysql-centos-8/mysql_secure_installation.sql";
-  fi
-
-  # Restart MySQL.
-  sudo -E service mysql restart;
-
-  # Set MySQL to start on reboot.
-  # sudo -E systemctl enable mysql.service;
-  sudo -E chkconfig --add mysql;
-  sudo -E chkconfig --level 345 mysql on;
-
-  # Sleep a bit.
-  sleep 3;
-
-} # install_mariadb
 
 ##########################################################################################
 # MySQL configure.
@@ -1151,8 +1102,7 @@ fi
 if [ "${PROV_MYSQL}" = true ]; then
 
   hash mysql 2>/dev/null && hash mysqld 2>/dev/null || {
-    # install_mysql;
-    install_mariadb;
+    install_mysql;
   }
   configure_mysql;
 
