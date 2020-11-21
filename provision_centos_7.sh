@@ -588,6 +588,9 @@ function configure_apache () {
   # Add the user to the 'www-readwrite' group.
   sudo -E usermod -a -G www-readwrite apache;
 
+  # Restart Apache.
+  sudo -E service httpd restart;
+
 } # configure_apache
 
 ##########################################################################################
