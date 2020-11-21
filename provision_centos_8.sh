@@ -550,7 +550,7 @@ function install_mssql_php_module () {
     sudo -E cp -f "mssql-centos-8/mssql-tools.repo" "/etc/yum.repos.d/";
 
     # Clean the Yum repo cache.
-    sudo -E yum -y -q -e 0 clean all;
+    sudo -E yum --nogpgcheck -y -q -e 0 clean all;
 
   fi
 
@@ -558,7 +558,7 @@ function install_mssql_php_module () {
   sudo -E ACCEPT_EULA=Y yum -y -q -e 0 install msodbcsql17 mssql-tools;
 
   # Install the Unix ODBC and related stuff.
-  sudo -E yum -y -q -e 0 install unixODBC-devel;
+  sudo -E yum --nogpgcheck -y -q -e 0 install unixODBC-devel;
 
   # Install PHP SQLSRV module.
   sudo -E ACCEPT_EULA=Y yum -y -q -e 0 install php-sqlsrv;
@@ -829,6 +829,19 @@ function install_system_scripts () {
 } # install_system_scripts
 
 ##########################################################################################
+# Update the OS packages.
+##########################################################################################
+function update_os_pacakges () {
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Updating OS packages. This might take forever.\033[0m";
+
+  # Run yum update.
+  sudo -E yum update --nogpgcheck -y -q -e 0;
+
+} # update_os_pacakges
+
+##########################################################################################
 # Update the locate database.
 ##########################################################################################
 function update_locate_db () {
@@ -914,6 +927,9 @@ if [ "${PROV_MYSQL}" = true ]; then
   configure_mysql;
 
 fi
+
+# Update the OS packages.
+update_os_pacakges
 
 # Update the locate database.
 update_locate_db;
