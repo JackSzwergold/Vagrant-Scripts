@@ -110,7 +110,7 @@
   apache: true
   mysql: true
   imagemagick: false
-  geoip: true
+  geoip: false
   iptables: false
   fail2ban: false
 - name: "Sandbox (CentOS 7)"
