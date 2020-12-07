@@ -70,7 +70,7 @@
   box: "bento/ubuntu-18.04"
   primary: false
   autostart: false
-  provision_script: "provision_ubuntu_1608.sh"
+  provision_script: "provision_ubuntu_1804.sh"
   provision_script_regular: null
   os: "ubuntu"
   timezone: "America/New_York"
