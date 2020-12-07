@@ -19,31 +19,6 @@
 #
 ##########################################################################################
 
-- name: "Sandbox LAMP (Ubuntu 16.04)"
-  box: "bento/ubuntu-16.04"
-  primary: false
-  autostart: false
-  provision_script: "provision_ubuntu_1604.sh"
-  provision_script_regular: null
-  os: "ubuntu"
-  timezone: "America/New_York"
-  hostname: "sandbox-lamp-1604"
-  banner: "Sandbox LAMP 1604"
-  username: "vagrant"
-  password: "vagrant"
-  ip: "192.168.56.10"
-  forward_guest1: 22
-  forward_host1: 2210
-  forward_id1: "ssh"
-  memory: 512
-  cpus: 1
-  basics: true
-  apache: true
-  mysql: true
-  imagemagick: false
-  geoip: true
-  iptables: true
-  fail2ban: false
 - name: "Sandbox-Basic-1604 (Ubuntu)"
   box: "bento/ubuntu-16.04"
   primary: false
@@ -56,6 +31,28 @@
   banner: "Sandbox Basic 1604"
   username: "vagrant"
   password: "vagrant"
+  ip: "192.168.56.10"
+  forward_guest1: 22
+  forward_host1: 2210
+  forward_id1: "ssh"
+  memory: 512
+  cpus: 1
+  basics: true
+  geoip: false
+  iptables: false
+  fail2ban: false
+- name: "Sandbox LAMP (Ubuntu 16.04)"
+  box: "bento/ubuntu-16.04"
+  primary: false
+  autostart: false
+  provision_script: "provision_ubuntu_1604.sh"
+  provision_script_regular: null
+  os: "ubuntu"
+  timezone: "America/New_York"
+  hostname: "sandbox-lamp-1604"
+  banner: "Sandbox LAMP 1604"
+  username: "vagrant"
+  password: "vagrant"
   ip: "192.168.56.11"
   forward_guest1: 22
   forward_host1: 2211
@@ -63,8 +60,11 @@
   memory: 512
   cpus: 1
   basics: true
-  geoip: false
-  iptables: false
+  apache: true
+  mysql: true
+  imagemagick: false
+  geoip: true
+  iptables: true
   fail2ban: false
 - name: "Sandbox-Basic-1804 (Ubuntu)"
   box: "bento/ubuntu-18.04"
