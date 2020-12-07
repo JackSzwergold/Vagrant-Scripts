@@ -88,6 +88,31 @@
   geoip: false
   iptables: false
   fail2ban: false
+- name: "Sandbox LAMP (Ubuntu 18.04)"
+  box: "bento/ubuntu-18.04"
+  primary: false
+  autostart: false
+  provision_script: "provision_ubuntu_1804.sh"
+  provision_script_regular: null
+  os: "ubuntu"
+  timezone: "America/New_York"
+  hostname: "sandbox-lamp-1804"
+  banner: "Sandbox LAMP 1804"
+  username: "vagrant"
+  password: "vagrant"
+  ip: "192.168.56.13"
+  forward_guest1: 22
+  forward_host1: 2213
+  forward_id1: "ssh"
+  memory: 512
+  cpus: 1
+  basics: true
+  apache: true
+  mysql: true
+  imagemagick: false
+  geoip: true
+  iptables: false
+  fail2ban: false
 - name: "Sandbox (CentOS 7)"
   box: "bento/centos-7.8"
   primary: false

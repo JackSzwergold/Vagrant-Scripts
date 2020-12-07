@@ -511,14 +511,15 @@ function install_apache () {
     apachetop;
 
   # Install other PHP related related items.
+  # TODO: These are somehow not in Ubuntu 18.04 by default.
   sudo -E RUNLEVEL=1 apt-get -y -qq -o=Dpkg::Use-Pty=0 install \
-    php-mysql php-pgsql php-odbc php-sybase php-sqlite \
+    php-mysql php-pgsql php-odbc php-sybase \
     php-xmlrpc php-json php-xsl php-curl php-geoip \
-    php-getid3 php-imap php-ldap php-mcrypt \
+    php-getid3 php-imap php-ldap \
     php-pspell php-gmp php-gd;
 
   # Enable the PHP mcrypt module.
-  sudo -E phpenmod mcrypt;
+  # sudo -E phpenmod mcrypt;
 
   # Enable these core Apache modules.
   sudo -E a2enmod -q rewrite headers expires include proxy proxy_http cgi;
