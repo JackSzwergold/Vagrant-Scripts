@@ -1308,6 +1308,22 @@ function set_application_deployment_directories () {
 } # set_application_deployment_directories
 
 ##########################################################################################
+# Update the OS packages.
+##########################################################################################
+function update_os_pacakges () {
+
+  # Output a provisioning message.
+  echo -e "\033[33;1mPROVISIONING: Updating OS packages. This might take forever.\033[0m";
+
+  # Run apt update.
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 update;
+
+  # Run apt update.
+  sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 upgrade;
+
+} # update_os_pacakges
+
+##########################################################################################
 # Update the locate database.
 ##########################################################################################
 function update_locate_db () {
@@ -1438,6 +1454,9 @@ fi
 
 # GoAccess related stuff.
 install_goaccess;
+
+# Update the OS packages.
+update_os_pacakges
 
 # Update the locate database.
 update_locate_db;
