@@ -614,6 +614,12 @@ function set_apache_deployment_directories () {
   sudo -E chmod -f -R 775 "/var/www/"{builds,configs,content};
   sudo -E chmod g+s "/var/www/"{builds,configs,content};
 
+  # Set the deployment directories.
+  sudo -E mkdir -p "/opt/codebase/"{active,builds,configs,content};
+  sudo -E chown -f -R "${USERNAME}":www-readwrite "/opt/codebase/"{active,builds,configs,content};
+  sudo -E chmod -f -R 775 "/opt/codebase/"{active,builds,configs,content};
+  sudo -E chmod g+s "/opt/codebase/"{active,builds,configs,content};
+
 } # set_apache_deployment_directories
 
 ##########################################################################################
