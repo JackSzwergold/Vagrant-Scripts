@@ -2,9 +2,9 @@
 
 ##########################################################################################
 #
-# Provision Ubuntu 18.04 (provision_ubuntu_1804.sh) (c) by Jack Szwergold
+# Provision Ubuntu 20.04 (provision_ubuntu_1804.sh) (c) by Jack Szwergold
 #
-# Provision Ubuntu 18.04 is licensed under a
+# Provision Ubuntu 20.04 is licensed under a
 # Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International License.
 #
 # You should have received a copy of the license along with this
