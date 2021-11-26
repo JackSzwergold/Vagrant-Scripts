@@ -72,7 +72,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
         vbox.customize ["modifyvm", :id, "--cpus", settings["cpus"]]
         # vbox.customize ["modifyvm", :id, "--name", "#{settings["name"]}"]
         vbox.name = "#{settings["name"]}"
-        vbox.gui = true
+        vbox.gui = false
       end
 
       # Basic virtual machine configuration options.
