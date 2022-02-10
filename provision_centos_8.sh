@@ -277,7 +277,7 @@ function install_basic_tools () {
     iftop figlet lynx mtr iperf3 nload zip unzip attr sshpass \
     dkms mc elinks dos2unix p7zip nfs-utils \
     sharutils chkconfig quota pv jq \
-    nano man man-pages \
+    nano man man-pages wget \
     dkms;
 
 } # install_basic_tools
