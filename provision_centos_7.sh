@@ -417,8 +417,8 @@ function install_apache () {
   # Install the Yum utils.
   sudo -E yum install --nogpgcheck -y -q -e 0 yum-utils;
 
-  # Set the Yum config manager to the Remi repo PHP 7.4 version.
-  sudo -E yum-config-manager -y -q -e 0 --enable remi-php74;
+  # Set the Yum config manager to the Remi repo PHP 804 version.
+  sudo -E yum-config-manager -y -q -e 0 --enable remi-php80;
 
   # Install the base Apache related items.
   sudo -E yum install --nogpgcheck -y -q -e 0 httpd httpd-devel \
