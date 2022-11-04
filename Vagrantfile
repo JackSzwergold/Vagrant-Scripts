@@ -79,7 +79,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       machine.vm.box = "#{settings["box"]}"
       machine.vm.hostname = "#{settings["hostname"]}"
       machine.vm.box_check_update = false
-      machine.vm.network :private_network, ip: "#{settings["ip"]}"
+      machine.vm.network :private_network, ip: "#{settings["ip"]}", virtualbox__intnet: true
 
       # Set port forwarding.
       if settings["forward_guest1"].to_s.strip.length > 0
