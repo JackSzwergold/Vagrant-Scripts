@@ -516,7 +516,7 @@ function install_apache () {
     php-mysql php-pgsql php-odbc php-sybase \
     php-xmlrpc php-json php-xsl php-curl php-geoip \
     php-getid3 php-imap php-ldap \
-    php-pspell php-gmp php-gd;
+    php-pspell php-gmp php-gd php-mbstring;
 
   # Enable the PHP mcrypt module.
   # sudo -E phpenmod mcrypt;
