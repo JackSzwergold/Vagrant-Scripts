@@ -716,12 +716,12 @@ function install_mariadb () {
   wait ${CURL_PID};
   sudo apt-key add "MariaDB-10-key.asc";
   rm -f "MariaDB-10-key.asc";
-  sudo add-apt-repository "deb [arch=amd64,i386,ppc64el] http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.2/ubuntu xenial main" & ADD_REPO_PID=(`jobs -l | awk '{print $2}'`);
+  sudo add-apt-repository "deb [arch=amd64,i386,ppc64el] http://nyc2.mirrors.digitalocean.com/mariadb/repo/10.3/ubuntu xenial main" & ADD_REPO_PID=(`jobs -l | awk '{print $2}'`);
   wait ${ADD_REPO_PID};
   sudo -E rm -rf "/var/lib/apt/lists/partial/";
   sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 update;
   sudo -E apt-get -y -qq -o=Dpkg::Use-Pty=0 clean;
-  sudo -E RUNLEVEL=1 apt-get -y -qq -o=Dpkg::Use-Pty=0 install mariadb-client-10.2 mariadb-server-10.2;
+  sudo -E RUNLEVEL=1 apt-get -y -qq -o=Dpkg::Use-Pty=0 install mariadb-client-10.3 mariadb-server-10.3;
 
   # Start MySQL.
   sudo -E service mysql start;
